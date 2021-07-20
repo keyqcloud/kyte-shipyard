@@ -33,7 +33,7 @@
     </div>
     <!--  -->
 
-    <div id="wrapper" class="d-none">
+    <div id="wrapper">
         <!-- START NAV -->
         <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
             <a href="/app/" class="navbar-brand" style="font-size: 2em; font-weight: bold;">Kyte</a>
@@ -61,23 +61,65 @@
         <!-- END NAV -->
 
         <div class="container">
-            <div class="d-sm-flex justify-content-between align-items-center my-4">
-                <h2 class="my-4">My Websites & Applications</h2>
-                <div>
-                    <a class="btn btn-primary btn-sm d-none d-sm-inline-block" id="addNew" role="button" href="/app/new/"><i class="fas fa-plus fa-sm text-white"></i> Create Site or App</a>
-                </div>
+            <div class="my-4">
+                <h2 class="my-4">New Website or Blog</h2>
             </div>
 
             <hr>
 
-            <!-- empty message -->
-            <div id="empty-message" class="d-none p-4 text-center">
-                <h3 class="text-muted my-4" style="font-weight: 200;">You don't have any websites or apps...let's get started!</h3>
-                <a class="btn btn-success my-4" id="addFirstNew" role="button" href="/app/new/"><i class="fas fa-plus fa-sm text-white"></i> Click here to create your first site or web app!</a>
-                <img src="/assets/images/woman-paints-in-an-art-workshop.png" class="w-100">
+            <div class="p-4 mb-4 text-center">
+                <!-- website name -->
+                <div class="row my-5" id="q1">
+                    <div class="col-md-7 mx-auto">
+                        <h3 class="text-muted my-4" style="font-weight: 200;">Great, what's the title for your website?</h3>
+                        <input id="website-name" type="text" class="form-control" placeholder="Joan's Garage">
+                        <div class="d-sm-flex justify-content-between align-items-center my-3">
+                            <a class="btn btn-outline-secondary w-25" role="button" href="/app/new/">Back</a>
+                            <button id="n1" class="btn btn-outline-primary w-25">Next</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- domain question -->
+                <div class="row my-5 d-none" id="q2">
+                    <div class="col-md-7 mx-auto">
+                        <h3 class="text-muted my-4" style="font-weight: 200;">Do you have a domain name for your website?</h3>
+                        <select id="hasDomain" class="form-control">
+                            <option value="1">Yes!</option>
+                            <option value="0">Nah, but give me a generic one.</option>
+                            <option value="2" disabled>Not yet...but I'd like to purchase one.</option>
+                        </select>
+                        <div class="d-sm-flex justify-content-between align-items-center my-3">
+                            <button id="b2" class="btn btn-outline-secondary w-25">Back</button>
+                            <button id="n2" class="btn btn-outline-primary w-25">Next</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- domain name -->
+                <div class="row my-5 d-none" id="q3">
+                    <div class="col-md-7 mx-auto">
+                        <h3 class="text-muted my-4" style="font-weight: 200;">Fantastic, what is your domain name?</h3>
+                        <input id="domain-name" type="text" class="form-control" placeholder="www.example.com">
+                        <div class="d-sm-flex justify-content-between align-items-center my-3">
+                            <button id="b3" class="btn btn-outline-secondary w-25">Back</button>
+                            <button id="n3" class="btn btn-outline-success w-25">Create</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- domain error -->
+                <div class="row my-5 d-none" id="q3a">
+                    <div class="col-md-7 mx-auto">
+                        <h3 class="text-muted my-4" style="font-weight: 200;">No problem, we're create one and let you know!</h3>
+                        <small>Pst...it'll be in the format of XXXXXXX.cloudfront.net</small>
+                        <div class="d-sm-flex justify-content-between align-items-center my-3">
+                            <button id="b3a" class="btn btn-outline-secondary w-25">Back</button>
+                            <button id="n3a" class="btn btn-outline-success w-25">Create</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- list of applications -->
-            <table id="data-table" class="table table-striped w-100"></table>
             
         </div>
 
@@ -107,18 +149,40 @@
     </div>
 
     <script>
-        $('#pageLoaderModal').modal('show');
         if (!k.isSession()) {
             location.href="/";
         }
-        k.get('Application', null, null, function(r) {
-            if (r.data.length == 0) {
-                $("#empty-message").removeClass('d-none');
+        $("#n1").click(function() {
+            if ($("#website-name").val()) {
+                $("#q1").addClass('d-none');
+                $("#q2").removeClass('d-none');
             }
-
-            //
-            $('#pageLoaderModal').modal('hide');
-            $("#wrapper").removeClass('d-none');
+        });
+        $("#n2").click(function() {
+            if ($("#hasDomain").val() == 1) {
+                $("#q2").addClass('d-none');
+                $("#q3").removeClass('d-none');
+            } else {
+                $("#q2").addClass('d-none');
+                $("#q3a").removeClass('d-none');
+            }
+        });
+        $("#n3").click(function() {
+            if ($("#domain-name").val()) {
+                //
+            }
+        });
+        $("#b2").click(function() {
+            $("#q2").addClass('d-none');
+            $("#q1").removeClass('d-none');
+        });
+        $("#b3").click(function() {
+            $("#q3").addClass('d-none');
+            $("#q2").removeClass('d-none');
+        });
+        $("#b3a").click(function() {
+            $("#q3a").addClass('d-none');
+            $("#q2").removeClass('d-none');
         });
     </script>
 </body>

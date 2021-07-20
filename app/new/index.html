@@ -33,7 +33,7 @@
     </div>
     <!--  -->
 
-    <div id="wrapper" class="d-none">
+    <div id="wrapper">
         <!-- START NAV -->
         <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
             <a href="/app/" class="navbar-brand" style="font-size: 2em; font-weight: bold;">Kyte</a>
@@ -62,22 +62,41 @@
 
         <div class="container">
             <div class="d-sm-flex justify-content-between align-items-center my-4">
-                <h2 class="my-4">My Websites & Applications</h2>
+                <h2 class="my-4">Create a Website or Application</h2>
                 <div>
-                    <a class="btn btn-primary btn-sm d-none d-sm-inline-block" id="addNew" role="button" href="/app/new/"><i class="fas fa-plus fa-sm text-white"></i> Create Site or App</a>
+                    <a class="btn btn-secondary btn-sm d-none d-sm-inline-block" role="button" href="/app/">Cancel</a>
                 </div>
             </div>
 
             <hr>
 
-            <!-- empty message -->
-            <div id="empty-message" class="d-none p-4 text-center">
-                <h3 class="text-muted my-4" style="font-weight: 200;">You don't have any websites or apps...let's get started!</h3>
-                <a class="btn btn-success my-4" id="addFirstNew" role="button" href="/app/new/"><i class="fas fa-plus fa-sm text-white"></i> Click here to create your first site or web app!</a>
-                <img src="/assets/images/woman-paints-in-an-art-workshop.png" class="w-100">
+            <div class="p-4 mb-4 text-center">
+                <h3 class="text-muted my-4" style="font-weight: 200;">Let's get started by choosing the type of application you'd like to create.</h3>
+
+                <div class="row py-4">
+                    <div class="col-md">
+                        <a href="/app/new/website/" class="border rounded border-primary p-4 d-inline-block">
+                            <p><i class="fa fa-globe fa-4x"></i></p>
+                            <h5>Website or Blog</h5>
+                            <small><s>$5 / month</s> 1 month free trial</small>
+                        </a>
+                    </div>
+                    <div class="col-md">
+                        <a href="/app/new/ecommerce/" class="border rounded border-primary p-4 d-inline-block">
+                            <p><i class="fa fa-shopping-cart fa-4x"></i></p>
+                            <h5>eCommerce Site</h5>
+                            <small>$10 / month</small>
+                        </a>
+                    </div>
+                    <div class="col-md">
+                        <a href="/app/new/application/" class="border rounded border-primary p-4 d-inline-block">
+                            <p><i class="fa fa-server fa-4x"></i></p>
+                            <h5>Web Application</h5>
+                            <small>$25 / month</small>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <!-- list of applications -->
-            <table id="data-table" class="table table-striped w-100"></table>
             
         </div>
 
@@ -107,19 +126,9 @@
     </div>
 
     <script>
-        $('#pageLoaderModal').modal('show');
         if (!k.isSession()) {
             location.href="/";
         }
-        k.get('Application', null, null, function(r) {
-            if (r.data.length == 0) {
-                $("#empty-message").removeClass('d-none');
-            }
-
-            //
-            $('#pageLoaderModal').modal('hide');
-            $("#wrapper").removeClass('d-none');
-        });
     </script>
 </body>
 </html>
