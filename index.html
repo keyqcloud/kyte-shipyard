@@ -61,41 +61,5 @@
         </div>
     </footer>
     <!-- END FOOTER -->
-
-    <script>
-        if (k.isSession()) {
-            location.href="/app";
-        } else {
-            $("#loginNext").click(function() {
-                if ($("input[type=email]").val()) {
-                    $("#loginPage1").addClass('d-none');
-                    $("#loginPage2").removeClass('d-none');
-                    $("#loginEmail").html($("input[type=email]").val());
-                    // trigger api call to warm up db
-                    k.warm();
-                }
-            });
-            $("#notYou").click(function() {
-                $("#loginPage2").addClass('d-none');
-                $("#loginPage1").removeClass('d-none');
-            });
-            $("#signin").click(function() {
-                $("#errorMsg").html('');
-                $("#errorMsg").addClass('d-none');
-                if ($("input[type=password]").val()) {
-                    $('#pageLoaderModal').modal('show');
-                    k.sessionCreate({'email' : $("input[type=email]").val(), 'password': $("input[type=password]").val()}, function() {
-                        // successful login
-                        location.href = "/app";
-                    }, function() {
-                        // failed login
-                        $("#errorMsg").html('Email or password combination is not correct.');
-                        $("#errorMsg").removeClass('d-none');
-                        $('#pageLoaderModal').modal('hide');
-                    });
-                }
-            });
-        }
-    </script>
 </body>
 </html>
