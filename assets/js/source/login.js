@@ -9,7 +9,7 @@ $(document).ready(function() {
         e.preventDefault();
         e.stopPropagation();
 
-        let redir = false;s
+        let redir = false;
         redir = k.getUrlParameter("redir");
 
         $("#errorMsg").html('');
