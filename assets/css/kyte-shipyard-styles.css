@@ -17,6 +17,11 @@ main {
     overflow-y: hidden;
 }
 
+.section-heading {
+    border-left: 10px solid black;
+    padding-left: 0.5em;
+}
+
 #sidenav {
     background-color: rgb(180, 207, 216);
 }
