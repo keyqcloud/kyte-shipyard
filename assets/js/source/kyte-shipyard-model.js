@@ -32,7 +32,7 @@ let colDef = [
 $(document).ready(function() {
     $('#pageLoaderModal').modal('show');
     if (k.isSession()) {
-        var tbl = new KyteTable(k, $("#data-table"), {'name':'DataModel','field':null,'value':null}, colDef, true, [0,"asc"], false, true);
+        var tbl = new KyteTable(k, $("#data-table"), {'name':'DataModel','field':null,'value':null}, colDef, true, [0,"asc"], false, true, 'id', '/app/model/details.html');
         tbl.initComplete = function() {
             $('#pageLoaderModal').modal('hide');
         }
