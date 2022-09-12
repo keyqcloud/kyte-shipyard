@@ -7,8 +7,9 @@ $(document).ready(function() {
     
     $("#login-form").submit(function(e) {
         e.preventDefault();
+        e.stopPropagation();
 
-        let redir = false;
+        let redir = false;s
         redir = k.getUrlParameter("redir");
 
         $("#errorMsg").html('');
