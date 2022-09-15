@@ -384,18 +384,26 @@ function generate_swift(model) {
 }
 
 function download_code(model, code, ext) {
-    blob = new Blob([universalBOM+code], {type: "octet/stream"});
-    url = window.URL.createObjectURL(blob);
-    $('#pageLoaderModal').modal('hide');
+    if (ext=="json") {
+        alert("Feature coming soon!");
+    } else {
+        blob = new Blob([universalBOM+code], {type: "octet/stream"});
+        url = window.URL.createObjectURL(blob);
+        $('#pageLoaderModal').modal('hide');
 
-    // create hidden link
-    var a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
-    a.href = url;
-    a.download = model+'.'+ext;
-    a.click();
-    window.URL.revokeObjectURL(url);
+        // create hidden link
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = url;
+        a.download = model+'.'+ext;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+}
+
+function download_data(format) {
+    alert("Feature coming soon!");
 }
 
 $(document).ready(function() {
@@ -452,6 +460,25 @@ $(document).ready(function() {
             e.stopPropagation();
 
             download_code(model, json, 'json');
+        });
+        //
+        $("#downloadDataCSV").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            download_data('csv');
+        });
+        $("#downloadDataJSON").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            download_data('json');
+        });
+        $("#downloadDataParquet").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            download_data('parquet');
         });
 
         // navigation listners
