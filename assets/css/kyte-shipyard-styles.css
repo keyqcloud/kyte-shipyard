@@ -1,4 +1,4 @@
-html, body { margin: 0; padding: 0;}
+html, body { margin: 0; padding: 0; font-family: 'Nunito', sans-serif !important; }
 .logo-container { margin-top: 3.5em;}
 .copyright a { text-decoration: none; color: white; }
 small.copyright {font-weight: 200;}
@@ -35,3 +35,61 @@ li.back-link {
 }
 
 #sidebar-nav .active { background-color: #f4f4f4 !important; color: #231F20 !important; }
+
+/* DATA TABLE STYLES */
+.dataTables_wrapper select, .dataTables_wrapper input[type=search] {
+    background-color: white !important;
+}
+
+.dataTables_wrapper table {
+    padding-top: 1em !important;
+    padding-bottom: 1em !important;
+    border-bottom: none !important;
+}
+.dataTables_wrapper tbody, .dataTables_wrapper thead {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important;
+}
+
+.dataTables_wrapper thead {
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+}
+
+.dataTables_wrapper thead th {
+    background-color: rgb(33, 37, 44) !important;
+    color: white !important;
+    font-weight: 500 !important;
+    padding-top: 1em !important;
+    padding-bottom: 1em !important;
+}
+
+.dataTables_wrapper td:first-child, .dataTables_wrapper th:first-child {
+    padding-left: 1em !important;
+}
+.dataTables_wrapper td:last-child, .dataTables_wrapper th:last-child {
+    padding-right: 1em !important;
+}
+
+.dataTables_wrapper tbody td {
+    border-bottom: none !important;
+    padding-top: 1em !important;;
+    padding-bottom: 1em !important;;
+    vertical-align: middle !important;
+}
+
+.dataTables_wrapper tbody tr.odd {
+    background-color: white !important;
+    --bs-table-striped-bg: none !important;
+}
+
+.dataTables_wrapper tbody tr.even {
+    background-color: rgba(155, 218, 255, 0.314) !important;
+}
+
+.dataTables_wrapper thead th:first-child {
+    border-top-left-radius: 10px !important;
+}
+
+.dataTables_wrapper thead th:last-child {
+    border-top-right-radius: 10px !important;
+}
