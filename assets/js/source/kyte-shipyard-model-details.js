@@ -482,7 +482,12 @@ $(document).ready(function() {
         });
 
         // navigation listners
-        $("#Attributes-nav-link").click(function() {
+        $("#Attributes-nav-link").click(function(e) {
+            history.pushState({}, '', this.href);
+
+            e.preventDefault();
+            e.stopPropagation();
+            
             $("#Attributes-nav-link").addClass("active");
             $("#Attributes").removeClass('d-none');
 
@@ -495,7 +500,12 @@ $(document).ready(function() {
             $("#Export-nav-link").removeClass("active");
             $("#Export").addClass('d-none');
         });
-        $("#Data-nav-link").click(function() {
+        $("#Data-nav-link").click(function(e) {
+            history.pushState({}, '', this.href);
+
+            e.preventDefault();
+            e.stopPropagation();
+
             $("#Data-nav-link").addClass("active");
             $("#Data").removeClass('d-none');
 
@@ -508,7 +518,12 @@ $(document).ready(function() {
             $("#Export-nav-link").removeClass("active");
             $("#Export").addClass('d-none');
         });
-        $("#Controllers-nav-link").click(function() {
+        $("#Controllers-nav-link").click(function(e) {
+            history.pushState({}, '', this.href);
+
+            e.preventDefault();
+            e.stopPropagation();
+            
             $("#Controllers-nav-link").addClass("active");
             $("#Controllers").removeClass('d-none');
 
@@ -521,7 +536,12 @@ $(document).ready(function() {
             $("#Export-nav-link").removeClass("active");
             $("#Export").addClass('d-none');
         });
-        $("#Export-nav-link").click(function() {
+        $("#Export-nav-link").click(function(e) {
+            history.pushState({}, '', this.href);
+            
+            e.preventDefault();
+            e.stopPropagation();
+            
             $("#Export-nav-link").addClass("active");
             $("#Export").removeClass('d-none');
 
