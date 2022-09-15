@@ -277,22 +277,62 @@ function generate_dart(mode) {
 
     // data class
     code += "class "+model+"Data {\r\n";
-    code += definitions+"\r\n";
+    code += definitions;
+    // kyte model and audit attributes
+    code += "\tString? id;\r\n";
+    code += "\tString? kyte_account;\r\n";
+    code += "\tString? created_by;\r\n";
+    code += "\tString? date_created;\r\n";
+    code += "\tString? modified_by;\r\n";
+    code += "\tString? date_modified;\r\n";
+    code += "\tString? deleted_by;\r\n";
+    code += "\tString? date_deleted;\r\n";
+    code += "\tString? deleted;\r\n\r\n";
 
     // initializer
     code += "\t"+model+"Data({\r\n";
-    code += initializers.replace(/(^,)|(,$)/g, '').replace(/,/g, ",\r\n")+"\r\n";
+    code += initializers.replace(/(^,)|(,$)/g, '').replace(/,/g, ",\r\n")+",\r\n";
+    // kyte model and audit attributes
+    code += "\t\tthis.id,\r\n";
+    code += "\t\tthis.kyte_account,\r\n";
+    code += "\t\tthis.created_by,\r\n";
+    code += "\t\tthis.date_created,\r\n";
+    code += "\t\tthis.modified_by,\r\n";
+    code += "\t\tthis.date_modified,\r\n";
+    code += "\t\tthis.deleted_by,\r\n";
+    code += "\t\tthis.date_deleted,\r\n";
+    code += "\t\tthis.deleted,\r\n";
     code += "\t});\r\n\r\n";
 
     // mapping from json
     code += "\t"+model+"Data.fromJson(Map<String, dynamic> json) {\r\n"
     code += mappingsFromJson;
+    // kyte model and audti attributes
+    code += "\t\tid = json['id'];\r\n";
+    code += "\t\tkyte_account = json['kyte_account'];\r\n";
+    code += "\t\tcreated_by = json['created_by'];\r\n";
+    code += "\t\tdate_created = json['date_created'];\r\n";
+    code += "\t\tmodified_by = json['modified_by'];\r\n";
+    code += "\t\tdate_modified = json['date_modified'];\r\n";
+    code += "\t\tdeleted_by = json['deleted_by'];\r\n";
+    code += "\t\tdate_deleted = json['date_deleted'];\r\n";
+    code += "\t\tdeleted = json['deleted'];\r\n";
     code += "\t}\r\n\r\n";
 
     // mapping to json
     code += "\tMap<String, dynamic> toJson() {\r\n";
     code += "\t\tfinal Map<String, dynamic> data = new Map<String, dynamic>();\r\n";
     code += mappingsToJson;
+    // kyte model and audti attributes
+    code += "\t\tdata['id'] = this.id;\r\n";
+    code += "\t\tdata['kyte_account'] = this.kyte_account;\r\n";
+    code += "\t\tdata['created_by'] = this.created_by;\r\n";
+    code += "\t\tdata['date_created'] = this.date_created;\r\n";
+    code += "\t\tdata['modified_by'] = this.modified_by;\r\n";
+    code += "\t\tdata['date_modified'] = this.date_modified;\r\n";
+    code += "\t\tdata['deleted_by'] = this.deleted_by;\r\n";
+    code += "\t\tdata['date_deleted'] = this.date_deleted;\r\n";
+    code += "\t\tdata['deleted'] = this.deleted;\r\n";
     code += "\t\treturn data;\r\n";
     code += "\t}\r\n";
 
@@ -319,10 +359,23 @@ function generate_swift(model) {
         structItems += "\tlet "+attr.name+": "+datatype+(attr.required == 0 ? "?" : "")+"\r\n";
     });
     code += structItems;
+    // kyte model and audit attributes
+    code += "\t// kyte model and audit attributes\r\n";
+    code += "\tlet id: String\r\n";
+    code += "\tlet kyte_account: String\r\n";
+    code += "\tlet created_by: String?\r\n";
+    code += "\tlet date_created: String?\r\n";
+    code += "\tlet modified_by: String?\r\n";
+    code += "\tlet date_modified: String?\r\n";
+    code += "\tlet deleted_by: String?\r\n";
+    code += "\tlet date_deleted: String?\r\n";
+    code += "\tlet deleted: String?\r\n";
 
     // enum
     code += "\r\n\tenum CodingKeys: String, CodingKey {\r\n"
     code += enumCases.replace(/(^,)|(,$)/g, '') + "\r\n";
+    // kyte model and audit attributes
+    code += "\t\tcase id, kyte_account, created_by, date_created, modified_by, date_modified, deleted_by, date_deleted, deleted\r\n";
     code += "\t}\r\n";
     // end struct
     code += "}\r\n";
