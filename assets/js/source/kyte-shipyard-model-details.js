@@ -123,6 +123,31 @@ let colDef = [
     {'targets':6,'data':'description','label':'Description'},
 ];
 
+let controllerElements = [
+    [
+        {
+            'field':'name',
+            'type':'text',
+            'label':'Name',
+            'required':true
+        }
+    ],
+    [
+        {
+            'field':'description',
+            'type':'textare',
+            'label':'Description',
+            'required':false
+        }
+    ]
+];
+
+let controllerColDef = [
+    {'targets':0,'data':'name','label':'Name'},
+    {'targets':1,'data':'dataModel.name','label':'Model', render: function(data, type, row, meta) { return data ? data:'Virtual'; }},
+    {'targets':2,'data':'description','label':'Description'},
+];
+
 function getData(idx, model) {
     // get attributes k.get() and iterate over to create table def and elements
     k.get("ModelAttribute", "dataModel", idx, [], function(r) {
@@ -437,11 +462,29 @@ $(document).ready(function() {
             $('#pageLoaderModal').modal('hide');
         });
 
+        // attribute table and form
         var tblAttributes = new KyteTable(k, $("#attribute-table"), {'name':'ModelAttribute','field':'dataModel','value':idx}, colDef, true, [0,"asc"], true, true);
         tblAttributes.init();
         var modalForm = new KyteForm(k, $("#modalForm"), 'ModelAttribute', hidden, elements, 'Model Attribute', tblAttributes, true, $("#newAttribute"));
         modalForm.init();
         tblAttributes.bindEdit(modalForm);
+
+        // controller table and form
+        var tblController = new KyteTable(k, $("#controller-table"), {'name':'Controller','field':'dataModel','value':idx}, controllerColDef, true, [0,"asc"], false, true, 'id', '/app/controller/');
+        tblController.initComplete = function() {
+            $('#pageLoaderModal').modal('hide');
+        }
+        tblController.init();
+        var modalForm = new KyteForm(k, $("#modalControllerForm"), 'Controller', hidden, controllerElements, 'Controller', tblController, true, $("#newController"));
+        modalForm.init();
+        modalForm.success = function(r) {
+            if (r.data[0]) {
+                let obj = {'model': 'Controller', 'idx':r.data[0].id};
+                let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                location.href="/app/controller/?request="+encoded;
+            }
+        }
+        tblController.bindEdit(modalForm);
 
         $("#downloadSwift").click(function(e) {
             e.preventDefault();
