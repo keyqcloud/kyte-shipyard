@@ -21,7 +21,7 @@
     <script src="/assets/js/login.js?v=1"></script>
 </head>
 
-<body>
+<body style="background: url(/assets/images/background-1.png) no-repeat; background-size: cover;">
     <!-- Page loading modal.  Once session is validated, the loading modal will close. -->
     <div id="pageLoaderModal" class="modal white" data-backdrop="static" data-keyboard="false" tabindex="-1">
         <div class="modal-dialog modal-sm h-100 d-flex">
@@ -37,30 +37,25 @@
         <div class="row my-5">
             <div class="col-lg-4 mx-auto">
                 <form id="login-form">
-                    <h3 class="text-center pb-4">Sign in</h3>
+                    <h3 class="text-center text-light pb-4">Sign in</h3>
                     <p class="text-danger d-none" id="errorMsg"></p>
                     <input type="email" class="my-3 form-control" name="email" placeholder="kate@example.com">
                     <input type="password" placeholder="password" class="my-3 form-control" name="password">
                     <button id="signin" class="my-3 btn btn-primary d-block w-100">Sign in</button>
-                    <p class="text-secondary p-2" style="font-size: 0.8em;">By continuing, you agree to the Terms of Service or other agreement for Kyte services, the Privacy Policy and the use of cookies. See our Cookie Notice for more information.</p>
+                    <p class="text-light p-2" style="font-size: 0.8em;">By continuing, you agree to the Terms of Service or other agreement for Kyte services, the Privacy Policy and the use of cookies. See our Cookie Notice for more information.</p>
                 </form>
-                <hr class="my-3">
-                <h5 class="text-secondary" style="font-weight: 300;">New to Kyte?</h5>
-                <button id="signup" class="my-3 btn btn-sm btn-secondary d-block w-100">Sign up for free</button>
+                <!-- <hr class="my-3">
+                <h5 class="text-light" style="font-weight: 300;">New to Kyte?</h5>
+                <button id="signup" class="my-3 btn btn-sm btn-secondary d-block w-100">Sign up for free</button> -->
+
+                <p class="text-light text-center mt-5" style="font-weight: 100;">KeyQ © 2022</p>
             </div>
             <div class="col-lg-8 mx-auto">
-                <img src="/assets/images/kyte-logo.png" class="w-100">
+                <h1 class="text-center text-light" style="font-weight: 300;">Kyte Shipyard<sup>&trade;</sup></h1>
+                <h4 class="text-center text-light" style="font-weight: 100; font-style: italic;">Next Generation App Building</h4>
             </div>
         </div>
     </div>
     <!-- END LOGIN PANEL -->
-
-    <!-- BEGIN FOOTER -->
-    <footer class="text-dark py-3">
-        <div class="container">
-            <p class="copyright text-center">KeyQ © 2021</p>
-        </div>
-    </footer>
-    <!-- END FOOTER -->
 </body>
 </html>
