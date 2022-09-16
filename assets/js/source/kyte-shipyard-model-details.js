@@ -475,16 +475,16 @@ $(document).ready(function() {
             $('#pageLoaderModal').modal('hide');
         }
         tblController.init();
-        var modalForm = new KyteForm(k, $("#modalControllerForm"), 'Controller', hidden, controllerElements, 'Controller', tblController, true, $("#newController"));
-        modalForm.init();
-        modalForm.success = function(r) {
+        var controllerModalForm = new KyteForm(k, $("#modalControllerForm"), 'Controller', hidden, controllerElements, 'Controller', tblController, true, $("#newController"));
+        controllerModalForm.init();
+        controllerModalForm.success = function(r) {
             if (r.data[0]) {
                 let obj = {'model': 'Controller', 'idx':r.data[0].id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 location.href="/app/controller/?request="+encoded;
             }
         }
-        tblController.bindEdit(modalForm);
+        tblController.bindEdit(controllerModalForm);
 
         $("#downloadSwift").click(function(e) {
             e.preventDefault();
