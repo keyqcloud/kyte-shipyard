@@ -86,7 +86,7 @@ $(document).ready(function() {
             }
         });
 
-        var customFunctionstbl = new KyteTable(k, $("#custom-function-table"), {'name':'ControllerFunction','field':"controller",'value':idx}, customFunctionsColDef, true, [0,"asc"], false, true, 'function', '/app/function/');
+        var customFunctionstbl = new KyteTable(k, $("#custom-function-table"), {'name':'ControllerFunction','field':"controller",'value':idx}, customFunctionsColDef, true, [0,"asc"], false, true, 'function.id', '/app/function/');
         customFunctionstbl.init();
         var assignControllerModalForm = new KyteForm(k, $("#modalControllerFunctionForm"), 'ControllerFunction', hidden, assignControllerElements, 'Controller', customFunctionstbl, true, $("#assignController"));
         assignControllerModalForm.init();

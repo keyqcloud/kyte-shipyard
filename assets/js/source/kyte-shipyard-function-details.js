@@ -71,7 +71,7 @@ $(document).ready(function() {
         });
 
         // controller table and form
-        var assignedControllertbl = new KyteTable(k, $("#controller-table"), {'name':'ControllerFunction','field':"function",'value':idx}, assignedControllersColDef, true, [0,"asc"], false, true, 'controller', '/app/controller/');
+        var assignedControllertbl = new KyteTable(k, $("#controller-table"), {'name':'ControllerFunction','field':"function",'value':idx}, assignedControllersColDef, true, [0,"asc"], false, true, 'controller.id', '/app/controller/');
         assignedControllertbl.init();
         var assignControllerModalForm = new KyteForm(k, $("#modalForm"), 'ControllerFunction', hidden, assignControllerElements, 'Controller', assignedControllertbl, true, $("#assignController"));
         assignControllerModalForm.init();
