@@ -40,6 +40,13 @@ $(document).ready(function() {
         let idx = k.getPageRequest();
         idx = idx.idx;
 
+        let hidden = [
+            {
+                'name': 'function',
+                'value': idx
+            }
+        ];
+
         k.get("Function", "id", idx, [], function(r) {
             if (r.data[0]) {
                 functionName = r.data[0].name;
@@ -65,7 +72,7 @@ $(document).ready(function() {
         // controller table and form
         var assignedControllertbl = new KyteTable(k, $("#controller-table"), {'name':'ControllerFunction','field':"function",'value':idx}, assignedControllersColDef, true, [0,"asc"], false, true, 'controller', '/app/controller/');
         assignedControllertbl.init();
-        var assignControllerModalForm = new KyteForm(k, $("#modalForm"), 'ControllerFunction', null, assignControllerElements, 'Controller', assignedControllertbl, true, $("#assignController"));
+        var assignControllerModalForm = new KyteForm(k, $("#modalForm"), 'ControllerFunction', hidden, assignControllerElements, 'Controller', assignedControllertbl, true, $("#assignController"));
         assignControllerModalForm.init();
         assignedControllertbl.bindEdit(assignControllerModalForm);
 
