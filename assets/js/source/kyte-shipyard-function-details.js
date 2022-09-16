@@ -23,8 +23,8 @@ let assignControllerElements = [
 ];
 
 let assignedControllersColDef = [
-    {'targets':1,'data':'controller.name','label':'Function', render: function(data, type, row, meta) { return data ? data:'Unknown'; }},
-    {'targets':2,'data':'controller.description','label':'Description', render: function(data, type, row, meta) { return data ? data:''; }},
+    {'targets':0,'data':'controller.name','label':'Controller', render: function(data, type, row, meta) { return data ? data:'Unknown'; }},
+    {'targets':1,'data':'controller.description','label':'Description', render: function(data, type, row, meta) { return data ? data:''; }},
 ];
 
 $(document).ready(function() {
