@@ -57,7 +57,8 @@ $(document).ready(function() {
                     language: "php"
                 });
             } else {
-                $("#model-name").html("Undefined");
+                $("#function-name").html("Undefined");
+                $("#function-type").html("Undefined");
             }
             $('#pageLoaderModal').modal('hide');
         });
