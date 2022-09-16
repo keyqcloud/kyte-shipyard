@@ -1,13 +1,30 @@
 var editor;
 let functionName = "Undefined";
 
-let elements = [
+let assignControllerElements = [
     [
+        {
+            'field': 'controller',
+            'type': 'select',
+            'label': 'Controller',
+            'required': true,
+            'placeholder': 'Please select...',
+            'option': {
+                'ajax': true,
+                'data_model_name': 'Controller',
+                'data_model_field': '',
+                'data_model_value': '',
+                'data_model_attributes': ['name'],
+                'data_model_default_field': 'id',
+                // 'data_model_default_value': 1,
+            }
+        }
     ]
 ];
 
-let colDef = [
-    {'targets':0,'data':'name','label':'Name'},
+let assignedControllersColDef = [
+    {'targets':1,'data':'controller.name','label':'Function', render: function(data, type, row, meta) { return data ? data:'Unknown'; }},
+    {'targets':2,'data':'controller.description','label':'Description', render: function(data, type, row, meta) { return data ? data:''; }},
 ];
 
 $(document).ready(function() {
@@ -44,6 +61,13 @@ $(document).ready(function() {
                 $('#pageLoaderModal').modal('hide');
             });
         });
+
+        // controller table and form
+        var assignedControllertbl = new KyteTable(k, $("#controller-table"), {'name':'ControllerFunction','field':null,'value':null}, assignedControllersColDef, true, [0,"asc"], false, true, 'controller', '/app/controller/');
+        assignedControllertbl.init();
+        var assignControllerModalForm = new KyteForm(k, $("#modalForm"), 'ControllerFunction', null, assignControllerElements, 'Controller', assignedControllertbl, true, $("#assignController"));
+        assignControllerModalForm.init();
+        assignedControllertbl.bindEdit(assignControllerModalForm);
 
         // navigation listners
         $("#Code-nav-link").click(function(e) {
