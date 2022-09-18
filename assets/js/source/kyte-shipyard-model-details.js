@@ -108,12 +108,18 @@ let elements = [
 ];
 
 let colDef = [
-    {'targets':0,'data':'name','label':'Name'},
+    {'targets':0,'data':'name','label':'Name', render: function(data, type, row, meta) {
+        if (row.foreignKeyModel) {
+            return data + " ( "+row.foreignKeyModel.name+" => id )";
+        }
+        return data;
+    } },
     {'targets':1,'data':'type','label':'Type', render: function(data, type, row, meta) {
         if (data == "i") return "Int("+row.size+")";
         if (data == "s") return "Varchar("+row.size+")";
         if (data == "t") return "Text";
         if (data == "date") return "Date";
+        
         return data;
     } },
     {'targets':2,'data':'required','label':'Null', render: function(data, type, row, meta) { return data == 1 ? 'NO':'YES'; }},
