@@ -30,6 +30,7 @@
     <!-- Kyte -->
     <script src="/assets/js/kyte.js?v=3h" crossorigin="anonymous"></script>
     <script src="/assets/js/kyte-connect.js?v=1"></script>
+    <script src="/assets/js/navigation.js?v=1"></script>
     <script src="/assets/js/kyte-shipyard-function-details.js?v=1"></script>
 </head>
 
@@ -46,25 +47,7 @@
 
     <div id="wrapper">
         <!-- START NAV -->
-        <nav class="navbar navbar-light bg-dark navbar-expand-lg">
-            <div class="container-fluid">
-                <a href="/app/" class="navbar-brand text-light"><!-- <img src="/assets/images/logo_square.png" style="width: 60px;" class="me-2 rounded"> -->Kyte Shipyard<sup>&trade;</sup></a>
-                <button data-bs-toggle="collapse" class="navbar-toggler" type="button" data-bs-target="#navcol-1" aria-controls="#navcol-1" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navcol-1">
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item"><a class="nav-link text-white me-2" href="/app/index.html"><i class="fas fa-file-import me-2"></i><span>Models</span></a></li>
-                        <li class="nav-item"><a class="nav-link text-white me-2" href="/app/controllers.html"><i class="fas fa-layer-group me-2"></i><span>Controllers</span></a></li>
-                        <li class="nav-item"><a class="nav-link text-white me-2" href="/app/functions.html"><i class="fas fa-cubes me-2"></i><span>Functions</span></a></li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <!-- <li class="nav-item"><a class="nav-link text-white me-2" href="/app/settings/"><i class="fas fa-cog me-2"></i><span>Settings</span></a></li> -->
-                        <li class="nav-item"><a class="nav-link text-white" href="#logout" id="logout"><i class="fas fa-sign-out-alt me-2"></i><span>Logout</span></a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <nav id="mainnav" class="navbar navbar-dark bg-dark navbar-expand-lg"></nav>
         <!-- END NAV -->
 
         <main>

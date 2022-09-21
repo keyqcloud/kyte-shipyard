@@ -45,6 +45,9 @@ let customFunctionsColDef = [
 ];
 
 $(document).ready(function() {
+    let navbar = new KyteNav("#mainnav", nav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Controllers');
+    navbar.create();
+
     $('#pageLoaderModal').modal('show');
 
     let hash = location.hash;

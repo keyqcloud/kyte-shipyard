@@ -46,6 +46,9 @@ let colDef = [
 ];
 
 $(document).ready(function() {
+    let navbar = new KyteNav("#mainnav", nav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Functions');
+    navbar.create();
+
     $('#pageLoaderModal').modal('show');
     if (k.isSession()) {
         var tbl = new KyteTable(k, $("#data-table"), {'name':'Function','field':null,'value':null}, colDef, true, [0,"asc"], false, true, 'id', '/app/function/');
