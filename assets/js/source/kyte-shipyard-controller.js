@@ -33,24 +33,14 @@ let elements = [
     ]
 ];
 
-let colDef = [
-    {'targets':0,'data':'name','label':'Name'},
-    {'targets':1,'data':'dataModel.name','label':'Model', render: function(data, type, row, meta) { return data ? data:'Virtual'; }},
-    {'targets':2,'data':'description','label':'Description'},
-];
-
 $(document).ready(function() {
     let navbar = new KyteNav("#mainnav", nav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Controllers');
     navbar.create();
 
     $('#pageLoaderModal').modal('show');
     if (k.isSession()) {
-        var tbl = new KyteTable(k, $("#data-table"), {'name':'Controller','field':null,'value':null}, colDef, true, [0,"asc"], false, true, 'id', '/app/controller/');
-        tbl.initComplete = function() {
-            $('#pageLoaderModal').modal('hide');
-        }
-        tbl.init();
-        var modalForm = new KyteForm(k, $("#modalForm"), 'Controller', null, elements, 'Controller', tbl, true, $("#new"));
+        var tblControllers = createTable("#controllers-table", "Controller", colDefControllers, null, null, false, true, '/app/controller/', 'id', true);
+        var modalForm = new KyteForm(k, $("#modalForm"), 'Controller', null, elements, 'Controller', tblControllers, true, $("#new"));
         modalForm.init();
         modalForm.success = function(r) {
             if (r.data[0]) {
@@ -59,7 +49,7 @@ $(document).ready(function() {
                 location.href="/app/controller/?request="+encoded;
             }
         }
-        tbl.bindEdit(modalForm);
+        tblControllers.bindEdit(modalForm);
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
     }

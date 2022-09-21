@@ -107,28 +107,6 @@ let elements = [
     ]
 ];
 
-let colDef = [
-    {'targets':0,'data':'name','label':'Name', render: function(data, type, row, meta) {
-        if (row.foreignKeyModel) {
-            return data + " ( "+row.foreignKeyModel.name+" => id )";
-        }
-        return data;
-    } },
-    {'targets':1,'data':'type','label':'Type', render: function(data, type, row, meta) {
-        if (data == "i") return "Int("+row.size+")";
-        if (data == "s") return "Varchar("+row.size+")";
-        if (data == "t") return "Text";
-        if (data == "date") return "Date";
-        
-        return data;
-    } },
-    {'targets':2,'data':'required','label':'Null', render: function(data, type, row, meta) { return data == 1 ? 'NO':'YES'; }},
-    {'targets':3,'data':'protected','label':'Private', render: function(data, type, row, meta) { return data == 1 ? 'YES':'NO'; }},
-    {'targets':4,'data':'unsigned','label':'Unsigned', render: function(data, type, row, meta) { return data == 1 ? 'YES':'NO'; }},
-    {'targets':5,'data':'defaults','label':'Default'},
-    {'targets':6,'data':'description','label':'Description'},
-];
-
 let controllerElements = [
     [
         {
@@ -146,12 +124,6 @@ let controllerElements = [
             'required':false
         }
     ]
-];
-
-let controllerColDef = [
-    {'targets':0,'data':'name','label':'Name'},
-    {'targets':1,'data':'dataModel.name','label':'Model', render: function(data, type, row, meta) { return data ? data:'Virtual'; }},
-    {'targets':2,'data':'description','label':'Description'},
 ];
 
 function getData(idx, model) {
@@ -181,8 +153,7 @@ function getData(idx, model) {
         targets++;
         modelColDef.push({'targets':targets,'data':'date_modified','label':'date_modified'});
 
-        var tblData = new KyteTable(k, $("#data-table"), {'name':model,'field':null,'value':null}, modelColDef, true, [0,"asc"], true, true);
-        tblData.init();
+        var tblData = createTable("#data-table", model, modelColDef, null, null, true, true);
 
         var modelDataForm = new KyteForm(k, $("#modalDataForm"), model, null, modelFormDef, model, tblData, true, $("#newData"));
         modelDataForm.init();
@@ -476,18 +447,13 @@ $(document).ready(function() {
         });
 
         // attribute table and form
-        var tblAttributes = new KyteTable(k, $("#attribute-table"), {'name':'ModelAttribute','field':'dataModel','value':idx}, colDef, true, [0,"asc"], true, true);
-        tblAttributes.init();
+        var tblAttributes = createTable("#attributes-table", "ModelAttribute", colDefAttributes, 'dataModel', idx, true, true);
         var modalForm = new KyteForm(k, $("#modalForm"), 'ModelAttribute', hidden, elements, 'Model Attribute', tblAttributes, true, $("#newAttribute"));
         modalForm.init();
         tblAttributes.bindEdit(modalForm);
 
         // controller table and form
-        var tblController = new KyteTable(k, $("#controller-table"), {'name':'Controller','field':'dataModel','value':idx}, controllerColDef, true, [0,"asc"], false, true, 'id', '/app/controller/');
-        tblController.initComplete = function() {
-            $('#pageLoaderModal').modal('hide');
-        }
-        tblController.init();
+        var tblController = createTable("#controller-table", "Controller", colDefControllers, 'dataModel', idx, true, true, '/app/controller/', 'id');
         var controllerModalForm = new KyteForm(k, $("#modalControllerForm"), 'Controller', hidden, controllerElements, 'Controller', tblController, true, $("#newController"));
         controllerModalForm.init();
         controllerModalForm.success = function(r) {

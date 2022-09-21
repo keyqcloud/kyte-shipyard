@@ -22,11 +22,6 @@ let assignControllerElements = [
     ]
 ];
 
-let assignedControllersColDef = [
-    {'targets':0,'data':'controller.name','label':'Controller', render: function(data, type, row, meta) { return data ? data:'Unknown'; }},
-    {'targets':1,'data':'controller.description','label':'Description', render: function(data, type, row, meta) { return data ? data:''; }},
-];
-
 $(document).ready(function() {
     let navbar = new KyteNav("#mainnav", nav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Functions');
     navbar.create();
@@ -78,8 +73,7 @@ $(document).ready(function() {
         });
 
         // controller table and form
-        var assignedControllertbl = new KyteTable(k, $("#controller-table"), {'name':'ControllerFunction','field':"function",'value':idx}, assignedControllersColDef, true, [0,"asc"], false, true, 'controller.id', '/app/controller/');
-        assignedControllertbl.init();
+        var assignedControllertbl = createTable("#controller-table", "ControllerFunction", colDefAssignedControllers, 'function', idx, false, true, '/app/controller/', 'controller.id');
         var assignControllerModalForm = new KyteForm(k, $("#modalForm"), 'ControllerFunction', hidden, assignControllerElements, 'Controller', assignedControllertbl, true, $("#assignController"));
         assignControllerModalForm.init();
         assignedControllertbl.bindEdit(assignControllerModalForm);
