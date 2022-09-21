@@ -45,32 +45,46 @@ let nav = [
 ]
 
 // menu array
-let subnavModels = [
+let subnavModel = [
     {
-        faicon:'fas fa-users',
-        label:'Team',
-        selector:'#Team'
+        faicon:'fas fa-file-import',
+        label:'Attributes',
+        selector:'#Attributes'
     },
     {
-        faicon:'fas fa-map-marked-alt',
-        label:'Sites',
-        selector:'#Sites'
+        faicon:'fas fa-database',
+        label:'Data',
+        selector:'#Data'
     },
     {
-        faicon:'fas fa-briefcase-medical',
-        label:'Trays',
-        selector:'#Trays'
+        faicon:'fas fa-layer-group',
+        label:'Controllers',
+        selector:'#Controllers'
     },
     {
-        faicon:'fas fa-search-location',
-        label:'Tray Locations',
-        selector:'#TrayLocations'
+        faicon:'fas fa-file-export',
+        label:'Export',
+        selector:'#Export'
+    },
+];
+let subnavController = [
+    {
+        faicon:'fas fa-code',
+        label:'Functions',
+        selector:'#Functions'
+    },
+];
+let subnavFunction = [
+    {
+        faicon:'fas fa-code',
+        label:'Code',
+        selector:'#Code'
     },
     {
-        faicon:'fas fa-address-card',
-        label:'Invitation Code',
-        selector:'#Invitations'
-    }
+        faicon:'fas fa-layer-group',
+        label:'Controllers',
+        selector:'#Controllers'
+    },
 ];
 let subnavSettings = [
     {

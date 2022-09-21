@@ -48,6 +48,10 @@ $(document).ready(function() {
     let navbar = new KyteNav("#mainnav", nav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Controllers');
     navbar.create();
 
+    let sidenav = new KyteSidenav("#sidenav", subnavController, "#Functions");
+    sidenav.create();
+    sidenav.bind();
+
     $('#pageLoaderModal').modal('show');
 
     let hash = location.hash;
@@ -94,53 +98,6 @@ $(document).ready(function() {
         var assignControllerModalForm = new KyteForm(k, $("#modalControllerFunctionForm"), 'ControllerFunction', hidden, assignControllerElements, 'Controller', customFunctionstbl, true, $("#assignController"));
         assignControllerModalForm.init();
         customFunctionstbl.bindEdit(assignControllerModalForm);
-
-        // navigation listners
-        // $("#Integrations-nav-link").click(function(e) {
-        //     history.pushState({}, '', this.href);
-
-        //     e.preventDefault();
-        //     e.stopPropagation();
-            
-        //     $("#Integrations-nav-link").addClass("active");
-        //     $("#Integrations").removeClass('d-none');
-
-        //     $("#CustomFunctions-nav-link").removeClass("active");
-        //     $("#CustomFunctions").addClass('d-none');
-
-        //     $("#Settings-nav-link").removeClass("active");
-        //     $("#Settings").addClass('d-none');
-        // });
-        $("#CustomFunctions-nav-link").click(function(e) {
-            history.pushState({}, '', this.href);
-
-            e.preventDefault();
-            e.stopPropagation();
-            
-            $("#CustomFunctions-nav-link").addClass("active");
-            $("#CustomFunctions").removeClass('d-none');
-
-            $("#Integrations-nav-link").removeClass("active");
-            $("#Integrations").addClass('d-none');
-
-            $("#Settings-nav-link").removeClass("active");
-            $("#Settings").addClass('d-none');
-        });
-        // $("#Settings-nav-link").click(function(e) {
-        //     history.pushState({}, '', this.href);
-
-        //     e.preventDefault();
-        //     e.stopPropagation();
-            
-        //     $("#Settings-nav-link").addClass("active");
-        //     $("#Settings").removeClass('d-none');
-
-        //     $("#CustomFunctions-nav-link").removeClass("active");
-        //     $("#CustomFunctions").addClass('d-none');
-
-        //     $("#Integrations-nav-link").removeClass("active");
-        //     $("#Integrations").addClass('d-none');
-        // });
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
     }

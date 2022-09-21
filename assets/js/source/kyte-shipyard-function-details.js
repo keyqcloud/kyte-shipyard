@@ -31,6 +31,10 @@ $(document).ready(function() {
     let navbar = new KyteNav("#mainnav", nav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Functions');
     navbar.create();
 
+    let sidenav = new KyteSidenav("#sidenav", subnavFunction, "#Code");
+    sidenav.create();
+    sidenav.bind();
+
     $('#pageLoaderModal').modal('show');
 
     let hash = location.hash;
@@ -79,32 +83,6 @@ $(document).ready(function() {
         var assignControllerModalForm = new KyteForm(k, $("#modalForm"), 'ControllerFunction', hidden, assignControllerElements, 'Controller', assignedControllertbl, true, $("#assignController"));
         assignControllerModalForm.init();
         assignedControllertbl.bindEdit(assignControllerModalForm);
-
-        // navigation listners
-        $("#Code-nav-link").click(function(e) {
-            history.pushState({}, '', this.href);
-
-            e.preventDefault();
-            e.stopPropagation();
-            
-            $("#Code-nav-link").addClass("active");
-            $("#Code").removeClass('d-none');
-
-            $("#Controllers-nav-link").removeClass("active");
-            $("#Controllers").addClass('d-none');
-        });
-        $("#Controllers-nav-link").click(function(e) {
-            history.pushState({}, '', this.href);
-
-            e.preventDefault();
-            e.stopPropagation();
-            
-            $("#Controllers-nav-link").addClass("active");
-            $("#Controllers").removeClass('d-none');
-
-            $("#Code-nav-link").removeClass("active");
-            $("#Code").addClass('d-none');
-        });
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
     }

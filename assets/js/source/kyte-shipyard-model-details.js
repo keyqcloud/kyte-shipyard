@@ -441,6 +441,10 @@ $(document).ready(function() {
     let navbar = new KyteNav("#mainnav", nav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Models');
     navbar.create();
 
+    let sidenav = new KyteSidenav("#sidenav", subnavModel, "#Attributes");
+    sidenav.create();
+    sidenav.bind();
+
     $('#pageLoaderModal').modal('show');
 
     let hash = location.hash;
@@ -531,80 +535,6 @@ $(document).ready(function() {
             e.stopPropagation();
 
             download_data('parquet');
-        });
-
-        // navigation listners
-        $("#Attributes-nav-link").click(function(e) {
-            history.pushState({}, '', this.href);
-
-            e.preventDefault();
-            e.stopPropagation();
-            
-            $("#Attributes-nav-link").addClass("active");
-            $("#Attributes").removeClass('d-none');
-
-            $("#Data-nav-link").removeClass("active");
-            $("#Data").addClass('d-none');
-
-            $("#Controllers-nav-link").removeClass("active");
-            $("#Controllers").addClass('d-none');
-            
-            $("#Export-nav-link").removeClass("active");
-            $("#Export").addClass('d-none');
-        });
-        $("#Data-nav-link").click(function(e) {
-            history.pushState({}, '', this.href);
-
-            e.preventDefault();
-            e.stopPropagation();
-
-            $("#Data-nav-link").addClass("active");
-            $("#Data").removeClass('d-none');
-
-            $("#Attributes-nav-link").removeClass("active");
-            $("#Attributes").addClass('d-none');
-
-            $("#Controllers-nav-link").removeClass("active");
-            $("#Controllers").addClass('d-none');
-            
-            $("#Export-nav-link").removeClass("active");
-            $("#Export").addClass('d-none');
-        });
-        $("#Controllers-nav-link").click(function(e) {
-            history.pushState({}, '', this.href);
-
-            e.preventDefault();
-            e.stopPropagation();
-            
-            $("#Controllers-nav-link").addClass("active");
-            $("#Controllers").removeClass('d-none');
-
-            $("#Data-nav-link").removeClass("active");
-            $("#Data").addClass('d-none');
-
-            $("#Attributes-nav-link").removeClass("active");
-            $("#Attributes").addClass('d-none');
-            
-            $("#Export-nav-link").removeClass("active");
-            $("#Export").addClass('d-none');
-        });
-        $("#Export-nav-link").click(function(e) {
-            history.pushState({}, '', this.href);
-            
-            e.preventDefault();
-            e.stopPropagation();
-            
-            $("#Export-nav-link").addClass("active");
-            $("#Export").removeClass('d-none');
-
-            $("#Data-nav-link").removeClass("active");
-            $("#Data").addClass('d-none');
-
-            $("#Controllers-nav-link").removeClass("active");
-            $("#Controllers").addClass('d-none');
-            
-            $("#Attributes-nav-link").removeClass("active");
-            $("#Attributes").addClass('d-none');
         });
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
