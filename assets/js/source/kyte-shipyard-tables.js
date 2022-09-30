@@ -56,6 +56,12 @@ let colDefUsers = [
     {'targets':2,'data':'role.name','label':'Role'},
 ];
 
+let colDefAPI = [
+    {'targets':0,'data':'identifier','label':'Identifier'},
+    {'targets':1,'data':'public_key','label':'Public Key'},
+    {'targets':2,'data':'secret_key','label':'Secret Key'},
+];
+
 function createTable(selector, model, colDef, field = null, value = null, has_edit = false, has_delete = false, detail_page = null, detail_idx = null, dismiss_loading = false) {
     var tbl = new KyteTable(k, $(selector), {'name':model,'field':field,'value':value}, colDef, true, [0,"asc"], has_edit, has_delete, detail_idx, detail_page);
     if (dismiss_loading) {

@@ -1,5 +1,6 @@
 $(document).ready(function() {
     let profile = null;
+    let acc = null;
 
     // setup password requirements
     var passreq = new KytePasswordRequirement(k, $("#passwordRequirements"), $("#new_password"), $("#confirm_password"));
@@ -18,6 +19,7 @@ $(document).ready(function() {
             if (r.data[0]) {
                 profile = r.data[0];
                 $("#profile_email").val(profile['email']);
+                $("#accountNumber").val(profile['kyte_account']['number']);
             }
             $('#pageLoaderModal').modal('hide');
         }, function(err) {
@@ -38,6 +40,8 @@ $(document).ready(function() {
 
         var tblAdmin = createTable("#admin-table", "User", colDefUsers, 'kyte_account', 1, true, true);
         var frmUser = createForm("#adminForm", "Administrator", "User", fldsAdmin, hidden, tblAdmin, "#newAdmin");
+
+        var tblAPI = createTable("#api-table", "APIKey", colDefAPI, 'kyte_account', 1, false, false);
 
         $("#updateEmail").click(function(e) {
             e.preventDefault();

@@ -96,5 +96,10 @@ let subnavSettings = [
         faicon:'fas fa-user-shield',
         label:'Administrators',
         selector:'#Administrators'
+    },
+    {
+        faicon:'fas fa-server',
+        label:'API',
+        selector:'#API'
     }
 ];

@@ -18,7 +18,7 @@
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
     <script src="/assets/js/kyte.js?v=3h" crossorigin="anonymous"></script>
     <script src="/assets/js/kyte-connect.js"></script>
-    <script src="/assets/js/login.js?v=1"></script>
+    <script src="/assets/js/reset.js?v=1"></script>
 </head>
 
 <body style="background: url(/assets/images/background-1.png) no-repeat; background-size: cover;">
@@ -36,14 +36,12 @@
     <div class="container">
         <div class="row my-5">
             <div class="col-lg-4 mx-auto">
-                <form id="login-form">
-                    <h3 class="text-center text-light pb-4">Sign in</h3>
+                <form id="reset-form">
+                    <h3 class="text-center text-light pb-4">Password Reset</h3>
                     <p class="text-danger d-none" id="errorMsg"></p>
                     <input type="email" class="my-3 form-control" name="email" placeholder="kate@example.com">
-                    <input type="password" placeholder="password" class="my-3 form-control" name="password">
-                    <button id="signin" class="my-3 btn btn-primary d-block w-100">Sign in</button>
-                    <p class="text-light p-2" style="font-size: 0.8em;">By continuing, you agree to the Terms of Service or other agreement for Kyte services, the Privacy Policy and the use of cookies. See our Cookie Notice for more information.</p>
-                    <a href="/reset.html" class="text-white text-center d-block">Having trouble signing in?</a>
+                    <button id="signin" class="my-3 btn btn-primary d-block w-100">Reset Password</button>
+                    <a href="/" class="text-white text-center d-block">Back to sign in?</a>
                 </form>
                 <!-- <hr class="my-3">
                 <h5 class="text-light" style="font-weight: 300;">New to Kyte?</h5>
