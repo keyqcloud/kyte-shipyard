@@ -1,7 +1,5 @@
 let colDefModels = [
     {'targets':0,'data':'name','label':'User Model'},
-    {'targets':1,'data':'charset','label':'Charset'},
-    {'targets':2,'data':'engine','label':'Engine'},
 ];
 
 let colDefAttributes = [

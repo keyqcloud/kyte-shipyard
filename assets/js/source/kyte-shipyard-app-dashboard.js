@@ -15,6 +15,9 @@ $(document).ready(function() {
     k.get("Application", "id", idx, [], function(r) {
         if (r.data[0]) {
             data = r.data[0];
+
+            let obj = {'model': 'Controller', 'idx':r.data[0].id};
+            let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
             
             let appnav = [
                 [
@@ -27,26 +30,26 @@ $(document).ready(function() {
                     {
                         faicon:'fas fa-globe',
                         class:'me-2 text-light',
-                        label:'Models',
-                        href:'/app/sites.html'
+                        label:'Sites',
+                        href:'/app/sites.html?request='+encoded
                     },
                     {
                         faicon:'fas fa-file-import',
                         class:'me-2 text-light',
                         label:'Models',
-                        href:'/app/models.html'
+                        href:'/app/models.html?request='+encoded
                     },
                     {
                         faicon:'fas fa-layer-group',
                         class:'me-2 text-light',
                         label:'Controllers',
-                        href:'/app/controllers.html'
+                        href:'/app/controllers.html?request='+encoded
                     },
                     {
                         faicon:'fas fa-cubes',
                         class:'me-2 text-light',
                         label:'Functions',
-                        href:'/app/functions.html'
+                        href:'/app/functions.html?request='+encoded
                     }
                 ],
                 [
