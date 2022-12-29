@@ -15,12 +15,12 @@ let colDefApps = [
 ];
 
 $(document).ready(function() {
-    let navbar = new KyteNav("#mainnav", [], null, 'Kyte Shipyard<sup>&trade;</sup>');
+    let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup>');
     navbar.create();
 
     $('#pageLoaderModal').modal('show');
     if (k.isSession()) {
-        var dataTable = createTable("#models-table", "Application", colDefApps, null, null, false, true, '/app/detail/', 'id', true);
+        var dataTable = createTable("#models-table", "Application", colDefApps, null, null, true, true, '/app/dashboard/', 'id', true);
         var modalForm = new KyteForm(k, $("#modalForm"), 'Application', null, elements, 'My App', dataTable, true, $("#new"));
         modalForm.init();
         dataTable.bindEdit(modalForm);

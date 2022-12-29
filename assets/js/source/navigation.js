@@ -1,4 +1,31 @@
 // menu array
+let rootnav = [
+    [],
+    [
+        {
+            dropdown: true,
+            // faicon:'fas fa-server',
+            class:'me-2 text-light',
+            label:'Account',
+            items: [
+                {
+                    faicon:'fas fa-cog',
+                    class:'me-2',
+                    label:'Settings',
+                    href:'/app/settings.html'
+                },
+                {
+                    logout: true,
+                    faicon:'fas fa-server',
+                    class:'me-2',
+                    label:'Logout'
+                }
+            ]
+        }
+    ]
+]
+
+// menu array
 let nav = [
     [
         {

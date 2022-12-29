@@ -1,0 +1,84 @@
+
+$(document).ready(function() {
+
+    $('#pageLoaderModal').modal('show');
+
+    if (!k.isSession()) {
+        location.href="/?redir="+encodeURIComponent(window.location);
+        return;
+    }
+
+    // get url param
+    let idx = k.getPageRequest();
+    idx = idx.idx;
+
+    k.get("Application", "id", idx, [], function(r) {
+        if (r.data[0]) {
+            data = r.data[0];
+            
+            let appnav = [
+                [
+                    {
+                        faicon:'fas fa-rocket',
+                        class:'me-2 text-light',
+                        label: data.name,
+                        href: window.location.href
+                    },
+                    {
+                        faicon:'fas fa-globe',
+                        class:'me-2 text-light',
+                        label:'Models',
+                        href:'/app/sites.html'
+                    },
+                    {
+                        faicon:'fas fa-file-import',
+                        class:'me-2 text-light',
+                        label:'Models',
+                        href:'/app/models.html'
+                    },
+                    {
+                        faicon:'fas fa-layer-group',
+                        class:'me-2 text-light',
+                        label:'Controllers',
+                        href:'/app/controllers.html'
+                    },
+                    {
+                        faicon:'fas fa-cubes',
+                        class:'me-2 text-light',
+                        label:'Functions',
+                        href:'/app/functions.html'
+                    }
+                ],
+                [
+                    {
+                        dropdown: true,
+                        // faicon:'fas fa-server',
+                        class:'me-2 text-light',
+                        label:'Account',
+                        items: [
+                            {
+                                faicon:'fas fa-cog',
+                                class:'me-2',
+                                label:'Settings',
+                                href:'/app/settings.html'
+                            },
+                            {
+                                logout: true,
+                                faicon:'fas fa-server',
+                                class:'me-2',
+                                label:'Logout'
+                            }
+                        ]
+                    }
+                ]
+            ]
+        
+            let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Models');
+            navbar.create();
+
+        } else {
+            alert("Failed to load...");
+        }
+        $('#pageLoaderModal').modal('hide');
+    });
+});
