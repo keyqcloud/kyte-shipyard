@@ -16,7 +16,7 @@ $(document).ready(function() {
         if (r.data[0]) {
             data = r.data[0];
 
-            let obj = {'model': 'Controller', 'idx':r.data[0].id};
+            let obj = {'model': 'Application', 'idx':r.data[0].id};
             let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
             
             let appnav = [
@@ -25,7 +25,7 @@ $(document).ready(function() {
                         faicon:'fas fa-rocket',
                         class:'me-2 text-light',
                         label: data.name,
-                        href: window.location.href
+                        href: '/app/dashboard/?request='+encoded
                     },
                     {
                         faicon:'fas fa-globe',
@@ -34,7 +34,13 @@ $(document).ready(function() {
                         href:'/app/sites.html?request='+encoded
                     },
                     {
-                        faicon:'fas fa-file-import',
+                        faicon:'fas fa-hdd',
+                        class:'me-2 text-light',
+                        label:'Data Store',
+                        href:'/app/datastore.html?request='+encoded
+                    },
+                    {
+                        faicon:'fas fa-table',
                         class:'me-2 text-light',
                         label:'Models',
                         href:'/app/models.html?request='+encoded
