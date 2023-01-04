@@ -8,7 +8,7 @@ let elements = [
         {
             'field':'name',
             'type':'text',
-            'label':'Model',
+            'label':'Name',
             'required':true
         },
         {
@@ -153,11 +153,11 @@ function getData(idx, model) {
         targets++;
         modelColDef.push({'targets':targets,'data':'date_modified','label':'date_modified'});
 
-        var tblData = createTable("#data-table", model, modelColDef, null, null, true, true);
+        // var tblData = createTable("#data-table", model, modelColDef, null, null, true, true);
 
-        var modelDataForm = new KyteForm(k, $("#modalDataForm"), model, null, modelFormDef, model, tblData, true, $("#newData"));
-        modelDataForm.init();
-        tblData.bindEdit(modelDataForm);
+        // var modelDataForm = new KyteForm(k, $("#modalDataForm"), model, null, modelFormDef, model, tblData, true, $("#newData"));
+        // modelDataForm.init();
+        // tblData.bindEdit(modelDataForm);
 
         // generate swift code
         swift = generate_swift(model);
@@ -409,9 +409,6 @@ function download_data(format) {
 }
 
 $(document).ready(function() {
-    let navbar = new KyteNav("#mainnav", nav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Models');
-    navbar.create();
-
     let sidenav = new KyteSidenav("#sidenav", subnavModel, "#Attributes");
     sidenav.create();
     sidenav.bind();
@@ -440,6 +437,74 @@ $(document).ready(function() {
                 model = r.data[0].name;
                 $("#model-name").html(model);
                 getData(idx, model);
+                let obj = {'model': 'Application', 'idx':r.data[0].application.id};
+                let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                
+                let appnav = [
+                    [
+                        {
+                            faicon:'fas fa-rocket',
+                            class:'me-2 text-light',
+                            label: r.data[0].application.name,
+                            href: '/app/dashboard/?request='+encoded
+                        },
+                        {
+                            faicon:'fas fa-globe',
+                            class:'me-2 text-light',
+                            label:'Sites',
+                            href:'/app/sites.html?request='+encoded
+                        },
+                        {
+                            faicon:'fas fa-hdd',
+                            class:'me-2 text-light',
+                            label:'Data Store',
+                            href:'/app/datastore.html?request='+encoded
+                        },
+                        {
+                            faicon:'fas fa-table',
+                            class:'me-2 text-light',
+                            label:'Models',
+                            href:'/app/models.html?request='+encoded
+                        },
+                        {
+                            faicon:'fas fa-layer-group',
+                            class:'me-2 text-light',
+                            label:'Controllers',
+                            href:'/app/controllers.html?request='+encoded
+                        },
+                        {
+                            faicon:'fas fa-cubes',
+                            class:'me-2 text-light',
+                            label:'Functions',
+                            href:'/app/functions.html?request='+encoded
+                        }
+                    ],
+                    [
+                        {
+                            dropdown: true,
+                            // faicon:'fas fa-server',
+                            class:'me-2 text-light',
+                            label:'Account',
+                            items: [
+                                {
+                                    faicon:'fas fa-cog',
+                                    class:'me-2',
+                                    label:'Settings',
+                                    href:'/app/settings.html'
+                                },
+                                {
+                                    logout: true,
+                                    faicon:'fas fa-server',
+                                    class:'me-2',
+                                    label:'Logout'
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            
+                let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Models');
+                navbar.create();
             } else {
                 $("#model-name").html("Undefined");
             }
@@ -453,17 +518,17 @@ $(document).ready(function() {
         tblAttributes.bindEdit(modalForm);
 
         // controller table and form
-        var tblController = createTable("#controller-table", "Controller", colDefControllers, 'dataModel', idx, true, true, '/app/controller/', 'id');
-        var controllerModalForm = new KyteForm(k, $("#modalControllerForm"), 'Controller', hidden, controllerElements, 'Controller', tblController, true, $("#newController"));
-        controllerModalForm.init();
-        controllerModalForm.success = function(r) {
-            if (r.data[0]) {
-                let obj = {'model': 'Controller', 'idx':r.data[0].id};
-                let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                location.href="/app/controller/?request="+encoded;
-            }
-        }
-        tblController.bindEdit(controllerModalForm);
+        // var tblController = createTable("#controller-table", "Controller", colDefControllers, 'dataModel', idx, true, true, '/app/controller/', 'id');
+        // var controllerModalForm = new KyteForm(k, $("#modalControllerForm"), 'Controller', hidden, controllerElements, 'Controller', tblController, true, $("#newController"));
+        // controllerModalForm.init();
+        // controllerModalForm.success = function(r) {
+        //     if (r.data[0]) {
+        //         let obj = {'model': 'Controller', 'idx':r.data[0].id};
+        //         let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+        //         location.href="/app/controller/?request="+encoded;
+        //     }
+        // }
+        // tblController.bindEdit(controllerModalForm);
 
         $("#downloadSwift").click(function(e) {
             e.preventDefault();
