@@ -9,6 +9,11 @@ let colDefSites = [
     {'targets':3,'data':'description','label':'Description'},
 ];
 
+let colDefPage = [
+    {'targets':0,'data':'title','label':'Page Title'},
+    {'targets':1,'data':'state','label':'Status', render: function(data, type, row, meta) { if (data == 0) { return 'Not Published'; } else if (data == 1) { return 'Published'; } else { return 'Published (Stale)'; }}}
+];
+
 
 let colDefAttributes = [
     {'targets':0,'data':'name','label':'Name', render: function(data, type, row, meta) {

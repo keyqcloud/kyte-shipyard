@@ -101,9 +101,24 @@ let subnavSite = [
         selector:'#Pages'
     },
     {
+        faicon:'fas fa-photo-video',
+        label:'Media',
+        selector:'#Media'
+    },
+    {
+        faicon:'fas fa-compass',
+        label:'Navigation',
+        selector:'#Navigation'
+    },
+    {
         faicon:'fas fa-at',
         label:'Domains',
         selector:'#Domains'
+    },
+    {
+        faicon:'fas fa-wrench',
+        label:'Settings',
+        selector:'#Settings'
     },
 ];
 let subnavController = [

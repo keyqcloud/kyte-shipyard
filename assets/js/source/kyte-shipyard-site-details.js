@@ -138,12 +138,13 @@ $(document).ready(function() {
         let idx = k.getPageRequest();
         idx = idx.idx;
 
-        // let hidden = [
-        //     {
-        //         'name': 'dataModel',
-        //         'value': idx
-        //     }
-        // ];
+        let hidden = [
+            {
+                'name': 'site',
+                'value': idx
+            }
+        ];
+
 
         k.get("Site", "id", idx, [], function(r) {
             if (r.data[0]) {
@@ -216,10 +217,40 @@ $(document).ready(function() {
                             ]
                         }
                     ]
-                ]
+                ];
             
                 let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Sites');
                 navbar.create();
+
+                let pageFrmElements = [
+                    [
+                        {
+                            'field':'title',
+                            'type':'text',
+                            'label':'Page Title',
+                            'required':true
+                        }
+                    ],
+                    [
+                        {
+                            'field':'s3key',
+                            'type':'text',
+                            'label':'Path: https://'+data.cfDomain+'/',
+                            'required':true
+                        }
+                    ]
+                ];
+                var tblPage = createTable("#pages-table", "Page", colDefPage, 'site', idx, false, true, '/app/page/', 'id', true);
+                var modalFormPage = new KyteForm(k, $("#modalFormPage"), 'Page', hidden, pageFrmElements, 'Page', tblPage, true, $("#createPage"));
+                modalFormPage.init();
+                modalFormPage.success = function(r) {
+                    if (r.data[0]) {
+                        let obj = {'model': 'Page', 'idx':r.data[0].id};
+                        let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                        location.href="/app/page/?request="+encoded+"#Code";
+                    }
+                }
+                tblPage.bindEdit(modalFormPage);
             } else {
                 $("#model-name").html("Undefined");
             }
