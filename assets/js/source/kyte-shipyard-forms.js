@@ -7,11 +7,21 @@ let fldsAdmin = [
             'label':'Name (*)',
             'required':true
         },
+    ],
+    [
         {
             'field':'email',
             'type':'text',
             'label':'E-mail (*)',
             'required':true
+        }
+    ],
+    [
+        {
+            'field':'password',
+            'type':'password',
+            'label':'Password (leave blank for user to setup)',
+            'required':false
         }
     ]
 ];
