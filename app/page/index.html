@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Kyte - Shipyard</title>
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/assets/css/kyte-shipyard-styles.css">
+    <!--  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;500;700&display=swap" rel="stylesheet">
+    <!-- javascripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
+    <!-- javascript-obfuscator -->
+    <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script> -->
+    <!-- Monaco -->
+    <link rel="stylesheet" data-name="vs/editor/editor.main" href="/assets/js/packages/monaco-editor/min/vs/editor/editor.main.css" />
+    <script>var require = { paths: { vs: '/assets/js/packages/monaco-editor/min/vs' } };</script>
+    <script src="/assets/js/packages/monaco-editor/min/vs/loader.js"></script>
+    <script src="/assets/js/packages/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+    <script src="/assets/js/packages/monaco-editor/min/vs/editor/editor.main.js"></script>
+    <!-- Kyte -->
+    <script src="https://cdn.stratis-troika.com/kytejs/2.0.0/kyte.js" crossorigin="anonymous"></script>
+    <script src="/assets/js/kyte-connect.js?v=1"></script>
+    <script src="/assets/js/navigation.js?v=1"></script>
+    <script src="/assets/js/kyte-shipyard-tables.js?v=1"></script>
+    <script src="/assets/js/kyte-shipyard-page-details.js?v=1"></script>
+</head>
+
+<body>
+    <!-- Page loading modal.  Once session is validated, the loading modal will close. -->
+    <div id="pageLoaderModal" class="modal white" data-backdrop="static" data-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-sm h-100 d-flex">
+            <div class="mx-auto align-self-center" style="width: 48px">
+                <div class="spinner-wrapper text-center fa-6x"><span class="fas fa-sync fa-spin"></span></div>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+
+    <div id="wrapper">
+        <!-- START NAV -->
+        <nav id="mainnav" class="navbar navbar-dark bg-dark navbar-expand-lg"></nav>
+        <!-- END NAV -->
+
+        <main>
+            <!-- BEGIN SIDE NAVIGATION -->
+            <div id="sidenav" class="d-flex flex-column flex-shrink-0 p-3 text-white" style="width: 230px;"></div>
+            <!-- END SIDE NAVIGATION -->
+
+            <div class="container container-flex mb-5 px-5">
+                <p class="mt-3"><a id="backToSite" href="#">&lt; Back to Site</a></p>
+
+                <div class="d-flex justify-content-between mt-4 mb-3">
+                    <div>
+                        <h2 class="section-heading mt-3" id="page-title"></h2>
+                        <h4 class="mt-0" style="font-weight: 100;" id="page-path"></h4>
+                    </div>
+                    <div>
+                        <a class="btn d-inline-block btn-md btn-primary" href="#" id="publishPage"><i class="fas fa-upload me-2"></i> Publish</a>
+                        <a class="btn d-inline-block btn-md btn-warning" href="#" id="saveCode"><i class="fas fa-save me-2"></i> Save</a>
+                    </div>
+                </div>
+
+                <div id="Page" class="mt-2">
+                    <div id="htmlEditor" style="width: 100%; height: 85vh; border: 1px solid grey"></div>
+                </div>
+
+                <div id="JavaScript" class="mt-2">
+                    <div id="jsEditor" style="width: 100%; height: 85vh; border: 1px solid grey"></div>
+                </div>
+
+                <div id="Stylesheet" class="mt-2">
+                    <div id="cssEditor" style="width: 100%; height: 85vh; border: 1px solid grey"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- modal form -->
+    <div id="modalForm"></div>
+</body>
+</html>

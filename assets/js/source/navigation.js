@@ -94,6 +94,23 @@ let subnavModel = [
         selector:'#Export'
     },
 ];
+let subnavPage = [
+    {
+        faicon:'fas fa-code',
+        label:'Page',
+        selector:'#Page'
+    },
+    {
+        faicon:'fab fa-js',
+        label:'JavaScript',
+        selector:'#JavaScript'
+    },
+    {
+        faicon:'fab fa-css3',
+        label:'Stylesheet',
+        selector:'#Stylesheet'
+    },
+];
 let subnavSite = [
     {
         faicon:'fas fa-sitemap',
