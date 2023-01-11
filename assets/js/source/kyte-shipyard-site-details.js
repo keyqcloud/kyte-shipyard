@@ -238,6 +238,21 @@ $(document).ready(function() {
                             'label':'Path: https://'+data.cfDomain+'/',
                             'required':true
                         }
+                    ],
+                    [
+                        {
+                            'field':'protected',
+                            'type':'select',
+                            'label':'Requires Session',
+                            'required':true,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    '0': 'No',
+                                    '1': 'Yes'
+                                }
+                            }
+                        }
                     ]
                 ];
                 var tblPage = createTable("#pages-table", "Page", colDefPage, 'site', idx, false, true, '/app/page/', 'id', true);
