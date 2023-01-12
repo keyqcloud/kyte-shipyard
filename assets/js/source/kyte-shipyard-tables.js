@@ -49,12 +49,6 @@ let colDefFunctions = [
     {'targets':2,'data':'description','label':'Description'},
 ];
 
-let colDefAssignedControllers = [
-    {'targets':0,'data':'controller.name','label':'Controller', render: function(data, type, row, meta) { return data ? data:'Unknown'; }},
-    {'targets':1,'data':'controller.dataModel.name','label':'Description', render: function(data, type, row, meta) { return data ? data:'Virtual'; }},
-    {'targets':2,'data':'controller.description','label':'Description', render: function(data, type, row, meta) { return data ? data:''; }},
-];
-
 let colDefAssignedFunctions = [
     {'targets':0,'data':'function.name','label':'Function', render: function(data, type, row, meta) { return data ? data:'Unknown'; }},
     {'targets':1,'data':'type','label':'Type'},

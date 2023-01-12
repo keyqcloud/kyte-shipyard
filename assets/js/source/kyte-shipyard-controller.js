@@ -34,23 +34,31 @@ let elements = [
 ];
 
 $(document).ready(function() {
-    let navbar = new KyteNav("#mainnav", nav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Controllers');
-    navbar.create();
-
-    $('#pageLoaderModal').modal('show');
-    if (k.isSession()) {
-        var tblControllers = createTable("#controllers-table", "Controller", colDefControllers, null, null, false, true, '/app/controller/', 'id', true);
-        var modalForm = new KyteForm(k, $("#modalForm"), 'Controller', null, elements, 'Controller', tblControllers, true, $("#new"));
-        modalForm.init();
-        modalForm.success = function(r) {
-            if (r.data[0]) {
-                let obj = {'model': 'Controller', 'idx':r.data[0].id};
-                let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                location.href="/app/controller/?request="+encoded;
-            }
-        }
-        tblControllers.bindEdit(modalForm);
-    } else {
+    if (!k.isSession()) {
         location.href="/?redir="+encodeURIComponent(window.location);
+        return;
     }
+
+    // get url param
+    let idx = k.getPageRequest();
+    idx = idx.idx;
+
+    let hidden = [
+        {
+            'name': 'application',
+            'value': idx
+        }
+    ];
+
+    var tblControllers = createTable("#controllers-table", "Controller", colDefControllers, 'application', idx, false, true, '/app/controller/', 'id', true);
+    var modalForm = new KyteForm(k, $("#modalForm"), 'Controller', hidden, elements, 'Controller', tblControllers, true, $("#new"));
+    modalForm.init();
+    modalForm.success = function(r) {
+        if (r.data[0]) {
+            let obj = {'model': 'Controller', 'idx':r.data[0].id};
+            let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+            location.href="/app/controller/?request="+encoded;
+        }
+    }
+    tblControllers.bindEdit(modalForm);
 });

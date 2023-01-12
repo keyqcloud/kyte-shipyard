@@ -151,11 +151,6 @@ let subnavFunction = [
         label:'Code',
         selector:'#Code'
     },
-    {
-        faicon:'fas fa-layer-group',
-        label:'Controllers',
-        selector:'#Controllers'
-    },
 ];
 let subnavSettings = [
     {

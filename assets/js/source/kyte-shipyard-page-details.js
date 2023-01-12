@@ -94,12 +94,6 @@ $(document).ready(function() {
                             class:'me-2 text-light',
                             label:'Controllers',
                             href:'/app/controllers.html?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-cubes',
-                            class:'me-2 text-light',
-                            label:'Functions',
-                            href:'/app/functions.html?request='+encoded
                         }
                     ],
                     [
