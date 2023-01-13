@@ -25,7 +25,7 @@
     <script src="/assets/js/kyte-connect.js?v=1b"></script>
     <script src="/assets/js/navigation.js?v=1"></script>
     <script src="/assets/js/kyte-shipyard-tables.js?v=1"></script>
-    <script src="/assets/js/kyte-shipyard-site-domain.js?v=1"></script>
+    <script src="/assets/js/kyte-shipyard-site-navitem.js?v=1"></script>
 </head>
 
 <body>
@@ -63,20 +63,22 @@
 
                 <div id="Domains" class="mt-2">
                     <div class="d-flex justify-content-between mt-4">
-                        <h4>Domains &amp; SANs</h4>
+                        <h4 id="navigation-name"></h4>
                         <div>
-                            <div>Status: <i class="fas fa-circle text-secondary mx-2" id="status-icon"></i><span id="status">Unknown</span></div>
-                            <a class="btn d-inline-block btn-md my-2 d-none" href="#" id="assign"></a>
+                            <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="addMenuItem">&plus; Add Item</a>
                         </div>
                     </div>
 
-                    <p>Once the following CNAME records have been configured, domain validation may take a few minutes to over 24 hours.</p>
-                    <div class="mt-2" id="dns-validation-list"></div>
+                    <div class="mt-2">
+                        <table id="navitem-table" class="table table-striped w-100"></table>
+                    </div>
                 </div>
 
             </div>
         </main>
     </div>
-    
+
+    <!-- modal form -->
+    <div id="modalFormNavItem"></div>
 </body>
 </html>

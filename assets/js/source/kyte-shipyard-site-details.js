@@ -132,6 +132,25 @@ let domainFormElements = [
     ]
 ];
 
+let mediaElements = [
+    [
+        {
+            'field':'name',
+            'type':'text',
+            'label':'Name',
+            'required':true
+        },
+    ],
+    [
+        {
+            'field':'media',
+            'type':'file',
+            'label':'Static asset file',
+            'required':true
+        },
+    ]
+];
+
 $(document).ready(function() {
     let sidenav = new KyteSidenav("#sidenav", subnavSite, "#Attributes");
     sidenav.create();
@@ -167,62 +186,7 @@ $(document).ready(function() {
                 let obj = {'model': 'Application', 'idx':r.data[0].application.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 
-                let appnav = [
-                    [
-                        {
-                            faicon:'fas fa-rocket',
-                            class:'me-2 text-light',
-                            label: r.data[0].application.name,
-                            href: '/app/dashboard/?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-globe',
-                            class:'me-2 text-light',
-                            label:'Sites',
-                            href:'/app/sites.html?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-hdd',
-                            class:'me-2 text-light',
-                            label:'Data Store',
-                            href:'/app/datastore.html?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-table',
-                            class:'me-2 text-light',
-                            label:'Models',
-                            href:'/app/models.html?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-layer-group',
-                            class:'me-2 text-light',
-                            label:'Controllers',
-                            href:'/app/controllers.html?request='+encoded
-                        }
-                    ],
-                    [
-                        {
-                            dropdown: true,
-                            // faicon:'fas fa-server',
-                            class:'me-2 text-light',
-                            label:'Account',
-                            items: [
-                                {
-                                    faicon:'fas fa-cog',
-                                    class:'me-2',
-                                    label:'Settings',
-                                    href:'/app/settings.html'
-                                },
-                                {
-                                    logout: true,
-                                    faicon:'fas fa-server',
-                                    class:'me-2',
-                                    label:'Logout'
-                                }
-                            ]
-                        }
-                    ]
-                ];
+                let appnav = generateAppNav(r.data[0].application.name, encoded);
             
                 let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Sites');
                 navbar.create();
@@ -257,6 +221,38 @@ $(document).ready(function() {
                                     '1': 'Yes'
                                 }
                             }
+                        },
+                        {
+                            'field':'main_navigation',
+                            'type':'select',
+                            'label':'Navigation Menu',
+                            'required':false,
+                            'placeholder': 'N/A',
+                            'option': {
+                                'ajax': true,
+                                'data_model_name': 'Navigation',
+                                'data_model_field': 'site',
+                                'data_model_value': data.id,
+                                'data_model_attributes': ['name'],
+                                'data_model_default_field': 'id',
+                                // 'data_model_default_value': 1,
+                            }
+                        },
+                        {
+                            'field':'side_navigation',
+                            'type':'select',
+                            'label':'Navigation Menu',
+                            'required':false,
+                            'placeholder': 'N/A',
+                            'option': {
+                                'ajax': true,
+                                'data_model_name': 'Navigation',
+                                'data_model_field': 'site',
+                                'data_model_value': data.id,
+                                'data_model_attributes': ['name'],
+                                'data_model_default_field': 'id',
+                                // 'data_model_default_value': 1,
+                            }
                         }
                     ]
                 ];
@@ -269,12 +265,16 @@ $(document).ready(function() {
                     if (r.data[0]) {
                         let obj = {'model': 'Page', 'idx':r.data[0].id};
                         let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                        location.href="/app/page/?request="+encoded+"#Code";
+                        location.href="/app/page/?request="+encoded+"#Page";
                     }
                 }
                 tblPage.bindEdit(modalFormPage);
 
                 // media
+                var tblMedia = createTable("#media-table", "Media", colDefMedia, 'site', idx, false, true);
+                var modalFormMedia = new KyteForm(k, $("#modalFormMedia"), 'Media', hidden, mediaElements, 'Media', tblMedia, true, $("#newMedia"));
+                modalFormMedia.init();
+                tblMedia.bindEdit(modalFormMedia);
 
                 // navigation
                 var tblNavigation = createTable("#navigation-table", "Navigation", colDefNavigation, 'site', idx, false, true, '/app/site/navigation.html', 'id', true);
@@ -304,25 +304,6 @@ $(document).ready(function() {
             }
             $('#pageLoaderModal').modal('hide');
         });
-
-        // attribute table and form
-        // var tblAttributes = createTable("#attributes-table", "ModelAttribute", colDefAttributes, 'dataModel', idx, true, true);
-        // var modalForm = new KyteForm(k, $("#modalForm"), 'ModelAttribute', hidden, elements, 'Model Attribute', tblAttributes, true, $("#newAttribute"));
-        // modalForm.init();
-        // tblAttributes.bindEdit(modalForm);
-
-        // controller table and form
-        // var tblController = createTable("#controller-table", "Controller", colDefControllers, 'dataModel', idx, true, true, '/app/controller/', 'id');
-        // var controllerModalForm = new KyteForm(k, $("#modalControllerForm"), 'Controller', hidden, controllerElements, 'Controller', tblController, true, $("#newController"));
-        // controllerModalForm.init();
-        // controllerModalForm.success = function(r) {
-        //     if (r.data[0]) {
-        //         let obj = {'model': 'Controller', 'idx':r.data[0].id};
-        //         let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-        //         location.href="/app/controller/?request="+encoded;
-        //     }
-        // }
-        // tblController.bindEdit(controllerModalForm);
 
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);

@@ -65,62 +65,7 @@ $(document).ready(function() {
                 obj = {'model': 'Application', 'idx':r.data[0].controller.application.id};
                 encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
 
-                let appnav = [
-                    [
-                        {
-                            faicon:'fas fa-rocket',
-                            class:'me-2 text-light',
-                            label: r.data[0].controller.application.name,
-                            href: '/app/dashboard/?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-globe',
-                            class:'me-2 text-light',
-                            label:'Sites',
-                            href:'/app/sites.html?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-hdd',
-                            class:'me-2 text-light',
-                            label:'Data Store',
-                            href:'/app/datastore.html?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-table',
-                            class:'me-2 text-light',
-                            label:'Models',
-                            href:'/app/models.html?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-layer-group',
-                            class:'me-2 text-light',
-                            label:'Controllers',
-                            href:'/app/controllers.html?request='+encoded
-                        }
-                    ],
-                    [
-                        {
-                            dropdown: true,
-                            // faicon:'fas fa-server',
-                            class:'me-2 text-light',
-                            label:'Account',
-                            items: [
-                                {
-                                    faicon:'fas fa-cog',
-                                    class:'me-2',
-                                    label:'Settings',
-                                    href:'/app/settings.html'
-                                },
-                                {
-                                    logout: true,
-                                    faicon:'fas fa-server',
-                                    class:'me-2',
-                                    label:'Logout'
-                                }
-                            ]
-                        }
-                    ]
-                ];
+                let appnav = generateAppNav(r.data[0].controller.application.name, encoded);
             
                 let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Sites');
                 navbar.create();

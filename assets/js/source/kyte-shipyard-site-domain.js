@@ -21,6 +21,36 @@ $(document).ready(function() {
                 $("#domain-name").attr('href', 'https://'+data.site.cfDomain);
                 $("#region").html(data.site.region);
 
+                if (data.assigned) {
+                    $("#assign").html('<i class="fas fa-certificate me-2"></i> Unassign');
+                    $("#assign").addClass('btn-outline-danger');
+                    $("#assign").removeClass('d-none');
+                } else {
+                    $("#assign").html('<i class="fas fa-certificate me-2"></i> Assign');
+                    $("#assign").addClass('btn-outline-primary');
+                    $("#assign").removeClass('d-none');
+                }
+
+                $("#assign").click(function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (data.assigned) {
+                        // remove domain
+                        k.put('Domain', 'id', idx, {'assigned':null}, null, [], function(r) {
+                            $("#assign").html('<i class="fas fa-certificate me-2"></i> Assign');
+                            $("#assign").removeClass('btn-outline-danger');
+                            $("#assign").addClass('btn-outline-primary');
+                        });
+                    } else {
+                        // assign domain
+                        k.put('Domain', 'id', idx, {'assigned':data.site.cfDistributionId}, null, [], function(r) {
+                            $("#assign").html('<i class="fas fa-certificate me-2"></i> Unassign');
+                            $("#assign").removeClass('btn-outline-primary');
+                            $("#assign").addClass('btn-outline-danger');
+                        });
+                    }
+                });
+
                 // PENDING_VALIDATION|ISSUED|INACTIVE|EXPIRED|VALIDATION_TIMED_OUT|REVOKED|FAILED
                 $("#status").html(data.status.replace('_', ' '));
                 if (data.status == 'FAILED' || data.status == 'REVOKED' || data.status == 'EXPIRED') {
@@ -94,62 +124,7 @@ $(document).ready(function() {
                 obj = {'model': 'Application', 'idx':data.site.application.id};
                 encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 
-                let appnav = [
-                    [
-                        {
-                            faicon:'fas fa-rocket',
-                            class:'me-2 text-light',
-                            label: data.site.application.name,
-                            href: '/app/dashboard/?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-globe',
-                            class:'me-2 text-light',
-                            label:'Sites',
-                            href:'/app/sites.html?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-hdd',
-                            class:'me-2 text-light',
-                            label:'Data Store',
-                            href:'/app/datastore.html?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-table',
-                            class:'me-2 text-light',
-                            label:'Models',
-                            href:'/app/models.html?request='+encoded
-                        },
-                        {
-                            faicon:'fas fa-layer-group',
-                            class:'me-2 text-light',
-                            label:'Controllers',
-                            href:'/app/controllers.html?request='+encoded
-                        }
-                    ],
-                    [
-                        {
-                            dropdown: true,
-                            // faicon:'fas fa-server',
-                            class:'me-2 text-light',
-                            label:'Account',
-                            items: [
-                                {
-                                    faicon:'fas fa-cog',
-                                    class:'me-2',
-                                    label:'Settings',
-                                    href:'/app/settings.html'
-                                },
-                                {
-                                    logout: true,
-                                    faicon:'fas fa-server',
-                                    class:'me-2',
-                                    label:'Logout'
-                                }
-                            ]
-                        }
-                    ]
-                ];
+                let appnav = generateAppNav(data.site.application.name, encoded);
             
                 let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Sites');
                 navbar.create();
