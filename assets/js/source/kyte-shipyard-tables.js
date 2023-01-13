@@ -14,6 +14,15 @@ let colDefPage = [
     {'targets':1,'data':'state','label':'Status', render: function(data, type, row, meta) { if (data == 0) { return 'Not Published'; } else if (data == 1) { return 'Published'; } else { return 'Published (Stale)'; }}}
 ];
 
+let colDefDomains = [
+    {'targets':0,'data':'domainName','label':'Domain Name'},
+    {'targets':1,'data':'status','label':'Status', render: function(data, type, row, meta) { if (data) return data.replace('_', ' '); else return 'unknown' }}
+];
+
+let colDefNavigation = [
+    {'targets':0,'data':'name','label':'Name'},
+    {'targets':1,'data':'description','label':'Description'}
+];
 
 let colDefAttributes = [
     {'targets':0,'data':'name','label':'Name', render: function(data, type, row, meta) {

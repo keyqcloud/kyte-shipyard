@@ -102,7 +102,7 @@ let elements = [
     ]
 ];
 
-let controllerElements = [
+let navigationFormElements = [
     [
         {
             'field':'name',
@@ -117,6 +117,17 @@ let controllerElements = [
             'type':'textare',
             'label':'Description',
             'required':false
+        }
+    ]
+];
+
+let domainFormElements = [
+    [
+        {
+            'field':'domainName',
+            'type':'text',
+            'label':'Domain Name (i.e example.com)',
+            'required':true
         }
     ]
 ];
@@ -249,6 +260,8 @@ $(document).ready(function() {
                         }
                     ]
                 ];
+
+                // pages
                 var tblPage = createTable("#pages-table", "Page", colDefPage, 'site', idx, false, true, '/app/page/', 'id', true);
                 var modalFormPage = new KyteForm(k, $("#modalFormPage"), 'Page', hidden, pageFrmElements, 'Page', tblPage, true, $("#createPage"));
                 modalFormPage.init();
@@ -260,6 +273,32 @@ $(document).ready(function() {
                     }
                 }
                 tblPage.bindEdit(modalFormPage);
+
+                // media
+
+                // navigation
+                var tblNavigation = createTable("#navigation-table", "Navigation", colDefNavigation, 'site', idx, false, true, '/app/site/navigation.html', 'id', true);
+                var modalFormNavigation = new KyteForm(k, $("#modalFormNavigation"), 'Navigation', hidden, navigationFormElements, 'Navigation', tblNavigation, true, $("#createNavigation"));
+                modalFormNavigation.init();
+                tblNavigation.bindEdit(modalFormNavigation);
+
+                // domains
+                var tblDomains = createTable("#domains-table", "Domain", colDefDomains, 'site', idx, false, true, '/app/site/domain.html', 'id', true);
+                var modalFormDomain = new KyteForm(k, $("#modalFormDomain"), 'Domain', hidden, domainFormElements, 'Domain', tblDomains, true, $("#addDomain"));
+                modalFormDomain.itemized = {
+                    'title': 'Subject Alternative Names<small class="d-block">(i.e. www.example.com, app.example.com, *.example.com, etc.)</small>',
+                    'fields': [
+                        {
+                            'name': 'name[]',
+                            'type': 'text',
+                            'label': '',
+                            'required': true
+                        },
+                    ]
+                };
+                modalFormDomain.init();
+
+                // settings
             } else {
                 $("#model-name").html("Undefined");
             }
