@@ -27,7 +27,8 @@ let colDefMedia = [
 
 let colDefNavigation = [
     {'targets':0,'data':'name','label':'Name'},
-    {'targets':1,'data':'description','label':'Description'}
+    {'targets':1,'data':'description','label':'Description'},
+    // {'targets':2,'data':'link','label':'Target', render: function(data, type, row, meta) { console.log(row); if (data) { return data; } else { if (row.page) { return row.page.title; } else {return 'No'; }} }}
 ];
 
 let colDefNavItem = [

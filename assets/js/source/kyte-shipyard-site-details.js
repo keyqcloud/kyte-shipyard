@@ -102,25 +102,6 @@ let elements = [
     ]
 ];
 
-let navigationFormElements = [
-    [
-        {
-            'field':'name',
-            'type':'text',
-            'label':'Name',
-            'required':true
-        }
-    ],
-    [
-        {
-            'field':'description',
-            'type':'textare',
-            'label':'Description',
-            'required':false
-        }
-    ]
-];
-
 let domainFormElements = [
     [
         {
@@ -175,6 +156,56 @@ $(document).ready(function() {
             }
         ];
 
+        let navigationFormElements = [
+            [
+                {
+                    'field':'name',
+                    'type':'text',
+                    'label':'Name',
+                    'required':true
+                },
+                {
+                    'field':'page',
+                    'type':'select',
+                    'label':'Page',
+                    'required':false,
+                    'placeholder': 'N/A',
+                    'option': {
+                        'ajax': true,
+                        'data_model_name': 'Page',
+                        'data_model_field': 'site',
+                        'data_model_value': idx,
+                        'data_model_attributes': ['title'],
+                        'data_model_default_field': 'id',
+                        // 'data_model_default_value': 1,
+                    }
+                },
+            ],
+            [
+                {
+                    'field':'link',
+                    'type':'text',
+                    'label':'Link URL (optional if page or logout is set)',
+                    'required':false
+                },
+            ],
+            [
+                {
+                    'field':'logo',
+                    'type':'text',
+                    'label':'Logo URL',
+                    'required':false
+                },
+            ],
+            [
+                {
+                    'field':'description',
+                    'type':'textare',
+                    'label':'Description',
+                    'required':false
+                }
+            ]
+        ];
 
         k.get("Site", "id", idx, [], function(r) {
             if (r.data[0]) {
