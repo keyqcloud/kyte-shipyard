@@ -60,7 +60,7 @@ $(document).ready(function() {
 
                 let obj = {'model': 'Controller', 'idx':r.data[0].controller.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                $("#backToController").attr('href', '/app/controller?request='+encoded);
+                $("#backToController").attr('href', '/app/controller/?request='+encoded);
 
                 obj = {'model': 'Application', 'idx':r.data[0].controller.application.id};
                 encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
