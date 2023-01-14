@@ -61,7 +61,7 @@ $(document).ready(function() {
 
                 let obj = {'model': 'Site', 'idx':page.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                $("#backToSite").attr('href', '/app/site?request='+encoded);
+                $("#backToSite").attr('href', '/app/site/?request='+encoded);
 
                 $("#page-title").html(page.title);
                 $("#page-path").html('<i class="fas fa-link me-2"></i>https://'+page.site.cfDomain+'/'+page.s3key);
