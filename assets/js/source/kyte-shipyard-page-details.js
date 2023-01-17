@@ -33,19 +33,37 @@ $(document).ready(function() {
                 htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {
                     value: page.html,
                     theme: 'vs-dark',
-                    language: "html"
+                    language: "html",
+                    wordWrap: 'wordWrapColumn',
+                    // wordWrapColumn: 40,
+                    // Set this to false to not auto word wrap minified files
+                    wordWrapMinified: true,
+                    // try "same", "indent" or "none"
+                    wrappingIndent: 'indent'
                 });
 
                 jsEditor = monaco.editor.create(document.getElementById("jsEditor"), {
                     value: page.javascript,
                     theme: 'vs-dark',
-                    language: "javascript"
+                    language: "javascript",
+                    wordWrap: 'wordWrapColumn',
+                    // wordWrapColumn: 40,
+                    // Set this to false to not auto word wrap minified files
+                    wordWrapMinified: true,
+                    // try "same", "indent" or "none"
+                    wrappingIndent: 'indent'
                 });
 
                 cssEditor = monaco.editor.create(document.getElementById("cssEditor"), {
                     value: page.stylesheet,
                     theme: 'vs-dark',
-                    language: "css"
+                    language: "css",
+                    wordWrap: 'wordWrapColumn',
+                    // wordWrapColumn: 40,
+                    // Set this to false to not auto word wrap minified files
+                    wordWrapMinified: true,
+                    // try "same", "indent" or "none"
+                    wrappingIndent: 'indent'
                 });
                 
                 // hide after editor generation

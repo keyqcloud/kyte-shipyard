@@ -55,7 +55,13 @@ $(document).ready(function() {
                 editor = monaco.editor.create(document.getElementById('container'), {
                     value: r.data[0].code,
                     theme: 'vs-dark',
-                    language: "php"
+                    language: "php",
+                    wordWrap: 'wordWrapColumn',
+                    // wordWrapColumn: 40,
+                    // Set this to false to not auto word wrap minified files
+                    wordWrapMinified: true,
+                    // try "same", "indent" or "none"
+                    wrappingIndent: 'indent'
                 });
 
                 let obj = {'model': 'Controller', 'idx':r.data[0].controller.id};
