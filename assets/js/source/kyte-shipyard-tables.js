@@ -11,7 +11,8 @@ let colDefSites = [
 
 let colDefPage = [
     {'targets':0,'data':'title','label':'Page Title'},
-    {'targets':1,'data':'state','label':'Status', render: function(data, type, row, meta) { if (data == 0) { return 'Not Published'; } else if (data == 1) { return 'Published'; } else { return 'Published (Stale)'; }}}
+    {'targets':1,'data':'s3key','label':'Path', render: function(data, type, row, meta) { return '/'+data; }},
+    {'targets':2,'data':'state','label':'Status', render: function(data, type, row, meta) { if (data == 0) { return 'Not Published'; } else if (data == 1) { return 'Published'; } else { return 'Published (Stale)'; }}}
 ];
 
 let colDefDomains = [
