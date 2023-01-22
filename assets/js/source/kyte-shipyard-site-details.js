@@ -272,7 +272,7 @@ $(document).ready(function() {
                         {
                             'field':'side_navigation',
                             'type':'select',
-                            'label':'Navigation Menu',
+                            'label':'Side Menu',
                             'required':false,
                             'placeholder': 'N/A',
                             'option': {
