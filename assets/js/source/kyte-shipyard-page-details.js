@@ -29,6 +29,9 @@ $(document).ready(function() {
                         'value': page.site.id
                     }
                 ];
+
+                $("#setting-page-title").val(page.title);
+                $("#setting-page-description").val(page.description);
                 
                 htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {
                     value: page.html,
@@ -89,8 +92,12 @@ $(document).ready(function() {
                 encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 
                 k.get('Navigation', 'site', page.site.id, [], function(r) {
+                    let main_navigation = page.main_navigation ? page.main_navigation.id : 0;
+                    let side_navigation = page.side_navigation ? page.side_navigation.id : 0;
                     for (data of r.data) {
-                        $("#setting-main-navigation").append('<option value="'+data.id+'"'+(page.main_navigation.id == data.id ? ' selected' : '')+'>'+data.name+'</option>');
+                        $("#setting-main-navigation").append('<option value="'+data.id+'"'+(main_navigation == data.id ? ' selected' : '')+'>'+data.name+'</option>');
+                        // TODO: update for side nav only
+                        $("#setting-side-navigation").append('<option value="'+data.id+'"'+(side_navigation == data.id ? ' selected' : '')+'>'+data.name+'</option>');
                     }
                 });
 
@@ -101,7 +108,7 @@ $(document).ready(function() {
 
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
-                    k.put('Page', 'id', idx, {'html':htmlEditor.getValue(), 'javascript': jsEditor.getValue(), 'stylesheet': cssEditor.getValue(), 'main_navigation':$("#setting-main-navigation").val()}, null, [], function(r) {
+                    k.put('Page', 'id', idx, {'html':htmlEditor.getValue(), 'javascript': jsEditor.getValue(), 'stylesheet': cssEditor.getValue(), 'main_navigation':$("#setting-main-navigation").val(),'side_navigation':$("#setting-side-navigation").val(),'title':$("#setting-page-title").val(),'description':$("#setting-page-description").val()}, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
                     });
                 });
@@ -109,7 +116,7 @@ $(document).ready(function() {
                 $("#publishPage").click(function() {
                     $('#pageLoaderModal').modal('show');
                     // create kyte connect js
-                    let connect = "let endpoint = 'https://"+page.api_endpoint+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+page.application_identifier+"');k.init();$(document).ready(function() { k.addLogoutHandler(\"#logout\");});\n\n";
+                    let connect = "let endpoint = 'https://"+page.api_endpoint+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+page.application_identifier+"');k.init();\n\n";
 
                     let rawJS = jsEditor.getValue();
                     // var obfuscated = JavaScriptObfuscator.obfuscate(connect+rawJS,
@@ -126,7 +133,7 @@ $(document).ready(function() {
                     //         stringArrayThreshold: 1
                     //     }
                     // );
-                    k.put('Page', 'id', idx, {'html':htmlEditor.getValue(), 'javascript': rawJS, 'stylesheet': cssEditor.getValue(), 'state': 1, 'kyte_connect': connect, 'main_navigation':$("#setting-main-navigation").val()}, null, [], function(r) {
+                    k.put('Page', 'id', idx, {'html':htmlEditor.getValue(), 'javascript': rawJS, 'stylesheet': cssEditor.getValue(), 'state': 1, 'kyte_connect': connect, 'main_navigation':$("#setting-main-navigation").val(),'side_navigation':$("#setting-side-navigation").val(),'title':$("#setting-page-title").val(),'description':$("#setting-page-description").val()}, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
                     });
                 });
