@@ -137,13 +137,20 @@ $(document).ready(function() {
             let sortable = '';
             k.get('ModelAttribute', 'dataModel', $("#page-model").val(), [], function(r) {
                 sortable = '<ul id="data-model-columns">';
+                let i = 1;
                 for (data of r.data) {
-                    sortable += '<li class="p-2 my-2 data-attr-'+data.id+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col-2"><small class="d-block">include?</small><select class="column-include-opt" data-column-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div><div class="col"><small class="d-block">label</small><input type="text" class="column-label form-control" data-column-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
+                    sortable += '<li class="p-2 my-2 data-attr-'+data.id+'" data-column-order="'+i+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col-2"><small class="d-block">include?</small><select class="column-include-opt" data-column-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div><div class="col"><small class="d-block">label</small><input type="text" class="column-label form-control" data-column-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
+                    i++;
                 }
                 sortable += '</ul>';
-                console.log(sortable);
                 $("#data-model-columns-wrapper").html(sortable);
                 $("#data-model-columns").sortable();
+                $( "#data-model-columns" ).on("sortupdate", function( event, ui ) {
+                    // update order index
+                    $("#data-model-columns li").each(function(index) {
+                        $(this).data('columnOrder', index+1);
+                    });
+                });
                 $('#pageLoaderModal').modal('hide');
             });
         }
@@ -175,6 +182,7 @@ $(document).ready(function() {
         // hide page type specific customizations
         $("#customization-login").addClass('d-none');
         $("#customization-table").addClass('d-none');
+        $("#customize-page-form-title").addClass('d-none');
         $("#customize-page-table-add").addClass('d-none');
         $("#customize-page-table-edit").addClass('d-none');
         $("#customization-table-columns").addClass('d-none');
@@ -217,6 +225,7 @@ $(document).ready(function() {
                 getModelAttributes();
                 $("#label-page-type").html('table page with form');
                 $("#customization-table").removeClass('d-none');
+                $("#customize-page-form-title").removeClass('d-none');
                 $("#customize-page-table-add").removeClass('d-none');
                 $("#customize-page-table-edit").removeClass('d-none');
                 $("#image-placeholder").addClass('d-none');
