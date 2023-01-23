@@ -8,6 +8,7 @@ footer { position:fixed; bottom:0; width:100%; height:120px; }
 .footer-spacer  { clear: both; height: 120px; }
 .text-right { text-align: right;}
 .text-left { text-align: left;}
+.text-strike { text-decoration: line-through; }
 main {
     display: flex;
     flex-wrap: nowrap;

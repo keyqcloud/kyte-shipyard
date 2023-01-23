@@ -1,0 +1,76 @@
+/* https://codepen.io/Cormac-Maher/pen/KGpXqZ */
+.pgb .step {
+    text-align: center;
+    position:relative;
+    }
+.pgb h2 {
+    font-size:1.3rem;
+}
+.pgb .step p {
+    position:absolute;
+    height:60px;
+    width:100%;
+    text-align:center;
+    display:block;
+    z-index:3;
+    color:#fff;
+    font-size:160%;
+    line-height:55px;
+    opacity:.7;
+}
+.pgb .active.step p {
+    opacity:1;
+    font-weight:600;
+}
+.pgb .img-circle {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    border-radius:50%;
+    background-color:#9E9E9E;
+    border:4px solid #fff;
+}
+.pgb .complete .img-circle {
+    background-color:#4CAF50;
+}
+.pgb .active .img-circle {
+    background-color:#FF9800;
+}
+.pgb .step .img-circle:before {
+    content: "";
+    display: block;
+    background: #9E9E9E;
+    height: 4px;
+    width: 50%;
+    position: absolute;
+    bottom: 50%;
+    left: 0;
+    z-index: -1;
+    margin-right:24px;
+}
+.pgb .step .img-circle:after {
+    content: "";
+    display: block;
+    background: #9E9E9E;
+    height: 4px;
+    width: 50%;
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    z-index: -1;
+}
+.pgb .step.active .img-circle:after {
+    background: #9E9E9E;
+}
+
+.pgb .step.complete .img-circle:after, .pgb .step.active .img-circle:before {
+    background: #4CAF50;
+}
+
+.pgb .step:last-of-type .img-circle:after, .pgb .step:first-of-type .img-circle:before{
+    display: none;
+}
+
+/* https://jqueryui.com/sortable/#placeholder */
+#data-model-columns { list-style-type: none; }
+#data-model-columns li {cursor: pointer; }
