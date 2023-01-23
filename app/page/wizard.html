@@ -84,7 +84,7 @@
 
                             <div class="w-100" style="position: absolute; bottom: 0;">
                                 <div class="d-flex justify-content-between">
-                                    <a id="backToSite" class="btn btn-danger" href="#">Cancel</a><a id="wizard-1-next" class="btn btn-primary" href="#">Next</a>
+                                    <a class="btn btn-danger backToSite" href="#">Cancel</a><a id="wizard-1-next" class="btn btn-primary" href="#">Next</a>
                                 </div>
                             </div>
                         </div>
@@ -144,7 +144,6 @@
                             <div class="py-3">
                                 <h5>Write a short description of what this page is about. <small>(optional)</small></h5>
                                 <textarea class="form-control" id="page-description"></textarea>
-                                <span id="path-preview" class="d-block" style="font-size: 0.9em;"></span>
                             </div>
 
                             <p>You can skip the description if you require your users to login to view the page your are about to create.</p>
@@ -170,6 +169,10 @@
                             <!-- Login -->
                             <div id="customization-login" class="d-none">
                                 <div class="pb-3">
+                                    <h5>Give your login page a heading, i.e Welcome to my App!</h5>
+                                    <input type="text" class="form-control" id="page-login-heading">
+                                </div>
+                                <div class="py-3">
                                     <h5>What will your users use to login?</h5>
                                     <select class="form-select form-select-lg" id="page-login-field-name">
                                         <option value="email">Email &plus; Password</option>
@@ -206,6 +209,10 @@
                                 <div class="py-3 d-none" id="customize-page-form-title">
                                     <h5>Give your form a heading.</h5>
                                     <input type="text" class="form-control" id="page-form-title">
+                                </div>
+                                <div class="py-3">
+                                    <h5>Give your table a heading.</h5>
+                                    <input type="text" class="form-control" id="page-table-title">
                                 </div>
                                 <div class="py-3 d-none" id="customize-page-table-add">
                                     <div class="row">
@@ -296,6 +303,18 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <!--  -->
+
+                <!-- WIZARD FINAL -->
+                <div id="wizard-final" class="d-none">
+                    <div class="text-center">
+                        <h3 class="mt-4" style="font-weight: 300;">You're page has been created!</h3>
+
+                        <p>Take a peak at your new page <a id="newPageUrl" href="#" target="_blank"></a></p>
+
+                        <a class="btn btn-danger mx-auto backToSite" href="#">Done</a>
                     </div>
                 </div>
                 <!--  -->

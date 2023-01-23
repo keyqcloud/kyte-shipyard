@@ -1,6 +1,15 @@
 var cfDomain = '';
 const rePath = /[^A-Za-z0-9_.-\/]/g;
 
+let siteIdx = null;
+let kyte_endpoint = '';
+let kyte_pub = '';
+let kyte_iden = '';
+let kyte_num = '';
+let kyte_app = '';
+
+let page_path = '';
+
 $(document).ready(function() {
     $('#pageLoaderModal').modal('show');
     
@@ -8,6 +17,8 @@ $(document).ready(function() {
         // get url param
         let idx = k.getPageRequest();
         idx = idx.idx;
+
+        siteIdx = idx;
 
         k.get("Site", "id", idx, [], function(r) {
             if (r.data[0]) {
@@ -19,18 +30,25 @@ $(document).ready(function() {
                     }
                 ];
 
+                kyte_endpoint = r.kyte_api;
+                console.log(kyte_endpoint);
+                kyte_pub = r.kyte_pub;
+                kyte_iden = r.kyte_iden;
+                kyte_num = r.kyte_num;
+                kyte_app = site.application.identifier;
+
                 cfDomain = site.cfDomain;
                 $("#path-preview").html('https://'+cfDomain+'/index.html');
 
                 if (($("#page-path").val()).length == 0) {
                     $("#path-preview").html('https://'+cfDomain+'/index.html');
                 } else {
-                    $("#path-preview").html('https://'+cfDomain+'/'+$("#page-path").val().replace(rePath, '-')+'.html');
+                    $("#path-preview").html('https://'+cfDomain+'/'+$("#page-path").val().replace(rePath, '-').toLowerCase()+'.html');
                 }
 
                 let obj = {'model': 'Site', 'idx':site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                $("#backToSite").attr('href', '/app/site/?request='+encoded);
+                $(".backToSite").attr('href', '/app/site/?request='+encoded);
 
                 obj = {'model': 'Application', 'idx':site.application.id};
                 encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
@@ -55,8 +73,8 @@ $(document).ready(function() {
 
                 k.get('Page', 'site', site.id, [], function(r) {
                     for (data of r.data) {
-                        $("#page-login-success-target").append('<option value="'+data.id+'">'+data.title+' (/'+data.s3key+')'+'</option>');
-                        $("#page-table-click").append('<option value="'+data.id+'">'+data.title+' (/'+data.s3key+')'+'</option>');
+                        $("#page-login-success-target").append('<option value="'+data.s3key+'">'+data.title+' (/'+data.s3key+')'+'</option>');
+                        $("#page-table-click").append('<option value="'+data.s3key+'">'+data.title+' (/'+data.s3key+')'+'</option>');
                     }
                 });
 
@@ -64,7 +82,7 @@ $(document).ready(function() {
                     if (($(this).val()).length == 0) {
                         $("#path-preview").html('https://'+cfDomain+'/index.html');
                     } else {
-                        $("#path-preview").html('https://'+cfDomain+'/'+$(this).val().replace(rePath, '-')+'.html');
+                        $("#path-preview").html('https://'+cfDomain+'/'+$(this).val().replace(rePath, '-').toLowerCase()+'.html');
                     }
                 });
                 navbar.create();
@@ -108,13 +126,14 @@ $(document).ready(function() {
             $("#page-path").val('index');
         }
 
-        let path = ($("#page-path").val()).length > 0 ? $("#page-path").val().replace(rePath, '-')+'.html': 'index.html';
+        page_path = ($("#page-path").val()).length > 0 ? $("#page-path").val().replace(rePath, '-').toLowerCase()+'.html': 'index.html';
 
         // display model
         $('#pageLoaderModal').modal('show');
 
+        $condition = btoa(JSON.stringify('[{"field":"site","value":"'+siteIdx+'"}]'));
         // check if page already exists
-        k.get('Page', 's3key', path, [], function(r) {
+        k.get('Page', 's3key', page_path, [{'name':'x-kyte-query-conditions', 'value':$condition}], function(r) {
             $('#pageLoaderModal').modal('hide');
             if (r.data.length > 0) {
                 $("#page-path").addClass('is-invalid');
@@ -155,7 +174,7 @@ $(document).ready(function() {
                 let i = 1;
                 for (data of r.data) {
                     // create draggable column using jquery sortable
-                    sortable += '<li class="p-2 my-2 data-attr-'+data.id+'" data-column-order="'+i+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col-2"><small class="d-block">include?</small><select class="column-include-opt form-select" data-column-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div><div class="col"><small class="d-block">label</small><input type="text" class="column-label form-control" data-column-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
+                    sortable += '<li class="p-2 my-2 data-attr-'+data.id+'" data-attr-name="'+data.name+'" data-column-order="'+i+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col-2"><small class="d-block">include?</small><select class="column-include-opt form-select" data-column-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div><div class="col"><small class="d-block">label</small><input type="text" class="column-label form-control" data-column-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
 
                     // create draggable fields using jquery sotable
                     fields += '<li class="p-2 my-2 data-field-'+data.id+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div></div><div class="row"><div class="col"><small class="d-block">include?</small><select class="field-include-opt form-select" data-field-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div></div><div class="row"><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+data.id+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div><div class="row"><div class="col"><small class="d-block">label</small><input type="text" class="field-label form-control" data-field-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
@@ -333,5 +352,194 @@ $(document).ready(function() {
         $("#wizard-step-1").removeClass('complete');
         $("#wizard-step-1").addClass('active');
         $("#wizard-step-2").removeClass('active');
+    });
+
+    $("#wizard-4-next").click(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        let html = '';
+        let javascript = '';
+        let stylesheet = '';
+        let layout = {};
+        let main_navigation = $("#page-main-navigation").val() == 0 ? null : $("#page-main-navigation").val();
+        let side_navigation = $("#page-side-navigation").val() == 0 ? null : $("#page-side-navigation").val();
+        let page_title = $("#page-title").val();
+        let page_description = $("#page-description").val();
+        let page_protected = $("#page-requires-session").val();
+        //
+        let page_table_title = $("#page-table-title").val();
+        let page_form_title = $("#page-form-title").val();
+        //
+        let page_model = $("#page-model").val();
+        let page_table_delete = $("#page-table-delete").val();
+        let page_table_click = $("#page-table-click").val();
+        //
+        let page_login_heading = $("#page-login-heading").val();
+        let page_login_field_name = $("#page-login-field-name").val() ? $("#page-login-field-name").val() : 'email';
+        let page_login_success_target = $("#page-login-success-target").val();
+
+        // page path
+        if (page_path.length < 1) {
+            alert("Your page path is empty... please go back and check.");
+            return;
+        }
+        // page title
+        if (page_title.length < 1) {
+            alert("Your page title is empty... please go back and check.");
+            return;
+        }
+
+        //
+        let columns = [];
+        let colIdx = 0;
+
+        $("#newPageUrl").attr('href', 'https://'+cfDomain+'/'+page_path);
+        $("#newPageUrl").html('https://'+cfDomain+'/'+page_path);
+
+        switch ($("#page-type").val()) {
+            case 'login':
+                // perform validation
+                if (page_login_heading.length < 1) {
+                    $("#page-login-heading").addClass('is-invalid');
+                    return;
+                }
+                $("#page-login-heading").removeClass('is-invalid');
+                layout = {
+                    'page_type': $("#page-type").val(),
+                    'page_login_heading': page_login_heading,
+                    'page_login_field_name': page_login_field_name,
+                    'page_login_success_target': page_login_success_target
+                }
+                // generate javascript
+                javascript = '$("#login-form").submit(function(e) {e.preventDefault();e.stopPropagation();$("#errorMsg").addClass(\'d-none\');$("#errorMsg").html("");if (($("#'+page_login_field_name+'").val()).length > 0 || ($("#password").val()).length > 0) { k.sessionCreate({\''+page_login_field_name+'\':$("#'+page_login_field_name+'").val(), \'password\':$("#password").val()}, function(session) { if (session.data[0]) {location.href="/'+page_login_success_target+'"; } else {$("#errorMsg").html("Something went wrong with the login. Please contact your administrator.");$("#errorMsg").removeClass("d-none\");}}, function() {$("#errorMsg").html("Incorrect email and password combination.");$("#errorMsg").removeClass("d-none");});} else {$("#errorMsg").html("Email and password are required.");$("#errorMsg").removeClass("d-none");}});';
+
+                // generate html
+                html = '<div class="py-3"><div class="row"><div class="col-md-4 pt-4 mx-auto"><div class="card p-3"><div class="card-body"><h1 class="text-center mb-3">'+page_login_heading+'</h1><form id="login-form" class="text-center"><p class="text-danger text-center d-none" id="errorMsg"></p><!-- username --><input id="'+page_login_field_name+'" type="'+(page_login_field_name == username ? 'text' : page_login_field_name)+'" class="form-control d-block mb-3" placeholder="keyq@flykyte.io"><!-- password --><input id="password" type="password" class="form-control d-block mb-4" placeholder="password"><!-- submit button --><button type="submit" id="signin" class="btn btn-warning btn-lg d-block mx-auto mb-4 w-100">Login</button><!-- reset --><!-- <small><a href="/reset.html">Forgot your password?</a></small> --></form></div></div></div></div></div>';
+                break;
+
+            case 'table':
+                // perform validation
+                side_navigation = null;
+                if (page_table_title.length < 1) {
+                    $("#page-table-title").addClass('is-invalid');
+                    return;
+                }
+                $("#page-table-title").removeClass('is-invalid');
+                // generate the table columns
+                $("#data-model-columns li").each(function(index) {
+                    columns.push({'targets':colIdx, 'data':$(this).data('attrName'), 'label':$(this).find('.column-label').val()});
+                    colIdx++;
+                });
+                layout = {
+                    'model': page_model,
+                    'page_type': $("#page-type").val(),
+                    'main_navigation': main_navigation,
+                    'page_table_title': page_table_title,
+                    'page_table_delete': page_table_delete,
+                    'page_table_click': page_table_click,
+                    'page_table_columns': columns
+                };
+                // generate javascript
+                javascript = 'let colDef'+page_model+' = JSON.parse(\''+JSON.stringify(columns)+'\'); let tbl'+page_model+' = new KyteTable(k, $("#dt'+page_model+'"),{"name":"'+page_model+'","field":null,"value":null}, colDef'+page_model+', true, [0, "asc"], false, false'+(page_table_click.length > 1 ? ', "id", "/'+page_table_click+'"' : '')+');tbl'+page_model+'.init();';
+                // generate html
+                html = '<div class="py-3"><div class="d-flex justify-content-between"><h1>'+page_table_title+'</h1><div></div></div><div class="mt-2 table-responsive"><table id="dt'+page_model+'" class="table table-striped w-100"></table></div></div>';
+                break;
+
+            case 'form':
+                // perform validation
+                side_navigation = null;
+                if (page_table_title.length < 1) {
+                    $("#page-table-title").addClass('is-invalid');
+                    return;
+                }
+                $("#page-table-title").removeClass('is-invalid');
+                // generate the table columns
+                $("#data-model-columns li").each(function(index) {
+                    columns.push({'targets':colIdx, 'data':$(this).data('attrName'), 'label':$(this).find('.column-label').val()});
+                    colIdx++;
+                });
+                layout = {
+                    'model': page_model,
+                    'page_type': $("#page-type").val(),
+                    'main_navigation': main_navigation,
+                    'page_table_title': page_table_title,
+                    'page_table_delete': page_table_delete,
+                    'page_table_click': page_table_click,
+                    'page_table_columns': columns
+                };
+                // generate javascript
+                javascript = 'let colDef'+page_model+' = JSON.parse(\''+JSON.stringify(columns)+'\'); let tbl'+page_model+' = new KyteTable(k, $("#dt'+page_model+'"),{"name":"'+page_model+'","field":null,"value":null}, colDef'+page_model+', true, [0, "asc"], false, false'+(page_table_click.length > 1 ? ', "id", "/'+page_table_click+'"' : '')+');tbl'+page_model+'.init();';
+                // generate html
+                html = '<div class="py-3"><div class="d-flex justify-content-between"><h1>'+page_table_title+'</h1><div><a class="btn btn-primary btn-sm" id="addEntry"><i class="fas fa-plus fs-sm"></i> Create</a></div></div><div class="mt-2 table-responsive"><table id="dt'+page_model+'" class="table table-striped w-100"></table></div></div><div id="modalForm'+page_model+'"></div>';
+                alert("I'm sorry Dave, I'm afraid I can't do that.");
+                return;
+                break;
+
+            case 'sidenav':
+                // perform validation
+                // generate code
+                alert("I'm sorry Dave, I'm afraid I can't do that.");
+                return;
+                break;
+
+            case 'block':
+                // perform validation
+                // generate code
+                alert("I'm sorry Dave, I'm afraid I can't do that.");
+                return;
+                break;
+        
+            default:
+                layout = {
+                    'page_type': $("#page-type").val(),
+                    protected: page_protected
+                }
+                break;
+        }
+
+        $('#pageLoaderModal').modal('show');
+
+        // upload code
+        k.post('Page', {
+            'html': html,
+            'javascript': javascript,
+            'stylesheet': stylesheet,
+            'layout': JSON.stringify(layout),
+            'main_navigation':main_navigation,
+            'side_navigation':side_navigation,
+            'title':page_title,
+            's3key':page_path,
+            'description':page_description,
+            'protected': page_protected,
+            'site': siteIdx
+        }, null, [], function(r) {
+            if (r.data.length > 0) {
+                // generate kyte connect
+                let connect = "let endpoint = 'https://"+kyte_endpoint+"';var k = new Kyte(endpoint, '"+kyte_pub+"', '"+kyte_iden+"', '"+kyte_num+"', '"+kyte_app+"');k.init();\n\n";
+                // create s3 file and invalidate
+                k.put('Page', 'id', r.data[0].id, {'state': 1, 'kyte_connect': connect}, null, [], function(r) {
+                    $('#pageLoaderModal').modal('hide');
+                    $("#wizard-4").addClass('d-none');
+                    $("#wizard-final").removeClass('d-none');
+                    $("#wizard-step-2").removeClass('active');
+                    $("#wizard-step-2").addClass('complete');
+                    $("#wizard-step-3").addClass('complete');
+                }, function(err) {
+                    $('#pageLoaderModal').modal('hide');
+                    console.log(err);
+                    alert("Somethign wen't wrong while publishing and invalidating cache...page has been saved so nothing is lost.");
+                });
+            } else {
+                $('#pageLoaderModal').modal('hide');
+                console.log(err);
+                alert("Somethign wen't wrong while trying to save your page...");
+            }
+            
+        }, function(err) {
+            $('#pageLoaderModal').modal('hide');
+            console.log(err);
+            alert("Somethign wen't terribly wrong while trying to save your page...");
+        });        
     });
 });
