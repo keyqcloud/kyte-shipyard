@@ -214,8 +214,13 @@ $(document).ready(function() {
                 $("#domain-name").html('<i class="fas fa-link me-2"></i>'+data.cfDomain);
                 $("#domain-name").attr('href', 'https://'+data.cfDomain);
                 $("#region").html(data.region);
-                let obj = {'model': 'Application', 'idx':r.data[0].application.id};
+
+                let obj = {'model': 'Site', 'idx':data.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                $("#createPage").attr('href', '/app/page/wizard.html?request='+encoded);
+
+                obj = {'model': 'Application', 'idx':r.data[0].application.id};
+                encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 
                 let appnav = generateAppNav(r.data[0].application.name, encoded);
             
@@ -290,16 +295,16 @@ $(document).ready(function() {
 
                 // pages
                 var tblPage = createTable("#pages-table", "Page", colDefPage, 'site', idx, false, true, '/app/page/', 'id', true);
-                var modalFormPage = new KyteForm(k, $("#modalFormPage"), 'Page', hidden, pageFrmElements, 'Page', tblPage, true, $("#createPage"));
-                modalFormPage.init();
-                modalFormPage.success = function(r) {
-                    if (r.data[0]) {
-                        let obj = {'model': 'Page', 'idx':r.data[0].id};
-                        let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                        location.href="/app/page/?request="+encoded+"#Page";
-                    }
-                }
-                tblPage.bindEdit(modalFormPage);
+                // var modalFormPage = new KyteForm(k, $("#modalFormPage"), 'Page', hidden, pageFrmElements, 'Page', tblPage, true, $("#createPage"));
+                // modalFormPage.init();
+                // modalFormPage.success = function(r) {
+                //     if (r.data[0]) {
+                //         let obj = {'model': 'Page', 'idx':r.data[0].id};
+                //         let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                //         location.href="/app/page/?request="+encoded+"#Page";
+                //     }
+                // }
+                // tblPage.bindEdit(modalFormPage);
 
                 // media
                 var tblMedia = createTable("#media-table", "Media", colDefMedia, 'site', idx, false, true);
