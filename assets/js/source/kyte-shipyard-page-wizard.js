@@ -371,7 +371,7 @@ $(document).ready(function() {
         let page_table_title = $("#page-table-title").val();
         let page_form_title = $("#page-form-title").val();
         //
-        let page_model = $("#page-model").val();
+        let page_model = $("#page-model option:selected" ).text();
         let page_table_delete = $("#page-table-delete").val();
         let page_table_click = $("#page-table-click").val();
         //
