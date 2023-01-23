@@ -72,5 +72,5 @@
 }
 
 /* https://jqueryui.com/sortable/#placeholder */
-#data-model-columns { list-style-type: none; }
-#data-model-columns li {cursor: pointer; }
+#data-model-columns, #data-model-fields { list-style-type: none; }
+#data-model-columns li, #data-model-fields li {cursor: pointer; }

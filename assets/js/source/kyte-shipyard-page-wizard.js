@@ -132,25 +132,48 @@ $(document).ready(function() {
 
     function getModelAttributes() {
         if ($("#page-model").val()) {
+            // clear wrapper
             $("#data-model-columns-wrapper").html('');
+            $("#data-model-form-fields-wrapper").html('');
+            // start modal
             $('#pageLoaderModal').modal('show');
+            // initialize variable to hold html
             let sortable = '';
+            let fields = '';
             k.get('ModelAttribute', 'dataModel', $("#page-model").val(), [], function(r) {
+                // create start of sortables
                 sortable = '<ul id="data-model-columns">';
+                fields = '<ul id="data-model-fields">';
+                // initialize counter
                 let i = 1;
                 for (data of r.data) {
-                    sortable += '<li class="p-2 my-2 data-attr-'+data.id+'" data-column-order="'+i+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col-2"><small class="d-block">include?</small><select class="column-include-opt" data-column-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div><div class="col"><small class="d-block">label</small><input type="text" class="column-label form-control" data-column-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
+                    // create draggable column using jquery sortable
+                    sortable += '<li class="p-2 my-2 data-attr-'+data.id+'" data-column-order="'+i+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col-2"><small class="d-block">include?</small><select class="column-include-opt form-select" data-column-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div><div class="col"><small class="d-block">label</small><input type="text" class="column-label form-control" data-column-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
+
+                    // create draggable fields using jquery sotable
+                    fields += '<li class="p-2 my-2 data-field-'+data.id+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col-2"><small class="d-block">include?</small><select class="field-include-opt form-select" data-field-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+data.id+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div></div></div></li>';
+
+                    // increment counter
                     i++;
                 }
+                // close sortables
                 sortable += '</ul>';
+                fields += '</ul>';
+                // update html
                 $("#data-model-columns-wrapper").html(sortable);
+                $("#data-model-form-fields-wrapper").html(fields);
+                // create sortables
                 $("#data-model-columns").sortable();
+                $("#data-model-fields").sortable();
+                // add listener for update events
                 $( "#data-model-columns" ).on("sortupdate", function( event, ui ) {
                     // update order index
                     $("#data-model-columns li").each(function(index) {
                         $(this).data('columnOrder', index+1);
                     });
                 });
+
+                // hid modal
                 $('#pageLoaderModal').modal('hide');
             });
         }
@@ -168,6 +191,19 @@ $(document).ready(function() {
             $(".data-attr-"+$(this).data('columnIdx')+" .card").addClass('bg-light');
             $(".data-attr-"+$(this).data('columnIdx')+" .attribute-name").removeClass('text-strike');
             $(".data-attr-"+$(this).data('columnIdx')+" .column-label").prop('disabled', false);
+        }
+    });
+    $("#customization-form-fields").on('change', '.field-include-opt', function() {
+        if ($(this).val() == 0) {
+            $(".data-field-"+$(this).data('fieldIdx')+" .card").removeClass('bg-light');
+            $(".data-field-"+$(this).data('fieldIdx')+" .card").addClass('text-secondary');
+            $(".data-field-"+$(this).data('fieldIdx')+" .attribute-name").addClass('text-strike');
+            $(".data-field-"+$(this).data('fieldIdx')+" .column-label").prop('disabled', true);
+        } else {
+            $(".data-field-"+$(this).data('fieldIdx')+" .card").removeClass('text-secondary');
+            $(".data-field-"+$(this).data('fieldIdx')+" .card").addClass('bg-light');
+            $(".data-field-"+$(this).data('fieldIdx')+" .attribute-name").removeClass('text-strike');
+            $(".data-field-"+$(this).data('fieldIdx')+" .column-label").prop('disabled', false);
         }
     });
 
@@ -192,6 +228,12 @@ $(document).ready(function() {
         $("#image-placeholder").removeClass('d-none');
         $("#data-model-columns-wrapper").html('');
 
+        // reset col width
+        $("#customization-left-panel").removeClass('col-3');
+        $("#customization-right-panel").removeClass('col-9');
+        $("#customization-left-panel").addClass('col-5');
+        $("#customization-right-panel").addClass('col-7');
+
         // toggle wizard
         $("#wizard-3").addClass('d-none');
         $("#wizard-2").removeClass('d-none');
@@ -214,6 +256,10 @@ $(document).ready(function() {
                 break;
 
             case 'table':
+                $("#customization-left-panel").removeClass('col-5');
+                $("#customization-right-panel").removeClass('col-7');    
+                $("#customization-left-panel").addClass('col-3');
+                $("#customization-right-panel").addClass('col-9');
                 getModelAttributes();
                 $("#label-page-type").html('table page');
                 $("#customization-table").removeClass('d-none');
@@ -222,6 +268,10 @@ $(document).ready(function() {
                 break;
 
             case 'form':
+                $("#customization-left-panel").removeClass('col-5');
+                $("#customization-right-panel").removeClass('col-7');    
+                $("#customization-left-panel").addClass('col-3');
+                $("#customization-right-panel").addClass('col-9');
                 getModelAttributes();
                 $("#label-page-type").html('table page with form');
                 $("#customization-table").removeClass('d-none');
