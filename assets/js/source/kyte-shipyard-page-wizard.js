@@ -143,7 +143,14 @@ $(document).ready(function() {
             k.get('ModelAttribute', 'dataModel', $("#page-model").val(), [], function(r) {
                 // create start of sortables
                 sortable = '<ul id="data-model-columns">';
-                fields = '<ul id="data-model-fields">';
+                // column headers for fields
+                fields += '<div class="row">';
+                fields += '<div class="col-3 text-center"><h5>Col 1</h5></div>'
+                fields += '<div class="col-3 text-center"><h5>Col 2</h5></div>'
+                fields += '<div class="col-3 text-center"><h5>Col 3</h5></div>'
+                fields += '<div class="col-3 text-center"><h5>Col 4</h5></div>'
+                fields += '</div>';
+                fields += '<div class="row"><div class="col-3"><ul id="data-model-fields-1" class="connectedSortable">';
                 // initialize counter
                 let i = 1;
                 for (data of r.data) {
@@ -151,26 +158,38 @@ $(document).ready(function() {
                     sortable += '<li class="p-2 my-2 data-attr-'+data.id+'" data-column-order="'+i+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col-2"><small class="d-block">include?</small><select class="column-include-opt form-select" data-column-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div><div class="col"><small class="d-block">label</small><input type="text" class="column-label form-control" data-column-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
 
                     // create draggable fields using jquery sotable
-                    fields += '<li class="p-2 my-2 data-field-'+data.id+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col-2"><small class="d-block">include?</small><select class="field-include-opt form-select" data-field-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+data.id+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div></div></div></li>';
+                    fields += '<li class="p-2 my-2 data-field-'+data.id+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div></div><div class="row"><div class="col"><small class="d-block">include?</small><select class="field-include-opt form-select" data-field-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div></div><div class="row"><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+data.id+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div><div class="row"><div class="col"><small class="d-block">label</small><input type="text" class="field-label form-control" data-field-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
 
                     // increment counter
                     i++;
                 }
                 // close sortables
                 sortable += '</ul>';
-                fields += '</ul>';
+                fields += '</ul></div>';
+                fields += '<div class="col-3"><ul id="data-model-fields-2" class="connectedSortable"></ul></div>';
+                fields += '<div class="col-3"><ul id="data-model-fields-3" class="connectedSortable"></ul></div>';
+                fields += '<div class="col-3"><ul id="data-model-fields-4" class="connectedSortable"></ul></div>';
+                fields += '</div>'; // close row
                 // update html
                 $("#data-model-columns-wrapper").html(sortable);
                 $("#data-model-form-fields-wrapper").html(fields);
                 // create sortables
                 $("#data-model-columns").sortable();
-                $("#data-model-fields").sortable();
+                $("#data-model-fields-1, #data-model-fields-2, #data-model-fields-3, #data-model-fields-4").sortable({
+                    connectWith: ".connectedSortable"
+                });
                 // add listener for update events
                 $( "#data-model-columns" ).on("sortupdate", function( event, ui ) {
                     // update order index
                     $("#data-model-columns li").each(function(index) {
                         $(this).data('columnOrder', index+1);
                     });
+                });
+
+                $("#addBlankFieldCard").click(function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    $("#data-model-fields-1").prepend('<li class="p-2 my-2"><div class="card bg-secondary blank-card"><div class="card-body p-1"></div></div></li>');
                 });
 
                 // hid modal
@@ -198,12 +217,12 @@ $(document).ready(function() {
             $(".data-field-"+$(this).data('fieldIdx')+" .card").removeClass('bg-light');
             $(".data-field-"+$(this).data('fieldIdx')+" .card").addClass('text-secondary');
             $(".data-field-"+$(this).data('fieldIdx')+" .attribute-name").addClass('text-strike');
-            $(".data-field-"+$(this).data('fieldIdx')+" .column-label").prop('disabled', true);
+            $(".data-field-"+$(this).data('fieldIdx')+" .field-label").prop('disabled', true);
         } else {
             $(".data-field-"+$(this).data('fieldIdx')+" .card").removeClass('text-secondary');
             $(".data-field-"+$(this).data('fieldIdx')+" .card").addClass('bg-light');
             $(".data-field-"+$(this).data('fieldIdx')+" .attribute-name").removeClass('text-strike');
-            $(".data-field-"+$(this).data('fieldIdx')+" .column-label").prop('disabled', false);
+            $(".data-field-"+$(this).data('fieldIdx')+" .field-label").prop('disabled', false);
         }
     });
 

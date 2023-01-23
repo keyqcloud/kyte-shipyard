@@ -72,5 +72,6 @@
 }
 
 /* https://jqueryui.com/sortable/#placeholder */
-#data-model-columns, #data-model-fields { list-style-type: none; }
-#data-model-columns li, #data-model-fields li {cursor: pointer; }
+#data-model-columns, #data-model-fields-1, #data-model-fields-2, #data-model-fields-3, #data-model-fields-4 { list-style-type: none; border: 1px solid #eee; min-height: 100%; }
+#data-model-columns li, #data-model-fields-1 li, #data-model-fields-2 li, #data-model-fields-3 li, #data-model-fields-4 li {cursor: pointer; }
+.blank-card { height: 232px; }
