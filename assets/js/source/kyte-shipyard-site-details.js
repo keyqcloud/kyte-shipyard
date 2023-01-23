@@ -227,84 +227,8 @@ $(document).ready(function() {
                 let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Sites');
                 navbar.create();
 
-                let pageFrmElements = [
-                    [
-                        {
-                            'field':'title',
-                            'type':'text',
-                            'label':'Page Title',
-                            'required':true
-                        }
-                    ],
-                    [
-                        {
-                            'field':'s3key',
-                            'type':'text',
-                            'label':'Path: https://'+data.cfDomain+'/',
-                            'required':true
-                        }
-                    ],
-                    [
-                        {
-                            'field':'protected',
-                            'type':'select',
-                            'label':'Requires Session',
-                            'required':true,
-                            'option': {
-                                'ajax': false,
-                                'data': {
-                                    '0': 'No',
-                                    '1': 'Yes'
-                                }
-                            }
-                        },
-                        {
-                            'field':'main_navigation',
-                            'type':'select',
-                            'label':'Navigation Menu',
-                            'required':false,
-                            'placeholder': 'N/A',
-                            'option': {
-                                'ajax': true,
-                                'data_model_name': 'Navigation',
-                                'data_model_field': 'site',
-                                'data_model_value': data.id,
-                                'data_model_attributes': ['name'],
-                                'data_model_default_field': 'id',
-                                // 'data_model_default_value': 1,
-                            }
-                        },
-                        {
-                            'field':'side_navigation',
-                            'type':'select',
-                            'label':'Side Menu',
-                            'required':false,
-                            'placeholder': 'N/A',
-                            'option': {
-                                'ajax': true,
-                                'data_model_name': 'Navigation',
-                                'data_model_field': 'site',
-                                'data_model_value': data.id,
-                                'data_model_attributes': ['name'],
-                                'data_model_default_field': 'id',
-                                // 'data_model_default_value': 1,
-                            }
-                        }
-                    ]
-                ];
-
                 // pages
                 var tblPage = createTable("#pages-table", "Page", colDefPage, 'site', idx, false, true, '/app/page/', 'id', true);
-                // var modalFormPage = new KyteForm(k, $("#modalFormPage"), 'Page', hidden, pageFrmElements, 'Page', tblPage, true, $("#createPage"));
-                // modalFormPage.init();
-                // modalFormPage.success = function(r) {
-                //     if (r.data[0]) {
-                //         let obj = {'model': 'Page', 'idx':r.data[0].id};
-                //         let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                //         location.href="/app/page/?request="+encoded+"#Page";
-                //     }
-                // }
-                // tblPage.bindEdit(modalFormPage);
 
                 // media
                 var tblMedia = createTable("#media-table", "Media", colDefMedia, 'site', idx, false, true);
