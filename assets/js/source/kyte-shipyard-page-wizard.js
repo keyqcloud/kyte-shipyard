@@ -372,6 +372,8 @@ $(document).ready(function() {
         let page_form_title = $("#page-form-title").val();
         //
         let page_model = $("#page-model option:selected" ).text();
+        let page_table_add = $("#page-table-add").val();
+        let page_table_edit = $("#page-table-edit").val();
         let page_table_delete = $("#page-table-delete").val();
         let page_table_click = $("#page-table-click").val();
         //
@@ -392,6 +394,8 @@ $(document).ready(function() {
 
         //
         let columns = [];
+        let fields = [];
+        let hidden = [];
         let colIdx = 0;
 
         $("#newPageUrl").attr('href', 'https://'+cfDomain+'/'+page_path);
@@ -464,14 +468,20 @@ $(document).ready(function() {
                     'page_type': $("#page-type").val(),
                     'main_navigation': main_navigation,
                     'page_table_title': page_table_title,
+                    'page_table_add': page_table_add,
+                    'page_table_edit': page_table_edit,
                     'page_table_delete': page_table_delete,
                     'page_table_click': page_table_click,
-                    'page_table_columns': columns
+                    'page_table_columns': columns,
+                    'page_form_title': page_form_title,
                 };
                 // generate javascript
                 javascript = 'let colDef'+page_model+' = JSON.parse(\''+JSON.stringify(columns)+'\'); let tbl'+page_model+' = new KyteTable(k, $("#dt'+page_model+'"),{"name":"'+page_model+'","field":null,"value":null}, colDef'+page_model+', true, [0, "asc"], false, false'+(page_table_click.length > 1 ? ', "id", "/'+page_table_click+'"' : '')+');tbl'+page_model+'.init();';
+                // form javascript
+                javascript += 'let fldsHidden'+page_model+' = null; let flds'+page_model+' = JSON.parse(\''+JSON.stringify(fields)+'\'); var form'+page_model+' = new KyteForm(k, $("#modalForm'+page_model+'"), "'+page_model+'", fldsHidden'+page_model+', flds'+page_model+', "'+page_form_title+'", tbl'+page_model+', true, '+(page_table_add == 1 ? '$("#addEntry'+page_model+'")':'null')+');form'+page_model+'.init();'+(page_table_edit == 1 ? 'tbl'+page_model+'.bindEdit(form'+page_model+');' : '');
+                
                 // generate html
-                html = '<div class="py-3"><div class="d-flex justify-content-between"><h1>'+page_table_title+'</h1><div><a class="btn btn-primary btn-sm" id="addEntry"><i class="fas fa-plus fs-sm"></i> Create</a></div></div><div class="mt-2 table-responsive"><table id="dt'+page_model+'" class="table table-striped w-100"></table></div></div><div id="modalForm'+page_model+'"></div>';
+                html = '<div class="py-3"><div class="d-flex justify-content-between"><h1>'+page_table_title+'</h1><div>'+(page_table_add == 1 ? '<a class="btn btn-primary btn-sm" id="addEntry'+page_model+'"><i class="fas fa-plus fs-sm"></i> Create</a>' : '')+'</div></div><div class="mt-2 table-responsive"><table id="dt'+page_model+'" class="table table-striped w-100"></table></div></div><div id="modalForm'+page_model+'"></div>';
                 alert("I'm sorry Dave, I'm afraid I can't do that.");
                 return;
                 break;
