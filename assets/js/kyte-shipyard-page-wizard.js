@@ -1,1 +1,711 @@
-const a0_0x4f080f=a0_0x5c49;(function(_0xcbbd1d,_0x59d54f){const _0xe7e987=a0_0x5c49,_0x3c7045=_0xcbbd1d();while(!![]){try{const _0x4c7b49=parseInt(_0xe7e987(0x22d))/0x1*(-parseInt(_0xe7e987(0x293))/0x2)+parseInt(_0xe7e987(0x259))/0x3+parseInt(_0xe7e987(0x1db))/0x4*(-parseInt(_0xe7e987(0x294))/0x5)+-parseInt(_0xe7e987(0x258))/0x6+-parseInt(_0xe7e987(0x23a))/0x7*(-parseInt(_0xe7e987(0x203))/0x8)+parseInt(_0xe7e987(0x222))/0x9*(parseInt(_0xe7e987(0x276))/0xa)+-parseInt(_0xe7e987(0x29e))/0xb;if(_0x4c7b49===_0x59d54f)break;else _0x3c7045['push'](_0x3c7045['shift']());}catch(_0x32d9cc){_0x3c7045['push'](_0x3c7045['shift']());}}}(a0_0x415e,0xd758f));function a0_0x415e(){const _0x138f4d=['i2n1C3rVBwL6yxrPB24TBg9NAw4','i3bHz2uTDgfIBguTy2XPy2S','ChjVCa','C2L6zq','i25LD1bHz2vvCMW','DgjS','DgL0Bgu','iJ48zgL2ignSyxnZpsjJyxjKigjNlwXPz2H0iJ48zgL2ignSyxnZpsjJyxjKlwjVzhKGCc0XiJ48zgL2ignSyxnZpsjYB3CIpJXKAxyGy2XHC3m9iMnVBc0XiJ48AsbJBgfZCZ0IzMfZigzHlxnVCNqGBwuTmIb0zxH0lxnLy29UzgfYEsi+pc9PpJWVzgL2pJXKAxyGy2XHC3m9iMnVBci+phnTywXSignSyxnZpsjKlwjSB2nRiJ5HDhrYAwj1Dgu8l3nTywXSpJXIignSyxnZpsjHDhrYAwj1DguTBMfTzsi+','pgrPDIbJBgfZCZ0Iy29SltmIpJX1BcbPzd0Izgf0ys1TB2rLBc1MAwvSzhmTmYiGy2XHC3m9iMnVBM5Ly3rLzfnVCNrHyMXLrM9YBuzPzwXKCYi+pc91Bd48l2rPDJ4','pc9VChrPB24+','i2n1C3rVBwL6yxrPB24TDgfIBguTy29SDw1UCW','ndqWAvb5s2Dz','iJSGFsbLBhnLihSKkciJzxjYB3jnC2CIks5ODg1SkcjtB21LDgHPBMCGD2vUDcb3CM9UzYb3AxrOihrOzsbSB2DPBI4GugXLyxnLignVBNrHy3qGEw91CIbHzg1PBMLZDhjHDg9YlIiPoYqOiInLCNjVCK1ZzYiPlNjLBw92zunSyxnZkcjKlw5VBMuIktT9FsWGzNvUy3rPB24Oksb7jcGIi2vYCM9YtxnNiIKUAhrTBcGIsw5JB3jYzwn0igvTywLSigfUzcbWyxnZD29YzcbJB21IAw5HDgLVBI4IktSKkciJzxjYB3jnC2CIks5Yzw1VDMvdBgfZCYGIzc1UB25LiIK7FsK7FsbLBhnLihSKkciJzxjYB3jnC2CIks5ODg1SkcjfBwfPBcbHBMqGCgfZC3DVCMqGyxjLihjLCxvPCMvKlIiPoYqOiInLCNjVCK1ZzYiPlNjLBw92zunSyxnZkcjKlw5VBMuIktT9FsK7','Bg9NAw4','i3bHz2uTC2LKzs1UyxzPz2f0Aw9U','i2rHDgeTBw9KzwWTzMLLBgrZltiGBgK','Aw5WDxrBDhLWzt1JAgvJA2jVEf0','Bw9KywW','i2n1C3rVBwL6yxrPB24TzM9YBs1MAwvSzhm','ic5HDhrYAwj1DguTBMfTzq','Bg9JyxrPB24','lMrHDgeTzMLLBgqT','i2rHDgeTBw9KzwWTzMLLBgrZlteSicnKyxrHlw1VzgvSlwzPzwXKCY0YlcaJzgf0ys1TB2rLBc1MAwvSzhmTmYWGi2rHDgeTBw9KzwWTzMLLBgrZltq','jYWGjW','A3L0zv9WDwi','ChvZAa','pc9Omt48zgL2pG','u2L0zq','C2XPy2u','AwrLBNrPzMLLCG','lMnVBhvTBI1PBMnSDwrLlw9WDa','C29YDgfIBgu','pgrPDIbJBgfZCZ0Iy29SltmGDgv4Dc1Jzw50zxiIpJXOnt5dB2WGmtWVAdu+pc9KAxy+','lMrHDgeTyxr0CI0','Dgv4Dc1Kyw5Nzxi','lMnVBM5Ly3rLzfnVCNrHyMXLrM9YBuzPzwXKCW','i2n1C3rVBwL6yxrPB24Ty3vZDg9T','Bgv0igvUzhbVAw50id0Gj2H0DhbZoI8V','i3DPEMfYzc00','i3DPEMfYzc1ZDgvWlti','i3DPEMfYzc0YlwjHy2S','iIb2ywX1zt0I','i3DPEMfYzc00lw5LEhq','iIb0ExbLpsi','zMLLBgruExbL','i3bHz2uTzM9YBs10AxrSzq','Dg9vChbLCKnHC2u','yxbWzw5K','y2HHBMDL','iIKSEYjUyw1LiJOI','i2rHDgeTBw9KzwWTzMLLBgrZlte','mtyXotKYsKrRsgXx','iIbJBgfZCZ0IDgfIBguGDgfIBguTC3rYAxbLzcb3lteWmci+pc90ywjSzt48l2rPDJ48l2rPDJ48zgL2igLKpsjTB2rHBezVCM0','i3bHz2uTDgfIBguTzwrPDa','Dgv4Da','Aw5KzxG','i3bHDgGTChjLDMLLDW','DgfIBguGCgfNzq','i3bHz2uTBg9NAw4TC3vJy2vZCY10yxjNzxq','lMjHy2TuB1nPDgu','pgrPDIbJBgfZCZ0Iy29SltmIpJX1BcbPzd0Izgf0ys1TB2rLBc1MAwvSzhmTnciGy2XHC3m9iMnVBM5Ly3rLzfnVCNrHyMXLrM9YBuzPzwXKCYi+pc91Bd48l2rPDJ4','lcb0CNvLlcbBmcWGiMfZyYjDlcbMywXZzsWGzMfSC2u','z2v0ugfNzvjLCxvLC3q','i2rHDgeTBw9KzwWTy29SDw1UCY13CMfWCgvY','iJ48AsbJBgfZCZ0IzMfYigzHlxrPBwvZlwnPCMnSzsi+pc9PpJWVyt48l2rPDJ48l2rPDJ48zgL2ignSyxnZpsjYB3CIpJXKAxyGy2XHC3m9iMnVBci+phnTywXSignSyxnZpsjKlwjSB2nRiJ5HDhrYAwj1Dgu8l3nTywXSpJXIignSyxnZpsjHDhrYAwj1DguTBMfTzsi+','i3DPEMfYzc0Ylw5LEhq','Dg9mB3DLCKnHC2u','ywrKq2XHC3m','i2rHDgeTBw9KzwWTy29SDw1UCW','Ahr0Chm6lY8','ChjLDMvUDerLzMf1Bhq','AgLKzq','pgrPDIbJBgfZCZ0IChKTmYi+pgrPDIbJBgfZCZ0ICM93iJ48zgL2ignSyxnZpsjJB2WTBwqTncbWDc00ig14lwf1Dg8IpJXKAxyGy2XHC3m9iMnHCMqGCc0ZiJ48zgL2ignSyxnZpsjJyxjKlwjVzhKIpJXOmsbJBgfZCZ0IDgv4Dc1Jzw50zxiGBwiTmYi+','iIbKyxrHlwf0DhiTBMfTzt0I','i2LTywDLlxbSywnLAg9SzgvY','i3DPEMfYzc0ZlwjHy2S','y2XVC2vZDa','AhrTBa','jZOKkciJ','i3bHz2uTCgf0Aa','i3DPEMfYzc0Y','iIWGDgjS','ndG1nduXruPzwK1v','ic5JB2X1Bw4TBgfIzwW','i2rHDgeTBw9KzwWTzMLLBgrZltqGBgK','i3DPEMfYzc0Zlw5LEhq','Bgv0ignVBerLzG','ic5MAwvSzc1SywjLBa','AxntzxnZAw9U','ktT0yMW','A3L0zv9HCgK','y2XPy2S','pgXPignSyxnZpsjWltiGBxKTmIbKyxrHlwf0DhiT','mZq5ndnyq2nwsuC','i3bHz2uTDgfIBguTzgvSzxrL','iIbOCMvMpsiJiJ48Aw5WDxqGDhLWzt0Iy2HLy2TIB3GIignSyxnZpsjTzs0YigrYB3bKB3DUlwL0zw0TzM9YBs1JA2j4igrYB3bKB3DUlwnRyNGTAwr4lq','lMrLBgv0zs1MAwvSza','pc9IpJWVzgL2pJWVzgL2pJXKAxyGy2XHC3m9iNjVDYi+pgrPDIbJBgfZCZ0Iy29SiJ48C21HBgWGy2XHC3m9iMqTyMXVy2SIpMzPzwXKihr5Cgu8l3nTywXSpJXZzwXLy3qGy2XHC3m9iMzVCM0TC2vSzwn0igzVCM0TzMLLBgqTDhLWzsiGzgf0ys1MAwvSzc1PzhG9iG','A3L0zv9PzgvU','lMrYB3bKB3DUlwLKEc0','Bgv0igzSzhniAwrKzw4','y3vZDg9TihbHz2u','lMnVBhvTBI1SywjLBa','ywn0AxzL','C2L0zq','pc9Omt48zM9YBsbPzd0IBg9NAw4TzM9YBsiGy2XHC3m9iNrLEhqTy2vUDgvYiJ48CcbJBgfZCZ0IDgv4Dc1Kyw5NzxiGDgv4Dc1Jzw50zxiGzc1UB25LiIbPzd0IzxjYB3jnC2CIpJWVCd48is0TihvZzxjUyw1Lic0TpJXPBNb1DcbPzd0I','nteXvLfpr0rQ','lcbMBgrZ','id0GBMv3ieT5DgvgB3jTkgSSicqOiInTB2rHBezVCM0','lMLUAxqOktS','lZ9YzwrPCJ0','y29SltC','zMLLBgroyw1L','i3bHz2uTBg9NAw4TAgvHzgLUzW','yxr0CK5HBwu','i2rHDgeTBw9KzwWTzMLLBgrZltmGBgK','Ec1RExrLlxf1zxj5lwnVBMrPDgLVBNm','pgXPpJXHignSyxnZpsjKCM9Wzg93BI1PDgvTigrYB3bKB3DUlwL0zw0TzM9YBs1MAwvSzcbKCM9Wzg93BI1PzhGT','iIWIzMLLBgqIoM51BgWSiNzHBhvLiJPUDwXSFsWGy29SrgvM','i3DPEMfYzc0X','i3bHz2uTDgfIBguTDgL0Bgu','zMLUza','iJ48B3b0Aw9UihzHBhvLpsj0zxH0iIbZzwXLy3rLzd5uzxH0pc9VChrPB24+pg9WDgLVBIb2ywX1zt0Izgf0zsi+rgf0ztWVB3b0Aw9UpJXVChrPB24GDMfSDwu9iNnLBgvJDci+rhjVCgrVD24GkhnLBgvJDcK8l29WDgLVBJ48B3b0Aw9UihzHBhvLpsj0zxH0yxjLysi+vgv4DgfYzwe8l29WDgLVBJ48B3b0Aw9UihzHBhvLpsjLBwfPBci+rw1HAwW8l29WDgLVBJ48B3b0Aw9UihzHBhvLpsjWyxnZD29Yzci+ugfZC3DVCMq8l29WDgLVBJ48l3nLBgvJDd48l2rPDJ48l2rPDJ48zgL2ignSyxnZpsjYB3CIpJXKAxyGy2XHC3m9iMnVBci+phnTywXSignSyxnZpsjKlwjSB2nRiJ5SywjLBdWVC21HBgW+pgLUChv0ihr5Cgu9iNrLEhqIignSyxnZpsjMAwvSzc1SywjLBcbMB3jTlwnVBNrYB2WIigrHDgeTzMLLBgqTAwr4psi','i2zVCM0TzMLLBgrZlwf2ywLSywjSzq','i3bHz2uTBwfPBI1UyxzPz2f0Aw9U','id0+ia','DMfS','i2XHyMvSlxbHz2uTDhLWzq','yxbWBgLJyxrPB24','id0GBNvSBdSGBgv0igzSzhm','iIKUDMfSkcKSicDWyxnZD29YzcC6jcGIi3bHC3n3B3jKiIKUDMfSkcL9lcbMDw5JDgLVBIHZzxnZAw9Uksb7igLMicHZzxnZAw9UlMrHDgfBmf0PihTSB2nHDgLVBI5OCMvMpsiV','pgrPDIbJBgfZCZ0ICM93iJ48zgL2ignSyxnZpsjJB2WTmYi+phvSigLKpsjKyxrHlw1VzgvSlwzPzwXKCY0XiIbJBgfZCZ0Iy29UBMvJDgvKu29YDgfIBgvgB3jTrMLLBgrZiJ4','i3DPEMfYzc0Z','i3DPEMfYzc1MAw5HBa','Awr4','i3bHz2uTDhLWzq','mJeXnZqWmeHhBvfADW','mtu1ote2mgLhAwDSra','CMvWBgfJzq','s3L0zsbtAgLWEwfYzdXZDxa+jNrYywrLoZWVC3vWpG','ugfNzq','i3bHz2uTzgvZy3jPChrPB24','jYK7ihzHCIbMB3jT','Dgv4Dc1ZDhjPA2u','A3L0zv9UDw0','iIbKyxrHlwzPzwXKlxr5Cgu9iG','ktWVyt48l2XPpG','yMCTBgLNAhq','i3bHz2uTDgfIBguTywrK','yMXVy2S','lcaIAwqIlcaIlW','pc91Bd48l2rPDJ48zgL2ignSyxnZpsjJB2WTnIi+phvSigLKpsjKyxrHlw1VzgvSlwnVBhvTBNmTzxHJBhvKzsiGy2XHC3m9iMnVBM5Ly3rLzfnVCNrHyMXLvgfIyMXLq29SDw1UCYbIzY1ZzwnVBMrHCNKIpJWVzgL2pJWVzgL2pG','lMjPBMrfzgL0kgzVCM0','DgfIBgu','zgf0yq','ic5JyxjK','u29TzxrOAwDUihDLBID0ihDYB25NihDOAwXLihrYEwLUzYb0BYbZyxzLihLVDxiGCgfNzs4UlG','rgf0yu1VzgvS','rvjst1i','i2rHDgeTBw9KzwWTy29SDw1UCYbSAq','i2n1C3rVBwL6zs1WywDLlxrHyMXLlwfKza','AxmTAw52ywXPza','iIbKyxrHlwzPzwXKlw5HBwu9iG','Bg9N','i2n1C3rVBwL6zs1WywDLlxrHyMXLlwvKAxq','pc9KAxy+pc9KAxy+pgrPDIbJBgfZCZ0IBxqTmIb0ywjSzs1YzxnWB25ZAxzLiJ48DgfIBguGAwq9iMr0','mtbZv1nwCKq','pgrPDIbJBgfZCZ0Iy29SltmGDgv4Dc1Jzw50zxiIpJXOnt5dB2WGndWVAdu+pc9KAxy+','pgXPignSyxnZpsjWltiGBxKTmIi+pgrPDIbJBgfZCZ0Iy2fYzcbIzY1ZzwnVBMrHCNKGyMXHBMSTy2fYzci+pgrPDIbJBgfZCZ0Iy2fYzc1IB2r5ihaTmsi+pc9KAxy+pc9KAxy+pc9SAt4','id0GBMv3ieT5DgvuywjSzsHRlcaKkciJzhq','iIbJBgfZCZ0IDgfIBguGDgfIBguTC3rYAxbLzcb3lteWmci+pc90ywjSzt48l2rPDJ48l2rPDJ4','BNvSBa','i2rHDgeTBw9KzwWTzM9YBs1MAwvSzhmTD3jHChbLCG','pgrPDIbJBgfZCZ0ICM93iJ4','iN1D','i3bHz2uTCMvXDwLYzxmTC2vZC2LVBG','lcb0CNvLlca','Bwf4','CMvHzhK','icGV','i2n1C3rVBwL6yxrPB24TDgfIBgu','C2LKzw5HDG','y29Sltu','i2n1C3rVBwL6zs1WywDLlwzVCM0TDgL0Bgu','lMrYB3bKB3DUlwL0zw0TzM9YBs1MAwvSza','lcaI','zM9YBq','l2LUzgv4lMH0BwW','i3bHz2uTBw9KzwWGB3b0Aw9UoNnLBgvJDgvK','C3rVCfbYB3bHz2f0Aw9U','ssDTihnVCNj5ierHDMuSieKNBsbHzNjHAwqGssbJyw4NDcbKBYb0Agf0lG','DxnLCM5HBwu','DhLWzq','ChjLCgvUza','CZnRzxK','mMHlEwjxsW','nti0nvr3BLPxtq','y2HLy2TLza','i3bHz2uTBw9KzwW','C2HVDW','ww91CIbWywDLihbHDgGGAxmGzw1WDhKUlI4GCgXLyxnLigDVigjHy2SGyw5KignOzwnRlG','pgrPDIbJBgfZCZ0Iy29SltmGDgv4Dc1Jzw50zxiIpJXOnt5dB2WGmZWVAdu+pc9KAxy+','pg9WDgLVBIb2ywX1zt0I','i2n1C3rVBwL6yxrPB24TyMXVy2S','iIKSici','C3rYAw5NAwz5','nZmZmtK0mfH0BezeAq','y3jLyxrL','i3bHz2uTDgL0Bgu','i3DPEMfYzc1ZDgvWlte','BgvUz3rO','w3SIzMLLBgqIoIjZAxrLiIWIDMfSDwuIoIi','iJ48AsbJBgfZCZ0IzMfZigzHlxbSDxmGzNmTC20IpJWVAt4Gq3jLyxrLpc9HpG','i3bHz2vmB2fKzxjnB2rHBa','iIbJAgvJA2vKpG','i3DPEMfYzc1ZDgvWltm','y29SltK','yxr0CG','lMH0BwW','zc1UB25L','i3bHz2uTBg9NAw4TzMLLBgqTBMfTzq','i2fKzejSyw5RrMLLBgrdyxjK','iJ48l2rPDJ48l2rPDJ48l2rPDJ48l2rPDJ48l2XPpG','CMvTB3zL','z2v0','l2fWCc9ZAxrLlZ9Yzxf1zxn0pq','i2n1C3rVBwL6yxrPB24TCMLNAhqTCgfUzwW','AhjLzG','zMLLBgrjzhG','lMrYB3bKB3DUlwnRyNGTAwr4lq','i21HAw5Uyxy','y29TCgXLDgu','zwfJAa','pgrPDIbJBgfZCZ0Iy29SltmIpJX1BcbPzd0Izgf0ys1TB2rLBc1MAwvSzhmTmIiGy2XHC3m9iMnVBM5Ly3rLzfnVCNrHyMXLrM9YBuzPzwXKCYi+pc91Bd48l2rPDJ4','iIbJBgfZCZ0IzM9YBs1JB250CM9SigqTyMXVy2SGBwiTmYiGCgXHy2vOB2XKzxi9iMTLExfazMX5A3L0zs5PBYi+pceTlsbWyxnZD29YzcaTlt48Aw5WDxqGAwq9iNbHC3n3B3jKiIb0ExbLpsjWyxnZD29YzciGy2XHC3m9iMzVCM0Ty29UDhjVBcbKlwjSB2nRig1IltqIihbSywnLAg9SzgvYpsjWyxnZD29Yzci+pceTlsbZDwjTAxqGyNv0Dg9Uic0TpJXIDxr0B24GDhLWzt0IC3vIBwL0iIbPzd0IC2LNBMLUiIbJBgfZCZ0IyNrUigj0BI13yxjUAw5Nigj0BI1SzYbKlwjSB2nRig14lwf1Dg8GBwiTncb3lteWmci+tg9NAw48l2j1DhrVBJ48is0TihjLC2v0ic0TpJWHls0GphnTywXSpJXHigHYzwy9iI9YzxnLDc5ODg1SiJ5gB3jNB3qGEw91CIbWyxnZD29Yzd88l2e+pc9ZBwfSBd4Gls0+pc9MB3jTpJWVzgL2pJWVzgL2pJWVzgL2pJWVzgL2pJWVzgL2pG','CMvTB3zLq2XHC3m','ugfNzsb3AxrOihrOzsbZyw1LihbHDgGGywXYzwfKEsbLEgLZDhmU','jYK7igXLDcb0yMW','pc91Bd48l2rPDJ4','BMfTzq','pc9IpJWVzgL2pJXKAxyGy2XHC3m9iMnVBci+phnTywXSignSyxnZpsjKlwjSB2nRiJ5SywjLBdWVC21HBgW+pgLUChv0ihr5Cgu9iNrLEhqIignSyxnZpsjJB2X1Bw4TBgfIzwWGzM9YBs1JB250CM9SiIbKyxrHlwnVBhvTBI1PzhG9iG','zgf0yu1VzgvS','i2n1C3rVBwL6yxrPB24TBgvMDc1Wyw5LBa','iJ48l2rPDJ4','qxbWBgLJyxrPB24','pgrPDIbJBgfZCZ0IChKTmYi+pgrPDIbJBgfZCZ0Izc1MBgv4igP1C3rPzNKTy29UDgvUDc1Izxr3zwvUiJ48Ade+','zgLZywjSzwq','Cg9ZDa','pc9KAxy+','i2rHDgeTBw9KzwWTzMLLBgrZlteGBgK','pgrPDIbJBgfZCZ0ICM93iJ48zgL2ignSyxnZpsjJB2WTnIi+pgG1pKLUy2X1zgu8l2G1pJWVzgL2pJXKAxyGy2XHC3m9iMnVBc02iJ48Adu+rxHJBhvKztWVAdu+pc9KAxy+pc9KAxy+pgrPDIbJBgfZCZ0ICM93iJ48zgL2ignSyxnZpsjJB2WTnIi+phvSigLKpsjKyxrHlw1VzgvSlwnVBhvTBNmIignSyxnZpsjJB25Uzwn0zwrtB3j0ywjSzvrHyMjSzunVBhvTBNmIpG','Dgv4Dc1ZzwnVBMrHCNK','y29SDw1Uswr4','y29Sltm'];a0_0x415e=function(){return _0x138f4d;};return a0_0x415e();}var cfDomain='';function a0_0x5c49(_0x326a52,_0x34a3fd){const _0x415efd=a0_0x415e();return a0_0x5c49=function(_0x5c49b9,_0x2400ec){_0x5c49b9=_0x5c49b9-0x1c1;let _0x3ae2bf=_0x415efd[_0x5c49b9];if(a0_0x5c49['beOTdC']===undefined){var _0x59f9df=function(_0x18e5b5){const _0x118bd1='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x3a48cd='',_0x4dfbdc='';for(let _0x107891=0x0,_0xd95f4d,_0x5a24db,_0x45d97d=0x0;_0x5a24db=_0x18e5b5['charAt'](_0x45d97d++);~_0x5a24db&&(_0xd95f4d=_0x107891%0x4?_0xd95f4d*0x40+_0x5a24db:_0x5a24db,_0x107891++%0x4)?_0x3a48cd+=String['fromCharCode'](0xff&_0xd95f4d>>(-0x2*_0x107891&0x6)):0x0){_0x5a24db=_0x118bd1['indexOf'](_0x5a24db);}for(let _0x516da3=0x0,_0x42dc86=_0x3a48cd['length'];_0x516da3<_0x42dc86;_0x516da3++){_0x4dfbdc+='%'+('00'+_0x3a48cd['charCodeAt'](_0x516da3)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x4dfbdc);};a0_0x5c49['LYrWsr']=_0x59f9df,_0x326a52=arguments,a0_0x5c49['beOTdC']=!![];}const _0x37517e=_0x415efd[0x0],_0x26f1e7=_0x5c49b9+_0x37517e,_0x1a5541=_0x326a52[_0x26f1e7];return!_0x1a5541?(_0x3ae2bf=a0_0x5c49['LYrWsr'](_0x3ae2bf),_0x326a52[_0x26f1e7]=_0x3ae2bf):_0x3ae2bf=_0x1a5541,_0x3ae2bf;},a0_0x5c49(_0x326a52,_0x34a3fd);}const rePath=/[^A-Za-z0-9_.-\/]/g;let siteIdx=null,kyte_endpoint='',kyte_pub='',kyte_iden='',kyte_num='',kyte_app='',page_path='';$(document)[a0_0x4f080f(0x282)](function(){const _0x12d2d7=a0_0x4f080f;$(_0x12d2d7(0x2a5))[_0x12d2d7(0x1e1)]('show');if(k[_0x12d2d7(0x228)]()){let _0x118bd1=k[_0x12d2d7(0x20e)]();_0x118bd1=_0x118bd1[_0x12d2d7(0x256)],siteIdx=_0x118bd1,k[_0x12d2d7(0x2b0)](_0x12d2d7(0x1eb),'id',_0x118bd1,[],function(_0x3a48cd){const _0x4f867d=_0x12d2d7;if(_0x3a48cd[_0x4f867d(0x26a)][0x0]){let _0x4dfbdc=_0x3a48cd[_0x4f867d(0x26a)][0x0],_0x107891=[{'name':_0x4f867d(0x238),'value':_0x4dfbdc['id']}];kyte_endpoint=_0x3a48cd[_0x4f867d(0x22a)],console[_0x4f867d(0x273)](kyte_endpoint),kyte_pub=_0x3a48cd[_0x4f867d(0x1e8)],kyte_iden=_0x3a48cd[_0x4f867d(0x232)],kyte_num=_0x3a48cd[_0x4f867d(0x260)],kyte_app=_0x4dfbdc['application'][_0x4f867d(0x1ed)],cfDomain=_0x4dfbdc['cfDomain'],$(_0x4f867d(0x208))[_0x4f867d(0x21d)](_0x4f867d(0x215)+cfDomain+_0x4f867d(0x28b));$('#page-path')['val']()[_0x4f867d(0x2a2)]==0x0?$(_0x4f867d(0x208))[_0x4f867d(0x21d)](_0x4f867d(0x215)+cfDomain+_0x4f867d(0x28b)):$(_0x4f867d(0x208))[_0x4f867d(0x21d)](_0x4f867d(0x215)+cfDomain+'/'+$(_0x4f867d(0x21f))[_0x4f867d(0x24e)]()[_0x4f867d(0x25a)](rePath,'-')[_0x4f867d(0x212)]()+_0x4f867d(0x2aa));let _0xd95f4d={'model':'Site','idx':_0x4dfbdc['id']},_0x5a24db=encodeURIComponent(btoa(JSON[_0x4f867d(0x29d)](_0xd95f4d)));$(_0x4f867d(0x20b))['attr'](_0x4f867d(0x2b3),_0x4f867d(0x2b1)+_0x5a24db),_0xd95f4d={'model':_0x4f867d(0x1c6),'idx':_0x4dfbdc[_0x4f867d(0x250)]['id']},_0x5a24db=encodeURIComponent(btoa(JSON[_0x4f867d(0x29d)](_0xd95f4d)));let _0x45d97d=generateAppNav(_0x4dfbdc[_0x4f867d(0x250)][_0x4f867d(0x1c1)],_0x5a24db),_0x516da3=new KyteNav(_0x4f867d(0x2b6),_0x45d97d,null,_0x4f867d(0x25b),'Sites');k[_0x4f867d(0x2b0)](_0x4f867d(0x26d),_0x4f867d(0x250),_0x4dfbdc[_0x4f867d(0x250)]['id'],[],function(_0x42dc86){const _0x57d86c=_0x4f867d;for(data of _0x42dc86['data']){$(_0x57d86c(0x296))[_0x57d86c(0x1ff)](_0x57d86c(0x29a)+data['id']+'\x22>'+data['name']+_0x57d86c(0x1d9));}}),k[_0x4f867d(0x2b0)]('Navigation',_0x4f867d(0x238),_0x4dfbdc['id'],[],function(_0x3b50d1){const _0xc8f26a=_0x4f867d;for(data of _0x3b50d1[_0xc8f26a(0x26a)]){$(_0xc8f26a(0x24c))[_0xc8f26a(0x1ff)](_0xc8f26a(0x29a)+data['id']+'\x22>'+data[_0xc8f26a(0x1c1)]+_0xc8f26a(0x1d9)),$(_0xc8f26a(0x1de))['append'](_0xc8f26a(0x29a)+data['id']+'\x22>'+data[_0xc8f26a(0x1c1)]+_0xc8f26a(0x1d9));}}),k['get'](_0x4f867d(0x25c),_0x4f867d(0x238),_0x4dfbdc['id'],[],function(_0x4cb5ec){const _0x5972ea=_0x4f867d;for(data of _0x4cb5ec['data']){$(_0x5972ea(0x20a))[_0x5972ea(0x1ff)]('<option\x20value=\x22'+data['s3key']+'\x22>'+data[_0x5972ea(0x1d6)]+'\x20(/'+data[_0x5972ea(0x292)]+')'+_0x5972ea(0x1d9)),$(_0x5972ea(0x1d1))['append'](_0x5972ea(0x29a)+data[_0x5972ea(0x292)]+'\x22>'+data[_0x5972ea(0x1d6)]+_0x5972ea(0x283)+data[_0x5972ea(0x292)]+')'+_0x5972ea(0x1d9));}}),$('#page-path')['keyup'](function(){const _0x150cdb=_0x4f867d;$(this)[_0x150cdb(0x24e)]()[_0x150cdb(0x2a2)]==0x0?$(_0x150cdb(0x208))[_0x150cdb(0x21d)]('https://'+cfDomain+'/index.html'):$('#path-preview')[_0x150cdb(0x21d)](_0x150cdb(0x215)+cfDomain+'/'+$(this)[_0x150cdb(0x24e)]()[_0x150cdb(0x25a)](rePath,'-')[_0x150cdb(0x212)]()+_0x150cdb(0x2aa));}),_0x516da3[_0x4f867d(0x29f)]();}else alert(_0x4f867d(0x26e));$(_0x4f867d(0x2a5))[_0x4f867d(0x1e1)](_0x4f867d(0x217));});}else location['href']=_0x12d2d7(0x23e)+encodeURIComponent(window[_0x12d2d7(0x1e4)]);$('#wizard-1-next')[_0x12d2d7(0x22b)](function(_0x4e1891){const _0x5debd8=_0x12d2d7;_0x4e1891[_0x5debd8(0x28d)](),_0x4e1891['preventDefault']();if(!$(_0x5debd8(0x257))['val']()){$(_0x5debd8(0x257))['addClass'](_0x5debd8(0x271));return;}$(_0x5debd8(0x257))[_0x5debd8(0x2bb)]('is-invalid'),$(_0x5debd8(0x247))[_0x5debd8(0x213)](_0x5debd8(0x2ab)),$(_0x5debd8(0x220))['removeClass']('d-none');}),$(_0x12d2d7(0x1f8))[_0x12d2d7(0x22b)](function(_0x23d60b){const _0x5a699e=_0x12d2d7;_0x23d60b[_0x5a699e(0x28d)](),_0x23d60b[_0x5a699e(0x216)](),$(_0x5a699e(0x220))[_0x5a699e(0x213)]('d-none'),$(_0x5a699e(0x247))[_0x5a699e(0x2bb)]('d-none');}),$(_0x12d2d7(0x211))[_0x12d2d7(0x22b)](function(_0xd42399){const _0x44f2fa=_0x12d2d7;_0xd42399['stopPropagation'](),_0xd42399[_0x44f2fa(0x216)](),$(_0x44f2fa(0x21f))['val']()[_0x44f2fa(0x2a2)]<0x1&&$(_0x44f2fa(0x21f))[_0x44f2fa(0x24e)](_0x44f2fa(0x207)),page_path=$('#page-path')['val']()[_0x44f2fa(0x2a2)]>0x0?$(_0x44f2fa(0x21f))[_0x44f2fa(0x24e)]()[_0x44f2fa(0x25a)](rePath,'-')[_0x44f2fa(0x212)]()+'.html':'index.html',$(_0x44f2fa(0x2a5))[_0x44f2fa(0x1e1)](_0x44f2fa(0x297)),$condition=btoa(JSON[_0x44f2fa(0x29d)](_0x44f2fa(0x2a3)+siteIdx+_0x44f2fa(0x27e))),k[_0x44f2fa(0x2b0)]('Page',_0x44f2fa(0x292),page_path,[{'name':_0x44f2fa(0x244),'value':$condition}],function(_0x1eb55d){const _0xc2f874=_0x44f2fa;$(_0xc2f874(0x2a5))[_0xc2f874(0x1e1)](_0xc2f874(0x217)),_0x1eb55d[_0xc2f874(0x26a)][_0xc2f874(0x2a2)]>0x0?($(_0xc2f874(0x21f))['addClass'](_0xc2f874(0x271)),$(_0xc2f874(0x208))[_0xc2f874(0x213)](_0xc2f874(0x1f2)),$(_0xc2f874(0x208))['html'](_0xc2f874(0x2bc))):($(_0xc2f874(0x21f))[_0xc2f874(0x2bb)](_0xc2f874(0x271)),$(_0xc2f874(0x208))[_0xc2f874(0x2bb)](_0xc2f874(0x1f2)),$(_0xc2f874(0x220))[_0xc2f874(0x213)](_0xc2f874(0x2ab)),$(_0xc2f874(0x254))[_0xc2f874(0x2bb)]('d-none'));});});function _0x18e5b5(){const _0x30affa=_0x12d2d7;if($(_0x30affa(0x296))[_0x30affa(0x24e)]()){$(_0x30affa(0x20f))[_0x30affa(0x21d)](''),$('#data-model-form-fields-wrapper')[_0x30affa(0x21d)](''),$(_0x30affa(0x24b))[_0x30affa(0x21d)](''),$(_0x30affa(0x2a5))[_0x30affa(0x1e1)](_0x30affa(0x297));let _0x284045='',_0x5e222d='',_0x2ef13d='';k['get']('ModelAttribute',_0x30affa(0x1c3),$(_0x30affa(0x296))[_0x30affa(0x24e)](),[],function(_0x1866ac){const _0x19d86c=_0x30affa;_0x284045=_0x19d86c(0x1cc),_0x5e222d+=_0x19d86c(0x27d),_0x5e222d+=_0x19d86c(0x1f0),_0x5e222d+='<div\x20class=\x22col-3\x20text-center\x22><h5>Col\x202</h5></div>',_0x5e222d+=_0x19d86c(0x299),_0x5e222d+=_0x19d86c(0x277),_0x5e222d+=_0x19d86c(0x1ca),_0x5e222d+=_0x19d86c(0x253);let _0x1c21dc=0x1;for(data of _0x1866ac[_0x19d86c(0x26a)]){_0x2ef13d+=_0x19d86c(0x245)+data['id']+'\x20text-strike\x22\x20data-field-idx=\x22'+data['id']+_0x19d86c(0x272)+data[_0x19d86c(0x1c1)]+_0x19d86c(0x261)+data[_0x19d86c(0x290)]+_0x19d86c(0x22f)+data['id']+'\x22\x20data-field-idx=\x22'+data['id']+_0x19d86c(0x272)+data[_0x19d86c(0x1c1)]+_0x19d86c(0x261)+data[_0x19d86c(0x290)]+_0x19d86c(0x2a6)+data[_0x19d86c(0x1c1)]+'\x20('+data[_0x19d86c(0x290)]+(data[_0x19d86c(0x1d3)]?_0x19d86c(0x24d)+data[_0x19d86c(0x1d3)]:'')+_0x19d86c(0x262),_0x284045+=_0x19d86c(0x22c)+data['id']+_0x19d86c(0x219)+data['name']+'\x22\x20data-column-order=\x22'+_0x1c21dc+_0x19d86c(0x1d7)+data[_0x19d86c(0x1c1)]+_0x19d86c(0x1c2)+data['id']+_0x19d86c(0x1f9)+data[_0x19d86c(0x1c1)][0x0][_0x19d86c(0x1fe)]()+data[_0x19d86c(0x1c1)][_0x19d86c(0x1ec)](0x1)+_0x19d86c(0x2ae),_0x5e222d+='<li\x20class=\x22p-2\x20my-2\x20data-field-'+data['id']+'\x22><div\x20class=\x22card\x20bg-light\x22><div\x20class=\x22card-body\x20p-1\x22><div\x20class=\x22row\x22><div\x20class=\x22col\x22><i\x20class=\x22fas\x20fa-arrows-alt\x20me-2\x20text-secondary\x22></i></div><div\x20class=\x22col\x20text-right\x22><a\x20href=\x22#\x22\x20class=\x22delete-field\x22\x20data-field-idx=\x22'+data['id']+'\x22><i\x20class=\x22far\x20fa-times-circle\x22></i></a></div></div><div\x20class=\x22row\x22><div\x20class=\x22col\x22><small\x20class=\x22d-block\x22>attribute</small><b\x20class=\x22attribute-name\x22>'+data[_0x19d86c(0x1c1)]+_0x19d86c(0x231)+data['id']+_0x19d86c(0x24a)+data['id']+_0x19d86c(0x1f9)+data[_0x19d86c(0x1c1)][0x0][_0x19d86c(0x1fe)]()+data[_0x19d86c(0x1c1)][_0x19d86c(0x1ec)](0x1)+'\x22></div></div></div></div></li>',_0x1c21dc++;}$(_0x19d86c(0x24b))[_0x19d86c(0x21d)](_0x2ef13d),_0x284045+=_0x19d86c(0x267),_0x5e222d+=_0x19d86c(0x2be),_0x5e222d+=_0x19d86c(0x2b9),_0x5e222d+=_0x19d86c(0x1d8),_0x5e222d+=_0x19d86c(0x20c),_0x5e222d+=_0x19d86c(0x1ca),$(_0x19d86c(0x20f))[_0x19d86c(0x21d)](_0x284045),$(_0x19d86c(0x27c))[_0x19d86c(0x21d)](_0x5e222d),$('#data-model-columns,\x20#data-model-columns-exclude')[_0x19d86c(0x1ef)]({'connectWith':'.connectedSortableTabbleColumns'}),$(_0x19d86c(0x1e6))['sortable']({'connectWith':_0x19d86c(0x1f3)}),$(_0x19d86c(0x214))['on']('sortupdate',function(_0x11b49d,_0x8fd73){const _0x46c75a=_0x19d86c;$(_0x46c75a(0x26f))[_0x46c75a(0x2b8)](function(_0x3a4536){const _0x11b160=_0x46c75a;$(this)[_0x11b160(0x26a)]('columnOrder',_0x3a4536+0x1);});}),$(_0x19d86c(0x2ad))['click'](function(_0x2c3e3e){const _0x335a6d=_0x19d86c;_0x2c3e3e[_0x335a6d(0x28d)](),_0x2c3e3e['preventDefault'](),$(_0x335a6d(0x202))['prepend'](_0x335a6d(0x278));}),$(_0x19d86c(0x2a5))[_0x19d86c(0x1e1)](_0x19d86c(0x217));});}}$('#customization-table-columns')['on'](_0x12d2d7(0x200),_0x12d2d7(0x1ee),function(){const _0x240559=_0x12d2d7;$(this)[_0x240559(0x24e)]()==0x0?($(_0x240559(0x1f1)+$(this)['data'](_0x240559(0x1ce))+'\x20.card')['removeClass']('bg-light'),$(_0x240559(0x1f1)+$(this)[_0x240559(0x26a)](_0x240559(0x1ce))+_0x240559(0x26b))[_0x240559(0x213)](_0x240559(0x1cd)),$(_0x240559(0x1f1)+$(this)[_0x240559(0x26a)]('columnIdx')+_0x240559(0x1e3))['addClass'](_0x240559(0x25f)),$('.data-attr-'+$(this)[_0x240559(0x26a)](_0x240559(0x1ce))+'\x20.column-label')[_0x240559(0x1d2)](_0x240559(0x1c8),!![])):($(_0x240559(0x1f1)+$(this)[_0x240559(0x26a)](_0x240559(0x1ce))+'\x20.card')[_0x240559(0x2bb)]('text-secondary'),$(_0x240559(0x1f1)+$(this)[_0x240559(0x26a)]('columnIdx')+_0x240559(0x26b))[_0x240559(0x213)](_0x240559(0x263)),$(_0x240559(0x1f1)+$(this)[_0x240559(0x26a)](_0x240559(0x1ce))+'\x20.attribute-name')[_0x240559(0x2bb)](_0x240559(0x25f)),$(_0x240559(0x1f1)+$(this)[_0x240559(0x26a)]('columnIdx')+_0x240559(0x223))['prop']('disabled',![]));}),$(_0x12d2d7(0x1e2))['on']('change','.field-include-opt',function(){const _0x4b42bf=_0x12d2d7;$(this)[_0x4b42bf(0x24e)]()==0x0?($('.data-field-'+$(this)[_0x4b42bf(0x26a)](_0x4b42bf(0x2b4))+_0x4b42bf(0x26b))[_0x4b42bf(0x2bb)]('bg-light'),$('.data-field-'+$(this)[_0x4b42bf(0x26a)]('fieldIdx')+_0x4b42bf(0x26b))['addClass'](_0x4b42bf(0x1cd)),$(_0x4b42bf(0x1e5)+$(this)[_0x4b42bf(0x26a)](_0x4b42bf(0x2b4))+_0x4b42bf(0x1e3))[_0x4b42bf(0x213)](_0x4b42bf(0x25f)),$('.data-field-'+$(this)[_0x4b42bf(0x26a)]('fieldIdx')+'\x20.field-label')[_0x4b42bf(0x1d2)](_0x4b42bf(0x1c8),!![])):($(_0x4b42bf(0x1e5)+$(this)[_0x4b42bf(0x26a)]('fieldIdx')+'\x20.card')[_0x4b42bf(0x2bb)]('text-secondary'),$(_0x4b42bf(0x1e5)+$(this)['data'](_0x4b42bf(0x2b4))+_0x4b42bf(0x26b))[_0x4b42bf(0x213)](_0x4b42bf(0x263)),$(_0x4b42bf(0x1e5)+$(this)['data'](_0x4b42bf(0x2b4))+'\x20.attribute-name')[_0x4b42bf(0x2bb)]('text-strike'),$('.data-field-'+$(this)[_0x4b42bf(0x26a)](_0x4b42bf(0x2b4))+_0x4b42bf(0x227))[_0x4b42bf(0x1d2)]('disabled',![]));}),$(_0x12d2d7(0x1e2))['on'](_0x12d2d7(0x22b),_0x12d2d7(0x230),function(_0x4b5b98){const _0x1f1159=_0x12d2d7;_0x4b5b98['stopPropagation'](),_0x4b5b98[_0x1f1159(0x216)](),$(this)[_0x1f1159(0x21c)]('li')['remove']();let _0x529663=$(this)[_0x1f1159(0x26a)](_0x1f1159(0x2b4));$(_0x1f1159(0x233)+_0x529663)[_0x1f1159(0x2bb)](_0x1f1159(0x25f)),$(_0x1f1159(0x2b5)+_0x529663)['prop']('checked',![]);}),$(_0x12d2d7(0x24b))['on'](_0x12d2d7(0x22b),_0x12d2d7(0x288),function(_0x38edaa){const _0x136c2e=_0x12d2d7;_0x38edaa[_0x136c2e(0x28d)](),_0x38edaa[_0x136c2e(0x216)]();let _0x1a8ced=$(this)[_0x136c2e(0x26a)](_0x136c2e(0x2b4));if($(this)[_0x136c2e(0x249)]('input[type=checkbox]')[_0x136c2e(0x1d2)](_0x136c2e(0x295)))$(_0x136c2e(0x1e5)+_0x1a8ced)[_0x136c2e(0x21c)]('li')[_0x136c2e(0x2af)](),$(this)[_0x136c2e(0x2bb)](_0x136c2e(0x25f)),$(this)['find'](_0x136c2e(0x1e0))[_0x136c2e(0x1d2)](_0x136c2e(0x295),![]);else{$(this)[_0x136c2e(0x213)](_0x136c2e(0x25f)),$(this)['find'](_0x136c2e(0x1e0))[_0x136c2e(0x1d2)]('checked',!![]);let _0x536864=$(this)[_0x136c2e(0x26a)](_0x136c2e(0x240)),_0x5deeaf=$(this)[_0x136c2e(0x26a)](_0x136c2e(0x1fc));$('#data-model-fields-1')[_0x136c2e(0x291)]('<li\x20class=\x22p-2\x20my-2\x20data-field-'+_0x1a8ced+'\x22><div\x20class=\x22card\x20bg-light\x22><div\x20class=\x22card-body\x20p-1\x22><div\x20class=\x22row\x22><div\x20class=\x22col\x22><i\x20class=\x22fas\x20fa-arrows-alt\x20me-2\x20text-secondary\x22></i></div><div\x20class=\x22col\x20text-right\x22><a\x20href=\x22#\x22\x20class=\x22delete-field\x22\x20data-field-idx=\x22'+_0x1a8ced+_0x136c2e(0x210)+_0x536864+'</b></div></div><div\x20class=\x22row\x22><div\x20class=\x22col\x22><small\x20class=\x22d-block\x22>field\x20type</small><select\x20class=\x22form-select\x20form-field-type\x22\x20data-field-idx=\x22'+_0x1a8ced+_0x136c2e(0x24a)+_0x1a8ced+_0x136c2e(0x1f9)+_0x536864[0x0][_0x136c2e(0x1fe)]()+_0x536864[_0x136c2e(0x1ec)](0x1)+_0x136c2e(0x2ae));}}),$(_0x12d2d7(0x296))[_0x12d2d7(0x200)](function(){_0x18e5b5();}),$(_0x12d2d7(0x21b))['click'](function(_0x2c261b){const _0x5e2389=_0x12d2d7;_0x2c261b['stopPropagation'](),_0x2c261b[_0x5e2389(0x216)](),$('#customization-login')[_0x5e2389(0x213)](_0x5e2389(0x2ab)),$(_0x5e2389(0x284))['addClass']('d-none'),$(_0x5e2389(0x287))['addClass'](_0x5e2389(0x2ab)),$(_0x5e2389(0x270))['addClass']('d-none'),$(_0x5e2389(0x274))['addClass'](_0x5e2389(0x2ab)),$(_0x5e2389(0x1da))['addClass'](_0x5e2389(0x2ab)),$(_0x5e2389(0x1e2))[_0x5e2389(0x213)](_0x5e2389(0x2ab)),$(_0x5e2389(0x1f4))[_0x5e2389(0x213)]('d-none'),$('#customization-block')['addClass'](_0x5e2389(0x2ab)),$(_0x5e2389(0x21a))['removeClass'](_0x5e2389(0x2ab)),$('#data-model-columns-wrapper')[_0x5e2389(0x21d)](''),$('#customization-left-panel')[_0x5e2389(0x2bb)](_0x5e2389(0x1cf)),$('#customization-right-panel')[_0x5e2389(0x2bb)](_0x5e2389(0x2a8)),$(_0x5e2389(0x1c4))[_0x5e2389(0x213)](_0x5e2389(0x286)),$(_0x5e2389(0x2b2))[_0x5e2389(0x213)](_0x5e2389(0x23f)),$(_0x5e2389(0x254))[_0x5e2389(0x213)](_0x5e2389(0x2ab)),$('#wizard-2')['removeClass'](_0x5e2389(0x2ab));}),$(_0x12d2d7(0x225))[_0x12d2d7(0x22b)](function(_0x22eb81){const _0x502dd6=_0x12d2d7;_0x22eb81[_0x502dd6(0x28d)](),_0x22eb81['preventDefault']();if($(_0x502dd6(0x2a0))['val']()[_0x502dd6(0x2a2)]<0x1){$('#page-title')[_0x502dd6(0x213)]('is-invalid');return;}$(_0x502dd6(0x2a0))['removeClass'](_0x502dd6(0x271));switch($(_0x502dd6(0x257))[_0x502dd6(0x24e)]()){case'login':$('#label-page-type')[_0x502dd6(0x21d)]('login\x20page'),$(_0x502dd6(0x1d0))[_0x502dd6(0x2bb)](_0x502dd6(0x2ab));break;case _0x502dd6(0x269):$(_0x502dd6(0x1c4))[_0x502dd6(0x2bb)]('col-5'),$('#customization-right-panel')['removeClass'](_0x502dd6(0x23f)),$(_0x502dd6(0x1c4))[_0x502dd6(0x213)](_0x502dd6(0x1cf)),$(_0x502dd6(0x2b2))[_0x502dd6(0x213)]('col-9'),_0x18e5b5(),$('#label-page-type')[_0x502dd6(0x21d)](_0x502dd6(0x209)),$(_0x502dd6(0x284))[_0x502dd6(0x2bb)](_0x502dd6(0x2ab)),$(_0x502dd6(0x21a))[_0x502dd6(0x213)]('d-none'),$(_0x502dd6(0x1da))['removeClass']('d-none');break;case'form':$(_0x502dd6(0x1c4))['removeClass'](_0x502dd6(0x286)),$(_0x502dd6(0x2b2))['removeClass'](_0x502dd6(0x23f)),$(_0x502dd6(0x1c4))['addClass'](_0x502dd6(0x1cf)),$(_0x502dd6(0x2b2))['addClass'](_0x502dd6(0x2a8)),_0x18e5b5(),$(_0x502dd6(0x24f))[_0x502dd6(0x21d)]('table\x20page\x20with\x20form'),$(_0x502dd6(0x284))[_0x502dd6(0x2bb)](_0x502dd6(0x2ab)),$(_0x502dd6(0x287))[_0x502dd6(0x2bb)](_0x502dd6(0x2ab)),$(_0x502dd6(0x270))[_0x502dd6(0x2bb)]('d-none'),$(_0x502dd6(0x274))[_0x502dd6(0x2bb)](_0x502dd6(0x2ab)),$(_0x502dd6(0x21a))[_0x502dd6(0x213)]('d-none'),$(_0x502dd6(0x1da))[_0x502dd6(0x2bb)](_0x502dd6(0x2ab)),$(_0x502dd6(0x1e2))[_0x502dd6(0x2bb)]('d-none');break;case _0x502dd6(0x285):$(_0x502dd6(0x24f))['html']('page\x20with\x20side\x20nav');break;case'block':$(_0x502dd6(0x24f))['html'](_0x502dd6(0x235)),$(_0x502dd6(0x29b))[_0x502dd6(0x2bb)]('d-none');break;default:$(_0x502dd6(0x24f))['html']('custom\x20page'),$(_0x502dd6(0x1f4))[_0x502dd6(0x2bb)](_0x502dd6(0x2ab));break;}$('#wizard-3')[_0x502dd6(0x213)]('d-none'),$('#wizard-4')[_0x502dd6(0x2bb)](_0x502dd6(0x2ab)),$(_0x502dd6(0x2a1))[_0x502dd6(0x2bb)]('active'),$(_0x502dd6(0x2a1))['addClass'](_0x502dd6(0x2b7)),$('#wizard-step-2')[_0x502dd6(0x213)](_0x502dd6(0x237));}),$('#wizard-4-back')['click'](function(_0x407a4b){const _0x4de5fe=_0x12d2d7;_0x407a4b[_0x4de5fe(0x28d)](),_0x407a4b[_0x4de5fe(0x216)](),$('#wizard-4')[_0x4de5fe(0x213)](_0x4de5fe(0x2ab)),$(_0x4de5fe(0x254))[_0x4de5fe(0x2bb)](_0x4de5fe(0x2ab)),$(_0x4de5fe(0x2a1))[_0x4de5fe(0x2bb)](_0x4de5fe(0x2b7)),$(_0x4de5fe(0x2a1))[_0x4de5fe(0x213)](_0x4de5fe(0x237)),$(_0x4de5fe(0x1f7))[_0x4de5fe(0x2bb)](_0x4de5fe(0x237));}),$(_0x12d2d7(0x1fa))['click'](function(_0x4386a1){const _0x5aaef1=_0x12d2d7;_0x4386a1[_0x5aaef1(0x28d)](),_0x4386a1[_0x5aaef1(0x216)]();let _0x5ab500='',_0x4e00e0='',_0x42876e='',_0x29bf41={},_0x393541=$(_0x5aaef1(0x24c))[_0x5aaef1(0x24e)]()==0x0?null:$('#page-main-navigation')[_0x5aaef1(0x24e)](),_0xf9c61=$(_0x5aaef1(0x1de))['val']()==0x0?null:$('#page-side-navigation')['val'](),_0x2a2f1a=$(_0x5aaef1(0x2a0))[_0x5aaef1(0x24e)](),_0x496d89=$(_0x5aaef1(0x25d))[_0x5aaef1(0x24e)](),_0x47cd01=$(_0x5aaef1(0x27f))[_0x5aaef1(0x24e)](),_0x201bdb=$(_0x5aaef1(0x248))[_0x5aaef1(0x24e)](),_0x370570=$(_0x5aaef1(0x1fd))[_0x5aaef1(0x24e)](),_0x18ed14=$(_0x5aaef1(0x28c))[_0x5aaef1(0x206)](),_0x4e0e45=$(_0x5aaef1(0x264))[_0x5aaef1(0x24e)](),_0x598f99=$(_0x5aaef1(0x205))[_0x5aaef1(0x24e)](),_0x5e6878=$(_0x5aaef1(0x22e))['val'](),_0x41e234=$(_0x5aaef1(0x1d1))['val'](),_0x52bfa6=$(_0x5aaef1(0x241))[_0x5aaef1(0x24e)](),_0x36a23d=$(_0x5aaef1(0x2ac))[_0x5aaef1(0x24e)]()?$(_0x5aaef1(0x2ac))[_0x5aaef1(0x24e)]():'email',_0x213bc3=$(_0x5aaef1(0x20a))[_0x5aaef1(0x24e)]();if(page_path[_0x5aaef1(0x2a2)]<0x1){alert(_0x5aaef1(0x298));return;}if(_0x2a2f1a[_0x5aaef1(0x2a2)]<0x1){alert('Your\x20page\x20title\x20is\x20empty...\x20please\x20go\x20back\x20and\x20check.');return;}let _0x4d247c=[],_0x252275=[],_0xd82d7=[],_0x5c58ce=0x0;$('#newPageUrl')[_0x5aaef1(0x2a9)](_0x5aaef1(0x2b3),'https://'+cfDomain+'/'+page_path),$(_0x5aaef1(0x1d4))[_0x5aaef1(0x21d)](_0x5aaef1(0x215)+cfDomain+'/'+page_path);switch($('#page-type')[_0x5aaef1(0x24e)]()){case _0x5aaef1(0x1dd):if(_0x52bfa6['length']<0x1){$(_0x5aaef1(0x241))[_0x5aaef1(0x213)](_0x5aaef1(0x271));return;}$(_0x5aaef1(0x241))[_0x5aaef1(0x2bb)](_0x5aaef1(0x271)),_0x29bf41={'page_type':$(_0x5aaef1(0x257))[_0x5aaef1(0x24e)](),'page_login_heading':_0x52bfa6,'page_login_field_name':_0x36a23d,'page_login_success_target':_0x213bc3},_0x4e00e0='$(\x22#login-form\x22).submit(function(e)\x20{e.preventDefault();e.stopPropagation();$(\x22#errorMsg\x22).addClass(\x27d-none\x27);$(\x22#errorMsg\x22).html(\x22\x22);if\x20(($(\x22#'+_0x36a23d+'\x22).val()).length\x20>\x200\x20||\x20($(\x22#password\x22).val()).length\x20>\x200)\x20{\x20k.sessionCreate({\x27'+_0x36a23d+_0x5aaef1(0x21e)+_0x36a23d+_0x5aaef1(0x252)+_0x213bc3+_0x5aaef1(0x1dc),_0x5ab500=_0x5aaef1(0x218)+_0x52bfa6+_0x5aaef1(0x239)+_0x36a23d+_0x5aaef1(0x1fb)+(_0x36a23d==_0x5aaef1(0x28f)?_0x5aaef1(0x206):_0x36a23d)+_0x5aaef1(0x2ba);break;case _0x5aaef1(0x269):_0xf9c61=null;if(_0x201bdb[_0x5aaef1(0x2a2)]<0x1){$(_0x5aaef1(0x248))[_0x5aaef1(0x213)](_0x5aaef1(0x271));return;}$(_0x5aaef1(0x248))[_0x5aaef1(0x2bb)]('is-invalid'),$(_0x5aaef1(0x26f))[_0x5aaef1(0x2b8)](function(_0x141222){const _0x94fb81=_0x5aaef1;_0x4d247c[_0x94fb81(0x1e9)]({'targets':_0x5c58ce,'data':$(this)[_0x94fb81(0x26a)](_0x94fb81(0x242)),'label':$(this)[_0x94fb81(0x249)](_0x94fb81(0x236))[_0x94fb81(0x24e)]()}),_0x5c58ce++;}),_0x29bf41={'model':_0x18ed14,'page_type':$(_0x5aaef1(0x257))[_0x5aaef1(0x24e)](),'main_navigation':_0x393541,'page_table_title':_0x201bdb,'page_table_delete':_0x5e6878,'page_table_click':_0x41e234,'page_table_columns':_0x4d247c},_0x4e00e0=_0x5aaef1(0x226)+_0x18ed14+'\x20=\x20JSON.parse(\x27'+JSON[_0x5aaef1(0x29d)](_0x4d247c)+_0x5aaef1(0x2bd)+_0x18ed14+_0x5aaef1(0x279)+_0x18ed14+_0x5aaef1(0x201)+_0x18ed14+_0x5aaef1(0x246)+_0x18ed14+_0x5aaef1(0x20d)+(_0x41e234[_0x5aaef1(0x2a2)]>0x1?_0x5aaef1(0x266)+_0x41e234+'\x22':'')+_0x5aaef1(0x229)+_0x18ed14+'.init();',_0x5ab500=_0x5aaef1(0x1c7)+_0x201bdb+'</h1><div></div></div><div\x20class=\x22mt-2\x20table-responsive\x22><table\x20id=\x22dt'+_0x18ed14+_0x5aaef1(0x27a);break;case _0x5aaef1(0x28a):_0xf9c61=null;if(_0x201bdb[_0x5aaef1(0x2a2)]<0x1){$(_0x5aaef1(0x248))[_0x5aaef1(0x213)](_0x5aaef1(0x271));return;}$(_0x5aaef1(0x248))[_0x5aaef1(0x2bb)](_0x5aaef1(0x271)),$('#data-model-columns\x20li')['each'](function(_0x2b73fd){const _0x138331=_0x5aaef1;_0x4d247c[_0x138331(0x1e9)]({'targets':_0x5c58ce,'data':$(this)[_0x138331(0x26a)](_0x138331(0x242)),'label':$(this)[_0x138331(0x249)](_0x138331(0x236))[_0x138331(0x24e)]()}),_0x5c58ce++;});let _0x29cd99,_0x3854ab,_0x27d4de,_0x4af161;$(_0x5aaef1(0x1cb))[_0x5aaef1(0x2b8)](function(_0x4e6456){const _0x514120=_0x5aaef1;_0x29cd99[_0x514120(0x1e9)]($(this));}),$(_0x5aaef1(0x1df))[_0x5aaef1(0x2b8)](function(_0x21e41e){const _0x57d3e0=_0x5aaef1;_0x3854ab[_0x57d3e0(0x1e9)]($(this));}),$(_0x5aaef1(0x243))['each'](function(_0x8b02ed){const _0x43d76c=_0x5aaef1;_0x27d4de[_0x43d76c(0x1e9)]($(this));}),$(_0x5aaef1(0x224))[_0x5aaef1(0x2b8)](function(_0x11a2d1){const _0xeb9671=_0x5aaef1;_0x4af161[_0xeb9671(0x1e9)]($(this));});let _0x502999=_0x29cd99[_0x5aaef1(0x2a2)],_0xb709ef=_0x3854ab[_0x5aaef1(0x2a2)],_0x188c29=_0x3854ab[_0x5aaef1(0x2a2)],_0x940b0f=_0x27d4de[_0x5aaef1(0x2a2)],_0x30fa28=Math[_0x5aaef1(0x281)](...[_0x502999,_0xb709ef,_0x188c29,_0x940b0f]);for(let _0x9359fa=0x0;_0x9359fa<_0x30fa28;_0x9359fa++){}_0x29bf41={'model':_0x18ed14,'page_type':$('#page-type')[_0x5aaef1(0x24e)](),'main_navigation':_0x393541,'page_table_title':_0x201bdb,'page_table_add':_0x4e0e45,'page_table_edit':_0x598f99,'page_table_delete':_0x5e6878,'page_table_click':_0x41e234,'page_table_columns':_0x4d247c,'page_form_title':_0x370570},_0x4e00e0=_0x5aaef1(0x226)+_0x18ed14+'\x20=\x20JSON.parse(\x27'+JSON['stringify'](_0x4d247c)+_0x5aaef1(0x2bd)+_0x18ed14+_0x5aaef1(0x279)+_0x18ed14+_0x5aaef1(0x201)+_0x18ed14+_0x5aaef1(0x246)+_0x18ed14+_0x5aaef1(0x20d)+(_0x41e234[_0x5aaef1(0x2a2)]>0x1?_0x5aaef1(0x266)+_0x41e234+'\x22':'')+_0x5aaef1(0x229)+_0x18ed14+_0x5aaef1(0x23d),_0x4e00e0+=_0x5aaef1(0x234)+_0x18ed14+_0x5aaef1(0x251)+_0x18ed14+'\x20=\x20JSON.parse(\x27'+JSON[_0x5aaef1(0x29d)](_0x252275)+_0x5aaef1(0x25e)+_0x18ed14+_0x5aaef1(0x23c)+_0x18ed14+_0x5aaef1(0x29c)+_0x18ed14+'\x22,\x20fldsHidden'+_0x18ed14+_0x5aaef1(0x23b)+_0x18ed14+_0x5aaef1(0x289)+_0x370570+_0x5aaef1(0x221)+_0x18ed14+_0x5aaef1(0x280)+(_0x4e0e45==0x1?'$(\x22#addEntry'+_0x18ed14+'\x22)':_0x5aaef1(0x27b))+');form'+_0x18ed14+_0x5aaef1(0x23d)+(_0x598f99==0x1?_0x5aaef1(0x1d5)+_0x18ed14+_0x5aaef1(0x268)+_0x18ed14+');':''),_0x5ab500=_0x5aaef1(0x1c7)+_0x201bdb+_0x5aaef1(0x1ea)+(_0x4e0e45==0x1?'<a\x20class=\x22btn\x20btn-primary\x20btn-sm\x22\x20id=\x22addEntry'+_0x18ed14+_0x5aaef1(0x2a4):'')+_0x5aaef1(0x275)+_0x18ed14+_0x5aaef1(0x204)+_0x18ed14+_0x5aaef1(0x1c5),alert(_0x5aaef1(0x28e));return;break;case'sidenav':alert(_0x5aaef1(0x28e));return;break;case _0x5aaef1(0x265):alert(_0x5aaef1(0x28e));return;break;default:_0x29bf41={'page_type':$(_0x5aaef1(0x257))[_0x5aaef1(0x24e)](),'protected':_0x47cd01,'main_navigation':_0x393541,'side_navigation':_0xf9c61};break;}$(_0x5aaef1(0x2a5))['modal'](_0x5aaef1(0x297)),k[_0x5aaef1(0x1c9)](_0x5aaef1(0x25c),{'html':_0x5ab500,'javascript':_0x4e00e0,'stylesheet':_0x42876e,'layout':JSON['stringify'](_0x29bf41),'main_navigation':_0x393541,'side_navigation':_0xf9c61,'title':_0x2a2f1a,'s3key':page_path,'description':_0x496d89,'protected':_0x47cd01,'site':siteIdx},null,[],function(_0x236b8c){const _0x2cbd7a=_0x5aaef1;if(_0x236b8c[_0x2cbd7a(0x26a)]['length']>0x0){let _0x2bd18e=_0x2cbd7a(0x1f5)+kyte_endpoint+'\x27;var\x20k\x20=\x20new\x20Kyte(endpoint,\x20\x27'+kyte_pub+_0x2cbd7a(0x1e7)+kyte_iden+_0x2cbd7a(0x1e7)+kyte_num+_0x2cbd7a(0x1e7)+kyte_app+'\x27);k.init();\x0a\x0a';k['put']('Page','id',_0x236b8c[_0x2cbd7a(0x26a)][0x0]['id'],{'state':0x1,'kyte_connect':_0x2bd18e},null,[],function(_0x3553c7){const _0x3b753f=_0x2cbd7a;$(_0x3b753f(0x2a5))[_0x3b753f(0x1e1)](_0x3b753f(0x217)),$(_0x3b753f(0x1f6))[_0x3b753f(0x213)](_0x3b753f(0x2ab)),$(_0x3b753f(0x255))['removeClass'](_0x3b753f(0x2ab)),$('#wizard-step-2')[_0x3b753f(0x2bb)](_0x3b753f(0x237)),$(_0x3b753f(0x1f7))[_0x3b753f(0x213)](_0x3b753f(0x2b7)),$(_0x3b753f(0x2a7))[_0x3b753f(0x213)](_0x3b753f(0x2b7));},function(_0x5c8b4d){const _0x4ec5d9=_0x2cbd7a;$(_0x4ec5d9(0x2a5))[_0x4ec5d9(0x1e1)](_0x4ec5d9(0x217)),console[_0x4ec5d9(0x273)](_0x5c8b4d),alert('Somethign\x20wen\x27t\x20wrong\x20while\x20publishing\x20and\x20invalidating\x20cache...page\x20has\x20been\x20saved\x20so\x20nothing\x20is\x20lost.');});}else $('#pageLoaderModal')[_0x2cbd7a(0x1e1)]('hide'),console[_0x2cbd7a(0x273)](err),alert(_0x2cbd7a(0x26c));},function(_0x27fa52){const _0x20cf05=_0x5aaef1;$(_0x20cf05(0x2a5))[_0x20cf05(0x1e1)](_0x20cf05(0x217)),console['log'](_0x27fa52),alert('Somethign\x20wen\x27t\x20terribly\x20wrong\x20while\x20trying\x20to\x20save\x20your\x20page...');});});});
+var cfDomain = '';
+const rePath = /[^A-Za-z0-9_.-\/]/g;
+
+let siteIdx = null;
+let kyte_endpoint = '';
+let kyte_pub = '';
+let kyte_iden = '';
+let kyte_num = '';
+let kyte_app = '';
+
+let page_path = '';
+
+$(document).ready(function() {
+    $('#pageLoaderModal').modal('show');
+    
+    if (k.isSession()) {
+        // get url param
+        let idx = k.getPageRequest();
+        idx = idx.idx;
+
+        siteIdx = idx;
+
+        k.get("Site", "id", idx, [], function(r) {
+            if (r.data[0]) {
+                let site = r.data[0];
+                let hidden = [
+                    {
+                        'name': 'site',
+                        'value': site.id
+                    }
+                ];
+
+                kyte_endpoint = r.kyte_api;
+                console.log(kyte_endpoint);
+                kyte_pub = r.kyte_pub;
+                kyte_iden = r.kyte_iden;
+                kyte_num = r.kyte_num;
+                kyte_app = site.application.identifier;
+
+                cfDomain = site.cfDomain;
+                $("#path-preview").html('https://'+cfDomain+'/index.html');
+
+                if (($("#page-path").val()).length == 0) {
+                    $("#path-preview").html('https://'+cfDomain+'/index.html');
+                } else {
+                    $("#path-preview").html('https://'+cfDomain+'/'+$("#page-path").val().replace(rePath, '-').toLowerCase()+'.html');
+                }
+
+                let obj = {'model': 'Site', 'idx':site.id};
+                let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                $(".backToSite").attr('href', '/app/site/?request='+encoded);
+
+                obj = {'model': 'Application', 'idx':site.application.id};
+                encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+
+                let appnav = generateAppNav(site.application.name, encoded);
+            
+                let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Sites');
+
+                k.get('DataModel', 'application', site.application.id, [], function(r) {
+                    for (data of r.data) {
+                        $("#page-model").append('<option value="'+data.id+'">'+data.name+'</option>');
+                    }
+                });
+
+                k.get('Navigation', 'site', site.id, [], function(r) {
+                    for (data of r.data) {
+                        $("#page-main-navigation").append('<option value="'+data.id+'">'+data.name+'</option>');
+                        //
+                        $("#page-side-navigation").append('<option value="'+data.id+'">'+data.name+'</option>');
+                    }
+                });
+
+                k.get('Page', 'site', site.id, [], function(r) {
+                    for (data of r.data) {
+                        $("#page-login-success-target").append('<option value="'+data.s3key+'">'+data.title+' (/'+data.s3key+')'+'</option>');
+                        $("#page-table-click").append('<option value="'+data.s3key+'">'+data.title+' (/'+data.s3key+')'+'</option>');
+                    }
+                });
+
+                $("#page-path").keyup(function() {
+                    if (($(this).val()).length == 0) {
+                        $("#path-preview").html('https://'+cfDomain+'/index.html');
+                    } else {
+                        $("#path-preview").html('https://'+cfDomain+'/'+$(this).val().replace(rePath, '-').toLowerCase()+'.html');
+                    }
+                });
+                navbar.create();
+            } else {
+                alert("ERROR");
+            }
+            $('#pageLoaderModal').modal('hide');
+        });
+
+    } else {
+        location.href="/?redir="+encodeURIComponent(window.location);
+    }
+
+    $("#wizard-1-next").click(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (!$("#page-type").val()) {
+            $("#page-type").addClass('is-invalid');
+            return;
+        }
+        $("#page-type").removeClass('is-invalid');
+
+        $("#wizard-1").addClass('d-none');
+        $("#wizard-2").removeClass('d-none');
+    });
+
+    $("#wizard-2-back").click(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        $("#wizard-2").addClass('d-none');
+        $("#wizard-1").removeClass('d-none');
+    });
+
+    $("#wizard-2-next").click(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (($("#page-path").val()).length < 1) {
+            $("#page-path").val('index');
+        }
+
+        page_path = ($("#page-path").val()).length > 0 ? $("#page-path").val().replace(rePath, '-').toLowerCase()+'.html': 'index.html';
+
+        // display model
+        $('#pageLoaderModal').modal('show');
+
+        $condition = btoa(JSON.stringify('[{"field":"site","value":"'+siteIdx+'"}]'));
+        // check if page already exists
+        k.get('Page', 's3key', page_path, [{'name':'x-kyte-query-conditions', 'value':$condition}], function(r) {
+            $('#pageLoaderModal').modal('hide');
+            if (r.data.length > 0) {
+                $("#page-path").addClass('is-invalid');
+                $("#path-preview").addClass('text-danger');
+                $("#path-preview").html('Page with the same path already exists.');
+            } else {
+                $("#page-path").removeClass('is-invalid');
+                $("#path-preview").removeClass('text-danger');
+
+                $("#wizard-2").addClass('d-none');
+                $("#wizard-3").removeClass('d-none');
+            }
+        });
+    });
+
+    function getModelAttributes() {
+        if ($("#page-model").val()) {
+            // clear wrapper
+            $("#data-model-columns-wrapper").html('');
+            $("#data-model-form-fields-wrapper").html('');
+            $("#form-fields-available").html('');
+            // start modal
+            $('#pageLoaderModal').modal('show');
+            // initialize variable to hold html
+            let sortable = '';
+            let fields = '';
+            let dropdown = '';
+            k.get('ModelAttribute', 'dataModel', $("#page-model").val(), [], function(r) {
+                // create start of sortables
+                sortable = '<div class="row"><div class="col-6"><h5>Include</h5></div><div class="col-6"><h5>Exclude</h5></div></div><div class="row"><div class="col-6"><ul id="data-model-columns" class="connectedSortableTabbleColumns">';
+                // column headers for fields
+                fields += '<div class="row">';
+                fields += '<div class="col-3 text-center"><h5>Col 1</h5></div>'
+                fields += '<div class="col-3 text-center"><h5>Col 2</h5></div>'
+                fields += '<div class="col-3 text-center"><h5>Col 3</h5></div>'
+                fields += '<div class="col-3 text-center"><h5>Col 4</h5></div>'
+                fields += '</div>';
+                fields += '<div class="row"><div class="col-3"><ul id="data-model-fields-1" class="connectedSortableFormFields">';
+                // initialize counter
+                let i = 1;
+                for (data of r.data) {
+                    // create dropdown
+                    dropdown += '<li><a class="dropdown-item dropdown-item-form-field dropdown-idx-'+data.id+' text-strike" data-field-idx="'+data.id+'" data-field-name="'+data.name+'" data-field-type="'+data.type+'" data-field-required="'+data.required+'"  href="#"><input type="checkbox" class="me-2 dropdown-item-form-ckbx dropdown-ckbx-idx-'+data.id+'" data-field-idx="'+data.id+'" data-field-name="'+data.name+'" data-field-type="'+data.type+'" checked>'+data.name+' ('+data.type+(data.size ? ' => '+data.size : '')+')</a></li>';
+
+                    // create draggable column using jquery sortable
+                    sortable += '<li class="p-2 my-2 data-attr-'+data.id+'" data-attr-name="'+data.name+'" data-column-order="'+i+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col"><small class="d-block">label</small><input type="text" class="column-label form-control" data-column-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
+
+                    // create draggable fields using jquery sotable
+                    fields += '<li class="p-2 my-2 data-field-'+data.id+'" data-field-idx="'+data.id+'" data-field-name="'+data.name+'" data-field-type="'+data.type+'"  data-field-required="'+data.required+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-secondary"></i></div><div class="col text-right"><a href="#" class="delete-field" data-field-idx="'+data.id+'"><i class="far fa-times-circle"></i></a></div></div><div class="row"><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div></div><div class="row"><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+data.id+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div><div class="row"><div class="col"><small class="d-block">label</small><input type="text" class="field-label form-control" data-field-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
+
+                    // increment counter
+                    i++;
+                }
+                // populate dropdown
+                $("#form-fields-available").html(dropdown);
+                // close sortables
+                sortable += '</ul></div><div class="col-6"><ul id="data-model-columns-exclude" class="connectedSortableTabbleColumns bg-secondary"></div></div>';
+                // soratables for fields
+                fields += '</ul></div>';
+                fields += '<div class="col-3"><ul id="data-model-fields-2" class="connectedSortableFormFields"></ul></div>';
+                fields += '<div class="col-3"><ul id="data-model-fields-3" class="connectedSortableFormFields"></ul></div>';
+                fields += '<div class="col-3"><ul id="data-model-fields-4" class="connectedSortableFormFields"></ul></div>';
+                fields += '</div>'; // close row
+                // update html
+                $("#data-model-columns-wrapper").html(sortable);
+                $("#data-model-form-fields-wrapper").html(fields);
+                // create sortables
+                $("#data-model-columns, #data-model-columns-exclude").sortable({
+                    connectWith: ".connectedSortableTabbleColumns"
+                });
+                $("#data-model-fields-1, #data-model-fields-2, #data-model-fields-3, #data-model-fields-4").sortable({
+                    connectWith: ".connectedSortableFormFields"
+                });
+                
+                // hid modal
+                $('#pageLoaderModal').modal('hide');
+            });
+        }
+    }
+
+    // add listener
+    // add listener for update events
+    $("#data-model-columns-wrapper").on("sortupdate", "#data-model-columns", function( event, ui ) {
+        // update order index
+        $("#data-model-columns li").each(function(index) {
+            $(this).data('columnOrder', index+1);
+        });
+    });
+
+    $("#customization-form-fields").on('click', "#addBlankFieldCard", function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $("#data-model-fields-1").prepend('<li class="p-2 my-2"><div class="card bg-secondary blank-card"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-white"></i></div><div class="col text-right"><a href="#" class="delete-blank text-white" data-field-idx="'+data.id+'"><i class="far fa-times-circle"></i></a></div></div></div></div></li>');
+    });
+    $("#customization-table-columns").on('change', '.column-include-opt', function() {
+        if ($(this).val() == 0) {
+            $(".data-attr-"+$(this).data('columnIdx')+" .card").removeClass('bg-light');
+            $(".data-attr-"+$(this).data('columnIdx')+" .card").addClass('text-secondary');
+            $(".data-attr-"+$(this).data('columnIdx')+" .attribute-name").addClass('text-strike');
+            $(".data-attr-"+$(this).data('columnIdx')+" .column-label").prop('disabled', true);
+        } else {
+            $(".data-attr-"+$(this).data('columnIdx')+" .card").removeClass('text-secondary');
+            $(".data-attr-"+$(this).data('columnIdx')+" .card").addClass('bg-light');
+            $(".data-attr-"+$(this).data('columnIdx')+" .attribute-name").removeClass('text-strike');
+            $(".data-attr-"+$(this).data('columnIdx')+" .column-label").prop('disabled', false);
+        }
+    });
+    $("#customization-form-fields").on('change', '.field-include-opt', function() {
+        if ($(this).val() == 0) {
+            $(".data-field-"+$(this).data('fieldIdx')+" .card").removeClass('bg-light');
+            $(".data-field-"+$(this).data('fieldIdx')+" .card").addClass('text-secondary');
+            $(".data-field-"+$(this).data('fieldIdx')+" .attribute-name").addClass('text-strike');
+            $(".data-field-"+$(this).data('fieldIdx')+" .field-label").prop('disabled', true);
+        } else {
+            $(".data-field-"+$(this).data('fieldIdx')+" .card").removeClass('text-secondary');
+            $(".data-field-"+$(this).data('fieldIdx')+" .card").addClass('bg-light');
+            $(".data-field-"+$(this).data('fieldIdx')+" .attribute-name").removeClass('text-strike');
+            $(".data-field-"+$(this).data('fieldIdx')+" .field-label").prop('disabled', false);
+        }
+    });
+    $("#customization-form-fields").on('click', '.delete-field', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        $(this).closest('li').remove();
+
+        let fldIdx = $(this).data('fieldIdx');
+        
+        $(".dropdown-idx-"+fldIdx).removeClass('text-strike');
+        $(".dropdown-ckbx-idx-"+fldIdx).prop('checked', false);
+    });
+    $("#customization-form-fields").on('click', '.delete-blank', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        $(this).closest('li').remove();
+    });
+    $("#form-fields-available").on('click', '.dropdown-item-form-field', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        let fldIdx = $(this).data('fieldIdx');
+
+        if($(this).find('input[type=checkbox]').prop('checked')) {
+            $(".data-field-"+fldIdx).closest('li').remove();
+
+            $(this).removeClass('text-strike');
+            $(this).find('input[type=checkbox]').prop('checked', false);
+        } else {
+            $(this).addClass('text-strike');
+            $(this).find('input[type=checkbox]').prop('checked', true);
+
+            let fldName = $(this).data('fieldName');
+            let fldType = $(this).data('fieldType');
+            let fldRequired = $(this).data('fieldRequired');
+
+            $("#data-model-fields-1").prepend('<li class="p-2 my-2 data-field-'+fldIdx+'" data-field-idx="'+fldIdx+'" data-field-name="'+fldName+'" data-field-type="'+fldType+'" data-field-type="'+fldRequired+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-secondary"></i></div><div class="col text-right"><a href="#" class="delete-field" data-field-idx="'+fldIdx+'"><i class="far fa-times-circle"></i></a></div></div><div class="row"><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+fldName+'</b></div></div><div class="row"><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+fldIdx+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div><div class="row"><div class="col"><small class="d-block">label</small><input type="text" class="field-label form-control" data-field-idx="'+fldIdx+'" value="'+fldName[0].toUpperCase() + fldName.slice(1)+'"></div></div></div></div></li>');
+        }
+    });
+
+    $("#page-model").change(function() {
+        getModelAttributes();
+    });
+
+    $("#wizard-3-back").click(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        // hide page type specific customizations
+        $("#customization-login").addClass('d-none');
+        $("#customization-table").addClass('d-none');
+        $("#customize-page-form-title").addClass('d-none');
+        $("#customize-page-table-add").addClass('d-none');
+        $("#customize-page-table-edit").addClass('d-none');
+        $("#customization-table-columns").addClass('d-none');
+        $("#customization-form-fields").addClass('d-none');
+        $("#customization-custom").addClass('d-none');
+        $("#customization-block").addClass('d-none');
+        $("#image-placeholder").removeClass('d-none');
+        $("#data-model-columns-wrapper").html('');
+
+        // reset col width
+        $("#customization-left-panel").removeClass('col-3');
+        $("#customization-right-panel").removeClass('col-9');
+        $("#customization-left-panel").addClass('col-5');
+        $("#customization-right-panel").addClass('col-7');
+
+        // toggle wizard
+        $("#wizard-3").addClass('d-none');
+        $("#wizard-2").removeClass('d-none');
+    });
+
+    $("#wizard-3-next").click(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (($("#page-title").val()).length < 1) {
+            $("#page-title").addClass('is-invalid');
+            return;
+        }
+        $("#page-title").removeClass('is-invalid');
+
+        switch ($("#page-type").val()) {
+            case 'login':
+                $("#label-page-type").html('login page');
+                $("#customization-login").removeClass('d-none');
+                break;
+
+            case 'table':
+                $("#customization-left-panel").removeClass('col-5');
+                $("#customization-right-panel").removeClass('col-7');    
+                $("#customization-left-panel").addClass('col-3');
+                $("#customization-right-panel").addClass('col-9');
+                getModelAttributes();
+                $("#label-page-type").html('table page');
+                $("#customization-table").removeClass('d-none');
+                $("#image-placeholder").addClass('d-none');
+                $("#customization-table-columns").removeClass('d-none');
+                break;
+
+            case 'form':
+                $("#customization-left-panel").removeClass('col-5');
+                $("#customization-right-panel").removeClass('col-7');    
+                $("#customization-left-panel").addClass('col-3');
+                $("#customization-right-panel").addClass('col-9');
+                getModelAttributes();
+                $("#label-page-type").html('table page with form');
+                $("#customization-table").removeClass('d-none');
+                $("#customize-page-form-title").removeClass('d-none');
+                $("#customize-page-table-add").removeClass('d-none');
+                $("#customize-page-table-edit").removeClass('d-none');
+                $("#image-placeholder").addClass('d-none');
+                $("#customization-table-columns").removeClass('d-none');
+                $("#customization-form-fields").removeClass('d-none');
+                break;
+
+            case 'sidenav':
+                $("#label-page-type").html('page with side nav');
+                break;
+
+            case 'block':
+                $("#label-page-type").html('custom page');
+                $("#customization-block").removeClass('d-none');
+                break;
+        
+            default:
+                $("#label-page-type").html('custom page');
+                $("#customization-custom").removeClass('d-none');
+                break;
+        }
+
+        $("#wizard-3").addClass('d-none');
+        $("#wizard-4").removeClass('d-none');
+        $("#wizard-step-1").removeClass('active');
+        $("#wizard-step-1").addClass('complete');
+        $("#wizard-step-2").addClass('active');
+    });
+
+    $("#wizard-4-back").click(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        $("#wizard-4").addClass('d-none');
+        $("#wizard-3").removeClass('d-none');
+        $("#wizard-step-1").removeClass('complete');
+        $("#wizard-step-1").addClass('active');
+        $("#wizard-step-2").removeClass('active');
+    });
+
+    $("#wizard-4-next").click(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        let html = '';
+        let javascript = '';
+        let stylesheet = '';
+        let layout = {};
+        let main_navigation = $("#page-main-navigation").val() == 0 ? null : $("#page-main-navigation").val();
+        let side_navigation = $("#page-side-navigation").val() == 0 ? null : $("#page-side-navigation").val();
+        let page_title = $("#page-title").val();
+        let page_description = $("#page-description").val();
+        let page_protected = $("#page-requires-session").val();
+        //
+        let page_table_title = $("#page-table-title").val();
+        let page_form_title = $("#page-form-title").val();
+        //
+        let page_model = $("#page-model option:selected" ).text();
+        let page_table_add = $("#page-table-add").val();
+        let page_table_edit = $("#page-table-edit").val();
+        let page_table_delete = $("#page-table-delete").val();
+        let page_table_click = $("#page-table-click").val();
+        //
+        let page_login_heading = $("#page-login-heading").val();
+        let page_login_field_name = $("#page-login-field-name").val() ? $("#page-login-field-name").val() : 'email';
+        let page_login_success_target = $("#page-login-success-target").val();
+
+        // page path
+        if (page_path.length < 1) {
+            alert("Your page path is empty... please go back and check.");
+            return;
+        }
+        // page title
+        if (page_title.length < 1) {
+            alert("Your page title is empty... please go back and check.");
+            return;
+        }
+
+        //
+        let columns = [];
+        let fields = [];
+        let hidden = [];
+        let colIdx = 0;
+
+        $("#newPageUrl").attr('href', 'https://'+cfDomain+'/'+page_path);
+        $("#newPageUrl").html('https://'+cfDomain+'/'+page_path);
+
+        switch ($("#page-type").val()) {
+            case 'login':
+                // perform validation
+                if (page_login_heading.length < 1) {
+                    $("#page-login-heading").addClass('is-invalid');
+                    return;
+                }
+                $("#page-login-heading").removeClass('is-invalid');
+                layout = {
+                    'page_type': $("#page-type").val(),
+                    'page_login_heading': page_login_heading,
+                    'page_login_field_name': page_login_field_name,
+                    'page_login_success_target': page_login_success_target
+                }
+                // generate javascript
+                javascript = '$("#login-form").submit(function(e) {e.preventDefault();e.stopPropagation();$("#errorMsg").addClass(\'d-none\');$("#errorMsg").html("");if (($("#'+page_login_field_name+'").val()).length > 0 || ($("#password").val()).length > 0) { k.sessionCreate({\''+page_login_field_name+'\':$("#'+page_login_field_name+'").val(), \'password\':$("#password").val()}, function(session) { if (session.data[0]) {location.href="/'+page_login_success_target+'"; } else {$("#errorMsg").html("Something went wrong with the login. Please contact your administrator.");$("#errorMsg").removeClass("d-none\");}}, function() {$("#errorMsg").html("Incorrect email and password combination.");$("#errorMsg").removeClass("d-none");});} else {$("#errorMsg").html("Email and password are required.");$("#errorMsg").removeClass("d-none");}});';
+
+                // generate html
+                html = '<div class="py-3"><div class="row"><div class="col-md-4 pt-4 mx-auto"><div class="card p-3"><div class="card-body"><h1 class="text-center mb-3">'+page_login_heading+'</h1><form id="login-form" class="text-center"><p class="text-danger text-center d-none" id="errorMsg"></p><!-- username --><input id="'+page_login_field_name+'" type="'+(page_login_field_name == 'username' ? 'text' : page_login_field_name)+'" class="form-control d-block mb-3" placeholder="keyq@flykyte.io"><!-- password --><input id="password" type="password" class="form-control d-block mb-4" placeholder="password"><!-- submit button --><button type="submit" id="signin" class="btn btn-warning btn-lg d-block mx-auto mb-4 w-100">Login</button><!-- reset --><!-- <small><a href="/reset.html">Forgot your password?</a></small> --></form></div></div></div></div></div>';
+                break;
+
+            case 'table':
+                // perform validation
+                side_navigation = null;
+                if (page_table_title.length < 1) {
+                    $("#page-table-title").addClass('is-invalid');
+                    return;
+                }
+                $("#page-table-title").removeClass('is-invalid');
+                // generate the table columns
+                $("#data-model-columns li").each(function(index) {
+                    // todo: exclude columns that are not included
+                    columns.push({'targets':colIdx, 'data':$(this).data('attrName'), 'label':$(this).find('.column-label').val()});
+                    colIdx++;
+                });
+                layout = {
+                    'model': page_model,
+                    'page_type': $("#page-type").val(),
+                    'main_navigation': main_navigation,
+                    'page_table_title': page_table_title,
+                    'page_table_delete': page_table_delete,
+                    'page_table_click': page_table_click,
+                    'page_table_columns': columns
+                };
+                // generate javascript
+                javascript = 'let colDef'+page_model+' = JSON.parse(\''+JSON.stringify(columns)+'\'); let tbl'+page_model+' = new KyteTable(k, $("#dt'+page_model+'"),{"name":"'+page_model+'","field":null,"value":null}, colDef'+page_model+', true, [0, "asc"], false, false'+(page_table_click.length > 1 ? ', "id", "/'+page_table_click+'"' : '')+');tbl'+page_model+'.init();';
+                // generate html
+                html = '<div class="py-3"><div class="d-flex justify-content-between"><h1>'+page_table_title+'</h1><div></div></div><div class="mt-2 table-responsive"><table id="dt'+page_model+'" class="table table-striped w-100"></table></div></div>';
+                break;
+
+            case 'form':
+                // perform validation
+                side_navigation = null;
+                if (page_table_title.length < 1) {
+                    $("#page-table-title").addClass('is-invalid');
+                    return;
+                }
+                $("#page-table-title").removeClass('is-invalid');
+                // generate the table columns
+                $("#data-model-columns li").each(function(index) {
+                    columns.push({'targets':colIdx, 'data':$(this).data('attrName'), 'label':$(this).find('.column-label').val()});
+                    colIdx++;
+                });
+
+                // get form fields
+                let col1 = [], col2 = [], col3 = [], col4 = [];
+                $("#data-model-fields-1 li").each(function(index) {
+                    col1.push($(this));
+                });
+                $("#data-model-fields-2 li").each(function(index) {
+                    col2.push($(this));
+                });
+                $("#data-model-fields-3 li").each(function(index) {
+                    col3.push($(this));
+                });
+                $("#data-model-fields-4 li").each(function(index) {
+                    col4.push($(this));
+                });
+                let col1_len = col1.length;
+                let col2_len = col2.length;
+                let col3_len = col3.length;
+                let col4_len = col4.length;
+                // get max 
+                let max_col_len = Math.max(...[col1_len, col2_len, col3_len, col4_len]);
+                //
+                for (let c = 0; c < max_col_len; c++) {
+                    let fieldCols = [];
+
+                    if (c < col1_len) {
+                        // column 1
+                        let c1_idx = col1[c].data('fieldIdx');
+                        let c1_name = col1[c].data('fieldName');
+                        let c1_type = col1[c].data('fieldType');
+                        let c1_label = col1[c].find('input.field-label').val();
+                        let c1_required = col1[c].data('fieldRequired');
+
+                        // TODO: implement dropdown / select
+                        if (c1_idx && c1_name && c1_type) {
+                            fieldCols.push({
+                                'field':c1_name,
+                                'type': c1_type,
+                                'label': c1_label,
+                                'required': c1_required == 1 ? true : false
+                            });
+                        }
+                    }
+
+                    if (c < col2_len) {
+                        // column 2
+                        let c2_idx = col2[c].data('fieldIdx');
+                        let c2_name = col2[c].data('fieldName');
+                        let c2_type = col2[c].data('fieldType');
+                        let c2_label = col2[c].find('input.field-label').val();
+                        let c2_required = col2[c].data('fieldRequired');
+
+                        // TODO: implement dropdown / select
+                        if (c2_idx && c2_name && c2_type) {
+                            fieldCols.push({
+                                'field':c2_name,
+                                'type': c2_type,
+                                'label': c2_label,
+                                'required': c2_required == 1 ? true : false
+                            });
+                        }
+                    }
+
+                    if (c < col3_len) {
+                        // column 3
+                        let c3_idx = col3[c].data('fieldIdx');
+                        let c3_name = col3[c].data('fieldName');
+                        let c3_type = col3[c].data('fieldType');
+                        let c3_label = col3[c].find('input.field-label').val();
+                        let c3_required = col3[c].data('fieldRequired');
+
+                        // TODO: implement dropdown / select
+                        if (c3_idx && c3_name && c3_type) {
+                            fieldCols.push({
+                                'field':c3_name,
+                                'type': c3_type,
+                                'label': c3_label,
+                                'required': c3_required == 1 ? true : false
+                            });
+                        }
+                    }
+
+                    if (c < col4_len) {
+                        // column 4
+                        let c4_idx = col4[c].data('fieldIdx');
+                        let c4_name = col4[c].data('fieldName');
+                        let c4_type = col4[c].data('fieldType');
+                        let c4_label = col4[c].find('input.field-label').val();
+                        let c4_required = col4[c].data('fieldRequired');
+
+                        // TODO: implement dropdown / select
+                        if (c4_idx && c4_name && c4_type) {
+                            fieldCols.push({
+                                'field':c4_name,
+                                'type': c4_type,
+                                'label': c4_label,
+                                'required': c4_required == 1 ? true : false
+                            });
+                        }
+                    }
+
+                    // push col to row
+                    fields.push(fieldCols);
+                }
+
+                layout = {
+                    'model': page_model,
+                    'page_type': $("#page-type").val(),
+                    'main_navigation': main_navigation,
+                    'page_table_title': page_table_title,
+                    'page_table_add': page_table_add,
+                    'page_table_edit': page_table_edit,
+                    'page_table_delete': page_table_delete,
+                    'page_table_click': page_table_click,
+                    'page_table_columns': columns,
+                    'page_form_title': page_form_title,
+                    'page_form_fields': fields,
+                };
+                // generate javascript
+                javascript = 'let colDef'+page_model+' = JSON.parse(\''+JSON.stringify(columns)+'\'); let tbl'+page_model+' = new KyteTable(k, $("#dt'+page_model+'"),{"name":"'+page_model+'","field":null,"value":null}, colDef'+page_model+', true, [0, "asc"], false, false'+(page_table_click.length > 1 ? ', "id", "/'+page_table_click+'"' : '')+');tbl'+page_model+'.init();';
+                // form javascript
+                javascript += 'let fldsHidden'+page_model+' = null; let flds'+page_model+' = JSON.parse(\''+JSON.stringify(fields)+'\'); var form'+page_model+' = new KyteForm(k, $("#modalForm'+page_model+'"), "'+page_model+'", fldsHidden'+page_model+', flds'+page_model+', "'+page_form_title+'", tbl'+page_model+', true, '+(page_table_add == 1 ? '$("#addEntry'+page_model+'")':'null')+');form'+page_model+'.init();'+(page_table_edit == 1 ? 'tbl'+page_model+'.bindEdit(form'+page_model+');' : '');
+                
+                // generate html
+                html = '<div class="py-3"><div class="d-flex justify-content-between"><h1>'+page_table_title+'</h1><div>'+(page_table_add == 1 ? '<a class="btn btn-primary btn-sm" id="addEntry'+page_model+'"><i class="fas fa-plus fs-sm"></i> Create</a>' : '')+'</div></div><div class="mt-2 table-responsive"><table id="dt'+page_model+'" class="table table-striped w-100"></table></div></div><div id="modalForm'+page_model+'"></div>';
+                break;
+
+            case 'sidenav':
+                // perform validation
+                // generate code
+                alert("I'm sorry Dave, I'm afraid I can't do that.");
+                return;
+                break;
+
+            case 'block':
+                // perform validation
+                // generate code
+                alert("I'm sorry Dave, I'm afraid I can't do that.");
+                return;
+                break;
+        
+            default:
+                layout = {
+                    'page_type': $("#page-type").val(),
+                    'protected': page_protected,
+                    'main_navigation': main_navigation,
+                    'side_navigation': side_navigation,
+                }
+                break;
+        }
+
+        $('#pageLoaderModal').modal('show');
+
+        // upload code
+        k.post('Page', {
+            'html': html,
+            'javascript': javascript,
+            'stylesheet': stylesheet,
+            'layout': JSON.stringify(layout),
+            'main_navigation':main_navigation,
+            'side_navigation':side_navigation,
+            'title':page_title,
+            's3key':page_path,
+            'description':page_description,
+            'protected': page_protected,
+            'site': siteIdx
+        }, null, [], function(r) {
+            if (r.data.length > 0) {
+                // generate kyte connect
+                let connect = "let endpoint = 'https://"+kyte_endpoint+"';var k = new Kyte(endpoint, '"+kyte_pub+"', '"+kyte_iden+"', '"+kyte_num+"', '"+kyte_app+"');k.init();\n\n";
+                // create s3 file and invalidate
+                k.put('Page', 'id', r.data[0].id, {'state': 1, 'kyte_connect': connect}, null, [], function(r) {
+                    $('#pageLoaderModal').modal('hide');
+                    $("#wizard-4").addClass('d-none');
+                    $("#wizard-final").removeClass('d-none');
+                    $("#wizard-step-2").removeClass('active');
+                    $("#wizard-step-2").addClass('complete');
+                    $("#wizard-step-3").addClass('complete');
+                }, function(err) {
+                    $('#pageLoaderModal').modal('hide');
+                    console.log(err);
+                    alert("Somethign wen't wrong while publishing and invalidating cache...page has been saved so nothing is lost.");
+                });
+            } else {
+                $('#pageLoaderModal').modal('hide');
+                console.log(err);
+                alert("Somethign wen't wrong while trying to save your page...");
+            }
+            
+        }, function(err) {
+            $('#pageLoaderModal').modal('hide');
+            console.log(err);
+            alert("Somethign wen't terribly wrong while trying to save your page...");
+        });        
+    });
+});

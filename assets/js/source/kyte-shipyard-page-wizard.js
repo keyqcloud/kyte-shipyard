@@ -176,13 +176,13 @@ $(document).ready(function() {
                 let i = 1;
                 for (data of r.data) {
                     // create dropdown
-                    dropdown += '<li><a class="dropdown-item dropdown-item-form-field dropdown-idx-'+data.id+' text-strike" data-field-idx="'+data.id+'" data-field-name="'+data.name+'" data-field-type="'+data.type+'" href="#"><input type="checkbox" class="me-2 dropdown-item-form-ckbx dropdown-ckbx-idx-'+data.id+'" data-field-idx="'+data.id+'" data-field-name="'+data.name+'" data-field-type="'+data.type+'" checked>'+data.name+' ('+data.type+(data.size ? ' => '+data.size : '')+')</a></li>';
+                    dropdown += '<li><a class="dropdown-item dropdown-item-form-field dropdown-idx-'+data.id+' text-strike" data-field-idx="'+data.id+'" data-field-name="'+data.name+'" data-field-type="'+data.type+'" data-field-required="'+data.required+'"  href="#"><input type="checkbox" class="me-2 dropdown-item-form-ckbx dropdown-ckbx-idx-'+data.id+'" data-field-idx="'+data.id+'" data-field-name="'+data.name+'" data-field-type="'+data.type+'" checked>'+data.name+' ('+data.type+(data.size ? ' => '+data.size : '')+')</a></li>';
 
                     // create draggable column using jquery sortable
                     sortable += '<li class="p-2 my-2 data-attr-'+data.id+'" data-attr-name="'+data.name+'" data-column-order="'+i+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col"><small class="d-block">label</small><input type="text" class="column-label form-control" data-column-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
 
                     // create draggable fields using jquery sotable
-                    fields += '<li class="p-2 my-2 data-field-'+data.id+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-secondary"></i></div><div class="col text-right"><a href="#" class="delete-field" data-field-idx="'+data.id+'"><i class="far fa-times-circle"></i></a></div></div><div class="row"><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div></div><div class="row"><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+data.id+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div><div class="row"><div class="col"><small class="d-block">label</small><input type="text" class="field-label form-control" data-field-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
+                    fields += '<li class="p-2 my-2 data-field-'+data.id+'" data-field-idx="'+data.id+'" data-field-name="'+data.name+'" data-field-type="'+data.type+'"  data-field-required="'+data.required+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-secondary"></i></div><div class="col text-right"><a href="#" class="delete-field" data-field-idx="'+data.id+'"><i class="far fa-times-circle"></i></a></div></div><div class="row"><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div></div><div class="row"><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+data.id+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div><div class="row"><div class="col"><small class="d-block">label</small><input type="text" class="field-label form-control" data-field-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
 
                     // increment counter
                     i++;
@@ -207,20 +207,7 @@ $(document).ready(function() {
                 $("#data-model-fields-1, #data-model-fields-2, #data-model-fields-3, #data-model-fields-4").sortable({
                     connectWith: ".connectedSortableFormFields"
                 });
-                // add listener for update events
-                $( "#data-model-columns" ).on("sortupdate", function( event, ui ) {
-                    // update order index
-                    $("#data-model-columns li").each(function(index) {
-                        $(this).data('columnOrder', index+1);
-                    });
-                });
-
-                $("#addBlankFieldCard").click(function(e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    $("#data-model-fields-1").prepend('<li class="p-2 my-2"><div class="card bg-secondary blank-card"><div class="card-body p-1"></div></div></li>');
-                });
-
+                
                 // hid modal
                 $('#pageLoaderModal').modal('hide');
             });
@@ -228,6 +215,19 @@ $(document).ready(function() {
     }
 
     // add listener
+    // add listener for update events
+    $("#data-model-columns-wrapper").on("sortupdate", "#data-model-columns", function( event, ui ) {
+        // update order index
+        $("#data-model-columns li").each(function(index) {
+            $(this).data('columnOrder', index+1);
+        });
+    });
+
+    $("#customization-form-fields").on('click', "#addBlankFieldCard", function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $("#data-model-fields-1").prepend('<li class="p-2 my-2"><div class="card bg-secondary blank-card"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-white"></i></div><div class="col text-right"><a href="#" class="delete-blank text-white" data-field-idx="'+data.id+'"><i class="far fa-times-circle"></i></a></div></div></div></div></li>');
+    });
     $("#customization-table-columns").on('change', '.column-include-opt', function() {
         if ($(this).val() == 0) {
             $(".data-attr-"+$(this).data('columnIdx')+" .card").removeClass('bg-light');
@@ -265,6 +265,12 @@ $(document).ready(function() {
         $(".dropdown-idx-"+fldIdx).removeClass('text-strike');
         $(".dropdown-ckbx-idx-"+fldIdx).prop('checked', false);
     });
+    $("#customization-form-fields").on('click', '.delete-blank', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        $(this).closest('li').remove();
+    });
     $("#form-fields-available").on('click', '.dropdown-item-form-field', function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -282,8 +288,9 @@ $(document).ready(function() {
 
             let fldName = $(this).data('fieldName');
             let fldType = $(this).data('fieldType');
+            let fldRequired = $(this).data('fieldRequired');
 
-            $("#data-model-fields-1").prepend('<li class="p-2 my-2 data-field-'+fldIdx+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-secondary"></i></div><div class="col text-right"><a href="#" class="delete-field" data-field-idx="'+fldIdx+'"><i class="far fa-times-circle"></i></a></div></div><div class="row"><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+fldName+'</b></div></div><div class="row"><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+fldIdx+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div><div class="row"><div class="col"><small class="d-block">label</small><input type="text" class="field-label form-control" data-field-idx="'+fldIdx+'" value="'+fldName[0].toUpperCase() + fldName.slice(1)+'"></div></div></div></div></li>');
+            $("#data-model-fields-1").prepend('<li class="p-2 my-2 data-field-'+fldIdx+'" data-field-idx="'+fldIdx+'" data-field-name="'+fldName+'" data-field-type="'+fldType+'" data-field-type="'+fldRequired+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-secondary"></i></div><div class="col text-right"><a href="#" class="delete-field" data-field-idx="'+fldIdx+'"><i class="far fa-times-circle"></i></a></div></div><div class="row"><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+fldName+'</b></div></div><div class="row"><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+fldIdx+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div><div class="row"><div class="col"><small class="d-block">label</small><input type="text" class="field-label form-control" data-field-idx="'+fldIdx+'" value="'+fldName[0].toUpperCase() + fldName.slice(1)+'"></div></div></div></div></li>');
         }
     });
 
@@ -508,7 +515,7 @@ $(document).ready(function() {
                 });
 
                 // get form fields
-                let col1, col2, col3, col4;
+                let col1 = [], col2 = [], col3 = [], col4 = [];
                 $("#data-model-fields-1 li").each(function(index) {
                     col1.push($(this));
                 });
@@ -523,13 +530,92 @@ $(document).ready(function() {
                 });
                 let col1_len = col1.length;
                 let col2_len = col2.length;
-                let col3_len = col2.length;
-                let col4_len = col3.length;
+                let col3_len = col3.length;
+                let col4_len = col4.length;
                 // get max 
                 let max_col_len = Math.max(...[col1_len, col2_len, col3_len, col4_len]);
                 //
                 for (let c = 0; c < max_col_len; c++) {
+                    let fieldCols = [];
 
+                    if (c < col1_len) {
+                        // column 1
+                        let c1_idx = col1[c].data('fieldIdx');
+                        let c1_name = col1[c].data('fieldName');
+                        let c1_type = col1[c].data('fieldType');
+                        let c1_label = col1[c].find('input.field-label').val();
+                        let c1_required = col1[c].data('fieldRequired');
+
+                        // TODO: implement dropdown / select
+                        if (c1_idx && c1_name && c1_type) {
+                            fieldCols.push({
+                                'field':c1_name,
+                                'type': c1_type,
+                                'label': c1_label,
+                                'required': c1_required == 1 ? true : false
+                            });
+                        }
+                    }
+
+                    if (c < col2_len) {
+                        // column 2
+                        let c2_idx = col2[c].data('fieldIdx');
+                        let c2_name = col2[c].data('fieldName');
+                        let c2_type = col2[c].data('fieldType');
+                        let c2_label = col2[c].find('input.field-label').val();
+                        let c2_required = col2[c].data('fieldRequired');
+
+                        // TODO: implement dropdown / select
+                        if (c2_idx && c2_name && c2_type) {
+                            fieldCols.push({
+                                'field':c2_name,
+                                'type': c2_type,
+                                'label': c2_label,
+                                'required': c2_required == 1 ? true : false
+                            });
+                        }
+                    }
+
+                    if (c < col3_len) {
+                        // column 3
+                        let c3_idx = col3[c].data('fieldIdx');
+                        let c3_name = col3[c].data('fieldName');
+                        let c3_type = col3[c].data('fieldType');
+                        let c3_label = col3[c].find('input.field-label').val();
+                        let c3_required = col3[c].data('fieldRequired');
+
+                        // TODO: implement dropdown / select
+                        if (c3_idx && c3_name && c3_type) {
+                            fieldCols.push({
+                                'field':c3_name,
+                                'type': c3_type,
+                                'label': c3_label,
+                                'required': c3_required == 1 ? true : false
+                            });
+                        }
+                    }
+
+                    if (c < col4_len) {
+                        // column 4
+                        let c4_idx = col4[c].data('fieldIdx');
+                        let c4_name = col4[c].data('fieldName');
+                        let c4_type = col4[c].data('fieldType');
+                        let c4_label = col4[c].find('input.field-label').val();
+                        let c4_required = col4[c].data('fieldRequired');
+
+                        // TODO: implement dropdown / select
+                        if (c4_idx && c4_name && c4_type) {
+                            fieldCols.push({
+                                'field':c4_name,
+                                'type': c4_type,
+                                'label': c4_label,
+                                'required': c4_required == 1 ? true : false
+                            });
+                        }
+                    }
+
+                    // push col to row
+                    fields.push(fieldCols);
                 }
 
                 layout = {
@@ -543,6 +629,7 @@ $(document).ready(function() {
                     'page_table_click': page_table_click,
                     'page_table_columns': columns,
                     'page_form_title': page_form_title,
+                    'page_form_fields': fields,
                 };
                 // generate javascript
                 javascript = 'let colDef'+page_model+' = JSON.parse(\''+JSON.stringify(columns)+'\'); let tbl'+page_model+' = new KyteTable(k, $("#dt'+page_model+'"),{"name":"'+page_model+'","field":null,"value":null}, colDef'+page_model+', true, [0, "asc"], false, false'+(page_table_click.length > 1 ? ', "id", "/'+page_table_click+'"' : '')+');tbl'+page_model+'.init();';
@@ -551,8 +638,6 @@ $(document).ready(function() {
                 
                 // generate html
                 html = '<div class="py-3"><div class="d-flex justify-content-between"><h1>'+page_table_title+'</h1><div>'+(page_table_add == 1 ? '<a class="btn btn-primary btn-sm" id="addEntry'+page_model+'"><i class="fas fa-plus fs-sm"></i> Create</a>' : '')+'</div></div><div class="mt-2 table-responsive"><table id="dt'+page_model+'" class="table table-striped w-100"></table></div></div><div id="modalForm'+page_model+'"></div>';
-                alert("I'm sorry Dave, I'm afraid I can't do that.");
-                return;
                 break;
 
             case 'sidenav':
