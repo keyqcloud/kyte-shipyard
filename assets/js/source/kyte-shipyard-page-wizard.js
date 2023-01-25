@@ -495,7 +495,7 @@ $(document).ready(function() {
                     'page_table_columns': columns
                 };
                 // generate javascript
-                javascript = 'let colDef'+page_model+' = JSON.parse(\''+JSON.stringify(columns)+'\'); let tbl'+page_model+' = new KyteTable(k, $("#dt'+page_model+'"),{"name":"'+page_model+'","field":null,"value":null}, colDef'+page_model+', true, [0, "asc"], false, false'+(page_table_click.length > 1 ? ', "id", "/'+page_table_click+'"' : '')+');tbl'+page_model+'.init();';
+                javascript = 'let colDef'+page_model+' = JSON.parse(\''+JSON.stringify(columns)+'\'); let tbl'+page_model+' = new KyteTable(k, $("#dt'+page_model+'"),{"name":"'+page_model+'","field":null,"value":null}, colDef'+page_model+', true, [0, "asc"], false, '+(page_table_delete == 1 ? 'true' : 'false')+(page_table_click.length > 1 ? ', "id", "/'+page_table_click+'"' : '')+');tbl'+page_model+'.init();';
                 // generate html
                 html = '<div class="py-3"><div class="d-flex justify-content-between"><h1>'+page_table_title+'</h1><div></div></div><div class="mt-2 table-responsive"><table id="dt'+page_model+'" class="table table-striped w-100"></table></div></div>';
                 break;
@@ -632,7 +632,7 @@ $(document).ready(function() {
                     'page_form_fields': fields,
                 };
                 // generate javascript
-                javascript = 'let colDef'+page_model+' = JSON.parse(\''+JSON.stringify(columns)+'\'); let tbl'+page_model+' = new KyteTable(k, $("#dt'+page_model+'"),{"name":"'+page_model+'","field":null,"value":null}, colDef'+page_model+', true, [0, "asc"], false, false'+(page_table_click.length > 1 ? ', "id", "/'+page_table_click+'"' : '')+');tbl'+page_model+'.init();';
+                javascript = 'let colDef'+page_model+' = JSON.parse(\''+JSON.stringify(columns)+'\'); let tbl'+page_model+' = new KyteTable(k, $("#dt'+page_model+'"),{"name":"'+page_model+'","field":null,"value":null}, colDef'+page_model+', true, [0, "asc"], '+(page_table_edit == 1 ? 'true' : 'false')+', '+(page_table_delete == 1 ? 'true' : 'false')+(page_table_click.length > 1 ? ', "id", "/'+page_table_click+'"' : '')+');tbl'+page_model+'.init();';
                 // form javascript
                 javascript += 'let fldsHidden'+page_model+' = null; let flds'+page_model+' = JSON.parse(\''+JSON.stringify(fields)+'\'); var form'+page_model+' = new KyteForm(k, $("#modalForm'+page_model+'"), "'+page_model+'", fldsHidden'+page_model+', flds'+page_model+', "'+page_form_title+'", tbl'+page_model+', true, '+(page_table_add == 1 ? '$("#addEntry'+page_model+'")':'null')+');form'+page_model+'.init();'+(page_table_edit == 1 ? 'tbl'+page_model+'.bindEdit(form'+page_model+');' : '');
                 
