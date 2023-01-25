@@ -283,8 +283,8 @@
                             <img src="/assets/images/woman-paints-in-an-art-workshop.png" class="w-100" id="image-placeholder">
                             <div id="customization-table-columns" class="card d-none">
                                 <div class="card-body">
-                                    <h4>Tabel Columns</h4>
-                                    <p>Columns with <code>include?</code> set to <code>No</code> will be ignored.</p>
+                                    <h4>Table Columns</h4>
+                                    <p>All columns are included by default. To exclude any from your table, drag them over to the exclude area to the right.</p>
                                     <div id="data-model-columns-wrapper"><h3 style="font-weight: 300;" class="text-center">Please select a model.</h3></div>
                                 </div>
                             </div>
@@ -295,10 +295,14 @@
                                             <h4>Form Fields</h4>
                                         </div>
                                         <div>
+                                            <div class="dropdown d-inline-block">
+                                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Available Fields</button>
+                                                <ul id="form-fields-available" class="dropdown-menu"></ul>
+                                            </div>
                                             <a href="#" id="addBlankFieldCard" class="btn btn-warning">Add Spacer</a>
                                         </div>
                                     </div>
-                                    <p>Drag fields to their desired location. If occupied columns are less than four, then the fields will expand to fill the width of the form. Fields with <code>include?</code> set to <code>No</code> will be ignored and can be used as spacers.</p>
+                                    <p>Drag fields to their desired location. If occupied columns are less than four, then the fields will expand to fill the width of the form.</p>
                                     <div id="data-model-form-fields-wrapper"><h3 style="font-weight: 300;" class="text-center">Please select a model.</h3></div>
                                 </div>
                             </div>

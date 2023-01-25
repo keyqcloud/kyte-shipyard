@@ -154,14 +154,16 @@ $(document).ready(function() {
             // clear wrapper
             $("#data-model-columns-wrapper").html('');
             $("#data-model-form-fields-wrapper").html('');
+            $("#form-fields-available").html('');
             // start modal
             $('#pageLoaderModal').modal('show');
             // initialize variable to hold html
             let sortable = '';
             let fields = '';
+            let dropdown = '';
             k.get('ModelAttribute', 'dataModel', $("#page-model").val(), [], function(r) {
                 // create start of sortables
-                sortable = '<ul id="data-model-columns">';
+                sortable = '<div class="row"><div class="col-6"><h5>Include</h5></div><div class="col-6"><h5>Exclude</h5></div></div><div class="row"><div class="col-6"><ul id="data-model-columns" class="connectedSortableTabbleColumns">';
                 // column headers for fields
                 fields += '<div class="row">';
                 fields += '<div class="col-3 text-center"><h5>Col 1</h5></div>'
@@ -169,33 +171,41 @@ $(document).ready(function() {
                 fields += '<div class="col-3 text-center"><h5>Col 3</h5></div>'
                 fields += '<div class="col-3 text-center"><h5>Col 4</h5></div>'
                 fields += '</div>';
-                fields += '<div class="row"><div class="col-3"><ul id="data-model-fields-1" class="connectedSortable">';
+                fields += '<div class="row"><div class="col-3"><ul id="data-model-fields-1" class="connectedSortableFormFields">';
                 // initialize counter
                 let i = 1;
                 for (data of r.data) {
+                    // create dropdown
+                    dropdown += '<li><a class="dropdown-item dropdown-item-form-field dropdown-idx-'+data.id+' text-strike" data-field-idx="'+data.id+'" data-field-name="'+data.name+'" data-field-type="'+data.type+'" href="#"><input type="checkbox" class="me-2 dropdown-item-form-ckbx dropdown-ckbx-idx-'+data.id+'" data-field-idx="'+data.id+'" data-field-name="'+data.name+'" data-field-type="'+data.type+'" checked>'+data.name+' ('+data.type+(data.size ? ' => '+data.size : '')+')</a></li>';
+
                     // create draggable column using jquery sortable
-                    sortable += '<li class="p-2 my-2 data-attr-'+data.id+'" data-attr-name="'+data.name+'" data-column-order="'+i+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col-2"><small class="d-block">include?</small><select class="column-include-opt form-select" data-column-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div><div class="col"><small class="d-block">label</small><input type="text" class="column-label form-control" data-column-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
+                    sortable += '<li class="p-2 my-2 data-attr-'+data.id+'" data-attr-name="'+data.name+'" data-column-order="'+i+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col-1"><i class="fas fa-sort me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div><div class="col"><small class="d-block">label</small><input type="text" class="column-label form-control" data-column-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
 
                     // create draggable fields using jquery sotable
-                    fields += '<li class="p-2 my-2 data-field-'+data.id+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-secondary"></i></div><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div></div><div class="row"><div class="col"><small class="d-block">include?</small><select class="field-include-opt form-select" data-field-idx="'+data.id+'"><option value="0">No</option><option value="1" selected>Yes</option></select></div></div><div class="row"><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+data.id+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div><div class="row"><div class="col"><small class="d-block">label</small><input type="text" class="field-label form-control" data-field-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
+                    fields += '<li class="p-2 my-2 data-field-'+data.id+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-secondary"></i></div><div class="col text-right"><a href="#" class="delete-field" data-field-idx="'+data.id+'"><i class="far fa-times-circle"></i></a></div></div><div class="row"><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+data.name+'</b></div></div><div class="row"><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+data.id+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div><div class="row"><div class="col"><small class="d-block">label</small><input type="text" class="field-label form-control" data-field-idx="'+data.id+'" value="'+data.name[0].toUpperCase() + data.name.slice(1)+'"></div></div></div></div></li>';
 
                     // increment counter
                     i++;
                 }
+                // populate dropdown
+                $("#form-fields-available").html(dropdown);
                 // close sortables
-                sortable += '</ul>';
+                sortable += '</ul></div><div class="col-6"><ul id="data-model-columns-exclude" class="connectedSortableTabbleColumns bg-secondary"></div></div>';
+                // soratables for fields
                 fields += '</ul></div>';
-                fields += '<div class="col-3"><ul id="data-model-fields-2" class="connectedSortable"></ul></div>';
-                fields += '<div class="col-3"><ul id="data-model-fields-3" class="connectedSortable"></ul></div>';
-                fields += '<div class="col-3"><ul id="data-model-fields-4" class="connectedSortable"></ul></div>';
+                fields += '<div class="col-3"><ul id="data-model-fields-2" class="connectedSortableFormFields"></ul></div>';
+                fields += '<div class="col-3"><ul id="data-model-fields-3" class="connectedSortableFormFields"></ul></div>';
+                fields += '<div class="col-3"><ul id="data-model-fields-4" class="connectedSortableFormFields"></ul></div>';
                 fields += '</div>'; // close row
                 // update html
                 $("#data-model-columns-wrapper").html(sortable);
                 $("#data-model-form-fields-wrapper").html(fields);
                 // create sortables
-                $("#data-model-columns").sortable();
+                $("#data-model-columns, #data-model-columns-exclude").sortable({
+                    connectWith: ".connectedSortableTabbleColumns"
+                });
                 $("#data-model-fields-1, #data-model-fields-2, #data-model-fields-3, #data-model-fields-4").sortable({
-                    connectWith: ".connectedSortable"
+                    connectWith: ".connectedSortableFormFields"
                 });
                 // add listener for update events
                 $( "#data-model-columns" ).on("sortupdate", function( event, ui ) {
@@ -242,6 +252,38 @@ $(document).ready(function() {
             $(".data-field-"+$(this).data('fieldIdx')+" .card").addClass('bg-light');
             $(".data-field-"+$(this).data('fieldIdx')+" .attribute-name").removeClass('text-strike');
             $(".data-field-"+$(this).data('fieldIdx')+" .field-label").prop('disabled', false);
+        }
+    });
+    $("#customization-form-fields").on('click', '.delete-field', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        $(this).closest('li').remove();
+
+        let fldIdx = $(this).data('fieldIdx');
+        
+        $(".dropdown-idx-"+fldIdx).removeClass('text-strike');
+        $(".dropdown-ckbx-idx-"+fldIdx).prop('checked', false);
+    });
+    $("#form-fields-available").on('click', '.dropdown-item-form-field', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        let fldIdx = $(this).data('fieldIdx');
+
+        if($(this).find('input[type=checkbox]').prop('checked')) {
+            $(".data-field-"+fldIdx).closest('li').remove();
+
+            $(this).removeClass('text-strike');
+            $(this).find('input[type=checkbox]').prop('checked', false);
+        } else {
+            $(this).addClass('text-strike');
+            $(this).find('input[type=checkbox]').prop('checked', true);
+
+            let fldName = $(this).data('fieldName');
+            let fldType = $(this).data('fieldType');
+
+            $("#data-model-fields-1").prepend('<li class="p-2 my-2 data-field-'+fldIdx+'"><div class="card bg-light"><div class="card-body p-1"><div class="row"><div class="col"><i class="fas fa-arrows-alt me-2 text-secondary"></i></div><div class="col text-right"><a href="#" class="delete-field" data-field-idx="'+fldIdx+'"><i class="far fa-times-circle"></i></a></div></div><div class="row"><div class="col"><small class="d-block">attribute</small><b class="attribute-name">'+fldName+'</b></div></div><div class="row"><div class="col"><small class="d-block">field type</small><select class="form-select form-field-type" data-field-idx="'+fldIdx+'"><option value="text" selected>Text</option><option value="date">Date</option><option value="select">Dropdown (select)</option><option value="textarea">Textarea</option><option value="email">Email</option><option value="password">Password</option></select></div></div><div class="row"><div class="col"><small class="d-block">label</small><input type="text" class="field-label form-control" data-field-idx="'+fldIdx+'" value="'+fldName[0].toUpperCase() + fldName.slice(1)+'"></div></div></div></div></li>');
         }
     });
 
@@ -432,6 +474,7 @@ $(document).ready(function() {
                 $("#page-table-title").removeClass('is-invalid');
                 // generate the table columns
                 $("#data-model-columns li").each(function(index) {
+                    // todo: exclude columns that are not included
                     columns.push({'targets':colIdx, 'data':$(this).data('attrName'), 'label':$(this).find('.column-label').val()});
                     colIdx++;
                 });
@@ -463,6 +506,32 @@ $(document).ready(function() {
                     columns.push({'targets':colIdx, 'data':$(this).data('attrName'), 'label':$(this).find('.column-label').val()});
                     colIdx++;
                 });
+
+                // get form fields
+                let col1, col2, col3, col4;
+                $("#data-model-fields-1 li").each(function(index) {
+                    col1.push($(this));
+                });
+                $("#data-model-fields-2 li").each(function(index) {
+                    col2.push($(this));
+                });
+                $("#data-model-fields-3 li").each(function(index) {
+                    col3.push($(this));
+                });
+                $("#data-model-fields-4 li").each(function(index) {
+                    col4.push($(this));
+                });
+                let col1_len = col1.length;
+                let col2_len = col2.length;
+                let col3_len = col2.length;
+                let col4_len = col3.length;
+                // get max 
+                let max_col_len = Math.max(...[col1_len, col2_len, col3_len, col4_len]);
+                //
+                for (let c = 0; c < max_col_len; c++) {
+
+                }
+
                 layout = {
                     'model': page_model,
                     'page_type': $("#page-type").val(),
