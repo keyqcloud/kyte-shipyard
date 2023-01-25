@@ -572,7 +572,9 @@ $(document).ready(function() {
             default:
                 layout = {
                     'page_type': $("#page-type").val(),
-                    protected: page_protected
+                    'protected': page_protected,
+                    'main_navigation': main_navigation,
+                    'side_navigation': side_navigation,
                 }
                 break;
         }

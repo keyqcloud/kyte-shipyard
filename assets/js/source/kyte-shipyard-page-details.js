@@ -108,7 +108,15 @@ $(document).ready(function() {
 
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
-                    k.put('Page', 'id', idx, {'html':htmlEditor.getValue(), 'javascript': jsEditor.getValue(), 'stylesheet': cssEditor.getValue(), 'main_navigation':$("#setting-main-navigation").val(),'side_navigation':$("#setting-side-navigation").val(),'title':$("#setting-page-title").val(),'description':$("#setting-page-description").val()}, null, [], function(r) {
+                    k.put('Page', 'id', idx, {
+                        'html':htmlEditor.getValue(),
+                        'javascript': jsEditor.getValue(),
+                        'stylesheet': cssEditor.getValue(),
+                        'main_navigation':$("#setting-main-navigation").val(),
+                        'side_navigation':$("#setting-side-navigation").val(),
+                        'title':$("#setting-page-title").val(),
+                        'description':$("#setting-page-description").val()
+                    }, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
                     });
                 });
@@ -133,7 +141,17 @@ $(document).ready(function() {
                     //         stringArrayThreshold: 1
                     //     }
                     // );
-                    k.put('Page', 'id', idx, {'html':htmlEditor.getValue(), 'javascript': rawJS, 'stylesheet': cssEditor.getValue(), 'state': 1, 'kyte_connect': connect, 'main_navigation':$("#setting-main-navigation").val(),'side_navigation':$("#setting-side-navigation").val(),'title':$("#setting-page-title").val(),'description':$("#setting-page-description").val()}, null, [], function(r) {
+                    k.put('Page', 'id', idx, {
+                        'html':htmlEditor.getValue(),
+                        'javascript': rawJS,
+                        'stylesheet': cssEditor.getValue(),
+                        'main_navigation':$("#setting-main-navigation").val(),
+                        'side_navigation':$("#setting-side-navigation").val(),
+                        'title':$("#setting-page-title").val(),
+                        'description':$("#setting-page-description").val(),
+                        'state': 1,
+                        'kyte_connect': connect
+                    }, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
                     });
                 });
