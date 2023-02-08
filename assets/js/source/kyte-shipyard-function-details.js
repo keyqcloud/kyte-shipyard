@@ -1,5 +1,9 @@
+import {registerPHPSnippetLanguage} from '/assets/js/packages/utils/php-snippet/registerPHPSnippetLanguage.js';
+
 var editor;
 let functionName = "Undefined";
+
+registerPHPSnippetLanguage(monaco.languages);
 
 let assignControllerElements = [
     [
@@ -55,7 +59,7 @@ $(document).ready(function() {
                 editor = monaco.editor.create(document.getElementById('container'), {
                     value: r.data[0].code,
                     theme: 'vs-dark',
-                    language: "php",
+                    language: "php-snippet",
                     wordWrap: 'wordWrapColumn',
                     // wordWrapColumn: 40,
                     // Set this to false to not auto word wrap minified files
