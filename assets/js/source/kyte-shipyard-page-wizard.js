@@ -131,9 +131,9 @@ $(document).ready(function() {
         // display model
         $('#pageLoaderModal').modal('show');
 
-        $condition = btoa(JSON.stringify('[{"field":"site","value":"'+siteIdx+'"}]'));
+        let condition = btoa(JSON.stringify('[{"field":"site","value":"'+siteIdx+'"}]'));
         // check if page already exists
-        k.get('Page', 's3key', page_path, [{'name':'x-kyte-query-conditions', 'value':$condition}], function(r) {
+        k.get('Page', 's3key', page_path, [{'name':'x-kyte-query-conditions', 'value':condition}], function(r) {
             $('#pageLoaderModal').modal('hide');
             if (r.data.length > 0) {
                 $("#page-path").addClass('is-invalid');
