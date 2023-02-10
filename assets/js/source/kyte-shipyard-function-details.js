@@ -52,8 +52,7 @@ $(document).ready(function() {
 
         k.get("Function", "id", idx, [], function(r) {
             if (r.data[0]) {
-                functionName = r.data[0].name;
-                $("#function-name").html(functionName);
+                $("#function-name").html(r.data[0].controller.name);
                 $("#function-type").html(r.data[0].type);
 
                 editor = monaco.editor.create(document.getElementById('container'), {
