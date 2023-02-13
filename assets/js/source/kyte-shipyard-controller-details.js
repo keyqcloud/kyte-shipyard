@@ -106,7 +106,9 @@ $(document).ready(function() {
             $('#pageLoaderModal').modal('hide');
         });
 
-        var functionsTable = createTable("#functions-table", "Function", colDefFunctions, 'controller', idx, false, true, '/app/function/', 'id');
+        var functionsTable = new KyteTable(k, $("#functions-table"), {'name':'Function','field':'controller','value':idx}, colDefFunctions, true, [0,"asc"], false, true, 'id', '/app/function/');
+        functionsTable.targetBlank = true;
+        functionsTable.init();
         var modelFormFunction = new KyteForm(k, $("#modalControllerFunctionForm"), 'Function', hidden, functionFormElements, 'Function', functionsTable, true, $("#assignController"));
         modelFormFunction.init();
         modelFormFunction.success = function(r) {

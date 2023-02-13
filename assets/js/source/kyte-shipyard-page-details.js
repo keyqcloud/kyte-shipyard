@@ -85,7 +85,7 @@ $(document).ready(function() {
                 $("#backToSite").attr('href', '/app/site/?request='+encoded);
 
                 $("#page-title").html(page.title);
-                $("#page-path").html('<i class="fas fa-link me-2"></i>https://'+page.site.cfDomain+'/'+page.s3key);
+                $("#viewPage").attr('href','https://'+page.site.cfDomain+'/'+page.s3key);
                 // $("#domain-name").attr('href', 'https://'+data.cfDomain);
                 // $("#region").html(data.region);
                 obj = {'model': 'Application', 'idx':page.site.application.id};

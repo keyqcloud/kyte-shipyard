@@ -229,6 +229,7 @@ $(document).ready(function() {
 
                 // pages
                 var tblPage = createTable("#pages-table", "Page", colDefPage, 'site', idx, false, true, '/app/page/', 'id', true);
+                tblPage.targetBlank = true;
 
                 // media
                 var tblMedia = createTable("#media-table", "Media", colDefMedia, 'site', idx, false, true);
