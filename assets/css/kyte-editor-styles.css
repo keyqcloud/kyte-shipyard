@@ -1,23 +1,36 @@
 /* https://stackoverflow.com/a/24979148/2069643 */
 
 .editor-box {
-    display: flex;
-    flex-flow: column;
-    height: 100%;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
 }
 
 .editor-box .editor-box-header {
-    flex: 0 1 auto;
-    /* The above is shorthand for:
-    flex-grow: 0,
-    flex-shrink: 1,
-    flex-basis: auto
-    */
-  }
+  flex: 0 1 auto;
+  /* The above is shorthand for:
+  flex-grow: 0,
+  flex-shrink: 1,
+  flex-basis: auto
+  */
+}
   
-  .editor-box .editor-box-content {
-    flex: 1 1 auto;
-    width: 100%;
-    height: 100%;
-    border: 1px solid grey;
-  }
+.editor-box .editor-box-content {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  border: 1px solid grey;
+}
+
+.editor-container {
+  height: 100%;
+}
+
+main.editor {
+    height: 100% !important;
+    flex-direction: row !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
