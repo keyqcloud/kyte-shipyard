@@ -141,7 +141,7 @@ $(document).ready(function() {
                     //         stringArrayThreshold: 1
                     //     }
                     // );
-                    k.put('Page', 'id', idx, {
+                    let payload = {
                         'html':htmlEditor.getValue(),
                         'javascript': rawJS,
                         'stylesheet': cssEditor.getValue(),
@@ -151,8 +151,23 @@ $(document).ready(function() {
                         'description':$("#setting-page-description").val(),
                         'state': 1,
                         'kyte_connect': connect
-                    }, null, [], function(r) {
+                    };
+                    k.put('Page', 'id', idx, payload, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
+                    }, function(err) {
+                        if (err == 'Unable to create new invalidation') {
+                            setTimeout(() => {
+                                k.put('Page', 'id', idx, payload, null, [], function(r) {
+                                    $('#pageLoaderModal').modal('hide');
+                                }, function(err) {
+                                    alert(err);
+                                    $('#pageLoaderModal').modal('hide');
+                                });
+                            }, "500");
+                        } else {
+                            alert(err);
+                            $('#pageLoaderModal').modal('hide');
+                        }
                     });
                 });
             } else {
