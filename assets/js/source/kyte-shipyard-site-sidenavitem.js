@@ -1,3 +1,8 @@
+let colDefNavItem = [
+    {'targets':0,'data':'title','label':'Label', render: function(data, type, row, meta) { return (row.faicon ? '<i class="'+row.faicon+' me-2"></i>' : '')+data; }},
+    {'targets':1,'data':'link','label':'Target', render: function(data, type, row, meta) { console.log(row); if (data) { return data; } else { if (row.page) { return row.page.title; } else {return 'No'; }} }}
+];
+
 $(document).ready(function() {
     $('#pageLoaderModal').modal('show');
     
@@ -90,32 +95,6 @@ $(document).ready(function() {
                             'required':true
                         },
                         {
-                            'field':'isLogout',
-                            'type':'select',
-                            'label':'Is this a logout button?',
-                            'required':true,
-                            'option': {
-                                'ajax': false,
-                                'data': {
-                                    '0': 'No',
-                                    '1': 'Yes',
-                                }
-                            }
-                        },
-                        {
-                            'field':'center',
-                            'type':'select',
-                            'label':'Location',
-                            'required':true,
-                            'option': {
-                                'ajax': false,
-                                'data': {
-                                    '1': 'Center',
-                                    '0': 'Right',
-                                }
-                            }
-                        },
-                        {
                             'field':'faicon',
                             'type':'text',
                             'label':'Font Awesome class',
@@ -146,29 +125,13 @@ $(document).ready(function() {
                                 'data_model_default_field': 'id',
                                 // 'data_model_default_value': 1,
                             }
-                        },
-                        {
-                            'field':'parentItem',
-                            'type':'select',
-                            'label':'Parent menu item (only select if submenu',
-                            'required':false,
-                            'placeholder': 'N/A',
-                            'option': {
-                                'ajax': true,
-                                'data_model_name': 'NavigationItem',
-                                'data_model_field': 'navigation',
-                                'data_model_value': idx,
-                                'data_model_attributes': ['title'],
-                                'data_model_default_field': 'id',
-                                // 'data_model_default_value': 1,
-                            }
                         }
                     ]
                 ];
 
                 // table and forms
-                var datatable = createTable("#navitem-table", "NavigationItem", colDefNavItem, 'navigation', idx, true, true);
-                var modalForm = new KyteForm(k, $("#modalFormNavItem"), 'NavigationItem', hidden, NavItemElements, 'Navigation Item', datatable, true, $("#addMenuItem"));
+                var datatable = createTable("#navitem-table", "SideNavItem", colDefNavItem, 'sidenav', idx, true, true);
+                var modalForm = new KyteForm(k, $("#modalFormNavItem"), 'SideNavItem', hidden, NavItemElements, 'Side Menu Item', datatable, true, $("#addMenuItem"));
                 modalForm.init();
                 datatable.bindEdit(modalForm);
             } else {

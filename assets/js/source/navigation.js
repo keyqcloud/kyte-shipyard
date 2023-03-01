@@ -193,6 +193,11 @@ let subnavSite = [
         selector:'#Navigation'
     },
     {
+        faicon:'fas fa-bars',
+        label:'Side Menu',
+        selector:'#SideNav'
+    },
+    {
         faicon:'fas fa-at',
         label:'Domains',
         selector:'#Domains'

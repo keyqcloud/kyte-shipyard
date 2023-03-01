@@ -105,6 +105,12 @@ $(document).ready(function() {
                         selector:'#Navigation'
                     },
                     {
+                        faicon:'fas fa-bars',
+                        label:'Side Menu',
+                        href:'/app/site/?request='+encoded+'#SideNav',
+                        selector:'#SideNav'
+                    },
+                    {
                         faicon:'fas fa-at',
                         label:'Domains',
                         href:'/app/site/?request='+encoded+'#Domains',

@@ -22,10 +22,10 @@
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
     <script src="https://cdn.stratis-troika.com/kytejs/dev/kyte.js" crossorigin="anonymous"></script>
-    <script src="/assets/js/kyte-connect.js?v=1"></script>
+    <script src="/assets/js/kyte-connect.js?v=1b"></script>
     <script src="/assets/js/navigation.js?v=1"></script>
     <script src="/assets/js/kyte-shipyard-tables.js?v=1"></script>
-    <script src="/assets/js/kyte-shipyard-site-details.js?v=1"></script>
+    <script src="/assets/js/kyte-shipyard-site-sidenavitem.js?v=1"></script>
 </head>
 
 <body>
@@ -61,81 +61,16 @@
                     </div>
                 </div>
 
-                <div id="Pages" class="mt-2 d-none">
+                <div id="Domains" class="mt-2">
                     <div class="d-flex justify-content-between mt-4">
-                        <h4>Pages</h4>
+                        <h4 id="navigation-name"></h4>
                         <div>
-                            <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="createPage">&plus; Create Page</a>
+                            <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="addMenuItem">&plus; Add Item</a>
                         </div>
                     </div>
 
                     <div class="mt-2">
-                        <table id="pages-table" class="table table-striped w-100"></table>
-                    </div>
-                </div>
-
-                <div id="Media" class="mt-2 d-none">
-                    <div class="d-flex justify-content-between mt-4">
-                        <h4>Media</h4>
-                        <div>
-                            <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="newMedia">&plus; Upload Media</a>
-                        </div>
-                    </div>
-
-                    <div class="mt-2">
-                        <table id="media-table" class="table table-striped w-100"></table>
-                    </div>
-                </div>
-
-                <div id="Navigation" class="mt-2 d-none">
-                    <div class="d-flex justify-content-between mt-4">
-                        <h4>Navigation</h4>
-                        <div>
-                            <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="createNavigation">&plus; Create Menu</a>
-                        </div>
-                    </div>
-
-                    <div class="mt-2">
-                        <table id="navigation-table" class="table table-striped w-100"></table>
-                    </div>
-                </div>
-
-                <div id="SideNav" class="mt-2 d-none">
-                    <div class="d-flex justify-content-between mt-4">
-                        <h4>Side Menu</h4>
-                        <div>
-                            <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="createSideNavigation">&plus; Create Menu</a>
-                        </div>
-                    </div>
-
-                    <div class="mt-2">
-                        <table id="side-navigation-table" class="table table-striped w-100"></table>
-                    </div>
-                </div>
-
-                <div id="Domains" class="mt-2 d-none">
-                    <div class="d-flex justify-content-between mt-4">
-                        <h4>Domains</h4>
-                        <div>
-                            <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="addDomain">&plus; Add Domain</a>
-                        </div>
-                    </div>
-
-                    <div class="mt-2">
-                        <table id="domains-table" class="table table-striped w-100"></table>
-                    </div>
-                </div>
-
-                <div id="Settings" class="mt-2 d-none">
-                    <div class="d-flex justify-content-between mt-4">
-                        <h4>Settings</h4>
-                        <div>
-                            <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="newController">&plus; Create Page</a>
-                        </div>
-                    </div>
-
-                    <div class="mt-2">
-                        <table id="pages-table" class="table table-striped w-100"></table>
+                        <table id="navitem-table" class="table table-striped w-100"></table>
                     </div>
                 </div>
 
@@ -144,10 +79,6 @@
     </div>
 
     <!-- modal form -->
-    <div id="modalFormPage"></div>
-    <div id="modalFormMedia"></div>
-    <div id="modalFormNavigation"></div>
-    <div id="modalFormSideNav"></div>
-    <div id="modalFormDomain"></div>
+    <div id="modalFormNavItem"></div>
 </body>
 </html>

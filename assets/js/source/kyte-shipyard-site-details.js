@@ -132,6 +132,11 @@ let mediaElements = [
     ]
 ];
 
+let colDefSideNavigation = [
+    {'targets':0,'data':'name','label':'Name'},
+    {'targets':1,'data':'description','label':'Description'},
+];
+
 $(document).ready(function() {
     let sidenav = new KyteSidenav("#sidenav", subnavSite, "#Attributes");
     sidenav.create();
@@ -207,6 +212,25 @@ $(document).ready(function() {
             ]
         ];
 
+        let sideNavigationFormElements = [
+            [
+                {
+                    'field':'name',
+                    'type':'text',
+                    'label':'Name',
+                    'required':true
+                }
+            ],
+            [
+                {
+                    'field':'description',
+                    'type':'textare',
+                    'label':'Description',
+                    'required':false
+                }
+            ]
+        ];
+
         k.get("Site", "id", idx, [], function(r) {
             if (r.data[0]) {
                 data = r.data[0];
@@ -238,10 +262,16 @@ $(document).ready(function() {
                 tblMedia.bindEdit(modalFormMedia);
 
                 // navigation
-                var tblNavigation = createTable("#navigation-table", "Navigation", colDefNavigation, 'site', idx, false, true, '/app/site/navigation.html', 'id', true);
+                var tblNavigation = createTable("#navigation-table", "Navigation", colDefNavigation, 'site', idx, true, true, '/app/site/navigation.html', 'id', true);
                 var modalFormNavigation = new KyteForm(k, $("#modalFormNavigation"), 'Navigation', hidden, navigationFormElements, 'Navigation', tblNavigation, true, $("#createNavigation"));
                 modalFormNavigation.init();
                 tblNavigation.bindEdit(modalFormNavigation);
+
+                // side navigation
+                var tblSideNav = createTable("#side-navigation-table", "SideNav", colDefSideNavigation, 'site', idx, true, true, '/app/site/sidenav.html', 'id', true);
+                var modalFormSideNav = new KyteForm(k, $("#modalFormSideNav"), 'SideNav', hidden, sideNavigationFormElements, 'Navigation', tblSideNav, true, $("#createSideNavigation"));
+                modalFormSideNav.init();
+                tblSideNav.bindEdit(modalFormSideNav);
 
                 // domains
                 var tblDomains = createTable("#domains-table", "Domain", colDefDomains, 'site', idx, false, true, '/app/site/domain.html', 'id', true);
