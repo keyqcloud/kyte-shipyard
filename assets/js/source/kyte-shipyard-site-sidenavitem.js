@@ -1,4 +1,4 @@
-let colDefNavItem = [
+let colDefSideNavItem = [
     {'targets':0,'data':'title','label':'Label', render: function(data, type, row, meta) { return (row.faicon ? '<i class="'+row.faicon+' me-2"></i>' : '')+data; }},
     {'targets':1,'data':'link','label':'Target', render: function(data, type, row, meta) { console.log(row); if (data) { return data; } else { if (row.page) { return row.page.title; } else {return 'No'; }} }}
 ];
@@ -11,7 +11,7 @@ $(document).ready(function() {
         let idx = k.getPageRequest();
         idx = idx.idx;
 
-        k.get("Navigation", "id", idx, [], function(r) {
+        k.get("SideNav", "id", idx, [], function(r) {
             if (r.data[0]) {
                 data = r.data[0];
                 $("#site-name").html(data.site.name);
@@ -27,7 +27,7 @@ $(document).ready(function() {
                         'value': data.site.id
                     },
                     {
-                        'name': 'navigation',
+                        'name': 'sidenav',
                         'value': idx
                     }
                 ];
@@ -130,7 +130,7 @@ $(document).ready(function() {
                 ];
 
                 // table and forms
-                var datatable = createTable("#navitem-table", "SideNavItem", colDefNavItem, 'sidenav', idx, true, true);
+                var datatable = createTable("#navitem-table", "SideNavItem", colDefSideNavItem, 'sidenav', idx, true, true);
                 var modalForm = new KyteForm(k, $("#modalFormNavItem"), 'SideNavItem', hidden, NavItemElements, 'Side Menu Item', datatable, true, $("#addMenuItem"));
                 modalForm.init();
                 datatable.bindEdit(modalForm);
