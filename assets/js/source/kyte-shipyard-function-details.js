@@ -59,7 +59,8 @@ $(document).ready(function() {
                     value: r.data[0].code,
                     theme: 'vs-dark',
                     language: "php-snippet",
-                    wordWrap: 'wordWrapColumn',
+                    automaticLayout: true,
+                    wordWrap: true,
                     // wordWrapColumn: 40,
                     // Set this to false to not auto word wrap minified files
                     wordWrapMinified: true,

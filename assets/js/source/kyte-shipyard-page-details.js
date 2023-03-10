@@ -37,7 +37,8 @@ $(document).ready(function() {
                     value: page.html,
                     theme: 'vs-dark',
                     language: "html",
-                    wordWrap: 'wordWrapColumn',
+                    automaticLayout: true,
+                    wordWrap: true,
                     // wordWrapColumn: 40,
                     // Set this to false to not auto word wrap minified files
                     wordWrapMinified: true,
@@ -49,7 +50,8 @@ $(document).ready(function() {
                     value: page.javascript,
                     theme: 'vs-dark',
                     language: "javascript",
-                    wordWrap: 'wordWrapColumn',
+                    automaticLayout: true,
+                    wordWrap: true,
                     // wordWrapColumn: 40,
                     // Set this to false to not auto word wrap minified files
                     wordWrapMinified: true,
@@ -61,7 +63,8 @@ $(document).ready(function() {
                     value: page.stylesheet,
                     theme: 'vs-dark',
                     language: "css",
-                    wordWrap: 'wordWrapColumn',
+                    automaticLayout: true,
+                    wordWrap: true,
                     // wordWrapColumn: 40,
                     // Set this to false to not auto word wrap minified files
                     wordWrapMinified: true,
@@ -93,10 +96,14 @@ $(document).ready(function() {
                 
                 k.get('Navigation', 'site', page.site.id, [], function(r) {
                     let main_navigation = page.main_navigation ? page.main_navigation.id : 0;
-                    let side_navigation = page.side_navigation ? page.side_navigation.id : 0;
                     for (data of r.data) {
                         $("#setting-main-navigation").append('<option value="'+data.id+'"'+(main_navigation == data.id ? ' selected' : '')+'>'+data.name+'</option>');
-                        // TODO: update for side nav only
+                    }
+                });
+
+                k.get('SideNav', 'site', page.site.id, [], function(r) {
+                    let side_navigation = page.side_navigation ? page.side_navigation.id : 0;
+                    for (data of r.data) {
                         $("#setting-side-navigation").append('<option value="'+data.id+'"'+(side_navigation == data.id ? ' selected' : '')+'>'+data.name+'</option>');
                     }
                 });
