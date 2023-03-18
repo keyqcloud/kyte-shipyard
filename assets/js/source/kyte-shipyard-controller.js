@@ -1,38 +1,3 @@
-let elements = [
-    [
-        {
-            'field':'name',
-            'type':'text',
-            'label':'Name',
-            'required':true
-        },
-        {
-            'field': 'dataModel',
-            'type': 'select',
-            'label': 'Data Model',
-            'required': false,
-            'placeholder': 'Virtual Model',
-            'option': {
-                'ajax': true,
-                'data_model_name': 'DataModel',
-                'data_model_field': '',
-                'data_model_value': '',
-                'data_model_attributes': ['name'],
-                'data_model_default_field': 'id',
-                // 'data_model_default_value': 1,
-            }
-        }
-    ],
-    [
-        {
-            'field':'description',
-            'type':'textare',
-            'label':'Description',
-            'required':false
-        }
-    ]
-];
-
 $(document).ready(function() {
     if (!k.isSession()) {
         location.href="/?redir="+encodeURIComponent(window.location);
@@ -42,6 +7,41 @@ $(document).ready(function() {
     // get url param
     let idx = k.getPageRequest();
     idx = idx.idx;
+
+    let elements = [
+        [
+            {
+                'field':'name',
+                'type':'text',
+                'label':'Name',
+                'required':true
+            },
+            {
+                'field': 'dataModel',
+                'type': 'select',
+                'label': 'Data Model',
+                'required': false,
+                'placeholder': 'Virtual Model',
+                'option': {
+                    'ajax': true,
+                    'data_model_name': 'DataModel',
+                    'data_model_field': 'application',
+                    'data_model_value': idx,
+                    'data_model_attributes': ['name'],
+                    'data_model_default_field': 'id',
+                    // 'data_model_default_value': 1,
+                }
+            }
+        ],
+        [
+            {
+                'field':'description',
+                'type':'textare',
+                'label':'Description',
+                'required':false
+            }
+        ]
+    ];
 
     let hidden = [
         {
