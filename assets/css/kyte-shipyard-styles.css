@@ -6,8 +6,8 @@ small.copyright {font-weight: 200;}
 #login-form .col, #reset-form .col, #enrollment-form .col, #password-update-form .col { padding: 1em;}
 footer { position:fixed; bottom:0; width:100%; height:120px; }
 .footer-spacer  { clear: both; height: 120px; }
-.text-right { text-align: right;}
-.text-left { text-align: left;}
+.text-right { text-align: right !important; }
+.text-left { text-align: left !important; }
 .text-strike { text-decoration: line-through; }
 #wrapper { height: 100%; width: 100%; }
 main {
