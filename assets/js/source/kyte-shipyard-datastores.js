@@ -18,6 +18,6 @@ $(document).ready(function() {
     let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
     $("#new").attr('href', '/app/datastore/new.html?request='+encoded);
 
-    var tblDataStore = new KyteTable(k, $("#datastore-table"), {'name':'DataStore','field':'application','value':idx}, colDefDataStore, true, [0,"asc"], false, true, 'id', '/app/datastore/');
+    var tblDataStore = new KyteTable(k, $("#datastore-table"), {'name':'DataStore','field':'application','value':idx}, colDefDataStore, true, [0,"asc"], false, true);//, 'id', '/app/datastore/');
     tblDataStore.init();
 });
