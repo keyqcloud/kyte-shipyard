@@ -46,6 +46,7 @@ $(document).ready(function() {
                             <div class="d-inline me-2"><input type="checkbox" class="corsMethodPost"> POST</div>
                             <div class="d-inline me-2"><input type="checkbox" class="corsMethodPut"> PUT</div>
                             <div class="d-inline"><input type="checkbox" class="corsMethodDelete"> DELETE</div>
+                            <div class="d-block"><input type="checkbox" class="corsMethodHead"> HEAD</div>
                         </div>
                         <div class="col">
                             <h6>Origins</h6>
@@ -156,6 +157,16 @@ $(document).ready(function() {
         }
         $("#bucket-region").removeClass('is-invalid');
 
+        if (!$("#bucket-acl").val()) {
+            $("#bucket-acl").addClass('is-invalid');
+        }
+        $("#bucket-acl").removeClass('is-invalid');
+
+        if (!$("#bucket-public-access").val()) {
+            $("#bucket-public-access").addClass('is-invalid');
+        }
+        $("#bucket-public-access").removeClass('is-invalid');
+
         $("#wizard-1").addClass('d-none');
         $("#wizard-2").removeClass('d-none');
     });
@@ -168,8 +179,24 @@ $(document).ready(function() {
         $("#wizard-1").removeClass('d-none');
     });
 
-    // create bucket
     $("#wizard-2-next").click(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        $("#wizard-2").addClass('d-none');
+        $("#wizard-3").removeClass('d-none');
+    });
+
+    $("#wizard-3-back").click(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        $("#wizard-3").addClass('d-none');
+        $("#wizard-2").removeClass('d-none');
+    });
+
+    // create bucket
+    $("#wizard-3-next").click(function(e) {
         e.stopPropagation();
         e.preventDefault();
 
@@ -209,7 +236,7 @@ $(document).ready(function() {
             }
 
             // validate that at least one method is checked
-            if (!$(this).find('.corsMethodGet').prop('checked') && !$(this).find('.corsMethodPost').prop('checked') && !$(this).find('.corsMethodPut').prop('checked') && !$(this).find('.corsMethodDelete').prop('checked')) {
+            if (!$(this).find('.corsMethodGet').prop('checked') && !$(this).find('.corsMethodPost').prop('checked') && !$(this).find('.corsMethodPut').prop('checked') && !$(this).find('.corsMethodDelete').prop('checked') && !$(this).find('.corsMethodHead').prop('checked')) {
                 alert('At least one method must be selected');
                 validationError = true;
                 return false; // Exit the loop
@@ -248,7 +275,6 @@ $(document).ready(function() {
             }
         });
 
-
         if (validationError) {
             return;
         }
@@ -262,10 +288,11 @@ $(document).ready(function() {
             return;
         }
         let bucketRegion = $("#bucket-region").val();
+        let bucketAcl = $("#bucket-acl").val();
+        let bucketPublicAccess = $("#bucket-public-access").val();
 
         // generate cors array
         $(".cors-policy").each(function() {
-            let corsPolicy = [];
             // AllowedHeaders
             let allowedHeaders = [];
             $(this).find(".corsHeaders").each(function() {
@@ -277,22 +304,22 @@ $(document).ready(function() {
             let corsPost = $(this).find('.corsMethodPost').prop('checked');
             let corsPut = $(this).find('.corsMethodPut').prop('checked');
             let corsDelete = $(this).find('.corsMethodDelete').prop('checked');
+            let corsHead = $(this).find('.corsMethodHead').prop('checked');
             let allowedMethods = [];
-            if (corsGet && corsPost && corsPut && corsDelete) {
-                allowedMethods.push('*');
-            } else {
-                if (corsGet) {
-                    allowedMethods.push('GET');
-                }
-                if (corsPost) {
-                    allowedMethods.push('POST');
-                }
-                if (corsPut) {
-                    allowedMethods.push('PUT');
-                }
-                if (corsDelete) {
-                    allowedMethods.push('DELETE');
-                }
+            if (corsGet) {
+                allowedMethods.push('GET');
+            }
+            if (corsPost) {
+                allowedMethods.push('POST');
+            }
+            if (corsPut) {
+                allowedMethods.push('PUT');
+            }
+            if (corsDelete) {
+                allowedMethods.push('DELETE');
+            }
+            if (corsHead) {
+                allowedMethods.push('HEAD');
             }
 
             // AllowedOrigins
@@ -301,17 +328,15 @@ $(document).ready(function() {
                 allowedOrigins.push($(this).val());
             });
 
-            corsPolicy.push({
+            cors.push({
                 'AllowedHeaders': allowedHeaders,
                 'AllowedMethods': allowedMethods,
                 'AllowedOrigins': allowedOrigins,
             });
-
-            cors.push(corsPolicy);
         });
 
-        k.post('DataStore', {'name':bucketName, 'region': bucketRegion, 'application': idx, 'cors':cors}, null, [], function(r) {
-            $("#wizard-2").addClass('d-none');
+        k.post('DataStore', {'name':bucketName, 'region': bucketRegion, 'acl': bucketAcl, 'blockPublicAccess':bucketPublicAccess, 'application': idx, 'cors':cors}, null, [], function(r) {
+            $("#wizard-3").addClass('d-none');
             $("#wizard-final").removeClass('d-none');
         }, function(e) {
             alert("Unable to create a data store at this time. Please try again later or contact support if problem persists.");

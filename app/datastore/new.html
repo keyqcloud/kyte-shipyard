@@ -50,13 +50,12 @@
 
             <div id="content-data-wrapper" class="mt-2">
 
-                <!-- STEP 1 -->
                 <!-- WIZARD 1 -->
                 <div id="wizard-1">
                     <div class="row">
                         <div class="col-5 px-1" style="position: relative;">
                             <h4 class="mt-4" style="font-weight: 300;">Let's get started!</h4>
-                            <div class="pb-3">
+                            <div class="py-3">
                                 <h5>What is the name of your data store?</h5>
                                 <small class="text-danger d-none bucket-name-error"></small>
                                 <input type="text" class="form-control" id="bucket-name">
@@ -97,10 +96,45 @@
                         <div class="col-7"><img src="/assets/images/mobile-app-ui-elements.png" class="w-100"></div>
                     </div>
                 </div>
-                <!--  -->
 
                 <!-- WIZARD 2 -->
                 <div id="wizard-2" class="d-none">
+                    <div class="row">
+                        <div class="col-5 px-1" style="position: relative;">
+                            <h4 class="mt-4" style="font-weight: 300;">Let's talk privacy!</h4>
+                            <div class="py-3">
+                                <h5>Which ACL do you want to use?</h5>
+                                <small>If uncertain, use to 'private'.</small>
+                                <select class="form-select form-select-lg" id="bucket-acl">
+                                    <option value="private">Private</option>
+                                    <option value="public-read">Public Read</option>
+                                    <option value="public-read-write">Public Read/Write</option>
+                                    <option value="authenticated-read">Authenticated Read</option>
+                                </select>
+                            </div>
+
+                            <div class="py-3">
+                                <h5>Do you wish to block all public access?</h5>
+                                <small>Will override public ACLs above.</small>
+                                <select class="form-select form-select-lg" id="bucket-public-access">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+
+                            <div class="w-100" style="position: absolute; bottom: 0;">
+                                <div class="d-flex justify-content-between">
+                                    <a id="wizard-2-back" class="btn btn-secondary" href="#">Back</a><a id="wizard-2-next" class="btn btn-primary" href="#">Next</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7"><img src="/assets/images/mobile-app-ui-elements.png" class="w-100"></div>
+                    </div>
+                </div>
+                <!--  -->
+
+                <!-- WIZARD 3 -->
+                <div id="wizard-3" class="d-none">
                     <div class="row">
                         <div class="col-12 px-1" style="position: relative;">
                             <div class="pb-3">
@@ -114,7 +148,7 @@
 
                             <div class="w-100" style="position: absolute; bottom: 0;">
                                 <div class="d-flex justify-content-between">
-                                    <a id="wizard-2-back" class="btn btn-secondary" href="#">Back</a><a id="wizard-2-next" class="btn btn-success" href="#">Create</a>
+                                    <a id="wizard-3-back" class="btn btn-secondary" href="#">Back</a><a id="wizard-3-next" class="btn btn-success" href="#">Create</a>
                                 </div>
                             </div>
                         </div>
