@@ -1,6 +1,7 @@
 let colDefDataStore = [
     {'targets':0,'data':'name','label':'Name'},
-    {'targets':1,'data':'region','label':'Region'},
+    {'targets':1,'data':'bucketname','label':'Bucket Name'},
+    {'targets':2,'data':'region','label':'Region'},
 ];
 
 $(document).ready(function() {
