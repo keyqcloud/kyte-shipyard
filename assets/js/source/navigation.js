@@ -13,12 +13,12 @@ function generateAppNav(appName, encodedRequest) {
                 label:'Sites',
                 href:'/app/sites.html?request='+encodedRequest
             },
-            // {
-            //     faicon:'fas fa-hdd',
-            //     class:'me-2 text-light',
-            //     label:'Data Store',
-            //     href:'/app/datastore.html?request='+encodedRequest
-            // },
+            {
+                faicon:'fas fa-hdd',
+                class:'me-2 text-light',
+                label:'Data Store',
+                href:'/app/datastores.html?request='+encodedRequest
+            },
             {
                 faicon:'fas fa-table',
                 class:'me-2 text-light',
