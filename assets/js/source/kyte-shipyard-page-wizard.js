@@ -640,20 +640,7 @@ $(document).ready(function() {
                 html = '<div class="py-3"><div class="d-flex justify-content-between"><h1>'+page_table_title+'</h1><div>'+(page_table_add == 1 ? '<a class="btn btn-primary btn-sm" id="addEntry'+page_model+'"><i class="fas fa-plus fs-sm"></i> Create</a>' : '')+'</div></div><div class="mt-2 table-responsive"><table id="dt'+page_model+'" class="table table-striped w-100"></table></div></div><div id="modalForm'+page_model+'"></div>';
                 break;
 
-            case 'sidenav':
-                // perform validation
-                // generate code
-                alert("I'm sorry Dave, I'm afraid I can't do that.");
-                return;
-                break;
-
-            case 'block':
-                // perform validation
-                // generate code
-                alert("I'm sorry Dave, I'm afraid I can't do that.");
-                return;
-                break;
-        
+            // custom and block editor pages
             default:
                 layout = {
                     'page_type': $("#page-type").val(),
@@ -671,6 +658,7 @@ $(document).ready(function() {
             'html': html,
             'javascript': javascript,
             'stylesheet': stylesheet,
+            'page_type': $("#page-type").val(),
             'layout': JSON.stringify(layout),
             'main_navigation':main_navigation,
             'side_navigation':side_navigation,
@@ -694,18 +682,18 @@ $(document).ready(function() {
                 }, function(err) {
                     $('#pageLoaderModal').modal('hide');
                     console.log(err);
-                    alert("Somethign wen't wrong while publishing and invalidating cache...page has been saved so nothing is lost.");
+                    alert("Something went wrong while publishing and invalidating cache...page has been saved so nothing is lost.");
                 });
             } else {
                 $('#pageLoaderModal').modal('hide');
                 console.log(err);
-                alert("Somethign wen't wrong while trying to save your page...");
+                alert("Something went wrong while trying to save your page...");
             }
             
         }, function(err) {
             $('#pageLoaderModal').modal('hide');
             console.log(err);
-            alert("Somethign wen't terribly wrong while trying to save your page...");
+            alert("Something went terribly wrong while trying to save your page...");
         });        
     });
 });
