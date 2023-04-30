@@ -33,6 +33,13 @@ $(document).ready(function() {
                 $("#setting-page-title").val(page.title);
                 $("#setting-page-description").val(page.description);
                 
+                if (page.page_type == 'block') {
+                    // redirect to block editor....
+                    let obj = {'model': 'Page', 'idx':idx};
+                    let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                    window.location = '/app/page/blockeditor.html?request='+encoded;
+                }
+
                 htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {
                     value: page.html,
                     theme: 'vs-dark',
@@ -115,15 +122,16 @@ $(document).ready(function() {
 
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
-                    k.put('Page', 'id', idx, {
-                        'html':htmlEditor.getValue(),
+                    let payload = {
+                        'html': htmlEditor.getValue(),
                         'javascript': jsEditor.getValue(),
                         'stylesheet': cssEditor.getValue(),
                         'main_navigation':$("#setting-main-navigation").val(),
                         'side_navigation':$("#setting-side-navigation").val(),
                         'title':$("#setting-page-title").val(),
-                        'description':$("#setting-page-description").val()
-                    }, null, [], function(r) {
+                        'description':$("#setting-page-description").val(),
+                    };
+                    k.put('Page', 'id', idx, payload, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
                     });
                 });
@@ -134,22 +142,38 @@ $(document).ready(function() {
                     let connect = "let endpoint = 'https://"+page.api_endpoint+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+page.application_identifier+"');k.init();\n\n";
 
                     let rawJS = jsEditor.getValue();
-                    // var obfuscated = JavaScriptObfuscator.obfuscate(connect+rawJS,
-                    //     {
-                    //         compact: true,
-                    //         controlFlowFlattening: true,
-                    //         controlFlowFlatteningThreshold: 1,
-                    //         numbersToExpressions: true,
-                    //         simplify: true,
-                    //         stringArrayEncoding: ['base64'],
-                    //         stringArrayShuffle: true,
-                    //         splitStrings: true,
-                    //         stringArrayWrappersType: 'variable',
-                    //         stringArrayThreshold: 1
-                    //     }
-                    // );
+                    let obfuscatedConnect = JavaScriptObfuscator.obfuscate(connect,
+                        {
+                            compact: true,
+                            controlFlowFlattening: true,
+                            controlFlowFlatteningThreshold: 1,
+                            numbersToExpressions: true,
+                            simplify: true,
+                            stringArrayEncoding: ['base64'],
+                            stringArrayShuffle: true,
+                            splitStrings: true,
+                            stringArrayWrappersType: 'variable',
+                            stringArrayThreshold: 1
+                        }
+                    );
+                    console.log(obfuscatedConnect.getObfuscatedCode());
+                    let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS,
+                        {
+                            compact: true,
+                            controlFlowFlattening: true,
+                            controlFlowFlatteningThreshold: 1,
+                            numbersToExpressions: true,
+                            simplify: true,
+                            stringArrayEncoding: ['base64'],
+                            stringArrayShuffle: true,
+                            splitStrings: true,
+                            stringArrayWrappersType: 'variable',
+                            stringArrayThreshold: 1
+                        }
+                    );
+                    console.log(obfuscatedJS.getObfuscatedCode());
                     let payload = {
-                        'html':htmlEditor.getValue(),
+                        'html': htmlEditor.getValue(),
                         'javascript': rawJS,
                         'stylesheet': cssEditor.getValue(),
                         'main_navigation':$("#setting-main-navigation").val(),

@@ -24,19 +24,12 @@
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
     <!-- JavaScript obfuscator -->
     <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
-    <!-- Monaco -->
-    <link rel="stylesheet" data-name="vs/editor/editor.main" href="/assets/js/packages/monaco-editor/min/vs/editor/editor.main.css" />
-    <script>var require = { paths: { vs: '/assets/js/packages/monaco-editor/min/vs' } };</script>
-    <script src="/assets/js/packages/monaco-editor/min/vs/loader.js"></script>
-    <script src="/assets/js/packages/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
-    <script src="/assets/js/packages/monaco-editor/min/vs/editor/editor.main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
     <!-- Kyte -->
     <script src="https://cdn.stratis-troika.com/kytejs/dev/kyte.js" crossorigin="anonymous"></script>
     <script src="/assets/js/kyte-connect.js?v=1"></script>
     <script src="/assets/js/navigation.js?v=1"></script>
     <script src="/assets/js/kyte-shipyard-tables.js?v=1"></script>
-    <script src="/assets/js/kyte-shipyard-page-code-editor.js?v=1"></script>
+    <script type="module" src="/assets/js/kyte-shipyard-page-block-editor.js?v=4"></script>
 </head>
 
 <body>
@@ -70,23 +63,15 @@
                                 <h2 id="page-title"></h2>
                             </div>
                             <div>
-                                <a class="btn d-inline-block btn-md btn-success" href="#" target="_blank" id="viewPage"><i class="fas fa-eye me-2"></i> View Page</a>
-                                <a class="btn d-inline-block btn-md btn-primary" href="#" id="publishPage"><i class="fas fa-upload me-2"></i> Publish</a>
-                                <a class="btn d-inline-block btn-md btn-warning" href="#" id="saveCode"><i class="fas fa-save me-2"></i> Save</a>
+                                <a class="btn d-inline-block btn-md btn-outline-success" href="#" target="_blank" id="viewPage"><i class="fas fa-eye me-2"></i> View Page</a>
+                                <a class="btn d-inline-block btn-md btn-outline-primary" href="#" id="publishPage"><i class="fas fa-upload me-2"></i> Publish</a>
+                                <a class="btn d-inline-block btn-md btn-outline-warning" href="#" id="saveCode"><i class="fas fa-save me-2"></i> Save</a>
                             </div>
                         </div>
                     </div>
                     <div class="editor-box-content">
                         <div id="Page" class="editor-container">
-                            <div id="htmlEditor" style="width: 100%; height: 100%; border: 1px solid grey"></div>
-                        </div>
-        
-                        <div id="JavaScript" class="editor-container">
-                            <div id="jsEditor" style="width: 100%; height: 100%; border: 1px solid grey"></div>
-                        </div>
-        
-                        <div id="Stylesheet" class="editor-container">
-                            <div id="cssEditor" style="width: 100%; height: 100%; border: 1px solid grey"></div>
+                            <div id="blockEditor" style="width: 100%; height: 100%; border: 1px solid grey"></div>
                         </div>
         
                         <div id="Settings" class="mt-2 px-3 d-none">

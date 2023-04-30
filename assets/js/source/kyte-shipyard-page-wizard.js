@@ -311,7 +311,6 @@ $(document).ready(function() {
         $("#customization-table-columns").addClass('d-none');
         $("#customization-form-fields").addClass('d-none');
         $("#customization-custom").addClass('d-none');
-        $("#customization-block").addClass('d-none');
         $("#image-placeholder").removeClass('d-none');
         $("#data-model-columns-wrapper").html('');
 
@@ -370,15 +369,6 @@ $(document).ready(function() {
                 $("#customization-form-fields").removeClass('d-none');
                 break;
 
-            case 'sidenav':
-                $("#label-page-type").html('page with side nav');
-                break;
-
-            case 'block':
-                $("#label-page-type").html('custom page');
-                $("#customization-block").removeClass('d-none');
-                break;
-        
             default:
                 $("#label-page-type").html('custom page');
                 $("#customization-custom").removeClass('d-none');
