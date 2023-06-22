@@ -98,3 +98,34 @@ li.back-link {
 .dataTables_wrapper thead th:last-child {
     border-top-right-radius: 10px !important;
 }
+
+
+/* dark mode css styles */
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #eee;
+        background: #121212;
+    }
+
+    input, select, textarea {
+        color: #e0e0e0 !important;
+        background: #37353b !important;
+    }
+
+    .modal-content, .card {
+        color: #eee !important;
+        background: #121212 !important;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .modal-backdrop {
+        background-color: #515151;
+      }
+
+    label, .paginate_button, .dataTables_info {
+        color: #eee !important;
+    }
+
+    a {
+        color: #809fff;
+    }
+}

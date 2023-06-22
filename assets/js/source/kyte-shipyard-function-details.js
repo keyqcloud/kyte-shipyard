@@ -3,6 +3,17 @@ import {registerPHPSnippetLanguage} from '/assets/js/packages/utils/php-snippet/
 var editor;
 let functionName = "Undefined";
 
+var colorMode = 'vs';
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    colorMode = 'vs-dark';
+}
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+    colorMode = event.matches ? "vs-dark" : "vs";
+    editor.editor.setTheme(colorMode);
+});
+
+
 registerPHPSnippetLanguage(monaco.languages);
 
 let assignControllerElements = [
@@ -57,7 +68,7 @@ $(document).ready(function() {
 
                 editor = monaco.editor.create(document.getElementById('container'), {
                     value: r.data[0].code,
-                    theme: 'vs-dark',
+                    theme: colorMode,
                     language: "php-snippet",
                     automaticLayout: true,
                     wordWrap: true,

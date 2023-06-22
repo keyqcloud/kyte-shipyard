@@ -3,6 +3,19 @@ var jsEditor;
 var cssEditor;
 var page;
 
+var colorMode = 'vs';
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    colorMode = 'vs-dark';
+}
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+    colorMode = event.matches ? "vs-dark" : "vs";
+    htmlEditor.editor.setTheme(colorMode);
+    jsEditor.editor.setTheme(colorMode);
+    cssEditor.editor.setTheme(colorMode);
+});
+
+
 $(document).ready(function() {
     let sidenav = new KyteSidenav("#sidenav", subnavPage, "#Page");
     sidenav.create();
@@ -42,7 +55,7 @@ $(document).ready(function() {
 
                 htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {
                     value: page.html,
-                    theme: 'vs-dark',
+                    theme: colorMode,
                     language: "html",
                     automaticLayout: true,
                     wordWrap: true,
@@ -55,7 +68,7 @@ $(document).ready(function() {
 
                 jsEditor = monaco.editor.create(document.getElementById("jsEditor"), {
                     value: page.javascript,
-                    theme: 'vs-dark',
+                    theme: colorMode,
                     language: "javascript",
                     automaticLayout: true,
                     wordWrap: true,
@@ -68,7 +81,7 @@ $(document).ready(function() {
 
                 cssEditor = monaco.editor.create(document.getElementById("cssEditor"), {
                     value: page.stylesheet,
-                    theme: 'vs-dark',
+                    theme: colorMode,
                     language: "css",
                     automaticLayout: true,
                     wordWrap: true,
