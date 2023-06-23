@@ -121,6 +121,14 @@ li.back-link {
         background-color: #515151;
     }
 
+    .section-heading {
+        border-left: 10px solid #e0e0e0;
+    }
+
+    #passwordRequirements {
+        color: #fff !important;
+    }
+
     label, .paginate_button, .dataTables_info {
         color: #eee !important;
     }
