@@ -13,6 +13,22 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
     editor.editor.setTheme(colorMode);
 });
 
+// key bindings for saving
+document.addEventListener("keydown", function(event) {
+    // Check if the Ctrl key (Windows) or the Command key (Mac) is pressed
+    var isCtrlPressed = event.ctrlKey || event.metaKey;
+  
+    // Check if the S key is pressed
+    var isSPressed = event.key === "s";
+  
+    // Check if both the Ctrl key and the S key are pressed
+    if (isCtrlPressed && isSPressed) {
+      event.preventDefault(); // Prevent the default browser save action
+  
+      // Call your function here
+      $("#saveCode").click();
+    }
+});
 
 registerPHPSnippetLanguage(monaco.languages);
 

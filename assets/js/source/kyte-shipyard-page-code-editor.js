@@ -15,6 +15,31 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
     cssEditor.editor.setTheme(colorMode);
 });
 
+// key bindings for saving
+document.addEventListener("keydown", function(event) {
+    // Check if the Ctrl key (Windows) or the Command key (Mac) is pressed
+    var isCtrlPressed = event.ctrlKey || event.metaKey;
+  
+    // Check if the S key is pressed
+    var isSPressed = event.key === "s";
+
+    var isPPressed = event.key === "p";
+  
+    // Check if both the Ctrl key and the S key are pressed
+    if (isCtrlPressed && isSPressed) {
+      event.preventDefault(); // Prevent the default browser save action
+  
+      // Call your function here
+      $("#saveCode").click();
+    }
+
+    if (isCtrlPressed && isPPressed) {
+        event.preventDefault(); // Prevent the default browser save action
+    
+        // Call your function here
+        $("#publishPage").click();
+      }    
+});
 
 $(document).ready(function() {
     let sidenav = new KyteSidenav("#sidenav", subnavPage, "#Page");
