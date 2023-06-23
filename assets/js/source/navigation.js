@@ -20,6 +20,12 @@ function generateAppNav(appName, encodedRequest) {
                 href:'/app/datastores.html?request='+encodedRequest
             },
             {
+                faicon:'fas fa-envelope',
+                class:'me-2 text-light',
+                label:'Email',
+                href:'/app/emails.html?request='+encodedRequest
+            },
+            {
                 faicon:'fas fa-table',
                 class:'me-2 text-light',
                 label:'Models',
@@ -60,7 +66,14 @@ function generateAppNav(appName, encodedRequest) {
 
 // menu array
 let rootnav = [
-    [],
+    [
+        {
+            faicon:'fas fa-rocket',
+            class:'me-2 text-light',
+            label: 'Applications',
+            href: '/app/'
+        }
+    ],
     [
         {
             dropdown: true,
@@ -169,6 +182,23 @@ let subnavPage = [
         faicon:'fab fa-css3',
         label:'Stylesheet',
         selector:'#Stylesheet'
+    },
+    {
+        faicon:'fas fa-wrench',
+        label:'Settings',
+        selector:'#Settings'
+    },
+];
+let subnavEmail = [
+    {
+        faicon:'fas fa-code',
+        label:'HTML',
+        selector:'#HTML'
+    },
+    {
+        faicon:'fas fa-eye',
+        label:'Preview',
+        selector:'#Preview'
     },
     {
         faicon:'fas fa-wrench',
