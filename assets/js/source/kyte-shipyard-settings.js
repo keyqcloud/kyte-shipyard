@@ -6,7 +6,9 @@ $(document).ready(function() {
     var passreq = new KytePasswordRequirement(k, $("#passwordRequirements"), $("#new_password"), $("#confirm_password"));
     passreq.init();
 
-    let navbar = new KyteNav("#mainnav", nav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Models');
+    // let navbar = new KyteNav("#mainnav", nav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Models');
+    // navbar.create();
+    let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup>');
     navbar.create();
 
     let sidenav = new KyteSidenav("#sidenav", subnavSettings, "#Profile");
@@ -15,7 +17,7 @@ $(document).ready(function() {
 
     $('#pageLoaderModal').modal('show');
     if (k.isSession()) {        
-        k.get("User", null, null, [], function(r) {
+        k.get("KyteProfile", null, null, [], function(r) {
             if (r.data[0]) {
                 profile = r.data[0];
                 $("#profile_email").val(profile['email']);
@@ -38,8 +40,8 @@ $(document).ready(function() {
             }
         ];
 
-        var tblAdmin = createTable("#admin-table", "User", colDefUsers, 'kyte_account', 1, true, true);
-        var frmUser = createForm("#adminForm", "Administrator", "User", fldsAdmin, hidden, tblAdmin, "#newAdmin");
+        var tblAdmin = createTable("#admin-table", "KyteUser", colDefUsers, 'kyte_account', 1, true, true);
+        var frmUser = createForm("#adminForm", "Administrator", "KyteUser", fldsAdmin, hidden, tblAdmin, "#newAdmin");
 
         var tblAPI = createTable("#api-table", "APIKey", colDefAPI, 'kyte_account', 1, false, false);
 
@@ -47,7 +49,7 @@ $(document).ready(function() {
             e.preventDefault();
             e.stopPropagation();
 
-            k.put("Profile", null, null, {"email":$("#profile_email").val()}, null, [], function(r) {
+            k.put("KyteProfile", null, null, {"email":$("#profile_email").val()}, null, [], function(r) {
                 if (r.data[0]) {
                     profile = r.data[0];
                     $("#profile_email").val(profile['email']);
@@ -68,7 +70,7 @@ $(document).ready(function() {
             let c = $("#confirm_password").val()
 
             if (c == p && c.length >= 8 && passreq.validatePassword($("#password"))) {    
-                k.put('Profile', null, null, {'password':$("#new_password").val()}, null, [], function(r) {
+                k.put('KyteProfile', null, null, {'password':$("#new_password").val()}, null, [], function(r) {
                     alert("Your password has been successfully update.");
                 }, function() {
                     alert("Unable to update your password. Please try again later.");
