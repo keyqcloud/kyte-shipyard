@@ -53,7 +53,7 @@ function generateAppNav(appName, encodedRequest) {
                     },
                     {
                         logout: true,
-                        faicon:'fas fa-server',
+                        faicon:'fas fa-power-off',
                         class:'me-2',
                         label:'Logout'
                     }
@@ -89,7 +89,7 @@ let rootnav = [
                 },
                 {
                     logout: true,
-                    faicon:'fas fa-server',
+                    faicon:'fas fa-power-off',
                     class:'me-2',
                     label:'Logout'
                 }
@@ -135,7 +135,7 @@ let nav = [
                 },
                 {
                     logout: true,
-                    faicon:'fas fa-server',
+                    faicon:'fas fa-power-off',
                     class:'me-2',
                     label:'Logout'
                 }
