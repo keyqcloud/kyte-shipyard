@@ -241,6 +241,9 @@ $(document).ready(function() {
                 $("#domain-name").html('<i class="fas fa-link me-2"></i>'+data.cfDomain);
                 $("#domain-name").attr('href', 'https://'+data.cfDomain);
                 $("#region").html(data.region);
+                $("#aliasDomain").val(data.aliasDomain);
+                $("#ga_code").val(data.ga_code);
+                $("#gtm_code").val(data.gtm_code);
 
                 let obj = {'model': 'Site', 'idx':data.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
@@ -300,10 +303,14 @@ $(document).ready(function() {
             e.preventDefault();
 
             let aliasDomain = $("#aliasDomain").val();
+            let ga_code = $("#ga_code").val();
+            let gtm_code = $("#gtm_code").val();
 
             k.put('Site', 'id', idx,
             {
                 'aliasDomain':aliasDomain,
+                'ga_code':ga_code,
+                'gtm_code':gtm_code,
             }, null, [], function(r) {
                 if (r.data.length > 0) {
                     alert("Application settings successfully updated");
