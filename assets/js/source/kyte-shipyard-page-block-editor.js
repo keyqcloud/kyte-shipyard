@@ -212,6 +212,11 @@ $(document).ready(function() {
                     window.location = '/app/page/index.html?request='+encoded;
                 }
 
+                if (page.protected == 0) {
+                    $("#sitemap-option-wrapper").removeClass('d-none');
+                    $('#setting-sitemap-include').val(page.sitemap_include);
+                }
+
                 // load blocks
                 let blocks = {};
                 if (page.block_layout.length > 0) {

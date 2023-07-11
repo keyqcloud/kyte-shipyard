@@ -78,6 +78,11 @@ $(document).ready(function() {
                     window.location = '/app/page/blockeditor.html?request='+encoded;
                 }
 
+                if (page.protected == 0) {
+                    $("#sitemap-option-wrapper").removeClass('d-none');
+                    $('#setting-sitemap-include').val(page.sitemap_include);
+                }
+
                 htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {
                     value: page.html,
                     theme: colorMode,
