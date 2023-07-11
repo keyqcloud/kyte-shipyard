@@ -271,6 +271,7 @@ $(document).ready(function() {
                         'side_navigation':$("#setting-side-navigation").val(),
                         'title':$("#setting-page-title").val(),
                         'description':$("#setting-page-description").val(),
+                        'sitemap_include':$("#setting-sitemap-include").val(),
                     };
                     blockEditor.save().then((outputData) => {
                         payload.block_layout = JSON.stringify(outputData);
@@ -310,6 +311,7 @@ $(document).ready(function() {
                         'side_navigation':$("#setting-side-navigation").val(),
                         'title':$("#setting-page-title").val(),
                         'description':$("#setting-page-description").val(),
+                        'sitemap_include':$("#setting-sitemap-include").val(),
                         'state': 1,
                         'kyte_connect': connect
                     };

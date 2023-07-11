@@ -173,6 +173,7 @@ $(document).ready(function() {
                         'side_navigation':$("#setting-side-navigation").val(),
                         'title':$("#setting-page-title").val(),
                         'description':$("#setting-page-description").val(),
+                        'sitemap_include':$("#setting-sitemap-include").val(),
                     };
                     k.put('Page', 'id', idx, payload, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
@@ -223,6 +224,7 @@ $(document).ready(function() {
                         'side_navigation':$("#setting-side-navigation").val(),
                         'title':$("#setting-page-title").val(),
                         'description':$("#setting-page-description").val(),
+                        'sitemap_include':$("#setting-sitemap-include").val(),
                         'state': 1,
                         'kyte_connect': connect
                     };

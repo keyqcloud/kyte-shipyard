@@ -294,6 +294,15 @@ $(document).ready(function() {
         }
     });
 
+    // toggle the display of sitemap preference option based on whether page requires session or not
+    $("#page-requires-session").change(function() {
+        if ($(this).val() == "0") {
+            $("#sitemap-settings-wrapper").removeClass('d-none');
+        } else {
+            $("#sitemap-settings-wrapper").addClass('d-none');
+        }
+    });
+
     $("#page-model").change(function() {
         getModelAttributes();
     });
@@ -406,6 +415,7 @@ $(document).ready(function() {
         let page_title = $("#page-title").val();
         let page_description = $("#page-description").val();
         let page_protected = $("#page-requires-session").val();
+        let sitemap_include = $("#sitemap-include").val();
         //
         let page_table_title = $("#page-table-title").val();
         let page_form_title = $("#page-form-title").val();
@@ -656,6 +666,7 @@ $(document).ready(function() {
             's3key':page_path,
             'description':page_description,
             'protected': page_protected,
+            'sitemap_include': sitemap_include,
             'site': siteIdx
         }, null, [], function(r) {
             if (r.data.length > 0) {
