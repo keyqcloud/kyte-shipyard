@@ -36,6 +36,12 @@ function generateAppNav(appName, encodedRequest) {
                 class:'me-2 text-light',
                 label:'Controllers',
                 href:'/app/controllers.html?request='+encodedRequest
+            },
+            {
+                faicon: 'fas fa-cog',
+                class:'me-2 text-light',
+                label:'Configuration',
+                href:'/app/configuration.html?request='+encodedRequest
             }
         ],
         [
