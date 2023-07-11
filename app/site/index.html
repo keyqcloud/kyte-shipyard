@@ -129,47 +129,11 @@
                 <div id="Settings" class="mt-2 d-none">
                     <div class="px-2">
                         <div class="card mb-3">
-                            <div class="card-header">User Table Configuration</div>
+                            <div class="card-header">Site Alias Domain</div>
                             <div class="card-body">
-                                <!-- <h5 class="card-title"></h5> -->
-                                <p>Customize the user table for your web app. Specify the fields and attributes that define your users, such as name, email, and password. This allows you to tailor the user management system to fit your specific requirements.</p>
-                                <div class="row">
-                                    <div class="col-4">
-                                        <select id="user_model" class="w-100">
-                                            <option value="0">Kyte Framework User (Default)</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-4">
-                                        <select id="username_colname" class="w-100">
-                                        </select>
-                                    </div>
-                                    <div class="col-4">
-                                        <select id="password_colname" class="w-100">
-                                        </select>
-                                    </div>
-                                </div>
+                                <input type="text" class="form-control" name="aliasDomain" id="aliasDomain" />
                             </div>
                         </div>
-                        <div class="card mb-3">
-                            <div class="card-header">Organization Table Configuration</div>
-                            <div class="card-body">
-                                <!-- <h5 class="card-title"></h5> -->
-                                <p>Set up an organization table to manage users within specific groups or organizations. Define fields like organization name, description, and membership attributes to organize users and facilitate collaboration within your web app. This feature enables you to create a structured system for managing users in different organizational contexts.</p>
-                                <div class="row">
-                                    <div class="col-4">
-                                        <select id="org_model" class="w-100">
-                                            <option value="0" id="default_org_model">Kyte Framework Account (Default)</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-4">
-                                        <select id="userorg_colname" class="w-100">
-                                        </select>
-                                    </div>
-                                    <div class="col-4"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- TODO: AWS credentials -->
                         <div class="text-right mt-3">
                             <button id="saveSettings" class="btn btn-primary btn-md">Save</button>
                         </div>
