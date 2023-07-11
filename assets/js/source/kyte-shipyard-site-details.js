@@ -295,27 +295,27 @@ $(document).ready(function() {
             $('#pageLoaderModal').modal('hide');
         });
 
+        // update org and user model in backend
+        $("#saveSettings").click(function(e) {
+            e.preventDefault();
+
+            let aliasDomain = $("#aliasDomain").val();
+
+            k.put('Site', 'id', idx,
+            {
+                'aliasDomain':aliasDomain,
+            }, null, [], function(r) {
+                if (r.data.length > 0) {
+                    alert("Application settings successfully updated");
+                } else {
+                    alert("Unable to update application settings. Please try again or contact support.");
+                }
+            }, function(err) {
+                alert("Unable to update application settings. Please try again or contact support. "+err);
+            });
+        });
+
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
     }
-
-    // update org and user model in backend
-    $("#saveSettings").click(function(e) {
-        e.preventDefault();
-
-        let aliasDomain = $("#aliasDomain").val();
-
-        k.put('Application', 'id', app.id,
-        {
-            'aliasDomain':aliasDomain,
-        }, null, [], function(r) {
-            if (r.data.length > 0) {
-                alert("Application settings successfully updated");
-            } else {
-                alert("Unable to update application settings. Please try again or contact support.");
-            }
-        }, function(err) {
-            alert("Unable to update application settings. Please try again or contact support. "+err);
-        });
-    });
 });

@@ -83,6 +83,8 @@ $(document).ready(function() {
                     $('#setting-sitemap-include').val(page.sitemap_include);
                 }
 
+                $("#setting-obfuscatejs").val(page.obfuscate_js);
+
                 htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {
                     value: page.html,
                     theme: colorMode,
@@ -165,27 +167,7 @@ $(document).ready(function() {
 
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
-                    let payload = {
-                        'html': htmlEditor.getValue(),
-                        'javascript': jsEditor.getValue(),
-                        'stylesheet': cssEditor.getValue(),
-                        'main_navigation':$("#setting-main-navigation").val(),
-                        'side_navigation':$("#setting-side-navigation").val(),
-                        'title':$("#setting-page-title").val(),
-                        'description':$("#setting-page-description").val(),
-                        'sitemap_include':$("#setting-sitemap-include").val(),
-                    };
-                    k.put('Page', 'id', idx, payload, null, [], function(r) {
-                        $('#pageLoaderModal').modal('hide');
-                    });
-                });
-
-                $("#publishPage").click(function() {
-                    $('#pageLoaderModal').modal('show');
-                    // create kyte connect js
                     let connect = "let endpoint = 'https://"+page.api_endpoint+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+page.application_identifier+"');k.init();\n\n";
-
-                    let rawJS = jsEditor.getValue();
                     let obfuscatedConnect = JavaScriptObfuscator.obfuscate(connect,
                         {
                             compact: true,
@@ -200,7 +182,8 @@ $(document).ready(function() {
                             stringArrayThreshold: 1
                         }
                     );
-                    console.log(obfuscatedConnect.getObfuscatedCode());
+
+                    let rawJS = jsEditor.getValue();
                     let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS,
                         {
                             compact: true,
@@ -215,18 +198,72 @@ $(document).ready(function() {
                             stringArrayThreshold: 1
                         }
                     );
-                    console.log(obfuscatedJS.getObfuscatedCode());
                     let payload = {
                         'html': htmlEditor.getValue(),
                         'javascript': rawJS,
+                        'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
                         'stylesheet': cssEditor.getValue(),
                         'main_navigation':$("#setting-main-navigation").val(),
                         'side_navigation':$("#setting-side-navigation").val(),
                         'title':$("#setting-page-title").val(),
                         'description':$("#setting-page-description").val(),
                         'sitemap_include':$("#setting-sitemap-include").val(),
+                        'obfuscate_js':$("#setting-obfuscatejs").val(),
+                        'kyte_connect': obfuscatedConnect.getObfuscatedCode(),
+                    };
+                    k.put('Page', 'id', idx, payload, null, [], function(r) {
+                        $('#pageLoaderModal').modal('hide');
+                    });
+                });
+
+                $("#publishPage").click(function() {
+                    $('#pageLoaderModal').modal('show');
+                    // create kyte connect js
+                    let connect = "let endpoint = 'https://"+page.api_endpoint+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+page.application_identifier+"');k.init();\n\n";
+
+                    let obfuscatedConnect = JavaScriptObfuscator.obfuscate(connect,
+                        {
+                            compact: true,
+                            controlFlowFlattening: true,
+                            controlFlowFlatteningThreshold: 1,
+                            numbersToExpressions: true,
+                            simplify: true,
+                            stringArrayEncoding: ['base64'],
+                            stringArrayShuffle: true,
+                            splitStrings: true,
+                            stringArrayWrappersType: 'variable',
+                            stringArrayThreshold: 1
+                        }
+                    );
+
+                    let rawJS = jsEditor.getValue();
+                    let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS,
+                        {
+                            compact: true,
+                            controlFlowFlattening: true,
+                            controlFlowFlatteningThreshold: 1,
+                            numbersToExpressions: true,
+                            simplify: true,
+                            stringArrayEncoding: ['base64'],
+                            stringArrayShuffle: true,
+                            splitStrings: true,
+                            stringArrayWrappersType: 'variable',
+                            stringArrayThreshold: 1
+                        }
+                    );
+                    let payload = {
+                        'html': htmlEditor.getValue(),
+                        'javascript': rawJS,
+                        'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
+                        'stylesheet': cssEditor.getValue(),
+                        'main_navigation':$("#setting-main-navigation").val(),
+                        'side_navigation':$("#setting-side-navigation").val(),
+                        'title':$("#setting-page-title").val(),
+                        'description':$("#setting-page-description").val(),
+                        'sitemap_include':$("#setting-sitemap-include").val(),
+                        'obfuscate_js':$("#setting-obfuscatejs").val(),
                         'state': 1,
-                        'kyte_connect': connect
+                        'kyte_connect': obfuscatedConnect.getObfuscatedCode(),
                     };
                     k.put('Page', 'id', idx, payload, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
