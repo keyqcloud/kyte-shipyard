@@ -1,0 +1,23 @@
+#sortable-menu-items {
+    list-style: none;
+}
+
+#sortable-menu-items li {
+    cursor: grab;
+    padding: 0.5em 1em;
+    margin: 1em 0;
+    border-radius: 1em;
+    border: 1px solid #37353b;
+    background-color: #fff;
+}
+
+.row-grip, .row-delete {
+    align-items: center;
+}
+
+@media (prefers-color-scheme: dark) {
+    #sortable-menu-items li {
+        border: 1px solid #e1e1e1;
+        background-color: #37353b;
+    }
+}

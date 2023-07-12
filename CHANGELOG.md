@@ -1,3 +1,10 @@
+## 1.0.3
+
+* Add support for integrating Google Analytics
+* Add support for integrating Google Tag Manager
+* Add preference for page javascript obfuscation
+* New menu item management UI that allows for reordering of navigation items
+
 ## 1.0.2
 
 * Add support for specifing sitemap inclusion preference

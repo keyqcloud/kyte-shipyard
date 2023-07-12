@@ -3,6 +3,9 @@ let colDefSideNavItem = [
     {'targets':1,'data':'link','label':'Target', render: function(data, type, row, meta) { console.log(row); if (data) { return data; } else { if (row.page) { return row.page.title; } else {return 'No'; }} }}
 ];
 
+let pages = []; // empty array to old object of pages
+let itemCount = 1;
+
 $(document).ready(function() {
     $('#pageLoaderModal').modal('show');
     
@@ -85,62 +88,140 @@ $(document).ready(function() {
                 let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Sites');
                 navbar.create();
 
-                // form element
-                let NavItemElements = [
-                    [
-                        {
-                            'field':'title',
-                            'type':'text',
-                            'label':'Label',
-                            'required':true
-                        },
-                        {
-                            'field':'faicon',
-                            'type':'text',
-                            'label':'Font Awesome class',
-                            'required':false
-                        },
-                    ],
-                    [
-                        {
-                            'field':'link',
-                            'type':'text',
-                            'label':'Link URL (optional if page or logout is set)',
-                            'required':false
-                        },
-                    ],
-                    [
-                        {
-                            'field':'page',
-                            'type':'select',
-                            'label':'Page',
-                            'required':false,
-                            'placeholder': 'N/A',
-                            'option': {
-                                'ajax': true,
-                                'data_model_name': 'Page',
-                                'data_model_field': 'site',
-                                'data_model_value': data.site.id,
-                                'data_model_attributes': ['title'],
-                                'data_model_default_field': 'id',
-                                // 'data_model_default_value': 1,
-                            }
-                        }
-                    ]
-                ];
+                // get pages
+                k.get('Page', 'site', data.site.id, [], function(r) {
+                    if (r.data.length > 0) {
+                        pages = r.data;
+                    }
 
-                // table and forms
-                var datatable = createTable("#navitem-table", "SideNavItem", colDefSideNavItem, 'sidenav', idx, true, true);
-                var modalForm = new KyteForm(k, $("#modalFormNavItem"), 'SideNavItem', hidden, NavItemElements, 'Side Menu Item', datatable, true, $("#addMenuItem"));
-                modalForm.init();
-                datatable.bindEdit(modalForm);
-            } else {
-                $("#model-name").html("Undefined");
+                    // get nav items
+                    $("#sortable-menu-items").sortable({
+                        update: function(event, ui) {
+                            let itemChanges = [];
+                            $('.sortable-navitem-element').each(function(index, element) {
+                                let navitemIdx = $(this).data('navIdx');
+                                if (navitemIdx > 0) {
+                                    // Access the index and element within the iteration
+                                    itemChanges.push({'id':navitemIdx, 'itemOrder':index});
+                                }
+                            });
+                            k.put('NavItems', 'SideNavItem', itemChanges.length, {'navitems':itemChanges}, null, []);
+                        }
+                    });
+                    k.get('SideNavItem', 'sidenav', idx, [], function(r) {
+                        if (r.data.length > 0) {
+                            r.data.forEach(element => { $("#sortable-menu-items").append(addMenuItem(element)); });
+                            itemCount++;
+                        }
+                        $('#pageLoaderModal').modal('hide');
+                    });
+
+                    $("#addMenuItem").click(function(e) {
+                        e.preventDefault();
+                        $('#pageLoaderModal').modal('show');
+                        // add menu item
+                        k.post('SideNavItem', {
+                            'title': 'New Navigation Item',
+                            'sidenav': idx,
+                            'site': data.site.id,
+                            'itemOrder': itemCount,
+                        }, null, [], function(r) {
+                            if (r.data.length > 0) {
+                                $("#sortable-menu-items").append(addMenuItem(r.data[0]));
+                                itemCount++;
+                            } else {
+                                alert('Failed to create new nav item.');
+                            }
+                            $('#pageLoaderModal').modal('hide');
+                        });
+                    });
+                });
             }
-            $('#pageLoaderModal').modal('hide');
+        });
+
+        $("#publishMenu").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $('#pageLoaderModal').modal('show');
+            k.put('SideNav', 'id', idx, {}, null, [], function() {$('#pageLoaderModal').modal('hide');});
         });
 
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
     }
+
+    function addMenuItem(element) {
+        let isLink = (element.page == null || element.page == 0) ? true : false;
+        let linkOpt = '<select class="form-select navitem-target-type"><option value="link"'+(isLink ? ' selected' : '')+'>Link</option><option value="page"'+(isLink ? '' : ' selected')+'>Page</option></select>';
+        let pageOpt = '<select class="navitem-page-selection form-select'+(isLink ? ' d-none' : '')+'">';
+        pageOpt += '<option'+((element.page == null || element.page == 0) ? ' selected' : '')+' disabled>Please select</option>'
+        pages.forEach(page => {
+            pageOpt += '<option value="'+page.id+'"'+((element.page != null && element.page.id == page.id) ? ' selected' : '')+'>'+page.title+'</option>';
+        });
+        pageOpt += '</select>';
+        let menuItemHtml = '<li class="sortable-navitem-element" data-nav-idx="'+element.id+'"><div class="row navitem-row"><div class="col-auto d-flex row-grip"><i class="fas fa-grip-vertical"></i></div><div class="col"><input class="form-control navitem-title" type="text" value="'+element.title+'" /></div><div class="col"><input class="form-control navitem-faicon" type="text" placeholder="fab fa-font-awesome-flag" value="'+(element.faicon ? element.faicon : '')+'" /></div><div class="col"><input class="form-control navitem-link'+(isLink ? '' : ' d-none')+'" type="text" placeholder="url or anchor" value="'+(element.link ? element.link : '')+'" />'+pageOpt+'</div><div class="col-2">'+linkOpt+'</div><div class="col-auto d-flex row-delete"><a href="#" class="text-danger navitem-delete"><i class="fas fa-trash-alt"></i></a></div></div></li>';
+        return menuItemHtml;
+    }
+
+    $("#sortable-menu-items").on('change', '.navitem-target-type', function() {
+        if ($(this).val() == 'link') {
+            $(this).closest('.navitem-row').find('.navitem-page-selection').addClass('d-none');
+            $(this).closest('.navitem-row').find('.navitem-link').removeClass('d-none');
+        } else {
+            $(this).closest('.navitem-row').find('.navitem-page-selection').removeClass('d-none');
+            $(this).closest('.navitem-row').find('.navitem-link').addClass('d-none');
+        }
+    });
+
+    $("#sortable-menu-items").on('change', '.navitem-title', function() {
+        let item = $(this).closest('li');
+        let navitemIdx = item.data('navIdx');
+        if (navitemIdx > 0) {
+            k.put('SideNavItem', 'id', navitemIdx, {'title':$(this).val()}, null, []);
+        }
+    });
+
+    $("#sortable-menu-items").on('change', '.navitem-faicon', function() {
+        let item = $(this).closest('li');
+        let navitemIdx = item.data('navIdx');
+        if (navitemIdx > 0) {
+            k.put('SideNavItem', 'id', navitemIdx, {'faicon':$(this).val()}, null, []);
+        }
+    });
+
+    $("#sortable-menu-items").on('change', '.navitem-link', function() {
+        let targetType = $(this).closest('.navitem-row').find('.navitem-target-type').val();
+        if (targetType == 'link') {
+            let item = $(this).closest('li');
+            let navitemIdx = item.data('navIdx');
+            if (navitemIdx > 0) {
+                k.put('SideNavItem', 'id', navitemIdx, {'link':$(this).val(), 'page':null}, null, []);
+            }
+        }
+    });
+
+    $("#sortable-menu-items").on('change', '.navitem-page-selection', function() {
+        let targetType = $(this).closest('.navitem-row').find('.navitem-target-type').val();
+        if (targetType == 'page') {
+            let item = $(this).closest('li');
+            let navitemIdx = item.data('navIdx');
+            if (navitemIdx > 0) {
+                k.put('SideNavItem', 'id', navitemIdx, {'page':$(this).val(), 'link':null}, null, []);
+            }
+        }
+    });
+
+    $("#sortable-menu-items").on('click', '.navitem-delete', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        let item = $(this).closest('li');
+        let navitemIdx = item.data('navIdx');
+        if (navitemIdx > 0) {
+            k.delete('SideNavItem', 'id', navitemIdx, [], function() {
+                item.remove();
+            }, function(err) {
+                alert('Unable to delete: '+err);
+            })
+        } else { alert('Invalid navigation item index of '+navitemIdx); }
+    });
 });

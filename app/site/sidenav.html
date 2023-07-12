@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/assets/css/kyte-shipyard-styles.css">
+    <link rel="stylesheet" href="/assets/css/navigation-ui-styles.css">
     <!--  -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,12 +66,14 @@
                     <div class="d-flex justify-content-between mt-4">
                         <h4 id="navigation-name"></h4>
                         <div>
+                            <a class="btn d-inline-block btn-md btn-outline-primary" href="#" id="publishMenu">Publish</a>
                             <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="addMenuItem">&plus; Add Item</a>
                         </div>
                     </div>
 
                     <div class="mt-2">
-                        <table id="navitem-table" class="table table-striped w-100"></table>
+                        <!-- <table id="navitem-table" class="table table-striped w-100"></table> -->
+                        <ul id="sortable-menu-items"></ul>
                     </div>
                 </div>
 

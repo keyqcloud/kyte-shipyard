@@ -99,7 +99,6 @@ li.back-link {
     border-top-right-radius: 10px !important;
 }
 
-
 /* dark mode css styles */
 @media (prefers-color-scheme: dark) {
     body {
