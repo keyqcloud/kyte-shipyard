@@ -1,3 +1,7 @@
+let pages = []; // empty array to old object of pages
+let parentMenuItems = [];
+let itemCount = 1;
+
 $(document).ready(function() {
     $('#pageLoaderModal').modal('show');
     
@@ -15,17 +19,6 @@ $(document).ready(function() {
                 $("#region").html(data.site.region);
 
                 $("#navigation-name").html(data.name);
-
-                let hidden = [
-                    {
-                        'name': 'site',
-                        'value': data.site.id
-                    },
-                    {
-                        'name': 'navigation',
-                        'value': idx
-                    }
-                ];
 
                 let obj = {'model': 'Site', 'idx':data.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
@@ -80,104 +73,182 @@ $(document).ready(function() {
                 let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Sites');
                 navbar.create();
 
-                // form element
-                let NavItemElements = [
-                    [
-                        {
-                            'field':'title',
-                            'type':'text',
-                            'label':'Label',
-                            'required':true
-                        },
-                        {
-                            'field':'isLogout',
-                            'type':'select',
-                            'label':'Is this a logout button?',
-                            'required':true,
-                            'option': {
-                                'ajax': false,
-                                'data': {
-                                    '0': 'No',
-                                    '1': 'Yes',
-                                }
-                            }
-                        },
-                        {
-                            'field':'center',
-                            'type':'select',
-                            'label':'Location',
-                            'required':true,
-                            'option': {
-                                'ajax': false,
-                                'data': {
-                                    '1': 'Center',
-                                    '0': 'Right',
-                                }
-                            }
-                        },
-                        {
-                            'field':'faicon',
-                            'type':'text',
-                            'label':'Font Awesome class',
-                            'required':false
-                        },
-                    ],
-                    [
-                        {
-                            'field':'link',
-                            'type':'text',
-                            'label':'Link URL (optional if page or logout is set)',
-                            'required':false
-                        },
-                    ],
-                    [
-                        {
-                            'field':'page',
-                            'type':'select',
-                            'label':'Page',
-                            'required':false,
-                            'placeholder': 'N/A',
-                            'option': {
-                                'ajax': true,
-                                'data_model_name': 'Page',
-                                'data_model_field': 'site',
-                                'data_model_value': data.site.id,
-                                'data_model_attributes': ['title'],
-                                'data_model_default_field': 'id',
-                                // 'data_model_default_value': 1,
-                            }
-                        },
-                        {
-                            'field':'parentItem',
-                            'type':'select',
-                            'label':'Parent menu item (only select if submenu',
-                            'required':false,
-                            'placeholder': 'N/A',
-                            'option': {
-                                'ajax': true,
-                                'data_model_name': 'NavigationItem',
-                                'data_model_field': 'navigation',
-                                'data_model_value': idx,
-                                'data_model_attributes': ['title'],
-                                'data_model_default_field': 'id',
-                                // 'data_model_default_value': 1,
-                            }
-                        }
-                    ]
-                ];
+                // get pages
+                k.get('Page', 'site', data.site.id, [], function(r) {
+                    if (r.data.length > 0) {
+                        pages = r.data;
+                    }
 
-                // table and forms
-                var datatable = createTable("#navitem-table", "NavigationItem", colDefNavItem, 'navigation', idx, true, true);
-                var modalForm = new KyteForm(k, $("#modalFormNavItem"), 'NavigationItem', hidden, NavItemElements, 'Navigation Item', datatable, true, $("#addMenuItem"));
-                modalForm.init();
-                datatable.bindEdit(modalForm);
-            } else {
-                $("#model-name").html("Undefined");
+                    // get nav items
+                    $("#sortable-menu-items").sortable({
+                        update: function(event, ui) {
+                            let itemChanges = [];
+                            $('.sortable-navitem-element').each(function(index, element) {
+                                let navitemIdx = $(this).data('navIdx');
+                                if (navitemIdx > 0) {
+                                    // Access the index and element within the iteration
+                                    itemChanges.push({'id':navitemIdx, 'itemOrder':index});
+                                }
+                            });
+                            k.put('NavItems', 'NavigationItem', itemChanges.length, {'navitems':itemChanges}, null, []);
+                        }
+                    });
+                    k.get('NavigationItem', 'navigation', idx, [], function(r) {
+                        if (r.data.length > 0) {
+                            let parentMenuSelect = '<select class="navitem-parentItem form-select"><option value="0">No Parent Menu</option>';
+                            r.data.forEach(element => {
+                                $("#sortable-menu-items").append(addMenuItem(element));
+                                parentMenuItems.push(element);
+                                parentMenuSelect += '<option value="'+element.id+'">'+element.title+'</option>';
+                                itemCount++;
+                            });
+                            parentMenuSelect += '</select>';
+                            $(".navitem-parentItem-wrapper").html(parentMenuSelect);
+                            parentMenuItems.forEach(item => {
+                                if (item.parentItem != null && item.parentItem.id > 0) {
+                                    $(".navitem-idx-"+item.id).find('.navitem-parentItem').val(item.parentItem.id);
+                                }
+                            });
+                        }
+                        $('#pageLoaderModal').modal('hide');
+                    });
+
+                    $("#addMenuItem").click(function(e) {
+                        e.preventDefault();
+                        $('#pageLoaderModal').modal('show');
+                        // add menu item
+                        k.post('NavigationItem', {
+                            'title': 'New Navigation Item',
+                            'navigation': idx,
+                            'site': data.site.id,
+                            'itemOrder': itemCount,
+                        }, null, [], function(r) {
+                            if (r.data.length > 0) {
+                                $("#sortable-menu-items").append(addMenuItem(r.data[0]));
+                                itemCount++;
+                            } else {
+                                alert('Failed to create new nav item.');
+                            }
+                            $('#pageLoaderModal').modal('hide');
+                        });
+                    });
+                });
+                
             }
-            $('#pageLoaderModal').modal('hide');
+        });
+
+        $("#publishMenu").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $('#pageLoaderModal').modal('show');
+            k.put('Navigation', 'id', idx, {}, null, [], function() {$('#pageLoaderModal').modal('hide');});
         });
 
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
     }
+
+    function addMenuItem(element) {
+        let isLink = (element.page == null || element.page == 0) ? true : false;
+        let isLogout = (element.isLogout == null || element.isLogout == 0) ? false : true;
+        // target link type select
+        let linkOpt = '<select class="form-select navitem-target-type"><option value="link"'+(isLink && !isLogout ? ' selected' : '')+'>Link</option><option value="page"'+(isLink && !isLogout ? '' : ' selected')+'>Page</option><option value="logout"'+(isLogout ? ' selected' : '')+'>Logout</option></select>';
+        // menu item position
+        let linkPos = '<select class="form-select navitem-position"><option value="1"'+(element.center == '1' ? ' selected' : '')+'>Center</option><option value="0"'+(element.center == '0' ? ' selected' : '')+'>Right</option></select>';
+        // page options
+        let pageOpt = '<select class="navitem-page-selection form-select">';
+        pageOpt += '<option'+((element.page == null || element.page == 0) ? ' selected' : '')+' disabled>Please select</option>'
+        pages.forEach(page => {
+            pageOpt += '<option value="'+page.id+'"'+((element.page != null && element.page.id == page.id) ? ' selected' : '')+'>'+page.title+'</option>';
+        });
+        pageOpt += '</select>';
+        // generate menu item html
+        let menuItemHtml = '<li class="sortable-navitem-element navitem-idx-'+element.id+'" data-nav-idx="'+element.id+'"><div class="row navitem-row"><div class="col-auto d-flex row-grip"><i class="fas fa-grip-vertical"></i></div><div class="col"><input class="form-control navitem-title" type="text" value="'+element.title+'" /></div><div class="col"><input class="form-control navitem-faicon" type="text" placeholder="fab fa-font-awesome-flag" value="'+(element.faicon ? element.faicon : '')+'" /></div><div class="col navitem-link-wrapper'+(isLink && !isLogout ? '' : ' d-none')+'"><input class="form-control navitem-link" type="text" placeholder="url or anchor" value="'+(element.link ? element.link : '')+'" /></div><div class="col navitem-targget-type-wrapper'+(isLink || isLogout ? ' d-none' : '')+'">'+pageOpt+'</div><div class="col-2">'+linkPos+'</div><div class="col-2">'+linkOpt+'</div><div class="col-2 navitem-parentItem-wrapper"></div><div class="col-auto d-flex row-delete"><a href="#" class="text-danger navitem-delete"><i class="fas fa-trash-alt"></i></a></div></div></li>';
+        return menuItemHtml;
+    }
+
+    $("#sortable-menu-items").on('change', '.navitem-parentItem', function() {
+        let item = $(this).closest('li');
+        let navitemIdx = item.data('navIdx');
+        k.put('NavigationItem', 'id', navitemIdx, {'parentItem':$(this).val()}, null, []);
+    });
+
+    $("#sortable-menu-items").on('change', '.navitem-position', function() {
+        let item = $(this).closest('li');
+        let navitemIdx = item.data('navIdx');
+        k.put('NavigationItem', 'id', navitemIdx, {'center':$(this).val()}, null, []);
+    });
+
+    $("#sortable-menu-items").on('change', '.navitem-target-type', function() {
+        let item = $(this).closest('li');
+        let navitemIdx = item.data('navIdx');
+        if ($(this).val() == 'link') {
+            $(this).closest('.navitem-row').find('.navitem-targget-type-wrapper').addClass('d-none');
+            $(this).closest('.navitem-row').find('.navitem-link-wrapper').removeClass('d-none');
+            // update to set isLogout
+            k.put('NavigationItem', 'id', navitemIdx, {'isLogout':0}, null, []);
+        } else if ($(this).val() == 'page') {
+            $(this).closest('.navitem-row').find('.navitem-targget-type-wrapper').removeClass('d-none');
+            $(this).closest('.navitem-row').find('.navitem-link-wrapper').addClass('d-none');
+            // update to set isLogout
+            k.put('NavigationItem', 'id', navitemIdx, {'isLogout':0}, null, []);
+        } else {
+            $(this).closest('.navitem-row').find('.navitem-targget-type-wrapper').addClass('d-none');
+            $(this).closest('.navitem-row').find('.navitem-link-wrapper').addClass('d-none');
+            // update to set isLogout
+            k.put('NavigationItem', 'id', navitemIdx, {'isLogout':1}, null, []);
+        }
+    });
+
+    $("#sortable-menu-items").on('change', '.navitem-title', function() {
+        let item = $(this).closest('li');
+        let navitemIdx = item.data('navIdx');
+        if (navitemIdx > 0) {
+            k.put('NavigationItem', 'id', navitemIdx, {'title':$(this).val()}, null, []);
+        }
+    });
+
+    $("#sortable-menu-items").on('change', '.navitem-faicon', function() {
+        let item = $(this).closest('li');
+        let navitemIdx = item.data('navIdx');
+        if (navitemIdx > 0) {
+            k.put('NavigationItem', 'id', navitemIdx, {'faicon':$(this).val()}, null, []);
+        }
+    });
+
+    $("#sortable-menu-items").on('change', '.navitem-link', function() {
+        let targetType = $(this).closest('.navitem-row').find('.navitem-target-type').val();
+        if (targetType == 'link') {
+            let item = $(this).closest('li');
+            let navitemIdx = item.data('navIdx');
+            if (navitemIdx > 0) {
+                k.put('NavigationItem', 'id', navitemIdx, {'link':$(this).val(), 'page':null}, null, []);
+            }
+        }
+    });
+
+    $("#sortable-menu-items").on('change', '.navitem-page-selection', function() {
+        let targetType = $(this).closest('.navitem-row').find('.navitem-target-type').val();
+        if (targetType == 'page') {
+            let item = $(this).closest('li');
+            let navitemIdx = item.data('navIdx');
+            if (navitemIdx > 0) {
+                k.put('NavigationItem', 'id', navitemIdx, {'page':$(this).val(), 'link':null}, null, []);
+            }
+        }
+    });
+
+    $("#sortable-menu-items").on('click', '.navitem-delete', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        let item = $(this).closest('li');
+        let navitemIdx = item.data('navIdx');
+        if (navitemIdx > 0) {
+            k.delete('NavigationItem', 'id', navitemIdx, [], function() {
+                item.remove();
+            }, function(err) {
+                alert('Unable to delete: '+err);
+            })
+        } else { alert('Invalid navigation item index of '+navitemIdx); }
+    });
 });
