@@ -1,8 +1,3 @@
-let colDefSideNavItem = [
-    {'targets':0,'data':'title','label':'Label', render: function(data, type, row, meta) { return (row.faicon ? '<i class="'+row.faicon+' me-2"></i>' : '')+data; }},
-    {'targets':1,'data':'link','label':'Target', render: function(data, type, row, meta) { console.log(row); if (data) { return data; } else { if (row.page) { return row.page.title; } else {return 'No'; }} }}
-];
-
 let pages = []; // empty array to old object of pages
 let itemCount = 1;
 
@@ -23,17 +18,6 @@ $(document).ready(function() {
                 $("#region").html(data.site.region);
 
                 $("#navigation-name").html(data.name);
-
-                let hidden = [
-                    {
-                        'name': 'site',
-                        'value': data.site.id
-                    },
-                    {
-                        'name': 'sidenav',
-                        'value': idx
-                    }
-                ];
 
                 let obj = {'model': 'Site', 'idx':data.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
@@ -110,8 +94,10 @@ $(document).ready(function() {
                     });
                     k.get('SideNavItem', 'sidenav', idx, [], function(r) {
                         if (r.data.length > 0) {
-                            r.data.forEach(element => { $("#sortable-menu-items").append(addMenuItem(element)); });
-                            itemCount++;
+                            r.data.forEach(element => {
+                                $("#sortable-menu-items").append(addMenuItem(element));
+                                itemCount++;
+                            });
                         }
                         $('#pageLoaderModal').modal('hide');
                     });
