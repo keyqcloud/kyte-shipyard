@@ -1,3 +1,7 @@
+## 1.0.4
+
+* Add support for customizing the side navigation appearance.
+
 ## 1.0.3
 
 * Add support for integrating Google Analytics
