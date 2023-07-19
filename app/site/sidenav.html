@@ -61,7 +61,7 @@
                     </div>
                 </div>
 
-                <div id="Domains" class="mt-2">
+                <div id="Sidenav" class="mt-2">
                     <div class="d-flex justify-content-between mt-4">
                         <h4 id="navigation-name"></h4>
                         <div>
@@ -70,8 +70,67 @@
                         </div>
                     </div>
 
-                    <div class="mt-2">
-                        <ul id="sortable-menu-items"></ul>
+                    <ul class="nav nav-tabs nav-fill mt-3">
+                        <li class="nav-item">
+                            <a class="nav-link page-tab-link active" href="#" id="tabItem_1" data-target-page="tab_1">Navigation Items</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link page-tab-link" href="#" id="tabItem_2" data-target-page="tab_2">Styles</a>
+                        </li>
+                    </ul>
+
+                    <div id="tab-page-wrapper" class="mt-2">
+                        <div class="tab-page" id="tab_1">
+                            <div class="mt-2">
+                                <ul id="sortable-menu-items" class="p-0"></ul>
+                            </div>
+                        </div>
+                        <div class="tab-page d-none" id="tab_2">
+                            <div class="row pt-3">
+                                <div class="col text-center">
+                                    <a href="#" id="columnStyle0" data-column-style="0" class="column-style-select p-2">
+                                        <h5>Default Style</h5>
+                                        <img src="/assets/images/icons/column-type-icons-01.png" class="w-100" />
+                                    </a>
+                                </div>
+                                <div class="col text-center">
+                                    <a href="#" id="columnStyle1" data-column-style="1" class="column-style-select p-2">
+                                        <h5>Style 1</h5>
+                                        <img src="/assets/images/icons/column-type-icons-02.png" class="w-100" />
+                                    </a>
+                                </div>
+                                <div class="col text-center">
+                                    <a href="#" id="columnStyle2" data-column-style="2" class="column-style-select p-2">
+                                        <h5>Style 2</h5>
+                                        <img src="/assets/images/icons/column-type-icons-03.png" class="w-100" />
+                                    </a>
+                                </div>
+                                <div class="col-5 text-center">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6 class="mt-3">Background Color</h6>
+                                            <input type="color" name="bgColorHex" id="bgColorHex" />
+                                            <h6 class="mt-4">Font Color</h6>
+                                            <input type="color" name="fgColorHex" id="fgColorHex" />
+                                        </div>
+                                        <div class="col">
+                                            <h6 class="mt-3">Active Background Color</h6>
+                                            <input type="color" name="bgActiveColorHex" id="bgActiveColorHex" />
+                                            <h6 class="mt-4">Active Font Color</h6>
+                                            <input type="color" name="fgActiveColorHex" id="fgActiveColorHex" />
+                                        </div>
+                                    </div>
+                                    <h6 class="mt-4">Preview</h6>
+                                    <div class="d-flex align-items-start justify-content-center p-3" id="colorPreview">
+                                        <div class="nav flex-column nav-pills me-3" aria-orientation="vertical">
+                                          <button class="nav-link active" type="button" aria-selected="true">Home</button>
+                                          <button class="nav-link" type="button" role="tab" aria-selected="false">Profile</button>
+                                          <button class="nav-link" type="button" aria-selected="false" disabled>Disabled</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

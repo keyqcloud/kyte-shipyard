@@ -1,5 +1,6 @@
 let pages = []; // empty array to old object of pages
 let itemCount = 1;
+let columnStyle = 0;
 
 $(document).ready(function() {
     $('#pageLoaderModal').modal('show');
@@ -18,7 +19,20 @@ $(document).ready(function() {
                 $("#region").html(data.site.region);
 
                 $("#navigation-name").html(data.name);
+                $("#bgColorHex").val(data.bgColor);
+                $("#fgColorHex").val(data.fgColor);
+                $("#bgActiveColorHex").val(data.bgActiveColor);
+                $("#fgActiveColorHex").val(data.fgActiveColor);
+                columnStyle = data.columnStyle;
 
+                $("#columnStyle"+columnStyle).addClass('active');
+
+                // update preview
+                $("#colorPreview").css('background-color',data.bgColor);
+                $("#colorPreview button").css('color', data.fgColor);
+                $("#colorPreview button.active").css('background-color', data.bgActiveColor);
+                $("#colorPreview button.active").css('color', data.fgActiveColor);
+                
                 let obj = {'model': 'Site', 'idx':data.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
 
@@ -129,7 +143,13 @@ $(document).ready(function() {
             e.preventDefault();
             e.stopPropagation();
             $('#pageLoaderModal').modal('show');
-            k.put('SideNav', 'id', idx, {}, null, [], function() {$('#pageLoaderModal').modal('hide');});
+            k.put('SideNav', 'id', idx, {
+                'bgColor':$("#bgColorHex").val(),
+                'fgColor':$("#fgColorHex").val(),
+                'bgActiveColor':$("#bgActiveColorHex").val(),
+                'fgActiveColor':$("#fgActiveColorHex").val(),
+                'columnStyle':columnStyle,
+            }, null, [], function() {$('#pageLoaderModal').modal('hide');});
         });
 
     } else {
@@ -209,5 +229,41 @@ $(document).ready(function() {
                 alert('Unable to delete: '+err);
             })
         } else { alert('Invalid navigation item index of '+navitemIdx); }
+    });
+
+    $('.page-tab-link').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    
+        $('.page-tab-link').removeClass('active');
+        $(this).addClass('active');
+    
+       $('.tab-page').addClass('d-none');
+       let pageSelector = $(this).data('targetPage');
+       $('#'+pageSelector).removeClass('d-none');
+    });
+
+    $("#bgColorHex").change(function() {
+        $("#colorPreview").css('background-color', $(this).val());
+        console.log($(this).val());
+    });
+    $("#fgColorHex").change(function() {
+        $("#colorPreview button").css('color', $(this).val());
+        console.log($(this).val());
+    });
+    $("#bgActiveColorHex").change(function() {
+        $("#colorPreview button.active").css('background-color', $(this).val());
+        console.log($(this).val());
+    });
+    $("#fgActiveColorHex").change(function() {
+        $("#colorPreview button.active").css('color', $(this).val());
+        console.log($(this).val());
+    });
+
+    $(".column-style-select").click(function(e) {
+        e.preventDefault();
+        columnStyle = $(this).data('columnStyle');
+        $(".column-style-select").removeClass('active');
+        $("#columnStyle"+columnStyle).addClass('active');
     });
 });
