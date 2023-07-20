@@ -2,9 +2,12 @@ $(document).ready(function() {
     let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup>');
     navbar.create();
 
+    let idx;
+
     $('#pageLoaderModal').modal('show');
     if (k.isSession()) {
-        let idx = k.getPageRequest();
+
+        idx = k.getPageRequest();
         idx = idx.idx;
 
         k.get("Application", "id", idx, [], function(r) {
@@ -222,7 +225,7 @@ $(document).ready(function() {
             }
         }
 
-        k.put('Application', 'id', app.id,
+        k.put('Application', 'id', idx,
         {
             'user_model':userModelIdx == 0 ? null : userModelName,
             'username_colname':userModelIdx == 0 ? null : usernameColnameLabel,
