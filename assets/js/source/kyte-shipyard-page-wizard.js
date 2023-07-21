@@ -66,7 +66,11 @@ $(document).ready(function() {
                 k.get('Navigation', 'site', site.id, [], function(r) {
                     for (data of r.data) {
                         $("#page-main-navigation").append('<option value="'+data.id+'">'+data.name+'</option>');
-                        //
+                    }
+                });
+
+                k.get('SideNav', 'site', site.id, [], function(r) {
+                    for (data of r.data) {
                         $("#page-side-navigation").append('<option value="'+data.id+'">'+data.name+'</option>');
                     }
                 });
