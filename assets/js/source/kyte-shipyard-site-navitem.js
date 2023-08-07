@@ -17,6 +17,17 @@ $(document).ready(function() {
                 $("#domain-name").html('<i class="fas fa-link me-2"></i>'+data.site.cfDomain);
                 $("#domain-name").attr('href', 'https://'+data.site.cfDomain);
                 $("#region").html(data.site.region);
+                //
+                $("#bgColorHex").val(data.bgColor);
+                $("#fgColorHex").val(data.fgColor);
+                $("#bgDropdownColorHex").val(data.bgDropdownColor);
+                $("#fgDropdownColorHex").val(data.fgDropdownColor);
+                $("#isStickyTop").val(data.isStickyTop);
+                // update preview
+                $("#colorPreview .navbar").css('background-color',data.bgColor);
+                $("#colorPreview .navbar a").css('color', data.fgColor);
+                $("#colorPreview .dropdown-menu").css('background-color', data.bgDropdownColor);
+                $("#colorPreview .dropdown-item").css('color', data.fgDropdownColor);
 
                 $("#navigation-name").html(data.name);
 
@@ -141,7 +152,13 @@ $(document).ready(function() {
             e.preventDefault();
             e.stopPropagation();
             $('#pageLoaderModal').modal('show');
-            k.put('Navigation', 'id', idx, {}, null, [], function() {$('#pageLoaderModal').modal('hide');});
+            k.put('Navigation', 'id', idx, {
+                'bgColor':$("#bgColorHex").val(),
+                'fgColor':$("#fgColorHex").val(),
+                'bgDropdownColor':$("#bgDropdownColorHex").val(),
+                'fgDropdownColor':$("#fgDropdownColorHex").val(),
+                'isStickyTop':$("#isStickyTop").val(),
+            }, null, [], function() {$('#pageLoaderModal').modal('hide');});
         });
 
     } else {
@@ -250,5 +267,34 @@ $(document).ready(function() {
                 alert('Unable to delete: '+err);
             })
         } else { alert('Invalid navigation item index of '+navitemIdx); }
+    });
+
+    $("#bgColorHex").change(function() {
+        $("#colorPreview .navbar").css('background-color', $(this).val());
+        console.log($(this).val());
+    });
+    $("#fgColorHex").change(function() {
+        $("#colorPreview .navbar a").css('color', $(this).val());
+        console.log($(this).val());
+    });
+    $("#bgDropdownColorHex").change(function() {
+        $("#colorPreview .dropdown-menu").css('background-color', $(this).val());
+        console.log($(this).val());
+    });
+    $("#fgDropdownColorHex").change(function() {
+        $("#colorPreview .dropdown-item").css('color', $(this).val());
+        console.log($(this).val());
+    });
+
+    $('.page-tab-link').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    
+        $('.page-tab-link').removeClass('active');
+        $(this).addClass('active');
+    
+       $('.tab-page').addClass('d-none');
+       let pageSelector = $(this).data('targetPage');
+       $('#'+pageSelector).removeClass('d-none');
     });
 });

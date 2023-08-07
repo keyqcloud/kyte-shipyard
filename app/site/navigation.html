@@ -70,8 +70,79 @@
                         </div>
                     </div>
 
-                    <div class="mt-2">
-                        <ul id="sortable-menu-items"></ul>
+                    <ul class="nav nav-tabs nav-fill mt-3">
+                        <li class="nav-item">
+                            <a class="nav-link page-tab-link active" href="#" id="tabItem_1" data-target-page="tab_1">Navigation Items</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link page-tab-link" href="#" id="tabItem_2" data-target-page="tab_2">Styles</a>
+                        </li>
+                    </ul>
+
+                    <div id="tab-page-wrapper" class="mt-2">
+                        <div class="tab-page" id="tab_1">
+                            <div class="mt-2">
+                                <ul id="sortable-menu-items"></ul>
+                            </div>
+                        </div>
+                        <div class="tab-page d-none" id="tab_2">
+                            <div class="row pt-3">
+                                <div class="row text-center">
+                                    <div class="col">
+                                        <h6 class="mt-3">Sticky Top</h6>
+                                        <small class="d-block">Make navigation bar stick to top even when scrolling.</small>
+                                        <select id="isStickyTop">
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <h6 class="mt-3">Background Color</h6>
+                                        <input type="color" name="bgColorHex" id="bgColorHex" />
+                                        <h6 class="mt-4">Font Color</h6>
+                                        <input type="color" name="fgColorHex" id="fgColorHex" />
+                                    </div>
+                                    <div class="col">
+                                        <h6 class="mt-3">Dropdown Background Color</h6>
+                                        <input type="color" name="bgDropdownColorHex" id="bgDropdownColorHex" />
+                                        <h6 class="mt-4">Dropdown Font Color</h6>
+                                        <input type="color" name="fgDropdownColorHex" id="fgDropdownColorHex" />
+                                    </div>
+                                </div>
+                                <h6 class="mt-4">Preview</h6>
+                                <div class="d-flex align-items-start justify-content-center p-3" id="colorPreview">
+                                    <nav class="navbar navbar-expand-lg">
+                                        <div class="container-fluid">
+                                            <a class="navbar-brand">Navbar</a>
+                                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                                <span class="navbar-toggler-icon"></span>
+                                            </button>
+                                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" aria-current="page">Home</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link">Link</a>
+                                                </li>
+                                                <li class="nav-item dropdown">
+                                                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Dropdown
+                                                    </a>
+                                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                        <li><a class="dropdown-item">Action</a></li>
+                                                        <li><a class="dropdown-item">Another action</a></li>
+                                                        <li><hr class="dropdown-divider"></li>
+                                                        <li><a class="dropdown-item">Something else here</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
