@@ -3,6 +3,7 @@
 * Add support to choose a region for a new site
 * Prevent duplicated .html extension in path
 * Strip / from begining of path if supplied
+* Fix overlapping controls in wizard layout
 
 ## 1.0.5
 

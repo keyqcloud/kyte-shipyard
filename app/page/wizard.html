@@ -64,8 +64,8 @@
 
                 <!-- STEP 1 -->
                 <!-- WIZARD 1 -->
-                <div id="wizard-1">
-                    <div class="row">
+                <div id="wizard-1" style="height: 100%; display: flex; flex-direction: column;">
+                    <div class="row flex-grow-1">
                         <div class="col-5 px-1" style="position: relative;">
                             <h4 class="mt-4" style="font-weight: 300;">Let's get started!</h4>
                             <div class="pb-3">
@@ -81,9 +81,10 @@
                                 <small>Further customization is available even after selection.</small>
                             </div>
 
-                            <div class="w-100" style="position: absolute; bottom: 0;">
+                            <div class="w-100 mt-auto">
                                 <div class="d-flex justify-content-between">
-                                    <a class="btn btn-danger backToSite" href="#">Cancel</a><a id="wizard-1-next" class="btn btn-primary" href="#">Next</a>
+                                    <a class="btn btn-danger backToSite" href="#">Cancel</a>
+                                    <a id="wizard-1-next" class="btn btn-primary" href="#">Next</a>
                                 </div>
                             </div>
                         </div>
@@ -93,8 +94,8 @@
                 <!--  -->
 
                 <!-- WIZARD 2 -->
-                <div id="wizard-2" class="d-none">
-                    <div class="row">
+                <div id="wizard-2" class="d-none" style="height: 100%; display: flex; flex-direction: column;">
+                    <div class="row flex-grow-1">
                         <div class="col-5 px-1" style="position: relative;">
                             <div class="pb-3">
                                 <h5>What is the path to your page?</h5>
@@ -130,7 +131,7 @@
                                 </select>
                             </div>
 
-                            <div class="w-100" style="position: absolute; bottom: 0;">
+                            <div class="w-100 mt-auto">
                                 <div class="d-flex justify-content-between">
                                     <a id="wizard-2-back" class="btn btn-secondary" href="#">Back</a><a id="wizard-2-next" class="btn btn-primary" href="#">Next</a>
                                 </div>
@@ -142,8 +143,8 @@
                 <!--  -->
 
                 <!-- WIZARD 3 -->
-                <div id="wizard-3" class="d-none">
-                    <div class="row">
+                <div id="wizard-3" class="d-none" style="height: 100%; display: flex; flex-direction: column;">
+                    <div class="row flex-grow-1">
                         <div class="col-5 px-1" style="position: relative;">
                             <div class="pb-3">
                                 <h5>Pick a user and search engine friendly title.</h5>
@@ -156,7 +157,7 @@
 
                             <p>You can skip the description if you require your users to login to view the page your are about to create.</p>
 
-                            <div class="w-100" style="position: absolute; bottom: 0;">
+                            <div class="w-100 mt-auto">
                                 <div class="d-flex justify-content-between">
                                     <a id="wizard-3-back" class="btn btn-secondary" href="#">Back</a><a id="wizard-3-next" class="btn btn-primary" href="#">Next</a>
                                 </div>
@@ -169,8 +170,8 @@
 
                 <!-- STEP 2 -->
                 <!-- WIZARD 4 -->
-                <div id="wizard-4" class="d-none">
-                    <div class="row">
+                <div id="wizard-4" class="d-none" style="height: 100%; display: flex; flex-direction: column;">
+                    <div class="row flex-grow-1">
                         <div id="customization-left-panel" class="col-5 pb-5 px-1" style="position: relative;">
                             <h4 class="mt-4" style="font-weight: 300;">Let's customize your <span id="label-page-type">page</span>!</h4>
 
@@ -274,7 +275,7 @@
                             </div>
 
                             <!-- nav buttons -->
-                            <div class="w-100" style="position: absolute; bottom: 0;">
+                            <div class="w-100 mt-auto">
                                 <div class="d-flex justify-content-between">
                                     <a id="wizard-4-back" class="btn btn-secondary" href="#">Back</a><a id="wizard-4-next" class="btn btn-warning" href="#">Save &amp; Generate</a>
                                 </div>
