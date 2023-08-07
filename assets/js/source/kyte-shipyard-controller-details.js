@@ -23,7 +23,7 @@ let functionFormElements = [
             'field':'name',
             'type':'text',
             'label':'Name',
-            'required':true
+            'required':false
         },
         {
             'field':'type',

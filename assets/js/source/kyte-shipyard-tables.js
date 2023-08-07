@@ -69,9 +69,8 @@ let colDefControllers = [
 ];
 
 let colDefFunctions = [
-    {'targets':0,'data':'name','label':'Name'},
-    {'targets':1,'data':'type','label':'Type'},
-    {'targets':2,'data':'description','label':'Description'},
+    {'targets':0,'data':'type','label':'Type', render: function(data, type, row, meta) { return row.name ? data+'<small class="d-block">'+row.name+'</small>' : data; }},
+    {'targets':1,'data':'description','label':'Description'},
 ];
 
 let colDefAssignedFunctions = [
