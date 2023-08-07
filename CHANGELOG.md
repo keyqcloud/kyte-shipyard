@@ -1,3 +1,15 @@
+## 1.0.5
+
+* Fix issue where side navigation option in page wizard displayed main navigation
+* Fix issue with undefined idx when attempting to save application level configurations
+* Make function name optional
+* Add password attribute to models
+* Add ability to toggle div container wrapper for HTML content
+* Add configuration tab for navigation for customizing appearance
+* Ability to change foreground and background colors of navigation
+* Ability to change foreground and background colors for navigation dropdown
+* Ability to specify whether navigation should stick to top of window even when scrolling
+
 ## 1.0.4
 
 * Add support for customizing the side navigation appearance.
