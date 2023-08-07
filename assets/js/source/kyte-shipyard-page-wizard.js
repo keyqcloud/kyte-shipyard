@@ -40,12 +40,23 @@ $(document).ready(function() {
                 cfDomain = site.cfDomain;
                 $("#path-preview").html('https://'+cfDomain+'/index.html');
 
-                if (($("#page-path").val()).length == 0) {
-                    $("#path-preview").html('https://'+cfDomain+'/index.html');
+                var userPagePath = $("#page-path").val();
+                var correctedPagePath = userPagePath.trim(); // Remove leading and trailing spaces
+                    
+                if (correctedPagePath === "") {
+                    $("#path-preview").html('https://' + cfDomain + '/index.html');
                 } else {
-                    $("#path-preview").html('https://'+cfDomain+'/'+$("#page-path").val().replace(rePath, '-').toLowerCase()+'.html');
+                    if (correctedPagePath.startsWith("/")) {
+                        correctedPagePath = correctedPagePath.substr(1); // Remove leading slash
+                    }
+                    
+                    if (!correctedPagePath.endsWith(".html")) {
+                        correctedPagePath += ".html"; // Add the extension if missing
+                    }
+                    
+                    $("#path-preview").html('https://' + cfDomain + '/' + correctedPagePath.replace(rePath, '-').toLowerCase());
                 }
-
+                
                 let obj = {'model': 'Site', 'idx':site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 $(".backToSite").attr('href', '/app/site/?request='+encoded);
@@ -82,11 +93,22 @@ $(document).ready(function() {
                     }
                 });
 
-                $("#page-path").keyup(function() {
-                    if (($(this).val()).length == 0) {
-                        $("#path-preview").html('https://'+cfDomain+'/index.html');
+                $("#page-path").on("input", function() {
+                    var userPath = $("#page-path").val();
+                    var correctedPath = userPath.trim(); // Remove leading and trailing spaces
+                
+                    if (correctedPath === "") {
+                        $("#path-preview").html('https://' + cfDomain + '/index.html');
                     } else {
-                        $("#path-preview").html('https://'+cfDomain+'/'+$(this).val().replace(rePath, '-').toLowerCase()+'.html');
+                        if (correctedPath.startsWith("/")) {
+                            correctedPath = correctedPath.substr(1); // Remove leading slash
+                        }
+                        
+                        if (!correctedPath.endsWith(".html")) {
+                            correctedPath += ".html"; // Add the extension if missing
+                        }
+
+                        $("#path-preview").html('https://' + cfDomain + '/' + correctedPath.replace(rePath, '-').toLowerCase());
                     }
                 });
                 navbar.create();

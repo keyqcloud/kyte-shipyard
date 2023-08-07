@@ -1,6 +1,8 @@
 ## 1.0.6
 
 * Add support to choose a region for a new site
+* Prevent duplicated .html extension in path
+* Strip / from begining of path if supplied
 
 ## 1.0.5
 
