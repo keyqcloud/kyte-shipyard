@@ -209,6 +209,7 @@ $(document).ready(function() {
                         'description':$("#setting-page-description").val(),
                         'sitemap_include':$("#setting-sitemap-include").val(),
                         'obfuscate_js':$("#setting-obfuscatejs").val(),
+                        'use_container':$("#setting-use_container").val(),
                         'kyte_connect': obfuscatedConnect.getObfuscatedCode(),
                     };
                     k.put('Page', 'id', idx, payload, null, [], function(r) {
@@ -262,6 +263,7 @@ $(document).ready(function() {
                         'description':$("#setting-page-description").val(),
                         'sitemap_include':$("#setting-sitemap-include").val(),
                         'obfuscate_js':$("#setting-obfuscatejs").val(),
+                        'use_container':$("#setting-use_container").val(),
                         'state': 1,
                         'kyte_connect': obfuscatedConnect.getObfuscatedCode(),
                     };
