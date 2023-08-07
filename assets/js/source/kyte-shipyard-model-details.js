@@ -91,6 +91,19 @@ let elements = [
             }
         },
         {
+            'field':'password',
+            'type':'select',
+            'label':'Password',
+            'required':false,
+            'option': {
+                'ajax': false,
+                'data': {
+                    0: 'No',
+                    1: 'Yes'
+                }
+            }
+        },
+        {
             'field':'defaults',
             'type':'text',
             'label':'Default',
