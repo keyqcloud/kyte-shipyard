@@ -1,3 +1,7 @@
+## 1.0.6
+
+* Add support to choose a region for a new site
+
 ## 1.0.5
 
 * Fix issue where side navigation option in page wizard displayed main navigation
