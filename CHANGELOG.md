@@ -1,3 +1,7 @@
+## 1.0.8
+
+* Obfuscated code for sites so changes can be reflected
+
 ## 1.0.7
 
 * Fix bug where path preview and actual path differed
