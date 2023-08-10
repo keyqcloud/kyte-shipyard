@@ -1,3 +1,7 @@
+## 1.0.7
+
+* Fix bug where path preview and actual path differed
+
 ## 1.0.6
 
 * Add support to choose a region for a new site

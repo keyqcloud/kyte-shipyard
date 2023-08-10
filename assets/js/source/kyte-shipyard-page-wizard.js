@@ -152,7 +152,20 @@ $(document).ready(function() {
             $("#page-path").val('index');
         }
 
-        page_path = ($("#page-path").val()).length > 0 ? $("#page-path").val().replace(rePath, '-').toLowerCase()+'.html': 'index.html';
+        page_path = $("#page-path").val();
+        page_path = page_path.trim(); // Remove leading and trailing spaces
+    
+        if (page_path === "") {
+            page_path = 'index.html';
+        } else {
+            if (page_path.startsWith("/")) {
+                page_path = page_path.substr(1); // Remove leading slash
+            }
+            
+            if (!page_path.endsWith(".html")) {
+                page_path += ".html"; // Add the extension if missing
+            }
+        }
 
         // display model
         $('#pageLoaderModal').modal('show');
