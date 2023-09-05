@@ -203,9 +203,13 @@ $(document).ready(function() {
                     }
                 ];
 
+                // display page title in window
+                document.title = document.title + " - " + page.title;
+                // set page title and description
                 $("#setting-page-title").val(page.title);
                 $("#setting-page-description").val(page.description);
                 
+                // if code editor, redirect to code editor page
                 if (page.page_type != 'block') {
                     let obj = {'model': 'Page', 'idx':idx};
                     let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));

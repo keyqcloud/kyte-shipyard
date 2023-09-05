@@ -1,3 +1,8 @@
+## 1.0.9
+
+* Display page title in window
+* Display date modified column
+
 ## 1.0.8
 
 * Obfuscated code for sites so changes can be reflected

@@ -68,9 +68,13 @@ $(document).ready(function() {
                     }
                 ];
 
+                // display page title in window
+                document.title = document.title + " - " + page.title;
+                // set page title and description
                 $("#setting-page-title").val(page.title);
                 $("#setting-page-description").val(page.description);
                 
+                // if block editor, redirect to block editor page.
                 if (page.page_type == 'block') {
                     // redirect to block editor....
                     let obj = {'model': 'Page', 'idx':idx};
