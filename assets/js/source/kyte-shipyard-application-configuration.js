@@ -24,6 +24,11 @@ $(document).ready(function() {
             let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Models');
             navbar.create();
             // application setting
+            $("#obfuscate_kyte_connect").val(parseInt(app.obfuscate_kyte_connect));
+            if (typeof app.aws_key === "object") {
+                $("#aws_username").val(app.aws_key.username);
+                $("#aws_public_key").val(app.aws_key.public_key);
+            }
             $("#userorg_colname").val(app.userorg_colname);
 
             let modelIdx = null;
@@ -191,6 +196,8 @@ $(document).ready(function() {
     $("#saveSettings").click(function(e) {
         e.preventDefault();
 
+        let obfuscateKyteConnect = parseInt($("#obfuscate_kyte_connect").val());
+
         let userModelIdx = parseInt($("#user_model").val());
         let userModelName = $('#user_model option:selected').text();
         let orgModelIdx = parseInt($("#org_model").val());
@@ -227,6 +234,7 @@ $(document).ready(function() {
 
         k.put('Application', 'id', idx,
         {
+            'obfuscate_kyte_connect':obfuscateKyteConnect,
             'user_model':userModelIdx == 0 ? null : userModelName,
             'username_colname':userModelIdx == 0 ? null : usernameColnameLabel,
             'password_colname':userModelIdx == 0 ? null : passwordColnameLabel,
