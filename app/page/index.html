@@ -89,6 +89,36 @@
                             <div id="cssEditor" style="width: 100%; height: 100%; border: 1px solid grey"></div>
                         </div>
         
+                        <div id="Scripts" class="mt-2 px-3 d-none">
+                            <p>Custom stylesheets and JavaScripts to include.</p>
+                            <ul class="nav nav-tabs nav-fill mt-3">
+                                <li class="nav-item">
+                                    <a class="nav-link page-tab-link active" href="#" id="tabItem_1" data-target-page="tab_1">Page Specific</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link page-tab-link" href="#" id="tabItem_2" data-target-page="tab_2">Global Includes</a>
+                                </li>
+                            </ul>
+
+                            <div id="tab-page-wrapper" class="mt-2">
+                                <!-- page-specific includes -->
+                                <div class="tab-page" id="tab_1">
+                                    <p>Manage page specific inclusion of custom JavaScript and Stylesheets.</p>
+                                    <div class="mt-2">
+                                        <!-- <table id="page-scripts-table" class="table table-striped w-100"></table> -->
+                                    </div>
+                                </div>
+                                <!-- global includes - readonly -->
+                                <div class="tab-page d-none" id="tab_2">
+                                    <p>Global includes are managed from <b>Site → Custom Scripts</b>.</p>
+                                    <div class="mt-2">
+                                        <!-- <table id="global-scripts-table" class="table table-striped w-100"></table> -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+
                         <div id="Settings" class="mt-2 px-3 d-none">
                             <div class="px-2">
                                 <div class="card mb-3">
