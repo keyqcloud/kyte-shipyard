@@ -45,8 +45,8 @@ let elements = [
 let colDefApps = [
     {'targets':0,'data':'name','label':'Name'},
     {'targets':1,'data':'identifier','label':'Identifier'},
-    {'targets':2,'data':'aws_key','label':'AWS Username', render: function(data, type, row, meta) { if (!row.aws_key) return 'None'; else return row.aws_key.public_key; }},
-    {'targets':3,'data':'aws_key','label':'AWS Public Key', render: function(data, type, row, meta) { if (!row.aws_key) return 'None'; else return row.aws_key.private_key; }},
+    {'targets':2,'data':'aws_key','label':'AWS Username', render: function(data, type, row, meta) { if (!row.aws_key) return 'None'; else return row.aws_key.username; }},
+    {'targets':3,'data':'aws_key','label':'AWS Public Key', render: function(data, type, row, meta) { if (!row.aws_key) return 'None'; else return row.aws_key.public_key; }},
 ];
 
 $(document).ready(function() {
