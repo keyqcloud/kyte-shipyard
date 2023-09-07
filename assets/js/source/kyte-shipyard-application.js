@@ -57,7 +57,7 @@ $(document).ready(function() {
     if (k.isSession()) {
         var dataTable = createTable("#models-table", "Application", colDefApps, null, null, true, true, '/app/dashboard/', 'id', true);
         var modalForm = new KyteForm(k, $("#modalForm"), 'Application', null, elements, 'My App', dataTable, true, $("#new"));
-        modalForm.successCallBack = function(r) {
+        modalForm.success = function(r) {
             let connect = "let endpoint = 'https://"+r.kyte_api+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+r.data[0].identifier+"');k.init();\n\n";
             let obfuscatedConnect = JavaScriptObfuscator.obfuscate(connect,
                 {
@@ -78,9 +78,7 @@ $(document).ready(function() {
                 'kyte_connect': connect,
                 'kyte_connect_obfuscated': obfuscatedConnect.getObfuscatedCode(),
             }, null, [], function(res) {
-                if (res.data.length > 0) {
-                    alert("Application settings successfully updated");
-                } else {
+                if (res.data.length <= 0) {
                     alert("Unable to update application settings. Please try again or contact support.");
                 }
             }, function(err) {
