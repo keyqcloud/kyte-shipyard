@@ -1,3 +1,5 @@
+let api = null;
+let app = null;
 $(document).ready(function() {
     let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup>');
     navbar.create();
@@ -15,7 +17,8 @@ $(document).ready(function() {
                 alert('Failed to retrieve app data.');
                 exit();
             }
-            let app = r.data[0];
+            api = r;
+            app = r.data[0];
             let obj = {'model': 'Application', 'idx':idx};
             let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
             
@@ -196,6 +199,22 @@ $(document).ready(function() {
     $("#saveSettings").click(function(e) {
         e.preventDefault();
 
+        let connect = "let endpoint = 'https://"+r.kyte_api+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+app.identifier+"');k.init();\n\n";
+        let obfuscatedConnect = JavaScriptObfuscator.obfuscate(connect,
+            {
+                compact: true,
+                controlFlowFlattening: true,
+                controlFlowFlatteningThreshold: 1,
+                numbersToExpressions: true,
+                simplify: true,
+                stringArrayEncoding: ['base64'],
+                stringArrayShuffle: true,
+                splitStrings: true,
+                stringArrayWrappersType: 'variable',
+                stringArrayThreshold: 1
+            }
+        );
+
         let obfuscateKyteConnect = parseInt($("#obfuscate_kyte_connect").val());
 
         let userModelIdx = parseInt($("#user_model").val());
@@ -235,6 +254,8 @@ $(document).ready(function() {
         k.put('Application', 'id', idx,
         {
             'obfuscate_kyte_connect':obfuscateKyteConnect,
+            'kyte_connect': connect,
+            'kyte_connect_obfuscated': obfuscatedConnect,
             'user_model':userModelIdx == 0 ? null : userModelName,
             'username_colname':userModelIdx == 0 ? null : usernameColnameLabel,
             'password_colname':userModelIdx == 0 ? null : passwordColnameLabel,
