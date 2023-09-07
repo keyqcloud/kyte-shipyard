@@ -199,7 +199,7 @@ $(document).ready(function() {
     $("#saveSettings").click(function(e) {
         e.preventDefault();
 
-        let connect = "let endpoint = 'https://"+r.kyte_api+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+app.identifier+"');k.init();\n\n";
+        let connect = "let endpoint = 'https://"+api.kyte_api+"';var k = new Kyte(endpoint, '"+api.kyte_pub+"', '"+api.kyte_iden+"', '"+api.kyte_num+"', '"+app.identifier+"');k.init();\n\n";
         let obfuscatedConnect = JavaScriptObfuscator.obfuscate(connect,
             {
                 compact: true,
