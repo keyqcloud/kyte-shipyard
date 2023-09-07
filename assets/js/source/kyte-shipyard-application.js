@@ -34,7 +34,7 @@ let elements = [
             'required':true
         },
         {
-            'field':'aws_secret_key',
+            'field':'aws_private_key',
             'type':'text',
             'label':'AWS Secret Key',
             'required':true
