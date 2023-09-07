@@ -1,3 +1,9 @@
+## 1.1.0
+
+* Application level toggle for obfuscating Kyte Connect JS
+* View AWS username and public key from configuration page
+* Manage AWS credentials from application
+
 ## 1.0.9
 
 * Display page title in window

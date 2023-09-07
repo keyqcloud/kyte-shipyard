@@ -255,7 +255,7 @@ $(document).ready(function() {
         {
             'obfuscate_kyte_connect':obfuscateKyteConnect,
             'kyte_connect': connect,
-            'kyte_connect_obfuscated': obfuscatedConnect,
+            'kyte_connect_obfuscated': obfuscatedConnect.getObfuscatedCode(),
             'user_model':userModelIdx == 0 ? null : userModelName,
             'username_colname':userModelIdx == 0 ? null : usernameColnameLabel,
             'password_colname':userModelIdx == 0 ? null : passwordColnameLabel,

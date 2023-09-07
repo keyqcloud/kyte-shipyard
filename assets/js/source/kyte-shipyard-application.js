@@ -76,7 +76,7 @@ $(document).ready(function() {
             k.put('Application', 'id', r.data[0].id,
             {
                 'kyte_connect': connect,
-                'kyte_connect_obfuscated': obfuscatedConnect,
+                'kyte_connect_obfuscated': obfuscatedConnect.getObfuscatedCode(),
             }, null, [], function(res) {
                 if (res.data.length > 0) {
                     alert("Application settings successfully updated");
