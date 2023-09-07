@@ -1,3 +1,6 @@
+## 1.1.1
+
+
 ## 1.1.0
 
 * Application level toggle for obfuscating Kyte Connect JS

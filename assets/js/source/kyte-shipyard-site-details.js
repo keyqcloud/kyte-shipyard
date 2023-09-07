@@ -1,82 +1,44 @@
-let elements = [
+let scriptElement = [
     [
         {
             'field':'name',
             'type':'text',
-            'label':'Name',
+            'label':'Script Name',
             'required':true
         },
         {
             'field':'type',
             'type':'select',
-            'label':'Type',
+            'label':'Script Stype',
             'required':true,
             'option': {
                 'ajax': false,
                 'data': {
-                    's': 'String',
-                    't': 'Text',
-                    'date': 'Date',
-                    'i': 'Integer',
+                    'css': 'CSS Stylesheet',
+                    'js': 'JavaScript'
                 }
             }
         },
-        {
-            'field':'required',
-            'type':'select',
-            'label':'Required',
-            'required':true,
-            'option': {
-                'ajax': false,
-                'data': {
-                    1: 'Yes',
-                    0: 'No'
-                }
-            }
-        },
-        {
-            'field': 'foreignKeyModel',
-            'type': 'select',
-            'label': 'FK Model',
-            'required': false,
-            'placeholder': 'N/A',
-            'option': {
-                'ajax': true,
-                'data_model_name': 'DataModel',
-                'data_model_field': '',
-                'data_model_value': '',
-                'data_model_attributes': ['name'],
-                'data_model_default_field': 'id',
-                // 'data_model_default_value': 1,
-            }
-        }
     ],
     [
         {
-            'field':'size',
-            'type':'text',
-            'label':'Size',
-            'required':false,
-        },
-        {
-            'field':'unsigned',
+            'field':'is_url',
             'type':'select',
-            'label':'Unsigned',
-            'required':false,
+            'label':'URL or File',
+            'required':true,
             'option': {
                 'ajax': false,
                 'data': {
-                    "":"n/a",
-                    1: 'Yes',
-                    0: 'No'
+                    0: 'Create file in editor',
+                    1: 'Provide URL to script'
                 }
             }
         },
         {
-            'field':'protected',
+            'field':'include_global',
             'type':'select',
-            'label':'Protected',
-            'required':false,
+            'label':'Globally Include',
+            'required':true,
             'option': {
                 'ajax': false,
                 'data': {
@@ -84,22 +46,8 @@ let elements = [
                     1: 'Yes'
                 }
             }
-        },
-        {
-            'field':'defaults',
-            'type':'text',
-            'label':'Default',
-            'required':false
         }
     ],
-    [
-        {
-            'field':'description',
-            'type':'text',
-            'label':'Description',
-            'required':false
-        }
-    ]
 ];
 
 let domainFormElements = [
@@ -135,6 +83,15 @@ let mediaElements = [
 let colDefSideNavigation = [
     {'targets':0,'data':'name','label':'Name'},
     {'targets':1,'data':'description','label':'Description'},
+];
+
+// table def
+let colDefScript = [
+    {'targets':0,'data':'name','label':'Script Name'},
+    {'targets':1,'data':'type','label':'Script Type', render: function(data, type, row, meta) { if (data == 'css') { return 'Stylesheet'; } else if (data == 'js') { return 'JavaScript'; } else { return 'Unknown'; } }},
+    {'targets':2,'data':'state','label':'Status', render: function(data, type, row, meta) { if (data == 0) { return 'Not Published'; } else if (data == 1) { return 'Published'; } else { return 'Published (Stale)'; }}},
+    {'targets':3,'data':'include_global','label':'Include All', render: function(data, type, row, meta) { if (data == 0) { return 'No'; } else if (data == 1) { return 'Yes'; } else { return 'Unknown'; }}},
+    {'targets':4,'data':'date_modified','label':'Date Modified'},
 ];
 
 let app = null;
@@ -260,6 +217,12 @@ $(document).ready(function() {
                 // pages
                 var tblPage = createTable("#pages-table", "Page", colDefPage, 'site', idx, false, true, '/app/page/', 'id', true);
                 tblPage.targetBlank = true;
+
+                // scripts
+                var tblScript = createTable("#scripts-table", "AssetScript", colDefScript, 'site', idx, false, true);
+                var modalFormScript = new KyteForm(k, $("#modalFormScript"), 'AssetScript', hidden, scriptElement, 'Script', tblScript, true, $("#newScript"));
+                modalFormScript.init();
+                tblScript.bindEdit(modalFormScript);
 
                 // media
                 var tblMedia = createTable("#media-table", "Media", colDefMedia, 'site', idx, false, true);
