@@ -13,7 +13,7 @@ let elements = [
             'required':true
         },
         {
-            'field':'secret_key',
+            'field':'private_key',
             'type':'text',
             'label':'AWS Secret Key',
             'required':true
@@ -21,11 +21,10 @@ let elements = [
     ]
 ];
 
-let colDefApps = [
+let colDefApiKey = [
     {'targets':0,'data':'username','label':'Username'},
     {'targets':1,'data':'public_key','label':'Public Key'},
     {'targets':2,'data':'date_created','label':'Date Created'},
-    {'targets':3,'data':'date_modified','label':'Date Modified'},
 ];
 
 $(document).ready(function() {
@@ -34,7 +33,7 @@ $(document).ready(function() {
 
     $('#pageLoaderModal').modal('show');
     if (k.isSession()) {
-        var dataTable = createTable("#models-table", "KyteAWSKey", colDefApps, null, null, true, false);
+        var dataTable = createTable("#aws-table", "KyteAWSKey", colDefApiKey, null, null, false, true, false, null, true);
         var modalForm = new KyteForm(k, $("#modalForm"), 'KyteAWSKey', null, elements, 'AWS Keys', dataTable, true, $("#new"));
         modalForm.init();
         dataTable.bindEdit(modalForm);
