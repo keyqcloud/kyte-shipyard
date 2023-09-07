@@ -78,6 +78,12 @@ let rootnav = [
             class:'me-2 text-light',
             label: 'Applications',
             href: '/app/'
+        },
+        {
+            faicon:'fab fa-aws',
+            class:'me-2 text-light',
+            label: 'AWS Keys',
+            href: '/app/aws.html'
         }
     ],
     [
@@ -190,6 +196,11 @@ let subnavPage = [
         selector:'#Stylesheet'
     },
     {
+        faicon:'fas fa-scroll',
+        label:'Custom Includes',
+        selector:'#Scripts'
+    },
+    {
         faicon:'fas fa-wrench',
         label:'Settings',
         selector:'#Settings'
@@ -217,6 +228,11 @@ let subnavSite = [
         faicon:'fas fa-sitemap',
         label:'Pages',
         selector:'#Pages'
+    },
+    {
+        faicon:'fas fa-scroll',
+        label:'Scripts',
+        selector:'#Scripts'
     },
     {
         faicon:'fas fa-photo-video',
