@@ -171,22 +171,7 @@ $(document).ready(function() {
 
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
-                    let connect = "let endpoint = 'https://"+page.api_endpoint+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+page.application_identifier+"');k.init();\n\n";
-                    let obfuscatedConnect = JavaScriptObfuscator.obfuscate(connect,
-                        {
-                            compact: true,
-                            controlFlowFlattening: true,
-                            controlFlowFlatteningThreshold: 1,
-                            numbersToExpressions: true,
-                            simplify: true,
-                            stringArrayEncoding: ['base64'],
-                            stringArrayShuffle: true,
-                            splitStrings: true,
-                            stringArrayWrappersType: 'variable',
-                            stringArrayThreshold: 1
-                        }
-                    );
-
+                    
                     let rawJS = jsEditor.getValue();
                     let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS,
                         {
@@ -214,7 +199,6 @@ $(document).ready(function() {
                         'sitemap_include':$("#setting-sitemap-include").val(),
                         'obfuscate_js':$("#setting-obfuscatejs").val(),
                         'use_container':$("#setting-use_container").val(),
-                        'kyte_connect': obfuscatedConnect.getObfuscatedCode(),
                     };
                     k.put('Page', 'id', idx, payload, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
@@ -223,23 +207,6 @@ $(document).ready(function() {
 
                 $("#publishPage").click(function() {
                     $('#pageLoaderModal').modal('show');
-                    // create kyte connect js
-                    let connect = "let endpoint = 'https://"+page.api_endpoint+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+page.application_identifier+"');k.init();\n\n";
-
-                    let obfuscatedConnect = JavaScriptObfuscator.obfuscate(connect,
-                        {
-                            compact: true,
-                            controlFlowFlattening: true,
-                            controlFlowFlatteningThreshold: 1,
-                            numbersToExpressions: true,
-                            simplify: true,
-                            stringArrayEncoding: ['base64'],
-                            stringArrayShuffle: true,
-                            splitStrings: true,
-                            stringArrayWrappersType: 'variable',
-                            stringArrayThreshold: 1
-                        }
-                    );
 
                     let rawJS = jsEditor.getValue();
                     let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS,
@@ -269,7 +236,6 @@ $(document).ready(function() {
                         'obfuscate_js':$("#setting-obfuscatejs").val(),
                         'use_container':$("#setting-use_container").val(),
                         'state': 1,
-                        'kyte_connect': obfuscatedConnect.getObfuscatedCode(),
                     };
                     k.put('Page', 'id', idx, payload, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
@@ -298,4 +264,16 @@ $(document).ready(function() {
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
     }
+
+    $('.page-tab-link').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    
+        $('.page-tab-link').removeClass('active');
+        $(this).addClass('active');
+    
+       $('.tab-page').addClass('d-none');
+       let pageSelector = $(this).data('targetPage');
+       $('#'+pageSelector).removeClass('d-none');
+    });
 });
