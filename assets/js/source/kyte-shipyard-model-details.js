@@ -2,124 +2,7 @@ var modelStructure = null;
 var model, swift, dart, json;
 // utf8
 var universalBOM = "\uFEFF";
-
-let elements = [
-    [
-        {
-            'field':'name',
-            'type':'text',
-            'label':'Name',
-            'required':true
-        },
-        {
-            'field':'type',
-            'type':'select',
-            'label':'Type',
-            'required':true,
-            'option': {
-                'ajax': false,
-                'data': {
-                    's': 'String',
-                    't': 'Text',
-                    'date': 'Date',
-                    'i': 'Integer',
-                }
-            }
-        },
-        {
-            'field':'required',
-            'type':'select',
-            'label':'Required',
-            'required':true,
-            'option': {
-                'ajax': false,
-                'data': {
-                    1: 'Yes',
-                    0: 'No'
-                }
-            }
-        },
-        {
-            'field': 'foreignKeyModel',
-            'type': 'select',
-            'label': 'FK Model',
-            'required': false,
-            'placeholder': 'N/A',
-            'option': {
-                'ajax': true,
-                'data_model_name': 'DataModel',
-                'data_model_field': 'application',
-                'data_model_value': idx,
-                'data_model_attributes': ['name'],
-                'data_model_default_field': 'id',
-                // 'data_model_default_value': 1,
-            }
-        }
-    ],
-    [
-        {
-            'field':'size',
-            'type':'text',
-            'label':'Size',
-            'required':false,
-        },
-        {
-            'field':'unsigned',
-            'type':'select',
-            'label':'Unsigned',
-            'required':false,
-            'option': {
-                'ajax': false,
-                'data': {
-                    "":"n/a",
-                    1: 'Yes',
-                    0: 'No'
-                }
-            }
-        },
-        {
-            'field':'protected',
-            'type':'select',
-            'label':'Protected',
-            'required':false,
-            'option': {
-                'ajax': false,
-                'data': {
-                    0: 'No',
-                    1: 'Yes'
-                }
-            }
-        },
-        {
-            'field':'password',
-            'type':'select',
-            'label':'Password',
-            'required':false,
-            'option': {
-                'ajax': false,
-                'data': {
-                    0: 'No',
-                    1: 'Yes'
-                }
-            }
-        },
-        {
-            'field':'defaults',
-            'type':'text',
-            'label':'Default',
-            'required':false
-        }
-    ],
-    [
-        {
-            'field':'description',
-            'type':'text',
-            'label':'Description',
-            'required':false
-        }
-    ]
-];
-
+let elements = []; //initialize for later
 let controllerElements = [
     [
         {
@@ -457,6 +340,123 @@ $(document).ready(function() {
             
                 let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Models');
                 navbar.create();
+
+                elements = [
+                    [
+                        {
+                            'field':'name',
+                            'type':'text',
+                            'label':'Name',
+                            'required':true
+                        },
+                        {
+                            'field':'type',
+                            'type':'select',
+                            'label':'Type',
+                            'required':true,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    's': 'String',
+                                    't': 'Text',
+                                    'date': 'Date',
+                                    'i': 'Integer',
+                                }
+                            }
+                        },
+                        {
+                            'field':'required',
+                            'type':'select',
+                            'label':'Required',
+                            'required':true,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    1: 'Yes',
+                                    0: 'No'
+                                }
+                            }
+                        },
+                        {
+                            'field': 'foreignKeyModel',
+                            'type': 'select',
+                            'label': 'FK Model',
+                            'required': false,
+                            'placeholder': 'N/A',
+                            'option': {
+                                'ajax': true,
+                                'data_model_name': 'DataModel',
+                                'data_model_field': 'application',
+                                'data_model_value': r.data[0].application.id,
+                                'data_model_attributes': ['name'],
+                                'data_model_default_field': 'id',
+                                // 'data_model_default_value': 1,
+                            }
+                        }
+                    ],
+                    [
+                        {
+                            'field':'size',
+                            'type':'text',
+                            'label':'Size',
+                            'required':false,
+                        },
+                        {
+                            'field':'unsigned',
+                            'type':'select',
+                            'label':'Unsigned',
+                            'required':false,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    "":"n/a",
+                                    1: 'Yes',
+                                    0: 'No'
+                                }
+                            }
+                        },
+                        {
+                            'field':'protected',
+                            'type':'select',
+                            'label':'Protected',
+                            'required':false,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    0: 'No',
+                                    1: 'Yes'
+                                }
+                            }
+                        },
+                        {
+                            'field':'password',
+                            'type':'select',
+                            'label':'Password',
+                            'required':false,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    0: 'No',
+                                    1: 'Yes'
+                                }
+                            }
+                        },
+                        {
+                            'field':'defaults',
+                            'type':'text',
+                            'label':'Default',
+                            'required':false
+                        }
+                    ],
+                    [
+                        {
+                            'field':'description',
+                            'type':'text',
+                            'label':'Description',
+                            'required':false
+                        }
+                    ]
+                ];
             } else {
                 $("#model-name").html("Undefined");
             }

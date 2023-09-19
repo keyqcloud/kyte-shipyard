@@ -1,3 +1,7 @@
+## 1.1.2
+
+* Fix issue where idx was being used before being defined for FK models
+
 ## 1.1.1
 
 * Fix issue where FK models displayed all models in Shipyard
