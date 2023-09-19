@@ -1,1 +1,525 @@
-const a0_0x5df2b7=a0_0x10f2;(function(_0x1253d1,_0x2866ab){const _0x40c061=a0_0x10f2,_0x9f7c68=_0x1253d1();while(!![]){try{const _0x57324a=-parseInt(_0x40c061(0x161))/0x1*(parseInt(_0x40c061(0x19d))/0x2)+parseInt(_0x40c061(0x11b))/0x3+-parseInt(_0x40c061(0x18a))/0x4*(parseInt(_0x40c061(0x132))/0x5)+parseInt(_0x40c061(0x1b9))/0x6*(-parseInt(_0x40c061(0x12b))/0x7)+-parseInt(_0x40c061(0x128))/0x8+parseInt(_0x40c061(0x125))/0x9*(parseInt(_0x40c061(0x12d))/0xa)+parseInt(_0x40c061(0x1aa))/0xb;if(_0x57324a===_0x2866ab)break;else _0x9f7c68['push'](_0x9f7c68['shift']());}catch(_0x583932){_0x9f7c68['push'](_0x9f7c68['shift']());}}}(a0_0x270f,0x32a89));var modelStructure=null,model,swift,dart,json,universalBOM='\ufeff';function a0_0x270f(){const _0x17166c=['cx0ncG0k','cvn0CMLUzZ8GBw9KAwzPzwrFyNK7dqO','cs8VigT5DguGBw9KzwWGyw5Kigf1zgL0igf0DhjPyNv0zxmncG','y2XPy2S','mZaWmdnosu1dwNq','cvn0CMLUzZ8GA3L0zu51BtSncG','cqLRExrLx2fJy291BNqGpsbQC29UwYDRExrLx2fJy291BNqNxtSncG','cx0PoW0kdqO','cqLKyxrHwYDJCMvHDgvKx2j5j10Gpsb0AgLZlMnYzwf0zwrFyNK7dqO','BI9H','cuXPC3q8','cqLLBMDPBMvwzxjZAw9Uid0GANnVBLSNzw5NAw5Lx3zLCNnPB24NxtSncG','dqOncG','cqLKyxrHwYDdt05uru5ux1rzueuNxsa9ihrOAxmUy09ovevovfrzueu7dqO','owjhB3ryrq','zgvMyxvSDhm','cqLKyxrHwYDRExrLx2LKzw4Nxsa9ihrOAxmUA3L0zuLKzw47dqO','mteZmtK4nhP1Exntrq','i2rVD25SB2fKrgf0yuPtt04','cwXLDcbKyxrLx21VzgLMAwvKoIbtDhjPBMC/dqO','mJu3mdyXn2rIzNvVDG','y3jLyxrL','mZy4odyWt0rIvur4','Awr4','AgLKzq','i2rVD25SB2fKrgf0yuntvG','i21VzgvSlw5HBwu','nuDqB3rrvG','rgvZy3jPChrPB24','j10Gpsb0AgLZlG','zgvZy3jPChrPB24','ANnVBG','z2v0','cqLYzxnWB25ZzunVzguGpsbQC29UwYDYzxnWB25Zzv9JB2rLj107dqO','cqL0AgLZlNnLC3nPB25qzxjTAxnZAw9Ula0k','cqL0AgLZlMT5DgvqDwiSdqO','Dgv4DgfYzq','zgf0zv9JCMvHDgvK','Bw9KywW','cqKjFsK7dqO','cqL0AgLZlNr4vgLTzxn0yw1Wla0k','lY8ncI8Via','sw50','i3nPzgvUyxy','cqL0AgLZlNnLC3nPB24SdqO','BNvTzxjPyW','cqLKyxrHwYD0EfrPBwvZDgfTCcDDid0GDgHPCY50EfrPBwvZDgfTCdSncG','cqL0AgLZlMLKla0k','cqLKCMf3id0GANnVBLSNzhjHDYDDoW0k','cqL0AgLZlMT5DgvFywnJB3vUDcWncG','cqLHy2nVDw50swqGpsbQC29UwYDHy2nVDw50x2LKj107dqO','cqLKyxrHwYDZzxnZAw9Uj10Gpsb0AgLZlNnLC3nPB247dqO','ywn0AxzL','i0f0DhjPyNv0zxm','yMLUzevKAxq','cqLJt05uru5uvfLqrsa9igPZB25Bj0nptLrftLrFvfLqrsDDoW0k','dqOjzw51BsbdB2rPBMDlzxLZoIbtDhjPBMCSienVzgLUz0TLEsb7dqO','cvn0CMLUzZ8GC2vZC2LVBJSncG','cqL0AgLZlMrLBgv0zwrFyNKSdqO','CMvWBgfJzq','cqLKyxrHwYDYzxnWB25Zzv9JB2rLj10Gpsb0AgLZlNjLC3bVBNnLq29KztSncG','tw9KzwXZ','cqLTB2rLBca9igPZB25Bj21VzgvSj107dqO','cqLPzIaOANnVBLSNzgf0ysDDice9ig51BgWPihSncG','y3jLyxrLrwXLBwvUDa','cqLKyxrHwYD0CMfUC2fJDgLVBIDDid0GDgHPCY50CMfUC2fJDgLVBJSncG','cqLTB2rPzMLLzf9IEsa9igPZB25Bj21VzgLMAwvKx2j5j107dqO','rgf0ysb7dqO','cvn0CMLUzZ8GDhjHBNnHy3rPB247dqO','rgf0yu1VzgvS','cqL0AgLZlNjLC3bVBNnLq29KzsWncG','zM9YzwLNBKTLEu1VzgvS','tw9KzwXbDhrYAwj1Dgu','cvn0CMLUzZ8GDwLKoW0k','nda4mxPjBLPzqq','C3rVCfbYB3bHz2f0Aw9U','vw5KzwzPBMvK','lNn3Awz0dqOVlW0klY8Gq3jLyxrLzcbIEsblExrLifnOAxb5yxjKig9Uia','cqL0AgLZlMrHDgencG','cqLKyxrHwYDKzwXLDgvKj10Gpsb0AgLZlMrLBgv0zwq7dqO','C3rYAw5NAwz5','cqLPzIaODgHPCY5KyxrHice9ig51BgWPihSncG','lMzYB21kC29Uke1HCdXtDhjPBMCSigr5BMfTAwm+igPZB24PihSncG','cqLKyxrHwYDTB2rPzMLLzf9IEsDDid0GDgHPCY5TB2rPzMLLzf9IEtSncG','cwXLDcbPzdOGu3rYAw5NdqO','vgv4Da','cqL0AgLZlNrVA2vUla0k','zc1UB25L','cqLKyxrLx21VzgLMAwvKid0GANnVBLSNzgf0zv9TB2rPzMLLzcDDoW0k','cwXLDcbKzwXLDgvKx2j5oIbtDhjPBMC/dqO','tI9b','BgvUz3rO','C3rYDwn0ia','rgf0yt5BxtSncG','cqKjzgf0yvSNzgf0ysDDid0GDgHPCY5KyxrHis5TyxaOkhyPid0+ihyUDg9kC29UkcKPlNrVtgLZDcGPoW0k','cvn0CMLUzZ8GDg9Rzw47dqO','cwXLDcbRExrLx2fJy291BNq6ifn0CMLUzW0k','cqL0AgLZlMnYzwf0zwrFyNKSdqO','DhLWzq','i2rVD25SB2fKu3DPzNq','i2f0DhjPyNv0zxmTDgfIBgu','B2n0zxqVC3rYzwfT','y2XHC3mG','cqL0AgLZlMrHDgvFzgvSzxrLzcWncG','cqL0AgLZlMfJy291BNrjzcWncG','cqLKyxrHwYDLBMDPBMvFDMvYC2LVBIDDid0GDgHPCY5LBMDPBMvwzxjZAw9UoW0k','u3rYAw5N','ihSncG','rgf0zq','cqLMAw5HBcbnyxa8u3rYAw5NlcbKEw5HBwLJpIbKyxrHid0GBMv3ie1HCdXtDhjPBMCSigr5BMfTAwm+kcK7dqO','ywrKq2XHC3m','cvn0CMLUzZ8Gzgf0zv9JCMvHDgvKoW0k','rMvHDhvYzsbJB21PBMCGC29VBIe','zgfYDa','C2vSzwn0','mtyXmdq3mLvKr2PIBa','Fq0k','cwXLDcbKyxrLx2nYzwf0zwq6ifn0CMLUzZ8ncG','C2L6zq','cqKjANnVBLSNzgf0ysDDlMzVCKvHy2GOkhyPihSncG','wwvZ','id0GANnVBLSN','CgfYCxvLDa','vvjm','cvn0CMLUzZ8Gzgf0zv9TB2rPzMLLzdSncG','uhjVDgvJDgvK','BMfTzq','cqL9dqO','zgf0yq','cwXLDcbKzwXLDgvKoIbtDhjPBMC/dqO','cqL0AgLZlMrLBgv0zwqSdqO','C2HVDW','rgvMyxvSDa','cwLUDd8GzhjHDZSncG','ndjPvwLwvwW','s3L0zsbtAgLWEwfYzdXZDxa+jNrYywrLoZWVC3vWpG','cqL0AgLZlNvPzcWncG','cqKjzgf0ysa9idW','cqL0AgLZlMvUz2LUzvzLCNnPB24SdqO','cqLKzwXLDgvKid0GANnVBLSNzgvSzxrLzcDDoW0k','cqLJyxnLigLKlcbRExrLx2fJy291BNqSignYzwf0zwrFyNKSigrHDgvFy3jLyxrLzcWGBw9KAwzPzwrFyNKSigrHDgvFBw9KAwzPzwqSigrLBgv0zwrFyNKSigrHDgvFzgvSzxrLzcWGzgvSzxrLza0k','cqLKyxrHwYDTB2rLBcDDid0GDgHPCY5TB2rLBdSncG','Dgv4DgfYzwe','cwXLDcbTB2rPzMLLzf9IEtOGu3rYAw5NpW0k','cqKjcwrHDgeHlMfKzcHUzxCG','yxbWBgLJyxrPB24','CMvXDwLYzwq','mti3mZqYmZHvzgnkBNK','cu1HCdXtDhjPBMCSigr5BMfTAwm+ihrVsNnVBIGPihSncG','cqLKyxrHwYDKzwXLDgvKx2j5j10Gpsb0AgLZlMrLBgv0zwrFyNK7dqO','rgf0ys5MCM9TsNnVBIH2ksK7dqO','oW0k','cqLYzxr1CM4Gzgf0ytSncG','y3jLyxrLt2jQzwn0vvjm','Dgv4Da','i2rVD25SB2fKrgf0yvbHCNf1zxq','Dg9mB2nHBgveyxrLu3rYAw5N','AhjLzG','cqL0AgLZlMrYyxCSdqO','cqL0AgLZlNrYyw5Zywn0Aw9Ula0k','cwXLDcbJCMvHDgvKx2j5oIbtDhjPBMC/dqO','cwLUDd8GCMvZCg9UC2vdB2rLoW0k','nKnJD3foAG','cqL0AgLZlMnptLrftLruwvbfla0k','cqLKyxrHwYDRExrLx2fJy291BNqNxsa9ihrOAxmUA3L0zv9Hy2nVDw50oW0k','zgf0yu1VzgvS','cqLKyxrHwYDKCMf3j10Gpsb0AgLZlMrYyxC7dqO','tMfTzq','cqL0AgLZlMrHDgvFy3jLyxrLzcWncG','cqL0AgLZlG','rgf0yt4/igrHDge7dqOncG','zgLZCgXHEtOGBM9Uzq','cqLKyxrHwYC','cvn0CMLUzZ8GywnJB3vUDeLKoW0k','ChjLDMvUDerLzMf1Bhq','Aw5PDa','i21HAw5Uyxy','zgf0zv9TB2rPzMLLza','yM9KEq','ugfZC3DVCMq','Fq0kdqO','mI1KAwDPDa','cqLRExrLswrLBIa9igPZB25Bj2T5DgvFAwrLBIDDoW0k','AxntzxnZAw9U','ChjVDgvJDgvK','cqLPzca9igPZB25Bj2LKj107dqO','cqL0AgLZlM1VzgvSla0k','cqL0B2TLBIa9igPZB25Bj3rVA2vUj107dqO','i3bHz2vmB2fKzxjnB2rHBa','zgf0zq','rgf0ys5MCM9TsNnVBIHnyxa8u3rYAw5NlcbKEw5HBwLJpIbQC29Uksb7dqO','cvn0CMLUzZ8GzgvSzxrLzf9IEtSncG','AhrTBa','ChvZAa','cqLJyxnL','cqLKyxrHwYDKyxrLx2nYzwf0zwqNxsa9ihrOAxmUzgf0zv9JCMvHDgvKoW0k','cqL0AgLZlMrHDgvFBw9KAwzPzwqSdqO','cvn0CMLUzZ8GBw9KzwW7dqO','cwXLDca','cqLKzwXLDgvKx2j5id0GANnVBLSNzgvSzxrLzf9IEsDDoW0k','cqL0EfrPBwvZDgfTCca9igPZB25Bj3r4vgLTzxn0yw1Wj107dqO','i2rVD25SB2fKrgfYDa','cqLKyxrHwYD1AwqNxsa9ihrOAxmUDwLKoW0k','yxbWzw5Kq2HPBgq','zM9YrwfJAa','cx0ncG','tw9KzwWGqxr0CMLIDxrL','sw50zwDLCG','cvn0CMLUzZ8Gy09ovevovfrzueu7dqO','cqLRExrLtNvTid0GANnVBLSNA3L0zv9UDw0NxtSncG','Aw50'];a0_0x270f=function(){return _0x17166c;};return a0_0x270f();}let elements=[],controllerElements=[[{'field':a0_0x5df2b7(0x195),'type':a0_0x5df2b7(0x1b1),'label':a0_0x5df2b7(0x1be),'required':!![]}],[{'field':a0_0x5df2b7(0x135),'type':a0_0x5df2b7(0x13b),'label':a0_0x5df2b7(0x133),'required':![]}]];function getData(_0x58bbfe,_0x332543){const _0x95d8f8=a0_0x5df2b7;k[_0x95d8f8(0x137)](_0x95d8f8(0x15f),'dataModel',_0x58bbfe,[],function(_0x4e04a5){const _0x178657=_0x95d8f8;let _0x6358aa=0x0,_0xbf36f6=[],_0x9837b7=[{'targets':_0x6358aa,'data':'id','label':'#'}];_0x4e04a5[_0x178657(0x197)][_0x178657(0x172)]>0x0&&(modelStructure=_0x4e04a5[_0x178657(0x197)],_0x4e04a5[_0x178657(0x197)][_0x178657(0x110)](_0x15afd0=>{const _0x12ca2d=_0x178657;_0x6358aa++;let _0x49c50f=_0x12ca2d(0x1b1);if(_0x15afd0[_0x12ca2d(0x179)]=='t')_0x49c50f=_0x12ca2d(0x1a5);if(_0x15afd0[_0x12ca2d(0x179)]==_0x12ca2d(0x1d4))_0x49c50f='date';_0x9837b7[_0x12ca2d(0x1d8)]({'targets':_0x6358aa,'data':_0x15afd0[_0x12ca2d(0x195)],'label':_0x15afd0[_0x12ca2d(0x195)]}),_0xbf36f6[_0x12ca2d(0x1d8)]([{'field':_0x15afd0[_0x12ca2d(0x195)],'type':_0x49c50f,'label':_0x15afd0['name'],'required':_0x15afd0[_0x12ca2d(0x1a9)]==0x1?!![]:![]}]);})),_0x6358aa++,_0x9837b7[_0x178657(0x1d8)]({'targets':_0x6358aa,'data':_0x178657(0x13c),'label':_0x178657(0x13c)}),_0x6358aa++,_0x9837b7['push']({'targets':_0x6358aa,'data':_0x178657(0x1c8),'label':_0x178657(0x1c8)}),swift=generate_swift(_0x332543),dart=generate_dart(_0x332543);});}function a0_0x10f2(_0x12c908,_0x45e68b){const _0x270f83=a0_0x270f();return a0_0x10f2=function(_0x10f273,_0x2aa644){_0x10f273=_0x10f273-0x108;let _0x356365=_0x270f83[_0x10f273];if(a0_0x10f2['AhZyhO']===undefined){var _0x4939cf=function(_0x58bbfe){const _0x332543='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x4e04a5='',_0x6358aa='';for(let _0xbf36f6=0x0,_0x9837b7,_0x15afd0,_0x49c50f=0x0;_0x15afd0=_0x58bbfe['charAt'](_0x49c50f++);~_0x15afd0&&(_0x9837b7=_0xbf36f6%0x4?_0x9837b7*0x40+_0x15afd0:_0x15afd0,_0xbf36f6++%0x4)?_0x4e04a5+=String['fromCharCode'](0xff&_0x9837b7>>(-0x2*_0xbf36f6&0x6)):0x0){_0x15afd0=_0x332543['indexOf'](_0x15afd0);}for(let _0x359cf6=0x0,_0xe28370=_0x4e04a5['length'];_0x359cf6<_0xe28370;_0x359cf6++){_0x6358aa+='%'+('00'+_0x4e04a5['charCodeAt'](_0x359cf6)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x6358aa);};a0_0x10f2['goRIwv']=_0x4939cf,_0x12c908=arguments,a0_0x10f2['AhZyhO']=!![];}const _0x3a737a=_0x270f83[0x0],_0x41a967=_0x10f273+_0x3a737a,_0x1c8f5c=_0x12c908[_0x41a967];return!_0x1c8f5c?(_0x356365=a0_0x10f2['goRIwv'](_0x356365),_0x12c908[_0x41a967]=_0x356365):_0x356365=_0x1c8f5c,_0x356365;},a0_0x10f2(_0x12c908,_0x45e68b);}function generate_dart(_0x359cf6){const _0xd6acad=a0_0x5df2b7;let _0xe28370=new Date()[_0xd6acad(0x1b3)]('en',{'year':_0xd6acad(0x144),'day':'2-digit','month':_0xd6acad(0x1cc)}),_0x5f510c=_0xd6acad(0x140)+model+_0xd6acad(0x164)+_0xe28370+_0xd6acad(0x123);_0x5f510c+='class\x20'+model+_0xd6acad(0x182),_0x5f510c+=_0xd6acad(0x1b8),_0x5f510c+=_0xd6acad(0x150),_0x5f510c+=_0xd6acad(0x176),_0x5f510c+=_0xd6acad(0x160),_0x5f510c+='\x09String?\x20sessionPermission;\x0d\x0a',_0x5f510c+='\x09String?\x20txTimestamp;\x0d\x0a',_0x5f510c+=_0xd6acad(0x19c),_0x5f510c+=_0xd6acad(0x114),_0x5f510c+=_0xd6acad(0x15b),_0x5f510c+='\x09String?\x20engineVersion;\x0d\x0a',_0x5f510c+=_0xd6acad(0x109),_0x5f510c+='\x09String?\x20kytePub;\x0d\x0a',_0x5f510c+=_0xd6acad(0x11c),_0x5f510c+='\x09String?\x20kyteIden;\x0d\x0a',_0x5f510c+=_0xd6acad(0x1c4),_0x5f510c+=_0xd6acad(0x121)+model+_0xd6acad(0x1c1),_0x5f510c+='\x09'+model+'({\x0d\x0a',_0x5f510c+=_0xd6acad(0x15d),_0x5f510c+=_0xd6acad(0x143),_0x5f510c+=_0xd6acad(0x16d),_0x5f510c+=_0xd6acad(0x19f),_0x5f510c+=_0xd6acad(0x139),_0x5f510c+=_0xd6acad(0x13f),_0x5f510c+=_0xd6acad(0x1b5),_0x5f510c+=_0xd6acad(0x1ba),_0x5f510c+=_0xd6acad(0x1b6),_0x5f510c+=_0xd6acad(0x1a1),_0x5f510c+=_0xd6acad(0x1d1),_0x5f510c+=_0xd6acad(0x13a),_0x5f510c+='\x09\x09this.kyteNum,\x0d\x0a',_0x5f510c+='\x09\x09this.kyteIden,\x0d\x0a',_0x5f510c+=_0xd6acad(0x17f),_0x5f510c+=_0xd6acad(0x165),_0x5f510c+=_0xd6acad(0x11e),_0x5f510c+='\x09'+model+_0xd6acad(0x169),_0x5f510c+=_0xd6acad(0x138),_0x5f510c+='\x09\x09session\x20=\x20json[\x27session\x27];\x0d\x0a',_0x5f510c+=_0xd6acad(0x1d2),_0x5f510c+='\x09\x09uid\x20=\x20json[\x27uid\x27];\x0d\x0a',_0x5f510c+='\x09\x09sessionPermission\x20=\x20json[\x27sessionPermission\x27];\x0d\x0a',_0x5f510c+=_0xd6acad(0x10c),_0x5f510c+=_0xd6acad(0x147),_0x5f510c+=_0xd6acad(0x14e),_0x5f510c+='\x09\x09transaction\x20=\x20json[\x27transaction\x27];\x0d\x0a',_0x5f510c+=_0xd6acad(0x122),_0x5f510c+=_0xd6acad(0x155),_0x5f510c+='\x09\x09kytePub\x20=\x20json[\x27kyte_pub\x27];\x0d\x0a',_0x5f510c+=_0xd6acad(0x115),_0x5f510c+=_0xd6acad(0x1cd),_0x5f510c+=_0xd6acad(0x149),_0x5f510c+=_0xd6acad(0x156),_0x5f510c+=_0xd6acad(0x1a0)+model+_0xd6acad(0x174),_0x5f510c+=_0xd6acad(0x18e),_0x5f510c+=_0xd6acad(0x1a7)+model+_0xd6acad(0x1ad),_0x5f510c+=_0xd6acad(0x13e),_0x5f510c+='\x09\x09}\x0d\x0a',_0x5f510c+=_0xd6acad(0x117),_0x5f510c+='\x09Map<String,\x20dynamic>\x20toJson()\x20{\x0d\x0a',_0x5f510c+=_0xd6acad(0x184),_0x5f510c+=_0xd6acad(0x153),_0x5f510c+=_0xd6acad(0x14a),_0x5f510c+='\x09\x09data[\x27token\x27]\x20=\x20this.token;\x0d\x0a',_0x5f510c+=_0xd6acad(0x10e),_0x5f510c+='\x09\x09data[\x27sessionPermission\x27]\x20=\x20this.sessionPermission;\x0d\x0a',_0x5f510c+=_0xd6acad(0x145),_0x5f510c+=_0xd6acad(0x1bd),_0x5f510c+=_0xd6acad(0x124),_0x5f510c+=_0xd6acad(0x158),_0x5f510c+=_0xd6acad(0x180),_0x5f510c+=_0xd6acad(0x1a4),_0x5f510c+='\x09\x09data[\x27kyte_pub\x27]\x20=\x20this.kytePub;\x0d\x0a',_0x5f510c+='\x09\x09data[\x27kyte_num\x27]\x20=\x20this.kyteNum;\x0d\x0a',_0x5f510c+=_0xd6acad(0x127),_0x5f510c+='\x09\x09data[\x27account_id\x27]\x20=\x20this.accountId;\x0d\x0a',_0x5f510c+=_0xd6acad(0x168),_0x5f510c+=_0xd6acad(0x175),_0x5f510c+=_0xd6acad(0x196),_0x5f510c+=_0xd6acad(0x1af),_0x5f510c+=_0xd6acad(0x111),_0x5f510c+=_0xd6acad(0x1cb);let _0x5e42a1='',_0xf57c5e='',_0x3faa76='',_0x58e47a='';return modelStructure[_0xd6acad(0x110)](_0x5c39db=>{const _0x203c2d=_0xd6acad;_0xf57c5e+=_0x203c2d(0x1c0)+_0x5c39db['name']+',';let _0xc925b1=_0x203c2d(0x181);if(_0x5c39db[_0x203c2d(0x179)]=='i')_0xc925b1=_0x203c2d(0x116);_0x5e42a1+='\x09'+_0xc925b1+'?\x20'+_0x5c39db[_0x203c2d(0x195)]+_0x203c2d(0x1ae),_0x3faa76+='\x09\x09'+_0x5c39db[_0x203c2d(0x195)]+_0x203c2d(0x190)+_0x5c39db[_0x203c2d(0x195)]+'\x27];\x0d\x0a',_0x58e47a+=_0x203c2d(0x1c3)+_0x5c39db[_0x203c2d(0x195)]+_0x203c2d(0x134)+_0x5c39db[_0x203c2d(0x195)]+_0x203c2d(0x1ae);}),_0x5f510c+=_0xd6acad(0x17d)+model+_0xd6acad(0x15a),_0x5f510c+=_0x5e42a1,_0x5f510c+='\x09String?\x20id;\x0d\x0a',_0x5f510c+='\x09String?\x20kyte_account;\x0d\x0a',_0x5f510c+='\x09String?\x20created_by;\x0d\x0a',_0x5f510c+=_0xd6acad(0x186),_0x5f510c+=_0xd6acad(0x118),_0x5f510c+=_0xd6acad(0x193),_0x5f510c+=_0xd6acad(0x1d6),_0x5f510c+='\x09String?\x20date_deleted;\x0d\x0a',_0x5f510c+='\x09String?\x20deleted;\x0d\x0a\x0d\x0a',_0x5f510c+='\x09'+model+'Data({\x0d\x0a',_0x5f510c+=_0xf57c5e[_0xd6acad(0x152)](/(^,)|(,$)/g,'')[_0xd6acad(0x152)](/,/g,',\x0d\x0a')+',\x0d\x0a',_0x5f510c+=_0xd6acad(0x146),_0x5f510c+=_0xd6acad(0x148),_0x5f510c+=_0xd6acad(0x178),_0x5f510c+=_0xd6acad(0x1bf),_0x5f510c+='\x09\x09this.modified_by,\x0d\x0a',_0x5f510c+=_0xd6acad(0x108),_0x5f510c+=_0xd6acad(0x151),_0x5f510c+=_0xd6acad(0x17e),_0x5f510c+=_0xd6acad(0x199),_0x5f510c+='\x09});\x0d\x0a\x0d\x0a',_0x5f510c+='\x09'+model+_0xd6acad(0x1d5),_0x5f510c+=_0x3faa76,_0x5f510c+=_0xd6acad(0x1d0),_0x5f510c+=_0xd6acad(0x11d),_0x5f510c+='\x09\x09created_by\x20=\x20json[\x27created_by\x27];\x0d\x0a',_0x5f510c+='\x09\x09date_created\x20=\x20json[\x27date_created\x27];\x0d\x0a',_0x5f510c+=_0xd6acad(0x159),_0x5f510c+=_0xd6acad(0x16f),_0x5f510c+=_0xd6acad(0x10b),_0x5f510c+='\x09\x09date_deleted\x20=\x20json[\x27date_deleted\x27];\x0d\x0a',_0x5f510c+=_0xd6acad(0x1a2),_0x5f510c+='\x09}\x0d\x0a\x0d\x0a',_0x5f510c+=_0xd6acad(0x1ab),_0x5f510c+=_0xd6acad(0x184),_0x5f510c+=_0x58e47a,_0x5f510c+='\x09\x09data[\x27id\x27]\x20=\x20this.id;\x0d\x0a',_0x5f510c+=_0xd6acad(0x1bb),_0x5f510c+=_0xd6acad(0x11f),_0x5f510c+=_0xd6acad(0x1da),_0x5f510c+=_0xd6acad(0x16a),_0x5f510c+='\x09\x09data[\x27date_modified\x27]\x20=\x20this.date_modified;\x0d\x0a',_0x5f510c+=_0xd6acad(0x1ac),_0x5f510c+='\x09\x09data[\x27date_deleted\x27]\x20=\x20this.date_deleted;\x0d\x0a',_0x5f510c+=_0xd6acad(0x166),_0x5f510c+=_0xd6acad(0x1af),_0x5f510c+=_0xd6acad(0x111),_0x5f510c+=_0xd6acad(0x18b),_0x5f510c;}function generate_swift(_0x1daf7a){const _0x52e7d0=a0_0x5df2b7;let _0x23fd7c=new Date()[_0x52e7d0(0x1b3)]('en',{'year':_0x52e7d0(0x144),'day':_0x52e7d0(0x1cc),'month':_0x52e7d0(0x1cc)}),_0x240a5c='//\x0d\x0a//\x20'+_0x1daf7a+_0x52e7d0(0x164)+_0x23fd7c+'\x0d\x0a\x0d\x0aimport\x20Foundation\x0d\x0a\x0d\x0a';_0x240a5c+=_0x52e7d0(0x173)+_0x1daf7a+'Data\x20:\x20Codable\x20{\x0d\x0a';let _0x316f71=_0x52e7d0(0x1d9),_0x24d22a='';return modelStructure[_0x52e7d0(0x110)](_0x4b0d16=>{const _0x1db119=_0x52e7d0;_0x316f71+='\x20'+_0x4b0d16[_0x1db119(0x195)]+',';let _0x22f4f5=_0x1db119(0x181);if(_0x4b0d16[_0x1db119(0x179)]=='i')_0x22f4f5=_0x1db119(0x141);_0x24d22a+=_0x1db119(0x10a)+_0x4b0d16[_0x1db119(0x195)]+':\x20'+_0x22f4f5+(_0x4b0d16[_0x1db119(0x1a9)]==0x0?'?':'')+'\x0d\x0a';}),_0x240a5c+=_0x24d22a,_0x240a5c+=_0x52e7d0(0x119),_0x240a5c+=_0x52e7d0(0x16b),_0x240a5c+=_0x52e7d0(0x177),_0x240a5c+=_0x52e7d0(0x1b7),_0x240a5c+=_0x52e7d0(0x18c),_0x240a5c+=_0x52e7d0(0x1a6),_0x240a5c+=_0x52e7d0(0x12a),_0x240a5c+=_0x52e7d0(0x170),_0x240a5c+='\x09let\x20date_deleted:\x20String?\x0d\x0a',_0x240a5c+=_0x52e7d0(0x198),_0x240a5c+=_0x52e7d0(0x14f),_0x240a5c+=_0x316f71[_0x52e7d0(0x152)](/(^,)|(,$)/g,'')+'\x0d\x0a',_0x240a5c+=_0x52e7d0(0x1a3),_0x240a5c+=_0x52e7d0(0x111),_0x240a5c+=_0x52e7d0(0x18b),_0x240a5c;}function download_code(_0x44554e,_0x13065d,_0x497fd3){const _0x3b9986=a0_0x5df2b7;if(_0x497fd3==_0x3b9986(0x136))alert(_0x3b9986(0x187));else{blob=new Blob([universalBOM+_0x13065d],{'type':_0x3b9986(0x17c)}),url=window[_0x3b9986(0x192)][_0x3b9986(0x1b0)](blob),$(_0x3b9986(0x1d3))[_0x3b9986(0x13d)](_0x3b9986(0x12f));var _0x5c518e=document[_0x3b9986(0x157)]('a');document[_0x3b9986(0x1c9)][_0x3b9986(0x10f)](_0x5c518e),_0x5c518e['style']=_0x3b9986(0x1c2),_0x5c518e[_0x3b9986(0x1b4)]=url,_0x5c518e['download']=_0x44554e+'.'+_0x497fd3,_0x5c518e[_0x3b9986(0x11a)](),window[_0x3b9986(0x192)]['revokeObjectURL'](url);}}function download_data(_0x1b5a9b){const _0x951c11=a0_0x5df2b7;alert(_0x951c11(0x187));}$(document)['ready'](function(){const _0x1c7ee5=a0_0x5df2b7;let _0x5a6f06=new KyteSidenav(_0x1c7ee5(0x142),subnavModel,_0x1c7ee5(0x14c));_0x5a6f06[_0x1c7ee5(0x12c)](),_0x5a6f06['bind'](),$(_0x1c7ee5(0x1d3))['modal'](_0x1c7ee5(0x19a));let _0x2e6508=location['hash'];_0x2e6508=_0x2e6508==''?_0x1c7ee5(0x14c):_0x2e6508,$(_0x2e6508)['removeClass'](_0x1c7ee5(0x16e)),$(_0x2e6508+'-nav-link')[_0x1c7ee5(0x185)](_0x1c7ee5(0x14b));if(k[_0x1c7ee5(0x1ce)]()){let _0x216d65=k['getPageRequest']();_0x216d65=_0x216d65[_0x1c7ee5(0x12e)];let _0x46f931=[{'name':'dataModel','value':_0x216d65}];k[_0x1c7ee5(0x137)](_0x1c7ee5(0x15c),'id',_0x216d65,[],function(_0x2c0f09){const _0x18ca94=_0x1c7ee5;if(_0x2c0f09[_0x18ca94(0x197)][0x0]){model=_0x2c0f09[_0x18ca94(0x197)][0x0][_0x18ca94(0x195)],$('#model-name')[_0x18ca94(0x1d7)](model),getData(_0x216d65,model);let _0x4b948e={'model':'Application','idx':_0x2c0f09[_0x18ca94(0x197)][0x0][_0x18ca94(0x1a8)]['id']},_0x285bc9=encodeURIComponent(btoa(JSON[_0x18ca94(0x167)](_0x4b948e))),_0x5f1a80=generateAppNav(_0x2c0f09[_0x18ca94(0x197)][0x0][_0x18ca94(0x1a8)][_0x18ca94(0x195)],_0x285bc9),_0x225853=new KyteNav(_0x18ca94(0x1c7),_0x5f1a80,null,_0x18ca94(0x19e),_0x18ca94(0x154));_0x225853['create'](),elements=[[{'field':_0x18ca94(0x195),'type':'text','label':_0x18ca94(0x1be),'required':!![]},{'field':_0x18ca94(0x179),'type':'select','label':'Type','required':!![],'option':{'ajax':![],'data':{'s':_0x18ca94(0x181),'t':_0x18ca94(0x16c),'date':_0x18ca94(0x183),'i':_0x18ca94(0x113)}}},{'field':'required','type':_0x18ca94(0x189),'label':'Required','required':!![],'option':{'ajax':![],'data':{0x1:_0x18ca94(0x18f),0x0:'No'}}},{'field':_0x18ca94(0x15e),'type':_0x18ca94(0x189),'label':'FK\x20Model','required':![],'placeholder':_0x18ca94(0x171),'option':{'ajax':!![],'data_model_name':'DataModel','data_model_field':_0x18ca94(0x1a8),'data_model_value':_0x2c0f09['data'][0x0][_0x18ca94(0x1a8)]['id'],'data_model_attributes':[_0x18ca94(0x195)],'data_model_default_field':'id'}}],[{'field':_0x18ca94(0x18d),'type':'text','label':'Size','required':![]},{'field':'unsigned','type':_0x18ca94(0x189),'label':'Unsigned','required':![],'option':{'ajax':![],'data':{'':_0x18ca94(0x120),0x1:'Yes',0x0:'No'}}},{'field':_0x18ca94(0x1cf),'type':_0x18ca94(0x189),'label':_0x18ca94(0x194),'required':![],'option':{'ajax':![],'data':{0x0:'No',0x1:_0x18ca94(0x18f)}}},{'field':'password','type':_0x18ca94(0x189),'label':_0x18ca94(0x1ca),'required':![],'option':{'ajax':![],'data':{0x0:'No',0x1:'Yes'}}},{'field':_0x18ca94(0x126),'type':_0x18ca94(0x1b1),'label':_0x18ca94(0x19b),'required':![]}],[{'field':_0x18ca94(0x135),'type':_0x18ca94(0x1b1),'label':_0x18ca94(0x133),'required':![]}]];}else $(_0x18ca94(0x131))[_0x18ca94(0x1d7)](_0x18ca94(0x163));$(_0x18ca94(0x1d3))[_0x18ca94(0x13d)](_0x18ca94(0x12f));});var _0x19fa8a=createTable(_0x1c7ee5(0x17b),_0x1c7ee5(0x15f),colDefAttributes,_0x1c7ee5(0x1bc),_0x216d65,!![],!![]),_0x28ddb7=new KyteForm(k,$('#modalForm'),_0x1c7ee5(0x15f),_0x46f931,elements,_0x1c7ee5(0x112),_0x19fa8a,!![],$('#newAttribute'));_0x28ddb7[_0x1c7ee5(0x1c6)](),_0x19fa8a[_0x1c7ee5(0x14d)](_0x28ddb7),$(_0x1c7ee5(0x17a))[_0x1c7ee5(0x11a)](function(_0x4aa71d){const _0x535719=_0x1c7ee5;_0x4aa71d[_0x535719(0x1c5)](),_0x4aa71d[_0x535719(0x162)](),download_code(model,swift,'swift');}),$(_0x1c7ee5(0x10d))[_0x1c7ee5(0x11a)](function(_0x518bf5){const _0x48c56b=_0x1c7ee5;_0x518bf5[_0x48c56b(0x1c5)](),_0x518bf5[_0x48c56b(0x162)](),download_code(model,dart,_0x48c56b(0x188));}),$('#downloadJSON')[_0x1c7ee5(0x11a)](function(_0x2fbe98){const _0x144e97=_0x1c7ee5;_0x2fbe98['preventDefault'](),_0x2fbe98[_0x144e97(0x162)](),download_code(model,json,'json');}),$(_0x1c7ee5(0x130))['click'](function(_0x4545f0){const _0x4a28cb=_0x1c7ee5;_0x4545f0[_0x4a28cb(0x1c5)](),_0x4545f0[_0x4a28cb(0x162)](),download_data('csv');}),$(_0x1c7ee5(0x129))['click'](function(_0xc4c80){const _0xa4a5a1=_0x1c7ee5;_0xc4c80[_0xa4a5a1(0x1c5)](),_0xc4c80[_0xa4a5a1(0x162)](),download_data(_0xa4a5a1(0x136));}),$(_0x1c7ee5(0x1b2))[_0x1c7ee5(0x11a)](function(_0x3e02e4){const _0x2db710=_0x1c7ee5;_0x3e02e4[_0x2db710(0x1c5)](),_0x3e02e4['stopPropagation'](),download_data(_0x2db710(0x191));});}else location[_0x1c7ee5(0x1b4)]='/?redir='+encodeURIComponent(window['location']);});
+var modelStructure = null;
+var model, swift, dart, json;
+// utf8
+var universalBOM = "\uFEFF";
+let elements = []; //initialize for later
+let controllerElements = [
+    [
+        {
+            'field':'name',
+            'type':'text',
+            'label':'Name',
+            'required':true
+        }
+    ],
+    [
+        {
+            'field':'description',
+            'type':'textare',
+            'label':'Description',
+            'required':false
+        }
+    ]
+];
+
+function getData(idx, model) {
+    // get attributes k.get() and iterate over to create table def and elements
+    k.get("ModelAttribute", "dataModel", idx, [], function(r) {
+        let targets = 0;
+        let modelFormDef = [];
+        let modelColDef = [{'targets':targets,'data':'id','label':'#'}];
+        if (r.data.length > 0) {
+            modelStructure = r.data;
+            r.data.forEach(col => {
+                targets++;
+                let dataType = "text";
+                if (col.type == 't') dataType = "textarea";
+                if (col.type == 'date') dataType = "date";
+                modelColDef.push({'targets':targets,'data':col.name,'label':col.name});
+                modelFormDef.push([{
+                    'field':col.name,
+                    'type':dataType,
+                    'label':col.name,
+                    'required':col.required == 1 ? true : false
+                }]);
+            })
+
+            // generate swift code
+            swift = generate_swift(model);
+            // generate dart code
+            dart = generate_dart(model);
+        }
+        targets++;
+        modelColDef.push({'targets':targets,'data':'date_created','label':'date_created'});
+        targets++;
+        modelColDef.push({'targets':targets,'data':'date_modified','label':'date_modified'});
+
+        // var tblData = createTable("#data-table", model, modelColDef, null, null, true, true);
+
+        // var modelDataForm = new KyteForm(k, $("#modalDataForm"), model, null, modelFormDef, model, tblData, true, $("#newData"));
+        // modelDataForm.init();
+        // tblData.bindEdit(modelDataForm);
+    });
+}
+
+function generate_dart(mode) {
+    let date = new Date().toLocaleDateString("en", {year:"numeric", day:"2-digit", month:"2-digit"});
+    let code = "//\r\n// "+model+".swift\r\n//\r\n// Created by Kyte Shipyard on "+date+"\r\n\r\n";
+    // class name
+    code += "class "+model+" {\r\n";
+    // kyte api level
+    code += "\tint? responseCode;\r\n";
+    code += "\tString? session;\r\n";
+    code += "\tString? token;\r\n";
+    code += "\tString? uid;\r\n";
+    code += "\tString? sessionPermission;\r\n";
+    code += "\tString? txTimestamp;\r\n";
+    code += "\tint? draw;\r\n";
+    code += "\tString? cONTENTTYPE;\r\n";
+    code += "\tString? transaction;\r\n";
+    code += "\tString? engineVersion;\r\n";
+    code += "\tString? model;\r\n";
+    code += "\tString? kytePub;\r\n";
+    code += "\tString? kyteNum;\r\n";
+    code += "\tString? kyteIden;\r\n";
+    code += "\tString? accountId;\r\n";
+
+    // data list
+    code += "\tList<"+model+"Data>? data;\r\n\r\n";
+
+    // initializer
+    code += "\t"+model+"({\r\n";
+    code += "\t\tthis.responseCode,\r\n";
+    code += "\t\tthis.session,\r\n";
+    code += "\t\tthis.token,\r\n";
+    code += "\t\tthis.uid,\r\n";
+    code += "\t\tthis.sessionPermission,\r\n";
+    code += "\t\tthis.txTimestamp,\r\n";
+    code += "\t\tthis.draw,\r\n";
+    code += "\t\tthis.cONTENTTYPE,\r\n";
+    code += "\t\tthis.transaction,\r\n";
+    code += "\t\tthis.engineVersion,\r\n";
+    code += "\t\tthis.model,\r\n";
+    code += "\t\tthis.kytePub,\r\n";
+    code += "\t\tthis.kyteNum,\r\n";
+    code += "\t\tthis.kyteIden,\r\n";
+    code += "\t\tthis.accountId,\r\n";
+    code += "\t\tthis.data\r\n";
+    code += "\t});\r\n\r\n";
+
+    // mapping from json
+    code += "\t"+model+".fromJson(Map<String, dynamic> json) {\r\n"
+    code += "\t\tresponseCode = json['response_code'];\r\n";
+    code += "\t\tsession = json['session'];\r\n";
+    code += "\t\ttoken = json['token'];\r\n";
+    code += "\t\tuid = json['uid'];\r\n";
+    code += "\t\tsessionPermission = json['sessionPermission'];\r\n";
+    code += "\t\ttxTimestamp = json['txTimestamp'];\r\n";
+    code += "\t\tdraw = json['draw'];\r\n";
+    code += "\t\tcONTENTTYPE = json['CONTENT_TYPE'];\r\n";
+    code += "\t\ttransaction = json['transaction'];\r\n";
+    code += "\t\tengineVersion = json['engine_version'];\r\n";
+    code += "\t\tmodel = json['model'];\r\n";
+    code += "\t\tkytePub = json['kyte_pub'];\r\n";
+    code += "\t\tkyteNum = json['kyte_num'];\r\n";
+    code += "\t\tkyteIden = json['kyte_iden'];\r\n";
+    code += "\t\taccountId = json['account_id'];\r\n";
+    code += "\t\tif (json['data'] != null) {\r\n";
+    code += "\t\t\tdata = <"+model+"Data>[];\r\n";
+    code += "\t\t\tjson['data'].forEach((v) {\r\n";
+    code += "\t\t\t\tdata!.add(new "+model+"Data.fromJson(v));\r\n"
+    code += "\t\t\t});\r\n";
+    code += "\t\t}\r\n";
+    code += "\t}\r\n\r\n";
+
+    // mapping to json
+    code += "\tMap<String, dynamic> toJson() {\r\n";
+    code += "\t\tfinal Map<String, dynamic> data = new Map<String, dynamic>();\r\n";
+    code += "\t\tdata['response_code'] = this.responseCode;\r\n";
+    code += "\t\tdata['session'] = this.session;\r\n";
+    code += "\t\tdata['token'] = this.token;\r\n";
+    code += "\t\tdata['uid'] = this.uid;\r\n";
+    code += "\t\tdata['sessionPermission'] = this.sessionPermission;\r\n";
+    code += "\t\tdata['txTimestamp'] = this.txTimestamp;\r\n";
+    code += "\t\tdata['draw'] = this.draw;\r\n";
+    code += "\t\tdata['CONTENT_TYPE'] = this.cONTENTTYPE;\r\n";
+    code += "\t\tdata['transaction'] = this.transaction;\r\n";
+    code += "\t\tdata['engine_version'] = this.engineVersion;\r\n";
+    code += "\t\tdata['model'] = this.model;\r\n";
+    code += "\t\tdata['kyte_pub'] = this.kytePub;\r\n";
+    code += "\t\tdata['kyte_num'] = this.kyteNum;\r\n";
+    code += "\t\tdata['kyte_iden'] = this.kyteIden;\r\n";
+    code += "\t\tdata['account_id'] = this.accountId;\r\n";
+    code += "\t\tif (this.data != null) {\r\n";
+    code += "\t\t\tdata['data'] = this.data!.map((v) => v.toJson()).toList();\r\n";
+    code += "\t\t}\r\n";
+    code += "\t\treturn data;\r\n";
+    code += "\t}\r\n";
+    // end class
+    code += "}\r\n\r\n";
+
+
+    // iterate through col and create defs
+    let definitions = "";
+    let initializers = "";
+    let mappingsFromJson = "";
+    let mappingsToJson = "";
+    modelStructure.forEach(attr => {
+        initializers += "\t\tthis."+attr.name+","
+        let datatype = "String";
+        if (attr.type == "i") datatype = "int";
+        definitions += "\t"+datatype+"? "+attr.name+";\r\n";
+        mappingsFromJson += "\t\t"+attr.name+" = json['"+attr.name+"'];\r\n";
+        mappingsToJson += "\t\tdata['"+attr.name+"'] = this."+attr.name+";\r\n";
+    });
+
+    // data class
+    code += "class "+model+"Data {\r\n";
+    code += definitions;
+    // kyte model and audit attributes
+    code += "\tString? id;\r\n";
+    code += "\tString? kyte_account;\r\n";
+    code += "\tString? created_by;\r\n";
+    code += "\tString? date_created;\r\n";
+    code += "\tString? modified_by;\r\n";
+    code += "\tString? date_modified;\r\n";
+    code += "\tString? deleted_by;\r\n";
+    code += "\tString? date_deleted;\r\n";
+    code += "\tString? deleted;\r\n\r\n";
+
+    // initializer
+    code += "\t"+model+"Data({\r\n";
+    code += initializers.replace(/(^,)|(,$)/g, '').replace(/,/g, ",\r\n")+",\r\n";
+    // kyte model and audit attributes
+    code += "\t\tthis.id,\r\n";
+    code += "\t\tthis.kyte_account,\r\n";
+    code += "\t\tthis.created_by,\r\n";
+    code += "\t\tthis.date_created,\r\n";
+    code += "\t\tthis.modified_by,\r\n";
+    code += "\t\tthis.date_modified,\r\n";
+    code += "\t\tthis.deleted_by,\r\n";
+    code += "\t\tthis.date_deleted,\r\n";
+    code += "\t\tthis.deleted,\r\n";
+    code += "\t});\r\n\r\n";
+
+    // mapping from json
+    code += "\t"+model+"Data.fromJson(Map<String, dynamic> json) {\r\n"
+    code += mappingsFromJson;
+    // kyte model and audti attributes
+    code += "\t\tid = json['id'];\r\n";
+    code += "\t\tkyte_account = json['kyte_account'];\r\n";
+    code += "\t\tcreated_by = json['created_by'];\r\n";
+    code += "\t\tdate_created = json['date_created'];\r\n";
+    code += "\t\tmodified_by = json['modified_by'];\r\n";
+    code += "\t\tdate_modified = json['date_modified'];\r\n";
+    code += "\t\tdeleted_by = json['deleted_by'];\r\n";
+    code += "\t\tdate_deleted = json['date_deleted'];\r\n";
+    code += "\t\tdeleted = json['deleted'];\r\n";
+    code += "\t}\r\n\r\n";
+
+    // mapping to json
+    code += "\tMap<String, dynamic> toJson() {\r\n";
+    code += "\t\tfinal Map<String, dynamic> data = new Map<String, dynamic>();\r\n";
+    code += mappingsToJson;
+    // kyte model and audti attributes
+    code += "\t\tdata['id'] = this.id;\r\n";
+    code += "\t\tdata['kyte_account'] = this.kyte_account;\r\n";
+    code += "\t\tdata['created_by'] = this.created_by;\r\n";
+    code += "\t\tdata['date_created'] = this.date_created;\r\n";
+    code += "\t\tdata['modified_by'] = this.modified_by;\r\n";
+    code += "\t\tdata['date_modified'] = this.date_modified;\r\n";
+    code += "\t\tdata['deleted_by'] = this.deleted_by;\r\n";
+    code += "\t\tdata['date_deleted'] = this.date_deleted;\r\n";
+    code += "\t\tdata['deleted'] = this.deleted;\r\n";
+    code += "\t\treturn data;\r\n";
+    code += "\t}\r\n";
+
+    // end class
+    code += "}\r\n";
+
+    return code;
+}
+
+function generate_swift(model) {
+    let date = new Date().toLocaleDateString("en", {year:"numeric", day:"2-digit", month:"2-digit"});
+    // comment header and import
+    let code = "//\r\n// "+model+".swift\r\n//\r\n// Created by Kyte Shipyard on "+date+"\r\n\r\nimport Foundation\r\n\r\n";
+    // struct
+    code += "struct "+model+"Data : Codable {\r\n";
+
+    // iterate through column
+    let enumCases = "\t\tcase";
+    let structItems = "";
+    modelStructure.forEach(attr => {
+        enumCases += " "+attr.name+","
+        let datatype = "String";
+        if (attr.type == "i") datatype = "Int";
+        structItems += "\tlet "+attr.name+": "+datatype+(attr.required == 0 ? "?" : "")+"\r\n";
+    });
+    code += structItems;
+    // kyte model and audit attributes
+    code += "\t// kyte model and audit attributes\r\n";
+    code += "\tlet id: String\r\n";
+    code += "\tlet kyte_account: String\r\n";
+    code += "\tlet created_by: String?\r\n";
+    code += "\tlet date_created: String?\r\n";
+    code += "\tlet modified_by: String?\r\n";
+    code += "\tlet date_modified: String?\r\n";
+    code += "\tlet deleted_by: String?\r\n";
+    code += "\tlet date_deleted: String?\r\n";
+    code += "\tlet deleted: String?\r\n";
+
+    // enum
+    code += "\r\n\tenum CodingKeys: String, CodingKey {\r\n"
+    code += enumCases.replace(/(^,)|(,$)/g, '') + "\r\n";
+    // kyte model and audit attributes
+    code += "\t\tcase id, kyte_account, created_by, date_created, modified_by, date_modified, deleted_by, date_deleted, deleted\r\n";
+    code += "\t}\r\n";
+    // end struct
+    code += "}\r\n";
+
+    return code;
+}
+
+function download_code(model, code, ext) {
+    if (ext=="json") {
+        alert("Feature coming soon!");
+    } else {
+        blob = new Blob([universalBOM+code], {type: "octet/stream"});
+        url = window.URL.createObjectURL(blob);
+        $('#pageLoaderModal').modal('hide');
+
+        // create hidden link
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = url;
+        a.download = model+'.'+ext;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+}
+
+function download_data(format) {
+    alert("Feature coming soon!");
+}
+
+$(document).ready(function() {
+    let sidenav = new KyteSidenav("#sidenav", subnavModel, "#Attributes");
+    sidenav.create();
+    sidenav.bind();
+
+    $('#pageLoaderModal').modal('show');
+
+    let hash = location.hash;
+    hash = hash == "" ? '#Attributes' : hash;
+    $(hash).removeClass('d-none');
+    $(hash+'-nav-link').addClass('active');
+    
+    if (k.isSession()) {
+        // get url param
+        let idx = k.getPageRequest();
+        idx = idx.idx;
+
+        let hidden = [
+            {
+                'name': 'dataModel',
+                'value': idx
+            }
+        ];
+
+        k.get("DataModel", "id", idx, [], function(r) {
+            if (r.data[0]) {
+                model = r.data[0].name;
+                $("#model-name").html(model);
+                getData(idx, model);
+                let obj = {'model': 'Application', 'idx':r.data[0].application.id};
+                let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                
+                let appnav = generateAppNav(r.data[0].application.name, encoded);
+            
+                let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Models');
+                navbar.create();
+
+                elements = [
+                    [
+                        {
+                            'field':'name',
+                            'type':'text',
+                            'label':'Name',
+                            'required':true
+                        },
+                        {
+                            'field':'type',
+                            'type':'select',
+                            'label':'Type',
+                            'required':true,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    's': 'String',
+                                    't': 'Text',
+                                    'date': 'Date',
+                                    'i': 'Integer',
+                                }
+                            }
+                        },
+                        {
+                            'field':'required',
+                            'type':'select',
+                            'label':'Required',
+                            'required':true,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    1: 'Yes',
+                                    0: 'No'
+                                }
+                            }
+                        },
+                        {
+                            'field': 'foreignKeyModel',
+                            'type': 'select',
+                            'label': 'FK Model',
+                            'required': false,
+                            'placeholder': 'N/A',
+                            'option': {
+                                'ajax': true,
+                                'data_model_name': 'DataModel',
+                                'data_model_field': 'application',
+                                'data_model_value': r.data[0].application.id,
+                                'data_model_attributes': ['name'],
+                                'data_model_default_field': 'id',
+                                // 'data_model_default_value': 1,
+                            }
+                        }
+                    ],
+                    [
+                        {
+                            'field':'size',
+                            'type':'text',
+                            'label':'Size',
+                            'required':false,
+                        },
+                        {
+                            'field':'unsigned',
+                            'type':'select',
+                            'label':'Unsigned',
+                            'required':false,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    "":"n/a",
+                                    1: 'Yes',
+                                    0: 'No'
+                                }
+                            }
+                        },
+                        {
+                            'field':'protected',
+                            'type':'select',
+                            'label':'Protected',
+                            'required':false,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    0: 'No',
+                                    1: 'Yes'
+                                }
+                            }
+                        },
+                        {
+                            'field':'password',
+                            'type':'select',
+                            'label':'Password',
+                            'required':false,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    0: 'No',
+                                    1: 'Yes'
+                                }
+                            }
+                        },
+                        {
+                            'field':'defaults',
+                            'type':'text',
+                            'label':'Default',
+                            'required':false
+                        }
+                    ],
+                    [
+                        {
+                            'field':'description',
+                            'type':'text',
+                            'label':'Description',
+                            'required':false
+                        }
+                    ]
+                ];
+
+                // attribute table and form
+                var tblAttributes = createTable("#attributes-table", "ModelAttribute", colDefAttributes, 'dataModel', idx, true, true);
+                var modalForm = new KyteForm(k, $("#modalForm"), 'ModelAttribute', hidden, elements, 'Model Attribute', tblAttributes, true, $("#newAttribute"));
+                modalForm.init();
+                tblAttributes.bindEdit(modalForm);
+            } else {
+                $("#model-name").html("Undefined");
+            }
+            $('#pageLoaderModal').modal('hide');
+        });
+
+        // controller table and form
+        // var tblController = createTable("#controller-table", "Controller", colDefControllers, 'dataModel', idx, true, true, '/app/controller/', 'id');
+        // var controllerModalForm = new KyteForm(k, $("#modalControllerForm"), 'Controller', hidden, controllerElements, 'Controller', tblController, true, $("#newController"));
+        // controllerModalForm.init();
+        // controllerModalForm.success = function(r) {
+        //     if (r.data[0]) {
+        //         let obj = {'model': 'Controller', 'idx':r.data[0].id};
+        //         let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+        //         location.href="/app/controller/?request="+encoded;
+        //     }
+        // }
+        // tblController.bindEdit(controllerModalForm);
+
+        $("#downloadSwift").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            download_code(model, swift, 'swift');
+        });
+        $("#downloadDart").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            download_code(model, dart, 'dart');
+        });
+        $("#downloadJSON").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            download_code(model, json, 'json');
+        });
+        //
+        $("#downloadDataCSV").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            download_data('csv');
+        });
+        $("#downloadDataJSON").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            download_data('json');
+        });
+        $("#downloadDataParquet").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            download_data('parquet');
+        });
+    } else {
+        location.href="/?redir="+encodeURIComponent(window.location);
+    }
+});

@@ -43,6 +43,11 @@ function getData(idx, model) {
                     'required':col.required == 1 ? true : false
                 }]);
             })
+
+            // generate swift code
+            swift = generate_swift(model);
+            // generate dart code
+            dart = generate_dart(model);
         }
         targets++;
         modelColDef.push({'targets':targets,'data':'date_created','label':'date_created'});
@@ -54,11 +59,6 @@ function getData(idx, model) {
         // var modelDataForm = new KyteForm(k, $("#modalDataForm"), model, null, modelFormDef, model, tblData, true, $("#newData"));
         // modelDataForm.init();
         // tblData.bindEdit(modelDataForm);
-
-        // generate swift code
-        swift = generate_swift(model);
-        // generate dart code
-        dart = generate_dart(model);
     });
 }
 
@@ -457,17 +457,17 @@ $(document).ready(function() {
                         }
                     ]
                 ];
+
+                // attribute table and form
+                var tblAttributes = createTable("#attributes-table", "ModelAttribute", colDefAttributes, 'dataModel', idx, true, true);
+                var modalForm = new KyteForm(k, $("#modalForm"), 'ModelAttribute', hidden, elements, 'Model Attribute', tblAttributes, true, $("#newAttribute"));
+                modalForm.init();
+                tblAttributes.bindEdit(modalForm);
             } else {
                 $("#model-name").html("Undefined");
             }
             $('#pageLoaderModal').modal('hide');
         });
-
-        // attribute table and form
-        var tblAttributes = createTable("#attributes-table", "ModelAttribute", colDefAttributes, 'dataModel', idx, true, true);
-        var modalForm = new KyteForm(k, $("#modalForm"), 'ModelAttribute', hidden, elements, 'Model Attribute', tblAttributes, true, $("#newAttribute"));
-        modalForm.init();
-        tblAttributes.bindEdit(modalForm);
 
         // controller table and form
         // var tblController = createTable("#controller-table", "Controller", colDefControllers, 'dataModel', idx, true, true, '/app/controller/', 'id');

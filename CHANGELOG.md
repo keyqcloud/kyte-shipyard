@@ -1,3 +1,7 @@
+## 1.1.3
+
+* Resolve issue where model attribute form will not load due to async call
+
 ## 1.1.2
 
 * Fix issue where idx was being used before being defined for FK models
