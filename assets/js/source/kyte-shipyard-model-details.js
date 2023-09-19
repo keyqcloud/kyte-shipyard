@@ -48,8 +48,8 @@ let elements = [
             'option': {
                 'ajax': true,
                 'data_model_name': 'DataModel',
-                'data_model_field': '',
-                'data_model_value': '',
+                'data_model_field': 'application',
+                'data_model_value': idx,
                 'data_model_attributes': ['name'],
                 'data_model_default_field': 'id',
                 // 'data_model_default_value': 1,

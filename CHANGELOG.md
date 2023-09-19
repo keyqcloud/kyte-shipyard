@@ -1,5 +1,6 @@
 ## 1.1.1
 
+* Fix issue where FK models displayed all models in Shipyard
 
 ## 1.1.0
 
