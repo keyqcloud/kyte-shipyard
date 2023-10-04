@@ -1,3 +1,8 @@
+## 1.1.4
+
+* Add ability to download page from page editor
+* Obfuscate model details controller
+
 ## 1.1.3
 
 * Resolve issue where model attribute form will not load due to async call
