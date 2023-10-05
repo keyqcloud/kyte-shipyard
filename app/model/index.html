@@ -22,7 +22,8 @@
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
     <script src="https://cdn.stratis-troika.com/kytejs/dev/kyte.js" crossorigin="anonymous"></script>
-    <script src="/assets/js/kyte-connect.js?v=1"></script>
+    <script src="/assets/js/kyte-connect.js"></script>
+    <script src="/assets/js/kyte-shipyard.js"></script>
     <script src="/assets/js/navigation.js?v=1"></script>
     <script src="/assets/js/kyte-shipyard-tables.js?v=1"></script>
     <script src="/assets/js/kyte-shipyard-model-details.js?v=1"></script>
@@ -49,7 +50,7 @@
             <div id="sidenav" class="d-flex flex-column flex-shrink-0 p-3 text-white" style="width: 230px;"></div>
             <!-- END SIDE NAVIGATION -->
 
-            <div class="container container-flex mb-5 px-5">
+            <div class="container container-flex px-5">
                 <!-- <p class="mt-3"><a href="javascript:history.back()">&lt; Back</a></p> -->
                 <h2 class="section-heading mt-3" id="model-name"></h2>
 
@@ -166,5 +167,15 @@
     <div id="modalForm"></div>
     <div id="modalDataForm"></div>
     <div id="modalControllerForm"></div>
+
+    <footer>
+        <div class="text-light d-flex justify-content-between py-2 px-3">
+            <div style="font-weight: 100;font-size:0.8em;">
+                <div>Kyte Shipyard&trade; Version <span id="kyteShipyardVersion"></span></div>
+                <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
+            </div>
+            <p class="text-light" style="font-weight: 100;">KeyQ © 2020-2023</p>
+        </div>
+    </footer>
 </body>
 </html>

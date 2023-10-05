@@ -1,3 +1,8 @@
+## 1.1.5
+
+* Add footer to platform
+* Add version number to footer
+
 ## 1.1.4
 
 * Add ability to download page from page editor

@@ -25,7 +25,8 @@
     <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
     <!-- Kyte -->
     <script src="https://cdn.stratis-troika.com/kytejs/dev/kyte.js" crossorigin="anonymous"></script>
-    <script src="/assets/js/kyte-connect.js?v=1"></script>
+    <script src="/assets/js/kyte-connect.js"></script>
+    <script src="/assets/js/kyte-shipyard.js"></script>
     <script src="/assets/js/navigation.js?v=1"></script>
     <script src="/assets/js/kyte-shipyard-tables.js?v=1"></script>
     <script src="/assets/js/kyte-shipyard-aws-keys.js"></script>
@@ -47,7 +48,7 @@
         <nav id="mainnav" class="navbar navbar-dark bg-dark navbar-expand-lg"></nav>
         <!-- END NAV -->
 
-        <div class="container container-flex mb-5 px-5">
+        <div class="container container-flex px-5">
             <div class="d-flex justify-content-between mt-4">
                 <h2 class="section-heading">AWS API Credentials</h2>
                 <div>
@@ -64,5 +65,15 @@
 
     <!-- modal form -->
     <div id="modalForm"></div>
+
+    <footer>
+        <div class="text-light d-flex justify-content-between py-2 px-3">
+            <div style="font-weight: 100;font-size:0.8em;">
+                <div>Kyte Shipyard&trade; Version <span id="kyteShipyardVersion"></span></div>
+                <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
+            </div>
+            <p class="text-light" style="font-weight: 100;">KeyQ © 2020-2023</p>
+        </div>
+    </footer>
 </body>
 </html>

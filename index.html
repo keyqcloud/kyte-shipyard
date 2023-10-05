@@ -18,6 +18,7 @@
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
     <script src="https://cdn.stratis-troika.com/kytejs/dev/kyte.js" crossorigin="anonymous"></script>
     <script src="/assets/js/kyte-connect.js"></script>
+    <script src="/assets/js/kyte-shipyard.js"></script>
     <script src="/assets/js/login.js?v=1"></script>
 </head>
 
@@ -35,7 +36,7 @@
     <!-- START LOGIN PANEL -->
     <div class="container">
         <div class="row my-5">
-            <div class="col-lg-4 mx-auto">
+            <div class="col-lg-4 mx-auto mt-2 order-lg-1 order-2">
                 <form id="login-form">
                     <h3 class="text-center text-light pb-4">Sign in</h3>
                     <p class="text-danger d-none" id="errorMsg"></p>
@@ -50,8 +51,12 @@
                 <button id="signup" class="my-3 btn btn-sm btn-secondary d-block w-100">Sign up for free</button> -->
 
                 <p class="text-light text-center mt-5" style="font-weight: 100;">KeyQ © 2020-2023</p>
+                <div class="text-light text-center mt-5 d-flex justify-content-between" style="font-weight: 100;font-size:0.8em;">
+                    <div>Kyte Shipyard&trade; Version <span id="kyteShipyardVersion"></span></div>
+                    <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
+                </div>
             </div>
-            <div class="col-lg-8 mx-auto">
+            <div class="col-lg-8 mx-auto mt-2 order-lg-2 order-1">
                 <h1 class="text-center text-light" style="font-weight: 300;">Kyte Shipyard<sup>&trade;</sup></h1>
                 <h4 class="text-center text-light" style="font-weight: 100; font-style: italic;">Next Generation App Building</h4>
             </div>
