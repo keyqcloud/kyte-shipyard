@@ -9,30 +9,6 @@ let colDefSites = [
     {'targets':3,'data':'region','label':'region'},
 ];
 
-let colDefPage = [
-    {'targets':0,'data':'title','label':'Page Title'},
-    {'targets':1,'data':'s3key','label':'Path', render: function(data, type, row, meta) { return '/'+data; }},
-    {'targets':2,'data':'state','label':'Status', render: function(data, type, row, meta) { if (data == 0) { return 'Not Published'; } else if (data == 1) { return 'Published'; } else { return 'Published (Stale)'; }}},
-    {'targets':3,'data':'date_modified','label':'Last Modified'},
-];
-
-let colDefDomains = [
-    {'targets':0,'data':'domainName','label':'Domain Name'},
-    {'targets':1,'data':'assigned','label':'In Use', render: function(data, type, row, meta) { return data ? 'Yes' : 'No'; }},
-    {'targets':2,'data':'status','label':'Status', render: function(data, type, row, meta) { if (data) return data.replace('_', ' '); else return 'unknown'; }}
-];
-
-let colDefMedia = [
-    {'targets':0,'data':'name','label':'Name'},
-    {'targets':1,'data':'s3key','label':'Path', render: function(data, type, row, meta) { if (row.site.cfMediaDomain) return 'https://'+row.site.cfMediaDomain+'/'+data; else return '/'+data; }}
-];
-
-let colDefNavigation = [
-    {'targets':0,'data':'name','label':'Name'},
-    {'targets':1,'data':'description','label':'Description'},
-    // {'targets':2,'data':'link','label':'Target', render: function(data, type, row, meta) { console.log(row); if (data) { return data; } else { if (row.page) { return row.page.title; } else {return 'No'; }} }}
-];
-
 let colDefNavItem = [
     {'targets':0,'data':'title','label':'Label', render: function(data, type, row, meta) { return (row.faicon ? '<i class="'+row.faicon+' me-2"></i>' : '')+data; }},
     {'targets':1,'data':'center','label':'Location', render: function(data, type, row, meta) { return data == 1 ? 'Center' : 'Right'; }},
