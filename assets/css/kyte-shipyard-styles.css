@@ -5,6 +5,7 @@ small.copyright {font-weight: 200;}
 #login-form, #reset-form, #enrollment-form, #password-update-form { width: 100%; margin: 0 auto; padding-bottom: 4em;}
 #login-form .col, #reset-form .col, #enrollment-form .col, #password-update-form .col { padding: 1em;}
 footer { position:fixed; bottom:0; width:100%; background-color: #191715; }
+footer p { margin-bottom: 0; }
 .footer-spacer  { clear: both; height: 120px; }
 .text-right { text-align: right !important; }
 .text-left { text-align: left !important; }

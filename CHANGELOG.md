@@ -1,3 +1,7 @@
+## 1.1.7
+
+* Improve footer style to make narrower
+
 ## 1.1.6
 
 * Change Kyte JS CDN endpoint
