@@ -47,7 +47,7 @@ function renderHtmlCode() {
     // Append the iframe to the code container
     codeContainer.innerHTML = "";
     codeContainer.appendChild(iframe);
-  }
+}
 
 $(document).ready(function() {
     let sidenav = new KyteSidenav("#sidenav", subnavEmail, "#HTML");
