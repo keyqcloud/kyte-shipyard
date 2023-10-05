@@ -1,3 +1,7 @@
+## 1.1.6
+
+* Change Kyte JS CDN endpoint
+
 ## 1.1.5
 
 * Add footer to platform
