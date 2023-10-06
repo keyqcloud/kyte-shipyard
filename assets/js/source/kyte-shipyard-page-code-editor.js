@@ -88,6 +88,7 @@ $(document).ready(function() {
                 }
 
                 $("#setting-obfuscatejs").val(page.obfuscate_js);
+                $("#setting-use_container").val(page.use_container);
 
                 htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {
                     value: page.html,

@@ -1,6 +1,10 @@
+## 1.1.9
+
+* Fix bug where use container selector was never populated
+
 ## 1.1.8
 
-* Add logo
+* Add Kyte Shipyard logo to navbar
 
 ## 1.1.7
 
