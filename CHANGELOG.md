@@ -1,3 +1,7 @@
+## 1.1.13
+
+* Add logo to login and reset pages
+
 ## 1.1.12
 
 * Fix bug where alias link was not correctly formatted
