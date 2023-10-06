@@ -243,9 +243,8 @@ $(document).ready(function() {
                 $("#backToSite").attr('href', '/app/site/?request='+encoded);
 
                 $("#page-title").html(page.title);
-                $("#viewPage").attr('href','https://'+page.site.cfDomain+'/'+page.s3key);
-                // $("#domain-name").attr('href', 'https://'+data.cfDomain);
-                // $("#region").html(data.region);
+                $("#viewPage").attr('href','https://'+(page.site.aliasDomain ? page.site.aliasDomain : page.site.cfDomain)+'/'+page.s3key);
+
                 obj = {'model': 'Application', 'idx':page.site.application.id};
                 encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 

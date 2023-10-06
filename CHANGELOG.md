@@ -1,3 +1,7 @@
+## 1.1.10
+
+* Update to display alias domain if one is set, otherwise display CF domain
+
 ## 1.1.9
 
 * Fix bug where use container selector was never populated
