@@ -1,3 +1,7 @@
+## 1.1.14
+
+* Update image to use compressed
+
 ## 1.1.13
 
 * Add logo to login and reset pages
