@@ -1,3 +1,7 @@
+## 1.1.15
+
+* Update 404 error page image to use compressed
+
 ## 1.1.14
 
 * Update image to use compressed
