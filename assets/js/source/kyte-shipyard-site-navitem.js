@@ -14,8 +14,8 @@ $(document).ready(function() {
             if (r.data[0]) {
                 data = r.data[0];
                 $("#site-name").html(data.site.name);
-                $("#domain-name").html('<i class="fas fa-link me-2"></i>'+data.site.aliasDomain ? data.site.aliasDomain : data.site.cfDomain);
-                $("#domain-name").attr('href', 'https://'+data.site.aliasDomain ? data.site.aliasDomain : data.site.cfDomain);
+                $("#domain-name").html('<i class="fas fa-link me-2"></i>'+(data.site.aliasDomain ? data.site.aliasDomain : data.site.cfDomain));
+                $("#domain-name").attr('href', 'https://'+(data.site.aliasDomain ? data.site.aliasDomain : data.site.cfDomain));
                 $("#region").html(data.site.region);
                 //
                 $("#bgColorHex").val(data.bgColor);

@@ -1,3 +1,7 @@
+## 1.1.12
+
+* Fix bug where alias link was not correctly formatted
+
 ## 1.1.11
 
 * Fix bug where alias domain did not display for site details
