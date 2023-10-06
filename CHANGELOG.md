@@ -4,6 +4,7 @@
 * Clean and reorganize code
 * Refactor table defs
 * Improve footer style to make narrower
+* Add ability to create sections, such as footers and headers
 
 ## 1.1.6
 
