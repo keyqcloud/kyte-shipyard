@@ -259,8 +259,8 @@ $(document).ready(function() {
                 app = r.data[0].application;
                 data = r.data[0];
                 $("#site-name").html(data.name);
-                $("#domain-name").html('<i class="fas fa-link me-2"></i>'+data.site.aliasDomain ? data.site.aliasDomain : data.site.cfDomain);
-                $("#domain-name").attr('href', 'https://'+data.site.aliasDomain ? data.site.aliasDomain : data.site.cfDomain);
+                $("#domain-name").html('<i class="fas fa-link me-2"></i>'+data.aliasDomain ? data.aliasDomain : data.cfDomain);
+                $("#domain-name").attr('href', 'https://'+data.aliasDomain ? data.aliasDomain : data.cfDomain);
                 $("#region").html(data.region);
                 $("#aliasDomain").val(data.aliasDomain);
                 $("#ga_code").val(data.ga_code);

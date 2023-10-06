@@ -1,3 +1,7 @@
+## 1.1.11
+
+* Fix bug where alias domain did not display for site details
+
 ## 1.1.10
 
 * Update to display alias domain if one is set, otherwise display CF domain
