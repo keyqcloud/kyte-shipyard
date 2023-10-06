@@ -141,7 +141,7 @@ $(document).ready(function() {
 
                 let obj = {'model': 'Site', 'idx':page.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                $("#backToSite").attr('href', '/app/site/?request='+encoded);
+                $("#backToSite").attr('href', '/app/site/?request='+encoded+'#Pages');
 
                 $("#page-title").html(page.title);
                 $("#viewPage").attr('href','https://'+page.site.cfDomain+'/'+page.s3key);
@@ -161,6 +161,14 @@ $(document).ready(function() {
                     let side_navigation = page.side_navigation ? page.side_navigation.id : 0;
                     for (data of r.data) {
                         $("#setting-side-navigation").append('<option value="'+data.id+'"'+(side_navigation == data.id ? ' selected' : '')+'>'+data.name+'</option>');
+                    }
+                });
+
+                let sectionTemplateCond = btoa(JSON.stringify([{'field':'category','value':'footer'}]));
+                k.get('SectionTemplate', 'site', page.site.id, [{'name':'x-kyte-query-conditions', 'value':sectionTemplateCond}], function(r) {
+                    let section = page.footer ? page.footer.id : 0;
+                    for (data of r.data) {
+                        $("#setting-footer").append('<option value="'+data.id+'"'+(section == data.id ? ' selected' : '')+'>'+data.title+'</option>');
                     }
                 });
 
@@ -194,6 +202,7 @@ $(document).ready(function() {
                         'stylesheet': cssEditor.getValue(),
                         'main_navigation':$("#setting-main-navigation").val(),
                         'side_navigation':$("#setting-side-navigation").val(),
+                        'footer':$("#setting-footer").val(),
                         'title':$("#setting-page-title").val(),
                         'description':$("#setting-page-description").val(),
                         'sitemap_include':$("#setting-sitemap-include").val(),
@@ -230,6 +239,7 @@ $(document).ready(function() {
                         'stylesheet': cssEditor.getValue(),
                         'main_navigation':$("#setting-main-navigation").val(),
                         'side_navigation':$("#setting-side-navigation").val(),
+                        'footer':$("#setting-footer").val(),
                         'title':$("#setting-page-title").val(),
                         'description':$("#setting-page-description").val(),
                         'sitemap_include':$("#setting-sitemap-include").val(),

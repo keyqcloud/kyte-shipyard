@@ -1,5 +1,8 @@
 ## 1.1.7
 
+* Fix bug with JSON string being stringified
+* Clean and reorganize code
+* Refactor table defs
 * Improve footer style to make narrower
 
 ## 1.1.6

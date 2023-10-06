@@ -50,6 +50,39 @@ let scriptElement = [
     ],
 ];
 
+let sectionsFormElement = [
+    [
+        {
+            'field':'title',
+            'type':'text',
+            'label':'Section Name',
+            'required':true
+        },
+        {
+            'field':'category',
+            'type':'select',
+            'label':'Category',
+            'required':true,
+            'option': {
+                'ajax': false,
+                'data': {
+                    'header': 'Header',
+                    'footer': 'Footer',
+                    'other': 'Other'
+                }
+            }
+        },
+    ],
+    [
+        {
+            'field':'description',
+            'type':'text',
+            'label':'Description',
+            'required':true
+        },
+    ],
+];
+
 let domainFormElements = [
     [
         {
@@ -85,6 +118,13 @@ let colDefPage = [
     {'targets':1,'data':'s3key','label':'Path', render: function(data, type, row, meta) { return '/'+data; }},
     {'targets':2,'data':'state','label':'Status', render: function(data, type, row, meta) { if (data == 0) { return 'Not Published'; } else if (data == 1) { return 'Published'; } else { return 'Published (Stale)'; }}},
     {'targets':3,'data':'date_modified','label':'Last Modified'},
+];
+
+let colDefSections = [
+    {'targets':0,'data':'title','label':'Section Title'},
+    {'targets':1,'data':'category','label':'Category'},
+    {'targets':2,'data':'description','label':'Description'},
+    {'targets':3,'data':'date_modified','label':'Last Modified', render: function(data, type, row, meta) { return data ? data : ''; }},
 ];
 
 let colDefDomains = [
@@ -240,7 +280,7 @@ $(document).ready(function() {
 
                 // pages
                 var tblPage = createTable("#pages-table", "Page", colDefPage, 'site', idx, false, true, '/app/page/', 'id', true);
-                tblPage.targetBlank = true;
+                // tblPage.targetBlank = true;
 
                 // scripts
                 // var tblScript = createTable("#scripts-table", "AssetScript", colDefScript, 'site', idx, false, true);
@@ -265,6 +305,12 @@ $(document).ready(function() {
                 var modalFormSideNav = new KyteForm(k, $("#modalFormSideNav"), 'SideNav', hidden, sideNavigationFormElements, 'Navigation', tblSideNav, true, $("#createSideNavigation"));
                 modalFormSideNav.init();
                 tblSideNav.bindEdit(modalFormSideNav);
+
+                // side navigation
+                var tblSections = createTable("#sections-table", "SectionTemplate", colDefSections, 'site', idx, true, true, '/app/section/', 'id', true);
+                var modalFormSection = new KyteForm(k, $("#modalFormSection"), 'SectionTemplate', hidden, sectionsFormElement, 'Section', tblSections, true, $("#addSection"));
+                modalFormSection.init();
+                tblSections.bindEdit(modalFormSection);
 
                 // domains
                 var tblDomains = createTable("#domains-table", "Domain", colDefDomains, 'site', idx, false, true, '/app/site/domain.html', 'id', true);
