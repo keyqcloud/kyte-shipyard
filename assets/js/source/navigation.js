@@ -250,6 +250,11 @@ let subnavSite = [
         selector:'#SideNav'
     },
     {
+        faicon:'fas fa-puzzle-piece',
+        label:'Sections',
+        selector:'#Sections'
+    },
+    {
         faicon:'fas fa-at',
         label:'Domains',
         selector:'#Domains'
