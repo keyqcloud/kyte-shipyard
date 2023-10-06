@@ -6,9 +6,7 @@ $(document).ready(function() {
     var passreq = new KytePasswordRequirement(k, $("#passwordRequirements"), $("#new_password"), $("#confirm_password"));
     passreq.init();
 
-    // let navbar = new KyteNav("#mainnav", nav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Models');
-    // navbar.create();
-    let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup>');
+    let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">');
     navbar.create();
 
     let sidenav = new KyteSidenav("#sidenav", subnavSettings, "#Profile");

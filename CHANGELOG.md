@@ -1,3 +1,7 @@
+## 1.1.8
+
+* Add logo
+
 ## 1.1.7
 
 * Fix bug with JSON string being stringified

@@ -28,7 +28,7 @@ let colDefApiKey = [
 ];
 
 $(document).ready(function() {
-    let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup>');
+    let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">');
     navbar.create();
 
     $('#pageLoaderModal').modal('show');

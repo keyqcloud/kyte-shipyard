@@ -1,7 +1,7 @@
 let api = null;
 let app = null;
 $(document).ready(function() {
-    let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup>');
+    let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">');
     navbar.create();
 
     let idx;
@@ -24,7 +24,7 @@ $(document).ready(function() {
             
             let appnav = generateAppNav(app.name, encoded);
         
-            let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Models');
+            let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">', 'Models');
             navbar.create();
             // application setting
             $("#obfuscate_kyte_connect").val(parseInt(app.obfuscate_kyte_connect));

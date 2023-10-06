@@ -160,7 +160,7 @@ $(document).ready(function() {
 
                 let appnav = generateAppNav(section.site.application.name, encoded);
             
-                let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Sites');
+                let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">', 'Sites');
                 navbar.create();
 
                 $("#saveCode").click(function() {

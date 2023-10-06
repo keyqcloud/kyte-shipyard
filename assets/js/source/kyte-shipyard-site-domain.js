@@ -132,7 +132,7 @@ $(document).ready(function() {
                 
                 let appnav = generateAppNav(data.site.application.name, encoded);
             
-                let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup>', 'Sites');
+                let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">', 'Sites');
                 navbar.create();
             } else {
                 $("#model-name").html("Undefined");
