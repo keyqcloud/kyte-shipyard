@@ -89,7 +89,8 @@ $(document).ready(function() {
                 // set Section title and description
                 $("#setting-section-title").val(section.title);
                 $("#setting-section-description").val(section.description);
-
+                $("#bgColor").val(data.bgColor);
+                $("#fgColor").val(data.fgColor);
                 $("#setting-obfuscatejs").val(section.obfuscate_js);
 
                 htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {
@@ -190,6 +191,8 @@ $(document).ready(function() {
                         'title':$("#setting-section-title").val(),
                         'description':$("#setting-section-description").val(),
                         'obfuscate_js':$("#setting-obfuscatejs").val(),
+                        'bgColor':$("#bgColor").val(),
+                        'fgColor':$("#fgColor").val(),
                     };
                     k.put('SectionTemplate', 'id', idx, payload, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');

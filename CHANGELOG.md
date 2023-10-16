@@ -1,3 +1,7 @@
+## 1.1.16
+
+* Ability to customize footer background and foreground colors
+
 ## 1.1.15
 
 * Update 404 error page image to use compressed
