@@ -89,8 +89,8 @@ $(document).ready(function() {
                 // set Section title and description
                 $("#setting-section-title").val(section.title);
                 $("#setting-section-description").val(section.description);
-                $("#bgColor").val(data.bgColor);
-                $("#fgColor").val(data.fgColor);
+                $("#bgColor").val(section.bgColor);
+                $("#fgColor").val(section.fgColor);
                 $("#setting-obfuscatejs").val(section.obfuscate_js);
 
                 htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {

@@ -1,3 +1,7 @@
+## 1.1.17
+
+* Fix bug where data is not defined
+
 ## 1.1.16
 
 * Ability to customize footer background and foreground colors
