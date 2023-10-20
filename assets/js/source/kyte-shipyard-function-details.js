@@ -1,5 +1,14 @@
 import {registerPHPSnippetLanguage} from '/assets/js/packages/utils/php-snippet/registerPHPSnippetLanguage.js';
 
+let subnavFunction = [
+    {
+        faicon:'fas fa-code',
+        label:'Code',
+        selector:'#Code'
+    },
+];
+
+
 var editor;
 let functionName = "Undefined";
 

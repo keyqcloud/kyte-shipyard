@@ -1,3 +1,21 @@
+let subnavSettings = [
+    {
+        faicon:'fas fa-user',
+        label:'My Profile',
+        selector:'#Profile'
+    },
+    {
+        faicon:'fas fa-user-shield',
+        label:'Administrators',
+        selector:'#Administrators'
+    },
+    {
+        faicon:'fas fa-server',
+        label:'API',
+        selector:'#API'
+    }
+];
+
 $(document).ready(function() {
     let profile = null;
     let acc = null;

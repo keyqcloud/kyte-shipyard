@@ -1,3 +1,21 @@
+let subnavEmail = [
+    {
+        faicon:'fas fa-code',
+        label:'HTML',
+        selector:'#HTML'
+    },
+    {
+        faicon:'fas fa-eye',
+        label:'Preview',
+        selector:'#Preview'
+    },
+    {
+        faicon:'fas fa-wrench',
+        label:'Settings',
+        selector:'#Settings'
+    },
+];
+
 var htmlEditor;
 var emailTemplate;
 

@@ -1,3 +1,11 @@
+let subnavController = [
+    {
+        faicon:'fas fa-code',
+        label:'Functions',
+        selector:'#Functions'
+    },
+];
+
 let controllerName = "Undefined";
 let modelName = "Virtual";
 
