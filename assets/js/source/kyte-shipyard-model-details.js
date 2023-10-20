@@ -1,3 +1,32 @@
+// menu array
+let subnavModel = [
+    {
+        faicon:'fas fa-file-import',
+        label:'Attributes',
+        selector:'#Attributes'
+    },
+    {
+        faicon:'fas fa-database',
+        label:'Data',
+        selector:'#Data'
+    },
+    {
+        faicon:'fas fa-layer-group',
+        label:'Controllers',
+        selector:'#Controllers'
+    },
+    {
+        faicon:'fas fa-file-export',
+        label:'Export',
+        selector:'#Export'
+    },
+    {
+        faicon:'fas fa-file-import',
+        label:'Import',
+        selector:'#Import'
+    },
+];
+
 var modelStructure = null;
 var model, swift, dart, json;
 // utf8
@@ -22,7 +51,7 @@ let controllerElements = [
     ]
 ];
 
-function getData(idx, model) {
+function getData(idx, model, appId) {
     // get attributes k.get() and iterate over to create table def and elements
     k.get("ModelAttribute", "dataModel", idx, [], function(r) {
         let targets = 0;
@@ -35,7 +64,7 @@ function getData(idx, model) {
                 let dataType = "text";
                 if (col.type == 't') dataType = "textarea";
                 if (col.type == 'date') dataType = "date";
-                modelColDef.push({'targets':targets,'data':col.name,'label':col.name});
+                modelColDef.push({'targets':targets,'data':col.name,'label':col.name, render: function(data, type, row, meta) { return (typeof data === 'object' ? JSON.stringify(data, undefined, 4) : data); }});
                 modelFormDef.push([{
                     'field':col.name,
                     'type':dataType,
@@ -54,8 +83,10 @@ function getData(idx, model) {
         targets++;
         modelColDef.push({'targets':targets,'data':'date_modified','label':'date_modified'});
 
-        // var tblData = createTable("#data-table", model, modelColDef, null, null, true, true);
+        console.log(modelColDef);
 
+        var tblData = createTable("#data-table", 'AppModelWrapper', modelColDef, appId, model, true, true);
+        tblData.init();
         // var modelDataForm = new KyteForm(k, $("#modalDataForm"), model, null, modelFormDef, model, tblData, true, $("#newData"));
         // modelDataForm.init();
         // tblData.bindEdit(modelDataForm);
@@ -332,7 +363,7 @@ $(document).ready(function() {
             if (r.data[0]) {
                 model = r.data[0].name;
                 $("#model-name").html(model);
-                getData(idx, model);
+                getData(idx, model, r.data[0].application.id);
                 let obj = {'model': 'Application', 'idx':r.data[0].application.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 
@@ -470,17 +501,8 @@ $(document).ready(function() {
         });
 
         // controller table and form
-        // var tblController = createTable("#controller-table", "Controller", colDefControllers, 'dataModel', idx, true, true, '/app/controller/', 'id');
-        // var controllerModalForm = new KyteForm(k, $("#modalControllerForm"), 'Controller', hidden, controllerElements, 'Controller', tblController, true, $("#newController"));
-        // controllerModalForm.init();
-        // controllerModalForm.success = function(r) {
-        //     if (r.data[0]) {
-        //         let obj = {'model': 'Controller', 'idx':r.data[0].id};
-        //         let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-        //         location.href="/app/controller/?request="+encoded;
-        //     }
-        // }
-        // tblController.bindEdit(controllerModalForm);
+        var tblController = createTable("#controllers-table", "Controller", colDefControllers, 'dataModel', idx, true, true, '/app/controller/', 'id');
+        tblController.init();
 
         $("#downloadSwift").click(function(e) {
             e.preventDefault();

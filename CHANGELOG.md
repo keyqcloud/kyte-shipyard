@@ -1,3 +1,10 @@
+## 1.1.20
+
+* Refactor navigation js.
+* Ability to view data inside an application scope
+* Add placeholder and staging for import data
+* Add favicon
+
 ## 1.1.19
 
 * Fix bug where third party api keys would not populate table
