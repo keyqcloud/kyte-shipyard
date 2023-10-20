@@ -1,3 +1,8 @@
+## 1.1.18
+
+* Update obfuscate utility script to also update version code
+* Add support for managing third party api keys
+
 ## 1.1.17
 
 * Fix bug where data is not defined

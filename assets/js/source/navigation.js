@@ -84,6 +84,12 @@ let rootnav = [
             class:'me-2 text-light',
             label: 'AWS Keys',
             href: '/app/aws.html'
+        },
+        {
+            faicon:'fab fa-key',
+            class:'me-2 text-light',
+            label: 'API Keys',
+            href: '/app/keys.html'
         }
     ],
     [
