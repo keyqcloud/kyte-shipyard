@@ -9,8 +9,6 @@ if [ -z "$1" ]
         echo "Obfuscating all JavaScript files..."
         for filename in assets/js/source/*.js; do
             javascript-obfuscator "$filename" --output ${filename//source/} --compact true --string-array-encoding 'base64' --string-array-wrappers-type variable
-            echo "Obfuscating KyteShipyard JS file"
-            javascript-obfuscator assets/js/source/kyte-shipyard.js --output assets/js/kyte-shipyard.js --compact true --string-array-encoding 'base64' --string-array-wrappers-type variable
         done
     else
         if [[ "$1" == *"source"* ]]; then
