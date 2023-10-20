@@ -1,3 +1,8 @@
+## 1.1.19
+
+* Fix bug where third party api keys would not populate table
+* Fix navigation icon issue
+
 ## 1.1.18
 
 * Update obfuscate utility script to also update version code

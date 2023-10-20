@@ -86,7 +86,7 @@ let rootnav = [
             href: '/app/aws.html'
         },
         {
-            faicon:'fab fa-key',
+            faicon:'fas fa-key',
             class:'me-2 text-light',
             label: 'API Keys',
             href: '/app/keys.html'
