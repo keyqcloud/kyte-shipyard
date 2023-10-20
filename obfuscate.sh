@@ -1,8 +1,9 @@
 #!/bin/bash
 
 if [ "$#" -eq 2 ]; then
-    sed -i'' -e "1s/.*/var KS_VERSION = '${2}';/" "assets/js/source/kyte-shipyard.js"
+    sed -i '' -e "1s/.*/var KS_VERSION = '${2}';/" "assets/js/source/kyte-shipyard.js"
 fi
+exit
 
 if [ -z "$1" ]
     then
