@@ -61,16 +61,33 @@ function getData(idx, model, appId) {
             modelStructure = r.data;
             r.data.forEach(col => {
                 targets++;
-                let dataType = "text";
-                if (col.type == 't') dataType = "textarea";
-                if (col.type == 'date') dataType = "date";
                 modelColDef.push({'targets':targets,'data':col.name,'label':col.name, render: function(data, type, row, meta) { return (typeof data === 'object' ? JSON.stringify(data, undefined, 4) : data); }});
-                modelFormDef.push([{
-                    'field':col.name,
-                    'type':dataType,
-                    'label':col.name,
-                    'required':col.required == 1 ? true : false
-                }]);
+                if (col.foreignKeyModel !== null && col.foreignKeyModel.id > 0 && col.foreignKeyAttribute.length > 0) {
+                    modelFormDef.push([{
+                        'field':col.name,
+                        'type':'select',
+                        'label':col.name,
+                        'required':col.required == 1 ? true : false,
+                        'option': {
+                            'ajax': true,
+                            'data_model_name': col.foreignKeyModel.name,
+                            'data_model_field': null,
+                            'data_model_value': null,
+                            'data_model_attributes': ['name'],
+                            'data_model_default_field': col.foreignKeyAttribute,
+                        }
+                    }]);
+                } else {
+                    let dataType = "text";
+                    if (col.type == 't') dataType = "textarea";
+                    if (col.type == 'date') dataType = "date";
+                    modelFormDef.push([{
+                        'field':col.name,
+                        'type':dataType,
+                        'label':col.name,
+                        'required':col.required == 1 ? true : false
+                    }]);
+                }
             })
 
             // generate swift code
@@ -85,7 +102,7 @@ function getData(idx, model, appId) {
 
         console.log(modelColDef);
 
-        var tblData = createTable("#data-table", 'AppModelWrapper', modelColDef, appId, model, true, true);
+        var tblData = createTable("#data-table", 'AppModelWrapper', modelColDef, appId, model, false, false); //true, true);
         tblData.init();
         // var modelDataForm = new KyteForm(k, $("#modalDataForm"), model, null, modelFormDef, model, tblData, true, $("#newData"));
         // modelDataForm.init();
