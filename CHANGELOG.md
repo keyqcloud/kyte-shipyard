@@ -1,3 +1,8 @@
+## 1.1.22
+
+* Ability to export data as csv, json, txt (tab delimited)
+* Ability to export model as json
+
 ## 1.1.21
 
 * Temporarily hide add, delete, edit buttons for data until we have a controller that can handle requests for app-level data

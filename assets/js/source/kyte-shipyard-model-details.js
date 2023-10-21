@@ -28,7 +28,7 @@ let subnavModel = [
 ];
 
 var modelStructure = null;
-var model, swift, dart, json;
+var model, modelIdx, appId, swift, dart, json;
 // utf8
 var universalBOM = "\uFEFF";
 let elements = []; //initialize for later
@@ -55,6 +55,7 @@ function getData(idx, model, appId) {
     // get attributes k.get() and iterate over to create table def and elements
     k.get("ModelAttribute", "dataModel", idx, [], function(r) {
         let targets = 0;
+        let modelJsonDef = [];
         let modelFormDef = [];
         let modelColDef = [{'targets':targets,'data':'id','label':'#'}];
         if (r.data.length > 0) {
@@ -88,8 +89,25 @@ function getData(idx, model, appId) {
                         'required':col.required == 1 ? true : false
                     }]);
                 }
-            })
-
+                
+                modelJsonDef.push({
+                    'name':col.name,
+                    'type':col.type,
+                    'size':col.size,
+                    'unsigned':col.unsigned,
+                    'protected':col.protected,
+                    'password':col.password,
+                    'description':col.description,
+                    'defaults':col.defaults,
+                    'required':col.required,
+                    'foreignKeyModel': (col.foreignKeyModel !== null && col.foreignKeyModel.id > 0 && col.foreignKeyAttribute.length > 0 ? col.foreignKeyModel.name : null),
+                    'foreignKeyAttribute': (col.foreignKeyModel !== null && col.foreignKeyModel.id > 0 && col.foreignKeyAttribute.length > 0 ? col.foreignKeyAttribute : null),
+                });
+            });
+            json = {
+                'name':model,
+                'struct':modelJsonDef,
+            };
             // generate swift code
             swift = generate_swift(model);
             // generate dart code
@@ -99,8 +117,6 @@ function getData(idx, model, appId) {
         modelColDef.push({'targets':targets,'data':'date_created','label':'date_created'});
         targets++;
         modelColDef.push({'targets':targets,'data':'date_modified','label':'date_modified'});
-
-        console.log(modelColDef);
 
         var tblData = createTable("#data-table", 'AppModelWrapper', modelColDef, appId, model, false, false); //true, true);
         tblData.init();
@@ -330,26 +346,89 @@ function generate_swift(model) {
 }
 
 function download_code(model, code, ext) {
-    if (ext=="json") {
-        alert("Feature coming soon!");
-    } else {
-        blob = new Blob([universalBOM+code], {type: "octet/stream"});
-        url = window.URL.createObjectURL(blob);
-        $('#pageLoaderModal').modal('hide');
+    blob = new Blob([universalBOM+code], {type: "octet/stream"});
+    url = window.URL.createObjectURL(blob);
+    $('#pageLoaderModal').modal('hide');
 
-        // create hidden link
-        var a = document.createElement("a");
-        document.body.appendChild(a);
-        a.style = "display: none";
-        a.href = url;
-        a.download = model+'.'+ext;
-        a.click();
-        window.URL.revokeObjectURL(url);
-    }
+    // create hidden link
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    a.href = url;
+    a.download = model+'.'+ext;
+    a.click();
+    window.URL.revokeObjectURL(url);
 }
 
 function download_data(format) {
-    alert("Feature coming soon!");
+    $('#pageLoaderModal').modal('show');
+    k.get('AppModelWrapper', appId, model, [], function(r) {
+        if(r.data.length > 0) {
+
+            if (format == 'json') {
+                blob = new Blob([universalBOM+JSON.stringify(r.data)], {type: "octet/stream"});
+                url = window.URL.createObjectURL(blob);
+                var a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                a.href = url;
+                a.download = model+'.json';
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } else if (format == 'csv') {
+                const header = Object.keys(r.data[0]).join(',');
+                const csv = r.data.map(obj => {
+                    if (typeof obj === 'object' && obj !== null && obj.hasOwnProperty('id')) {
+                        return Object.values(obj).map(value => {
+                            return typeof value === 'object' ? value.id : value;
+                        }).join(',');
+                    } else {
+                      return Object.values(obj).join(',');
+                    }
+                }).join('\n');
+                const csvContent = `${header}\n${csv}`;
+                blob = new Blob([universalBOM+csvContent], {type: "octet/stream"});
+                url = window.URL.createObjectURL(blob);
+                var a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                a.href = url;
+                a.download = model+'.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } else if (format == 'txt') {
+                const header = Object.keys(r.data[0]).join('\t');
+                const txt = r.data.map(obj => {
+                    if (typeof obj === 'object' && obj !== null && obj.hasOwnProperty('id')) {
+                        return Object.values(obj).map(value => {
+                            return typeof value === 'object' ? value.id : value;
+                        }).join('\t');
+                    } else {
+                      return Object.values(obj).join('\t');
+                    }
+                }).join('\n');
+                const txtContent = `${header}\n${txt}`;
+                blob = new Blob([universalBOM+txtContent], {type: "octet/stream"});
+                url = window.URL.createObjectURL(blob);
+                var a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                a.href = url;
+                a.download = model+'.txt';
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } else {
+                alert("Invalid output format requested");
+            }
+        } else {
+            alert("No data found to download");
+        }
+        $('#pageLoaderModal').modal('hide');
+    }, function(e) {
+        console.error(e);
+        alert(e);
+        $('#pageLoaderModal').modal('hide');
+    });
 }
 
 $(document).ready(function() {
@@ -367,20 +446,21 @@ $(document).ready(function() {
     if (k.isSession()) {
         // get url param
         let idx = k.getPageRequest();
-        idx = idx.idx;
+        modelIdx = idx.idx;
 
         let hidden = [
             {
                 'name': 'dataModel',
-                'value': idx
+                'value': modelIdx
             }
         ];
 
-        k.get("DataModel", "id", idx, [], function(r) {
+        k.get("DataModel", "id", modelIdx, [], function(r) {
             if (r.data[0]) {
                 model = r.data[0].name;
                 $("#model-name").html(model);
-                getData(idx, model, r.data[0].application.id);
+                appId = r.data[0].application.id;
+                getData(modelIdx, model, r.data[0].application.id);
                 let obj = {'model': 'Application', 'idx':r.data[0].application.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 
@@ -507,7 +587,7 @@ $(document).ready(function() {
                 ];
 
                 // attribute table and form
-                var tblAttributes = createTable("#attributes-table", "ModelAttribute", colDefAttributes, 'dataModel', idx, true, true);
+                var tblAttributes = createTable("#attributes-table", "ModelAttribute", colDefAttributes, 'dataModel', modelIdx, true, true);
                 var modalForm = new KyteForm(k, $("#modalForm"), 'ModelAttribute', hidden, elements, 'Model Attribute', tblAttributes, true, $("#newAttribute"));
                 modalForm.init();
                 tblAttributes.bindEdit(modalForm);
@@ -518,45 +598,39 @@ $(document).ready(function() {
         });
 
         // controller table and form
-        var tblController = createTable("#controllers-table", "Controller", colDefControllers, 'dataModel', idx, true, true, '/app/controller/', 'id');
+        var tblController = createTable("#controllers-table", "Controller", colDefControllers, 'dataModel', modelIdx, true, true, '/app/controller/', 'id');
         tblController.init();
 
-        $("#downloadSwift").click(function(e) {
+        $(".downloadCodeBtn").click(function(e) {
             e.preventDefault();
             e.stopPropagation();
 
-            download_code(model, swift, 'swift');
+            let format = $(this).data('downloadFormat');
+            switch (format) {
+                case 'swift':
+                    download_code(model, swift, 'swift');
+                    break;
+                
+                case 'dart':
+                    download_code(model, dart, 'dart');
+                    break;
+                    
+                case 'json':
+                    download_code(model, JSON.stringify(json), 'json');
+                    break;
+            
+                default:
+                    break;
+            }
+            
         });
-        $("#downloadDart").click(function(e) {
+        $(".downloadDataBtn").click(function(e) {
             e.preventDefault();
             e.stopPropagation();
 
-            download_code(model, dart, 'dart');
-        });
-        $("#downloadJSON").click(function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+            let format = $(this).data('downloadFormat');
 
-            download_code(model, json, 'json');
-        });
-        //
-        $("#downloadDataCSV").click(function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            download_data('csv');
-        });
-        $("#downloadDataJSON").click(function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            download_data('json');
-        });
-        $("#downloadDataParquet").click(function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            download_data('parquet');
+            download_data(format);
         });
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
