@@ -1,3 +1,7 @@
+## 1.1.21
+
+* Temporarily hide add, delete, edit buttons for data until we have a controller that can handle requests for app-level data
+
 ## 1.1.20
 
 * Refactor navigation js.
