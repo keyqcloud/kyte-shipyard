@@ -1,3 +1,7 @@
+## 1.1.27
+
+* Fix bug where page type was not updating
+
 ## 1.1.26
 
 * Add warning to inform user about code vs block editor compatibility issues

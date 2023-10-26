@@ -167,24 +167,25 @@ $(document).ready(function () {
 
                 k.get('Navigation', 'site', page.site.id, [], function (r) {
                     let main_navigation = page.main_navigation ? page.main_navigation.id : 0;
-                    for (data of r.data) {
+                    r.data.forEach(function(data) {
                         $("#setting-main-navigation").append('<option value="' + data.id + '"' + (main_navigation == data.id ? ' selected' : '') + '>' + data.name + '</option>');
-                    }
+                    });
                 });
+                
 
                 k.get('SideNav', 'site', page.site.id, [], function (r) {
                     let side_navigation = page.side_navigation ? page.side_navigation.id : 0;
-                    for (data of r.data) {
+                    r.data.forEach(function(data) {
                         $("#setting-side-navigation").append('<option value="' + data.id + '"' + (side_navigation == data.id ? ' selected' : '') + '>' + data.name + '</option>');
-                    }
+                    });
                 });
 
                 let sectionTemplateCond = btoa(JSON.stringify([{ 'field': 'category', 'value': 'footer' }]));
                 k.get('SectionTemplate', 'site', page.site.id, [{ 'name': 'x-kyte-query-conditions', 'value': sectionTemplateCond }], function (r) {
                     let section = page.footer ? page.footer.id : 0;
-                    for (data of r.data) {
+                    r.data.forEach(function(data) {
                         $("#setting-footer").append('<option value="' + data.id + '"' + (section == data.id ? ' selected' : '') + '>' + data.title + '</option>');
-                    }
+                    });
                 });
 
                 let appnav = generateAppNav(page.site.application.name, encoded);
@@ -216,7 +217,7 @@ $(document).ready(function () {
                         'description': $("#setting-page-description").val(),
                         'sitemap_include': $("#setting-sitemap-include").val(),
                         'block_layout': JSON.stringify(blockEditor.getProjectData()),
-                        'page_layout': 'block',
+                        'page_type': 'block',
                         'html': blockEditor.getHtml().match(/<body[^>]*>([\s\S]*)<\/body>/)[1],
                         'javascript': rawJS + blockEditor.getJs(),
                         'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
@@ -253,7 +254,7 @@ $(document).ready(function () {
                         'javascript': rawJS + blockEditor.getJs(),
                         'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
                         'stylesheet': blockEditor.getCss(),
-                        'page_layout': 'block',
+                        'page_type': 'block',
                         'main_navigation': $("#setting-main-navigation").val(),
                         'side_navigation': $("#setting-side-navigation").val(),
                         'footer': $("#setting-footer").val(),

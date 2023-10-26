@@ -211,7 +211,7 @@ $(document).ready(function() {
                         'sitemap_include':$("#setting-sitemap-include").val(),
                         'obfuscate_js':$("#setting-obfuscatejs").val(),
                         'use_container':$("#setting-use_container").val(),
-                        'page_layout': page.page_type == 'block' ? 'custom' : page.page_type,
+                        'page_type': page.page_type == 'block' ? 'custom' : page.page_type,
                     };
                     k.put('Page', 'id', idx, payload, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
@@ -249,7 +249,7 @@ $(document).ready(function() {
                         'sitemap_include':$("#setting-sitemap-include").val(),
                         'obfuscate_js':$("#setting-obfuscatejs").val(),
                         'use_container':$("#setting-use_container").val(),
-                        'page_layout': page.page_type == 'block' ? 'custom' : page.page_type,
+                        'page_type': page.page_type == 'block' ? 'custom' : page.page_type,
                         'state': 1,
                     };
                     k.put('Page', 'id', idx, payload, null, [], function(r) {
