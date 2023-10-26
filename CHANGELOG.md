@@ -1,3 +1,8 @@
+## 1.1.23
+
+* Add editor type to page list
+* Update block editor to use GrapesJS
+
 ## 1.1.22
 
 * Ability to export data as csv, json, txt (tab delimited)
