@@ -1,3 +1,7 @@
+## 1.1.26
+
+* Add warning to inform user about code vs block editor compatibility issues
+
 ## 1.1.25
 
 * Add bootstrap, fontawesome, jquery, and jquery UI support in block editor

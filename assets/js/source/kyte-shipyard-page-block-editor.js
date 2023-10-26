@@ -105,6 +105,9 @@ $(document).ready(function () {
 
                 // if code editor, redirect to code editor page
                 if (page.page_type != 'block') {
+                    // warn user that siwtching to block editor from custom can cause layout issues
+                    $("#alertModal").modal('show');
+
                     // prse the data
                     // HTML content to be parsed
                     const htmlContent = page.html;

@@ -189,6 +189,31 @@
     <!-- modal form -->
     <div id="modalForm"></div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="alertModalLabel">⚠️ Compatibility Alert ⚠️</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>You are about to open a web file that was generated using the Advanced Code Editor or a pre-selected template from the page creation wizard. Please be aware of the following potential issues:</p>
+                    <ol>
+                        <li>The preview may not display accurately due to differences between the Advanced Code and Block Editors.</li>
+                        <li>KyteJS function and session may not load correctly, leading to unexpected behavior.</li>
+                        <li>Saving in the Block Editor may cause your page to stop functioning as expected.</li>
+                    </ol>
+                    <p>Exercise caution and consider testing the file thoroughly in the Block Editor environment to ensure optimal performance and functionality.</p>
+                    <p>To preserve the original data, click on 'Back to Site' to safely return without modifying your page.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <div class="text-light d-flex justify-content-between py-2 px-3">
             <div style="font-weight: 100;font-size:0.6em;">
