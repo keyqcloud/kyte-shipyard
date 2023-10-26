@@ -1,4 +1,4 @@
-## 1.1.23
+## 1.1.24
 
 * Update page creation dropdown order
 
