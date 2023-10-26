@@ -1,5 +1,9 @@
 ## 1.1.23
 
+* Update page creation dropdown order
+
+## 1.1.23
+
 * Add editor type to page list
 * Update block editor to use GrapesJS
 
