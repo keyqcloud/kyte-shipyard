@@ -280,8 +280,32 @@ $(document).ready(function() {
                 navbar.create();
 
                 // pages
-                var tblPage = createTable("#pages-table", "Page", colDefPage, 'site', idx, false, true, '/app/page/', 'id', true);
+                // var tblPage = createTable("#pages-table", "Page", colDefPage, 'site', idx, false, true, '/app/page/', 'id', true);
+                var tblPage = new KyteTable(k, $("#pages-table"), {'name':'Page','field':'site','value':idx}, colDefPage, true, [0,"asc"], false, true, 'id', '/app/page/');
+                tblPage.customAction = [
+                    {
+                        'className': 'open-block-editor',
+                        'label': 'Open in Block Editor',
+                        'faicon': 'fas fa-cubes',
+                        'callback': function(data, model) {
+                            obj = {'model': model, 'idx':data['id']};
+                            encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                            location.href='/app/page/blockeditor.html?request='+encoded;
+                        }
+                    },
+                    {
+                        'className': 'open-code-editor',
+                        'label': 'Open in Code Editor',
+                        'faicon': 'fas fa-code',
+                        'callback': function(data, model) {
+                            obj = {'model': model, 'idx':data['id']};
+                            encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                            location.href='/app/page/?mode=code&request='+encoded;
+                        }
+                    }
+                ];
                 // tblPage.targetBlank = true;
+                tblPage.init();
 
                 // scripts
                 // var tblScript = createTable("#scripts-table", "AssetScript", colDefScript, 'site', idx, false, true);

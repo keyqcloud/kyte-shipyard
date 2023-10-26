@@ -1,3 +1,8 @@
+## 1.1.25
+
+* Add bootstrap, fontawesome, jquery, and jquery UI support in block editor
+* Ability to open block pages in code editor and vice versa
+
 ## 1.1.24
 
 * Update page creation dropdown order

@@ -51,8 +51,22 @@ const blockEditor = grapesjs.init({
         '@silexlabs/grapesjs-fonts': {
             api_key: 'AIzaSyABwPYuu1wZ5ujTfv2iK5bAZMjWr0zUzqg',
         }
+    },
+    canvas: {
+        styles: [
+          'https://use.fontawesome.com/releases/v5.12.0/css/all.css',
+          'https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css',
+          'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
+          'https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css',
+        ],
+        scripts: [
+            'https://code.jquery.com/jquery-3.5.1.min.js',
+            'https://code.jquery.com/ui/1.13.0/jquery-ui.min.js',
+            'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js',
+            'https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js',
+        ],
     }
-})
+});
 
 $(document).ready(function () {
     let sidenav = new KyteSidenav("#sidenav", subnavPage, "#Page");
@@ -81,13 +95,6 @@ $(document).ready(function () {
                 $("#setting-page-title").val(page.title);
                 $("#setting-page-description").val(page.description);
 
-                // if code editor, redirect to code editor page
-                if (page.page_type != 'block') {
-                    let obj = { 'model': 'Page', 'idx': idx };
-                    let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                    window.location = '/app/page/index.html?request=' + encoded;
-                }
-
                 if (page.protected == 0) {
                     $("#sitemap-option-wrapper").removeClass('d-none');
                     $('#setting-sitemap-include').val(page.sitemap_include);
@@ -96,15 +103,31 @@ $(document).ready(function () {
                 $("#setting-obfuscatejs").val(page.obfuscate_js);
                 $("#setting-use_container").val(page.use_container);
 
-                // load blocks
-                let blocks = {};
-                if (page.block_layout.length > 0) {
-                    try {
-                        blocks = JSON.parse(page.block_layout);
-                        blockEditor.loadProjectData(blocks);
-                    } catch (e) {
-                        console.error(e + " => " + page.block_layout);
-                        alert(e);
+                // if code editor, redirect to code editor page
+                if (page.page_type != 'block') {
+                    // prse the data
+                    // HTML content to be parsed
+                    const htmlContent = page.html;
+
+                    // CSS content to be parsed
+                    const cssContent = page.stylesheet;
+
+                    // Parse the HTML content and add it to the GrapesJS editor
+                    blockEditor.setComponents(htmlContent);
+
+                    // Parse the CSS content and add it to the GrapesJS editor
+                    blockEditor.setStyle(cssContent);
+                } else {
+                    // load blocks
+                    let blocks = {};
+                    if (page.block_layout.length > 0) {
+                        try {
+                            blocks = JSON.parse(page.block_layout);
+                            blockEditor.loadProjectData(blocks);
+                        } catch (e) {
+                            console.error(e + " => " + page.block_layout);
+                            alert(e);
+                        }
                     }
                 }
 
@@ -190,6 +213,7 @@ $(document).ready(function () {
                         'description': $("#setting-page-description").val(),
                         'sitemap_include': $("#setting-sitemap-include").val(),
                         'block_layout': JSON.stringify(blockEditor.getProjectData()),
+                        'page_layout': 'block',
                         'html': blockEditor.getHtml().match(/<body[^>]*>([\s\S]*)<\/body>/)[1],
                         'javascript': rawJS + blockEditor.getJs(),
                         'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
@@ -226,6 +250,7 @@ $(document).ready(function () {
                         'javascript': rawJS + blockEditor.getJs(),
                         'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
                         'stylesheet': blockEditor.getCss(),
+                        'page_layout': 'block',
                         'main_navigation': $("#setting-main-navigation").val(),
                         'side_navigation': $("#setting-side-navigation").val(),
                         'footer': $("#setting-footer").val(),

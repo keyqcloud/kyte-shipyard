@@ -58,6 +58,9 @@ $(document).ready(function() {
         let idx = k.getPageRequest();
         idx = idx.idx;
 
+        // check if we are explicitly asked to use code editor even if page was made using block
+        let forceCodeEditor = k.getUrlParameter('mode') == 'code';
+
         k.get("Page", "id", idx, [], function(r) {
             if (r.data[0]) {
                 page = r.data[0];
@@ -75,7 +78,7 @@ $(document).ready(function() {
                 $("#setting-page-description").val(page.description);
                 
                 // if block editor, redirect to block editor page.
-                if (page.page_type == 'block') {
+                if (page.page_type == 'block' && !forceCodeEditor) {
                     // redirect to block editor....
                     let obj = {'model': 'Page', 'idx':idx};
                     let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
@@ -208,6 +211,7 @@ $(document).ready(function() {
                         'sitemap_include':$("#setting-sitemap-include").val(),
                         'obfuscate_js':$("#setting-obfuscatejs").val(),
                         'use_container':$("#setting-use_container").val(),
+                        'page_layout': page.page_type == 'block' ? 'custom' : page.page_type,
                     };
                     k.put('Page', 'id', idx, payload, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
@@ -245,6 +249,7 @@ $(document).ready(function() {
                         'sitemap_include':$("#setting-sitemap-include").val(),
                         'obfuscate_js':$("#setting-obfuscatejs").val(),
                         'use_container':$("#setting-use_container").val(),
+                        'page_layout': page.page_type == 'block' ? 'custom' : page.page_type,
                         'state': 1,
                     };
                     k.put('Page', 'id', idx, payload, null, [], function(r) {
