@@ -1,3 +1,7 @@
+## 1.1.28
+
+* Staging monaco editor version 0.44
+
 ## 1.1.27
 
 * Fix bug where page type was not updating
