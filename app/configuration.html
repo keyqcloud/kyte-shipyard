@@ -57,7 +57,7 @@
                 <div id="Settings" class="mt-2">
                     <div class="px-2">
                         <div class="card mb-3">
-                            <div class="card-header">Obfuscate Kyte Connect</div>
+                            <h4 class="card-header">Obfuscate Kyte Connect</h4>
                             <div class="card-body">
                                 <!-- <h5 class="card-title"></h5> -->
                                 <p>Option to obfuscate the JavaScript for connecting to the Kyte API endpoint. Obfuscation is recommended, but if organization policies (such as firewall requirements) prevent obfuscated code, then you can disable it here.</p>
@@ -72,21 +72,23 @@
                             </div>
                         </div>
                         <div class="card mb-3">
-                            <div class="card-header">User Table Configuration</div>
+                            <h4 class="card-header">User Table Configuration</h4>
                             <div class="card-body">
-                                <!-- <h5 class="card-title"></h5> -->
                                 <p>Customize the user table for your web app. Specify the fields and attributes that define your users, such as name, email, and password. This allows you to tailor the user management system to fit your specific requirements.</p>
-                                <div class="row">
+                                <div class="row my-3">
                                     <div class="col-4">
+                                        <h6>User Model</h6>
                                         <select id="user_model" class="w-100">
                                             <option value="0">Kyte Framework User (Default)</option>
                                         </select>
                                     </div>
                                     <div class="col-4">
+                                        <h6>Login Username</h6>
                                         <select id="username_colname" class="w-100">
                                         </select>
                                     </div>
                                     <div class="col-4">
+                                        <h6>Login Password</h6>
                                         <select id="password_colname" class="w-100">
                                         </select>
                                     </div>
@@ -94,17 +96,19 @@
                             </div>
                         </div>
                         <div class="card mb-3">
-                            <div class="card-header">Organization Table Configuration</div>
+                            <h4 class="card-header">Organization Table Configuration</h4>
                             <div class="card-body">
                                 <!-- <h5 class="card-title"></h5> -->
                                 <p>Set up an organization table to manage users within specific groups or organizations. Define fields like organization name, description, and membership attributes to organize users and facilitate collaboration within your web app. This feature enables you to create a structured system for managing users in different organizational contexts.</p>
-                                <div class="row">
+                                <div class="row my-3">
                                     <div class="col-4">
+                                        <h6>Organization Model</h6>
                                         <select id="org_model" class="w-100">
                                             <option value="0" id="default_org_model">Kyte Framework Account (Default)</option>
                                         </select>
                                     </div>
                                     <div class="col-4">
+                                        <h6>User Foreign Key Attribute to Organization</h6>
                                         <select id="userorg_colname" class="w-100">
                                         </select>
                                     </div>
@@ -113,22 +117,22 @@
                             </div>
                         </div>
                         <div class="card mb-3">
-                            <div class="card-header">AWS Credentials</div>
+                            <h4 class="card-header">AWS Credentials</h4>
                             <div class="card-body">
                                 <!-- <h5 class="card-title"></h5> -->
                                 <p>AWS credentials configured for this application.</p>
                                 <small>Currently, changing the AWS credentials for your application is not supported. If changing the AWS credentials is required, please contact support.</small>
-                                <div class="row">
+                                <div class="row my-3">
                                     <div class="col-4">
-                                        <p>Username</p>
+                                        <h6>Username</h6>
                                         <input type="text" id="aws_username" class="w-100" readonly>
                                     </div>
                                     <div class="col-4">
-                                        <p>Public Key</p>
+                                        <h6>Public Key</h6>
                                         <input type="text" id="aws_public_key" class="w-100" readonly>
                                     </div>
                                     <div class="col-4">
-                                        <p>Secret Key</p>
+                                        <h6>Secret Key</h6>
                                         <small>Secret key is not displayed for your security</small>
                                     </div>
                                 </div>
