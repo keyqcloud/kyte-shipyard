@@ -23,15 +23,13 @@ let elements = [
                     'ap-northeast-2': 'Seoul',
                     'ap-southeast-1': 'Singapore',
                     'ap-southeast-2': 'Sydney',
-                    'ca-central-1': 'Canada Central',
+                    'ca-central-1': 'Canada (Central)',
                     'eu-central-1': 'Frankfurt',
                     'eu-north-1': 'Stockholm',
                     'eu-west-1': 'Ireland',
                     'eu-west-2': 'London',
                     'eu-west-3': 'Paris',
-                    'sa-east-1': 'Sao Paulo',
-                    'cn-north-1': 'Beijing',
-                    'cn-northwest-1': 'Ningxia'
+                    'sa-east-1': 'São Paulo',
                 }
             }
         }

@@ -1,5 +1,6 @@
 ## 1.1.28
 
+* Correct spelling of Sao Paulo to São Paulo
 * Fix missing menu items on sub pages
 * Update UX and add labels to configuration page
 * Staging monaco editor version 0.44
