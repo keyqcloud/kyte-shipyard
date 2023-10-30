@@ -93,6 +93,12 @@ $(document).ready(function() {
                         selector:'#Pages'
                     },
                     {
+                        faicon:'fas fa-scroll',
+                        label:'Scripts',
+                        href:'/app/site/?request='+encoded+'#Scripts',
+                        selector:'#Scripts'
+                    },
+                    {
                         faicon:'fas fa-photo-video',
                         label:'Media',
                         href:'/app/site/?request='+encoded+'#Media',
@@ -109,6 +115,12 @@ $(document).ready(function() {
                         label:'Side Menu',
                         href:'/app/site/?request='+encoded+'#SideNav',
                         selector:'#SideNav'
+                    },
+                    {
+                        faicon:'fas fa-puzzle-piece',
+                        label:'Sections',
+                        href:'/app/site/?request='+encoded+'#Sections',
+                        selector:'#Sections'
                     },
                     {
                         faicon:'fas fa-at',

@@ -1,5 +1,7 @@
 ## 1.1.28
 
+* Fix missing menu items on sub pages
+* Update UX and add labels to configuration page
 * Staging monaco editor version 0.44
 
 ## 1.1.27
