@@ -7,7 +7,13 @@ let scriptElement = [
             'required':true
         },
         {
-            'field':'type',
+            'field':'s3key',
+            'type':'text',
+            'label':'File Name',
+            'required':true
+        },
+        {
+            'field':'script_type',
             'type':'select',
             'label':'Script Stype',
             'required':true,
@@ -19,23 +25,8 @@ let scriptElement = [
                 }
             }
         },
-    ],
-    [
         {
-            'field':'is_url',
-            'type':'select',
-            'label':'URL or File',
-            'required':true,
-            'option': {
-                'ajax': false,
-                'data': {
-                    0: 'Create file in editor',
-                    1: 'Provide URL to script'
-                }
-            }
-        },
-        {
-            'field':'include_global',
+            'field':'include_all',
             'type':'select',
             'label':'Globally Include',
             'required':true,
@@ -47,6 +38,68 @@ let scriptElement = [
                 }
             }
         }
+    ],
+    [
+        {
+            'field':'description',
+            'type':'textarea',
+            'label':'Description',
+            'required':false
+        },
+    ],
+];
+
+let libraryElement = [
+    [
+        {
+            'field':'name',
+            'type':'text',
+            'label':'Script Name',
+            'required':true
+        },
+        {
+            'field':'script_type',
+            'type':'select',
+            'label':'Script Stype',
+            'required':true,
+            'option': {
+                'ajax': false,
+                'data': {
+                    'css': 'CSS Stylesheet',
+                    'js': 'JavaScript'
+                }
+            }
+        },
+        {
+            'field':'include_all',
+            'type':'select',
+            'label':'Globally Include',
+            'required':true,
+            'option': {
+                'ajax': false,
+                'data': {
+                    0: 'No',
+                    1: 'Yes'
+                }
+            }
+        }
+    ],
+    [
+
+        {
+            'field':'link',
+            'type':'text',
+            'label':'Link',
+            'required':true
+        },
+    ],
+    [
+        {
+            'field':'description',
+            'type':'textarea',
+            'label':'Description',
+            'required':false
+        },
     ],
 ];
 
@@ -152,11 +205,20 @@ let colDefSideNavigation = [
 
 // table def
 let colDefScript = [
-    {'targets':0,'data':'name','label':'Script Name'},
-    {'targets':1,'data':'type','label':'Script Type', render: function(data, type, row, meta) { if (data == 'css') { return 'Stylesheet'; } else if (data == 'js') { return 'JavaScript'; } else { return 'Unknown'; } }},
-    {'targets':2,'data':'state','label':'Status', render: function(data, type, row, meta) { if (data == 0) { return 'Not Published'; } else if (data == 1) { return 'Published'; } else { return 'Published (Stale)'; }}},
-    {'targets':3,'data':'include_global','label':'Include All', render: function(data, type, row, meta) { if (data == 0) { return 'No'; } else if (data == 1) { return 'Yes'; } else { return 'Unknown'; }}},
-    {'targets':4,'data':'date_modified','label':'Date Modified'},
+    {'targets':0,'data':'name','label':'Name'},
+    {'targets':1,'data':'script_type','label':'Type', render: function(data, type, row, meta) { if (data == 'css') { return 'Stylesheet'; } else if (data == 'js') { return 'JavaScript'; } else { return 'Unknown'; } }},
+    {'targets':2,'data':'s3key','label':'Path'},
+    {'targets':3,'data':'state','label':'Status', render: function(data, type, row, meta) { if (data == 0) { return 'Not Published'; } else if (data == 1) { return 'Published'; } else { return 'Published (Stale)'; }}},
+    {'targets':4,'data':'include_all','label':'Include All', render: function(data, type, row, meta) { if (data == 0) { return 'No'; } else if (data == 1) { return 'Yes'; } else { return 'Unknown'; }}},
+    {'targets':5,'data':'date_modified','label':'Date Modified', render: function(data, type, row, meta) { return data ? data : '' }}
+];
+
+let colDefLibrary = [
+    {'targets':0,'data':'name','label':'Name'},
+    {'targets':1,'data':'script_type','label':'Type', render: function(data, type, row, meta) { if (data == 'css') { return 'Stylesheet'; } else if (data == 'js') { return 'JavaScript'; } else { return 'Unknown'; } }},
+    {'targets':2,'data':'link','label':'Link'},
+    {'targets':3,'data':'include_all','label':'Include All', render: function(data, type, row, meta) { if (data == 0) { return 'No'; } else if (data == 1) { return 'Yes'; } else { return 'Unknown'; }}},
+    {'targets':4,'data':'date_modified','label':'Date Modified', render: function(data, type, row, meta) { return data ? data : '' }}
 ];
 
 let app = null;
@@ -308,10 +370,23 @@ $(document).ready(function() {
                 tblPage.init();
 
                 // scripts
-                // var tblScript = createTable("#scripts-table", "AssetScript", colDefScript, 'site', idx, false, true);
-                // var modalFormScript = new KyteForm(k, $("#modalFormScript"), 'AssetScript', hidden, scriptElement, 'Script', tblScript, true, $("#newScript"));
-                // modalFormScript.init();
-                // tblScript.bindEdit(modalFormScript);
+                var tblScript = createTable("#scripts-table", "KyteScript", colDefScript, 'site', idx, false, true);
+                var modalFormScript = new KyteForm(k, $("#modalFormScript"), 'KyteScript', hidden, scriptElement, 'Script', tblScript, true, $("#newScript"));
+                modalFormScript.success = function(r) {
+                    if (r.data[0]) {
+                        let obj = {'model': 'KyteScript', 'idx':r.data[0].id};
+                        let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                        location.href="/app/script/?request="+encoded;
+                    }
+                }
+                modalFormScript.init();
+                tblScript.bindEdit(modalFormScript);
+
+                // Library
+                var tblLibrary = createTable("#libraries-table", "KyteLibrary", colDefLibrary, 'site', idx, true, true);
+                var modalFormLibrary = new KyteForm(k, $("#modalFormLibrary"), 'KyteLibrary', hidden, libraryElement, 'Script', tblLibrary, true, $("#addLibrary"));
+                modalFormLibrary.init();
+                tblLibrary.bindEdit(modalFormLibrary);
 
                 // media
                 var tblMedia = createTable("#media-table", "Media", colDefMedia, 'site', idx, false, true);

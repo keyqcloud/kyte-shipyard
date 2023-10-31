@@ -202,6 +202,11 @@ let subnavSite = [
         selector:'#Scripts'
     },
     {
+        faicon:'fas fa-book',
+        label:'Library',
+        selector:'#Library'
+    },
+    {
         faicon:'fas fa-photo-video',
         label:'Media',
         selector:'#Media'

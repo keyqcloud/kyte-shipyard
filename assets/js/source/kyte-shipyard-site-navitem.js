@@ -48,6 +48,12 @@ $(document).ready(function() {
                         selector:'#Scripts'
                     },
                     {
+                        faicon:'fas fa-book',
+                        label:'Library',
+                        href:'/app/site/?request='+encoded+'#Library',
+                        selector:'#Library'
+                    },
+                    {
                         faicon:'fas fa-photo-video',
                         label:'Media',
                         href:'/app/site/?request='+encoded+'#Media',

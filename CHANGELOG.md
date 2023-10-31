@@ -1,5 +1,6 @@
 ## 1.1.28
 
+* Add support for custom libraries and scripts
 * Correct spelling of Sao Paulo to São Paulo
 * Fix missing menu items on sub pages
 * Update UX and add labels to configuration page

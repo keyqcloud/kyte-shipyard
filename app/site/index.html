@@ -24,9 +24,9 @@
     <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
     <script src="/assets/js/kyte-connect.js"></script>
     <script src="/assets/js/kyte-shipyard.js"></script>
-    <script src="/assets/js/navigation.js?v=1"></script>
-    <script src="/assets/js/kyte-shipyard-tables.js?v=1"></script>
-    <script src="/assets/js/kyte-shipyard-site-details.js?v=1"></script>
+    <script src="/assets/js/navigation.js"></script>
+    <script src="/assets/js/kyte-shipyard-tables.js"></script>
+    <script src="/assets/js/kyte-shipyard-site-details.js"></script>
 </head>
 
 <body>
@@ -79,12 +79,25 @@
                     <div class="d-flex justify-content-between mt-4">
                         <h4>Custom Scripts</h4>
                         <div>
-                            <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="createScript">&plus; Create Script</a>
+                            <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="newScript">&plus; Create Script</a>
                         </div>
                     </div>
 
                     <div class="mt-2">
                         <table id="scripts-table" class="table table-striped w-100"></table>
+                    </div>
+                </div>
+
+                <div id="Library" class="mt-2 d-none">
+                    <div class="d-flex justify-content-between mt-4">
+                        <h4>Third Party Libraries</h4>
+                        <div>
+                            <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="addLibrary">&plus; Add Library</a>
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <table id="libraries-table" class="table table-striped w-100"></table>
                     </div>
                 </div>
 
@@ -186,6 +199,7 @@
     <!-- modal form -->
     <div id="modalFormPage"></div>
     <div id="modalFormScript"></div>
+    <div id="modalFormLibrary"></div>
     <div id="modalFormMedia"></div>
     <div id="modalFormNavigation"></div>
     <div id="modalFormSideNav"></div>
