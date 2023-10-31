@@ -1,3 +1,7 @@
+## 1.1.29
+
+* Fix responsiveness of reset and password forms and offset logo
+
 ## 1.1.28
 
 * Add support for custom libraries and scripts
