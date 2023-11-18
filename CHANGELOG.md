@@ -1,3 +1,7 @@
+## 1.1.30
+
+* Add kyte-connect.js and kyte-connect-source.js to the gitignore
+
 ## 1.1.29
 
 * Fix responsiveness of reset and password forms and offset logo
