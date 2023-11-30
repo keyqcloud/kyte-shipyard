@@ -263,7 +263,7 @@ $(document).ready(function() {
                     'placeholder': 'N/A',
                     'option': {
                         'ajax': true,
-                        'data_model_name': 'Page',
+                        'data_model_name': 'KytePage',
                         'data_model_field': 'site',
                         'data_model_value': idx,
                         'data_model_attributes': ['title'],
@@ -343,7 +343,7 @@ $(document).ready(function() {
 
                 // pages
                 // var tblPage = createTable("#pages-table", "Page", colDefPage, 'site', idx, false, true, '/app/page/', 'id', true);
-                var tblPage = new KyteTable(k, $("#pages-table"), {'name':'Page','field':'site','value':idx}, colDefPage, true, [0,"asc"], false, true, 'id', '/app/page/');
+                var tblPage = new KyteTable(k, $("#pages-table"), {'name':'KytePage','field':'site','value':idx}, colDefPage, true, [0,"asc"], false, true, 'id', '/app/page/');
                 tblPage.customAction = [
                     {
                         'className': 'open-block-editor',

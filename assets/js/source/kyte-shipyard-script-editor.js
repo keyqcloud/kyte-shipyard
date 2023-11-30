@@ -178,7 +178,7 @@ $(document).ready(function() {
                     }, function(err) {
                         if (err == 'Unable to create new invalidation') {
                             setTimeout(() => {
-                                k.put('Page', 'id', idx, payload, null, [], function(r) {
+                                k.put('KytePage', 'id', idx, payload, null, [], function(r) {
                                     $('#pageLoaderModal').modal('hide');
                                 }, function(err) {
                                     alert(err);

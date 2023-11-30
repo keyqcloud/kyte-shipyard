@@ -1,10 +1,8 @@
-## 1.1.30
+## 1.2.0
 
 * Add kyte-connect.js and kyte-connect-source.js to the gitignore
-
-## 1.1.29
-
 * Fix responsiveness of reset and password forms and offset logo
+* Update to use KytePage and KytePageData instead of Page
 
 ## 1.1.28
 

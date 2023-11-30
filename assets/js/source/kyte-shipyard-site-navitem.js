@@ -103,7 +103,7 @@ $(document).ready(function() {
                 navbar.create();
 
                 // get pages
-                k.get('Page', 'site', data.site.id, [], function(r) {
+                k.get('KytePage', 'site', data.site.id, [], function(r) {
                     if (r.data.length > 0) {
                         pages = r.data;
                     }

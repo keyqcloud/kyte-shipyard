@@ -86,7 +86,7 @@ $(document).ready(function() {
                     }
                 });
 
-                k.get('Page', 'site', site.id, [], function(r) {
+                k.get('KytePage', 'site', site.id, [], function(r) {
                     for (data of r.data) {
                         $("#page-login-success-target").append('<option value="'+data.s3key+'">'+data.title+' (/'+data.s3key+')'+'</option>');
                         $("#page-table-click").append('<option value="'+data.s3key+'">'+data.title+' (/'+data.s3key+')'+'</option>');
@@ -172,7 +172,7 @@ $(document).ready(function() {
 
         let condition = btoa(JSON.stringify([{"field":"site","value":siteIdx}]));
         // check if page already exists
-        k.get('Page', 's3key', page_path, [{'name':'x-kyte-query-conditions', 'value':condition}], function(r) {
+        k.get('KytePage', 's3key', page_path, [{'name':'x-kyte-query-conditions', 'value':condition}], function(r) {
             $('#pageLoaderModal').modal('hide');
             if (r.data.length > 0) {
                 $("#page-path").addClass('is-invalid');
@@ -497,12 +497,12 @@ $(document).ready(function() {
                     return;
                 }
                 $("#page-login-heading").removeClass('is-invalid');
-                layout = {
-                    'page_type': $("#page-type").val(),
-                    'page_login_heading': page_login_heading,
-                    'page_login_field_name': page_login_field_name,
-                    'page_login_success_target': page_login_success_target
-                }
+                // layout = {
+                //     'page_type': $("#page-type").val(),
+                //     'page_login_heading': page_login_heading,
+                //     'page_login_field_name': page_login_field_name,
+                //     'page_login_success_target': page_login_success_target
+                // }
                 // generate javascript
                 javascript = '$("#login-form").submit(function(e) {e.preventDefault();e.stopPropagation();$("#errorMsg").addClass(\'d-none\');$("#errorMsg").html("");if (($("#'+page_login_field_name+'").val()).length > 0 || ($("#password").val()).length > 0) { k.sessionCreate({\''+page_login_field_name+'\':$("#'+page_login_field_name+'").val(), \'password\':$("#password").val()}, function(session) { if (session.data[0]) {location.href="/'+page_login_success_target+'"; } else {$("#errorMsg").html("Something went wrong with the login. Please contact your administrator.");$("#errorMsg").removeClass("d-none\");}}, function() {$("#errorMsg").html("Incorrect email and password combination.");$("#errorMsg").removeClass("d-none");});} else {$("#errorMsg").html("Email and password are required.");$("#errorMsg").removeClass("d-none");}});';
 
@@ -524,15 +524,15 @@ $(document).ready(function() {
                     columns.push({'targets':colIdx, 'data':$(this).data('attrName'), 'label':$(this).find('.column-label').val()});
                     colIdx++;
                 });
-                layout = {
-                    'model': page_model,
-                    'page_type': $("#page-type").val(),
-                    'main_navigation': main_navigation,
-                    'page_table_title': page_table_title,
-                    'page_table_delete': page_table_delete,
-                    'page_table_click': page_table_click,
-                    'page_table_columns': columns
-                };
+                // layout = {
+                //     'model': page_model,
+                //     'page_type': $("#page-type").val(),
+                //     'main_navigation': main_navigation,
+                //     'page_table_title': page_table_title,
+                //     'page_table_delete': page_table_delete,
+                //     'page_table_click': page_table_click,
+                //     'page_table_columns': columns
+                // };
                 // generate javascript
                 javascript = 'let colDef'+page_model+' = JSON.parse(\''+JSON.stringify(columns)+'\'); let tbl'+page_model+' = new KyteTable(k, $("#dt'+page_model+'"),{"name":"'+page_model+'","field":null,"value":null}, colDef'+page_model+', true, [0, "asc"], false, '+(page_table_delete == 1 ? 'true' : 'false')+(page_table_click.length > 1 ? ', "id", "/'+page_table_click+'"' : '')+');tbl'+page_model+'.init();';
                 // generate html
@@ -657,19 +657,19 @@ $(document).ready(function() {
                     fields.push(fieldCols);
                 }
 
-                layout = {
-                    'model': page_model,
-                    'page_type': $("#page-type").val(),
-                    'main_navigation': main_navigation,
-                    'page_table_title': page_table_title,
-                    'page_table_add': page_table_add,
-                    'page_table_edit': page_table_edit,
-                    'page_table_delete': page_table_delete,
-                    'page_table_click': page_table_click,
-                    'page_table_columns': columns,
-                    'page_form_title': page_form_title,
-                    'page_form_fields': fields,
-                };
+                // layout = {
+                //     'model': page_model,
+                //     'page_type': $("#page-type").val(),
+                //     'main_navigation': main_navigation,
+                //     'page_table_title': page_table_title,
+                //     'page_table_add': page_table_add,
+                //     'page_table_edit': page_table_edit,
+                //     'page_table_delete': page_table_delete,
+                //     'page_table_click': page_table_click,
+                //     'page_table_columns': columns,
+                //     'page_form_title': page_form_title,
+                //     'page_form_fields': fields,
+                // };
                 // generate javascript
                 javascript = 'let colDef'+page_model+' = JSON.parse(\''+JSON.stringify(columns)+'\'); let tbl'+page_model+' = new KyteTable(k, $("#dt'+page_model+'"),{"name":"'+page_model+'","field":null,"value":null}, colDef'+page_model+', true, [0, "asc"], '+(page_table_edit == 1 ? 'true' : 'false')+', '+(page_table_delete == 1 ? 'true' : 'false')+(page_table_click.length > 1 ? ', "id", "/'+page_table_click+'"' : '')+');tbl'+page_model+'.init();';
                 // form javascript
@@ -681,24 +681,24 @@ $(document).ready(function() {
 
             // custom and block editor pages
             default:
-                layout = {
-                    'page_type': $("#page-type").val(),
-                    'protected': page_protected,
-                    'main_navigation': main_navigation,
-                    'side_navigation': side_navigation,
-                }
+                // layout = {
+                //     'page_type': $("#page-type").val(),
+                //     'protected': page_protected,
+                //     'main_navigation': main_navigation,
+                //     'side_navigation': side_navigation,
+                // }
                 break;
         }
 
         $('#pageLoaderModal').modal('show');
 
         // upload code
-        k.post('Page', {
+        k.post('KytePage', {
             'html': html,
             'javascript': javascript,
             'stylesheet': stylesheet,
             'page_type': $("#page-type").val(),
-            'layout': JSON.stringify(layout),
+            // 'layout': JSON.stringify(layout),
             'main_navigation':main_navigation,
             'side_navigation':side_navigation,
             'title':page_title,
@@ -712,7 +712,7 @@ $(document).ready(function() {
                 // generate kyte connect
                 let connect = "let endpoint = 'https://"+kyte_endpoint+"';var k = new Kyte(endpoint, '"+kyte_pub+"', '"+kyte_iden+"', '"+kyte_num+"', '"+kyte_app+"');k.init();\n\n";
                 // create s3 file and invalidate
-                k.put('Page', 'id', r.data[0].id, {'state': 1, 'kyte_connect': connect}, null, [], function(r) {
+                k.put('KytePage', 'id', r.data[0].id, {'state': 1}, null, [], function(r) {
                     $('#pageLoaderModal').modal('hide');
                     $("#wizard-4").addClass('d-none');
                     $("#wizard-final").removeClass('d-none');

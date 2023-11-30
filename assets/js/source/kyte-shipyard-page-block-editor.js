@@ -1,4 +1,4 @@
-var page;
+var pageData;
 var jsEditor;
 
 var colorMode = 'vs';
@@ -85,35 +85,35 @@ $(document).ready(function () {
         let idx = k.getPageRequest();
         idx = idx.idx;
 
-        k.get("Page", "id", idx, [], function (r) {
+        k.get("KytePageData", "page", idx, [], function (r) {
             if (r.data[0]) {
-                page = r.data[0];
+                pageData = r.data[0];
 
                 // display page title in window
-                document.title = document.title + " - " + page.title;
+                document.title = document.title + " - " + pageData.page.title;
                 // set page title and description
-                $("#setting-page-title").val(page.title);
-                $("#setting-page-description").val(page.description);
+                $("#setting-page-title").val(pageData.page.title);
+                $("#setting-page-description").val(pageData.page.description);
 
-                if (page.protected == 0) {
+                if (pageData.page.protected == 0) {
                     $("#sitemap-option-wrapper").removeClass('d-none');
-                    $('#setting-sitemap-include').val(page.sitemap_include);
+                    $('#setting-sitemap-include').val(pageData.page.sitemap_include);
                 }
 
-                $("#setting-obfuscatejs").val(page.obfuscate_js);
-                $("#setting-use_container").val(page.use_container);
+                $("#setting-obfuscatejs").val(pageData.page.obfuscate_js);
+                $("#setting-use_container").val(pageData.page.use_container);
 
                 // if code editor, redirect to code editor page
-                if (page.page_type != 'block') {
+                if (pageData.page.page_type != 'block') {
                     // warn user that siwtching to block editor from custom can cause layout issues
                     $("#alertModal").modal('show');
 
                     // prse the data
                     // HTML content to be parsed
-                    const htmlContent = page.html;
+                    const htmlContent = pageData.html;
 
                     // CSS content to be parsed
-                    const cssContent = page.stylesheet;
+                    const cssContent = pageData.stylesheet;
 
                     // Parse the HTML content and add it to the GrapesJS editor
                     blockEditor.setComponents(htmlContent);
@@ -123,19 +123,19 @@ $(document).ready(function () {
                 } else {
                     // load blocks
                     let blocks = {};
-                    if (page.block_layout.length > 0) {
+                    if (pageData.block_layout.length > 0) {
                         try {
-                            blocks = JSON.parse(page.block_layout);
+                            blocks = JSON.parse(pageData.block_layout);
                             blockEditor.loadProjectData(blocks);
                         } catch (e) {
-                            console.error(e + " => " + page.block_layout);
+                            console.error(e + " => " + pageData.block_layout);
                             alert(e);
                         }
                     }
                 }
 
                 jsEditor = monaco.editor.create(document.getElementById("jsEditor"), {
-                    value: page.javascript,
+                    value: pageData.javascript,
                     theme: colorMode,
                     language: "javascript",
                     automaticLayout: true,
@@ -155,40 +155,40 @@ $(document).ready(function () {
                     $("#JavaScript").addClass('d-none');
                 }
 
-                let obj = { 'model': 'Site', 'idx': page.site.id };
+                let obj = { 'model': 'Site', 'idx': pageData.page.site.id };
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 $("#backToSite").attr('href', '/app/site/?request=' + encoded);
 
-                $("#page-title").html(page.title);
-                $("#viewPage").attr('href', 'https://' + (page.site.aliasDomain ? page.site.aliasDomain : page.site.cfDomain) + '/' + page.s3key);
+                $("#page-title").html(pageData.page.title);
+                $("#viewPage").attr('href', 'https://' + (pageData.page.site.aliasDomain ? pageData.page.site.aliasDomain : pageData.page.site.cfDomain) + '/' + pageData.page.s3key);
 
-                obj = { 'model': 'Application', 'idx': page.site.application.id };
+                obj = { 'model': 'Application', 'idx': pageData.page.site.application.id };
                 encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
 
-                k.get('Navigation', 'site', page.site.id, [], function (r) {
-                    let main_navigation = page.main_navigation ? page.main_navigation.id : 0;
+                k.get('Navigation', 'site', pageData.page.site.id, [], function (r) {
+                    let main_navigation = pageData.page.main_navigation ? pageData.page.main_navigation.id : 0;
                     r.data.forEach(function(data) {
                         $("#setting-main-navigation").append('<option value="' + data.id + '"' + (main_navigation == data.id ? ' selected' : '') + '>' + data.name + '</option>');
                     });
                 });
                 
 
-                k.get('SideNav', 'site', page.site.id, [], function (r) {
-                    let side_navigation = page.side_navigation ? page.side_navigation.id : 0;
+                k.get('SideNav', 'site', pageData.page.site.id, [], function (r) {
+                    let side_navigation = pageData.page.side_navigation ? pageData.page.side_navigation.id : 0;
                     r.data.forEach(function(data) {
                         $("#setting-side-navigation").append('<option value="' + data.id + '"' + (side_navigation == data.id ? ' selected' : '') + '>' + data.name + '</option>');
                     });
                 });
 
                 let sectionTemplateCond = btoa(JSON.stringify([{ 'field': 'category', 'value': 'footer' }]));
-                k.get('SectionTemplate', 'site', page.site.id, [{ 'name': 'x-kyte-query-conditions', 'value': sectionTemplateCond }], function (r) {
-                    let section = page.footer ? page.footer.id : 0;
+                k.get('SectionTemplate', 'site', pageData.page.site.id, [{ 'name': 'x-kyte-query-conditions', 'value': sectionTemplateCond }], function (r) {
+                    let section = pageData.page.footer ? pageData.page.footer.id : 0;
                     r.data.forEach(function(data) {
                         $("#setting-footer").append('<option value="' + data.id + '"' + (section == data.id ? ' selected' : '') + '>' + data.title + '</option>');
                     });
                 });
 
-                let appnav = generateAppNav(page.site.application.name, encoded);
+                let appnav = generateAppNav(pageData.page.site.application.name, encoded);
 
                 let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">', 'Sites');
                 navbar.create();
@@ -226,7 +226,7 @@ $(document).ready(function () {
 
                     console.log(payload);
 
-                    k.put('Page', 'id', idx, payload, null, [], function (r) {
+                    k.put('KytePage', 'id', idx, payload, null, [], function (r) {
                         $('#pageLoaderModal').modal('hide');
                     });
                 });
@@ -265,12 +265,12 @@ $(document).ready(function () {
                         'use_container': $("#setting-use_container").val(),
                         'state': 1,
                     };
-                    k.put('Page', 'id', idx, payload, null, [], function (r) {
+                    k.put('KytePage', 'id', idx, payload, null, [], function (r) {
                         $('#pageLoaderModal').modal('hide');
                     }, function (err) {
                         if (err == 'Unable to create new invalidation') {
                             setTimeout(() => {
-                                k.put('Page', 'id', idx, payload, null, [], function (r) {
+                                k.put('KytePage', 'id', idx, payload, null, [], function (r) {
                                     $('#pageLoaderModal').modal('hide');
                                 }, function (err) {
                                     alert(err);
