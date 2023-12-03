@@ -103,7 +103,7 @@ $(document).ready(function() {
                     $("#Content").addClass('d-none');
                 }
 
-                let obj = {'model': 'Site', 'idx':script.site.id};
+                let obj = {'model': 'KyteSite', 'idx':script.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 $("#backToSite").attr('href', '/app/site/?request='+encoded+'#Scripts');
 

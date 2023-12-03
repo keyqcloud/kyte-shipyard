@@ -317,10 +317,14 @@ $(document).ready(function() {
             ]
         ];
 
-        k.get("Site", "id", idx, [], function(r) {
+        k.get("KyteSite", "id", idx, [], function(r) {
             if (r.data[0]) {
                 app = r.data[0].application;
                 data = r.data[0];
+                // if site is not active display a message
+                if (data.status != 'active') {
+                    $("#site-detail-page-wrapper").html(`<div class="container"><div class="my-5 alert alert-info text-center" role="alert"><i class="my-3 d-block fas fa-exclamation fa-3x"></i><h3>We are ${data.status} your site.</h3><h4 style="font-weight:300">Please wait until the operation is completed.</h4></div></div>`)
+                }
                 $("#site-name").html(data.name);
                 $("#domain-name").html('<i class="fas fa-link me-2"></i>'+(data.aliasDomain ? data.aliasDomain : data.cfDomain));
                 $("#domain-name").attr('href', 'https://'+(data.aliasDomain ? data.aliasDomain : data.cfDomain));
@@ -329,7 +333,7 @@ $(document).ready(function() {
                 $("#ga_code").val(data.ga_code);
                 $("#gtm_code").val(data.gtm_code);
 
-                let obj = {'model': 'Site', 'idx':data.id};
+                let obj = {'model': 'KyteSite', 'idx':data.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 $("#createPage").attr('href', '/app/page/wizard.html?request='+encoded);
 
@@ -439,7 +443,7 @@ $(document).ready(function() {
             let ga_code = $("#ga_code").val();
             let gtm_code = $("#gtm_code").val();
 
-            k.put('Site', 'id', idx,
+            k.put('KyteSite', 'id', idx,
             {
                 'aliasDomain':aliasDomain,
                 'ga_code':ga_code,

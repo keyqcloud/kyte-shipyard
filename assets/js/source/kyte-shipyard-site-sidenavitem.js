@@ -33,7 +33,7 @@ $(document).ready(function() {
                 $("#colorPreview button.active").css('background-color', data.bgActiveColor);
                 $("#colorPreview button.active").css('color', data.fgActiveColor);
                 
-                let obj = {'model': 'Site', 'idx':data.site.id};
+                let obj = {'model': 'KyteSite', 'idx':data.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
 
                 let subnavSite = [

@@ -82,7 +82,7 @@ $(document).ready(function() {
                     $("#dns-validation-list").append('<div class="card mb-3"><div class="card-header"><i class="fas fa-circle mx-2 '+statusColor+'"></i>'+record.ValidationStatus.replace('_', ' ')+'</div><div class="card-body"><h5 class="card-title">'+record.DomainName+'</h5><div class="row mt-2" style="border-bottom:1px solid grey;"><div class="col"><b>Name</b></div><div class="col-2"><b>Type</b></div><div class="col"><b>Target</b></div></div><div class="row"><div class="col"><a onclick="navigator.clipboard.writeText(\''+record.ResourceRecord.Name+'\');$(this).addClass(\'text-success\');setTimeout(() => {$(this).removeClass(\'text-success\')}, 1000);" onmouseover="this.style.cursor=\'pointer\';"><i class="far fa-copy me-2"></i></a>'+record.ResourceRecord.Name+'</div><div class="col-2">'+record.ResourceRecord.Type+'</div><div class="col"><a onclick="navigator.clipboard.writeText(\''+record.ResourceRecord.Value+'\');$(this).addClass(\'text-success\');setTimeout(() => {$(this).removeClass(\'text-success\')}, 1000);" onmouseover="this.style.cursor=\'pointer\';"><i class="far fa-copy me-2"></i></a>'+record.ResourceRecord.Value+'</div></div></div></div>');
                 }
 
-                let obj = {'model': 'Site', 'idx':data.site.id};
+                let obj = {'model': 'KyteSite', 'idx':data.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
 
                 let subnavSite = [

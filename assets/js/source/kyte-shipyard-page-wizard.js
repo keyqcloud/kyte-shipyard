@@ -20,7 +20,7 @@ $(document).ready(function() {
 
         siteIdx = idx;
 
-        k.get("Site", "id", idx, [], function(r) {
+        k.get("KyteSite", "id", idx, [], function(r) {
             if (r.data[0]) {
                 let site = r.data[0];
                 let hidden = [
@@ -57,7 +57,7 @@ $(document).ready(function() {
                     $("#path-preview").html('https://' + cfDomain + '/' + correctedPagePath.replace(rePath, '-').toLowerCase());
                 }
                 
-                let obj = {'model': 'Site', 'idx':site.id};
+                let obj = {'model': 'KyteSite', 'idx':site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 $(".backToSite").attr('href', '/app/site/?request='+encoded);
 

@@ -31,7 +31,7 @@ $(document).ready(function() {
 
                 $("#navigation-name").html(data.name);
 
-                let obj = {'model': 'Site', 'idx':data.site.id};
+                let obj = {'model': 'KyteSite', 'idx':data.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
 
                 let subnavSite = [

@@ -143,7 +143,7 @@ $(document).ready(function() {
                     $("#Stylesheet").addClass('d-none');
                 }
 
-                let obj = {'model': 'Site', 'idx':section.site.id};
+                let obj = {'model': 'KyteSite', 'idx':section.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 $("#backToSection").attr('href', '/app/site/?request='+encoded+'#Sections');
 

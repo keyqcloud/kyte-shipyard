@@ -137,7 +137,7 @@ $(document).ready(function() {
                     $("#Stylesheet").addClass('d-none');
                 }
 
-                let obj = {'model': 'Site', 'idx':pageData.page.site.id};
+                let obj = {'model': 'KyteSite', 'idx':pageData.page.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 $("#backToSite").attr('href', '/app/site/?request='+encoded+'#Pages');
 

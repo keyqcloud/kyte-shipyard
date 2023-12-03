@@ -61,8 +61,8 @@ $(document).ready(function() {
         }
     ];
     
-    var dataTable = createTable("#data-table", "Site", colDefSites, 'application', idx, false, true, '/app/site/', 'id', true);
-    var modalForm = new KyteForm(k, $("#modalForm"), 'Site', hidden, elements, 'Site', dataTable, true, $("#new"));
+    var dataTable = createTable("#data-table", "KyteSite", colDefSites, 'application', idx, false, true, '/app/site/', 'id', true);
+    var modalForm = new KyteForm(k, $("#modalForm"), 'KyteSite', hidden, elements, 'Site', dataTable, true, $("#new"));
     modalForm.init();
     dataTable.bindEdit(modalForm);
 });

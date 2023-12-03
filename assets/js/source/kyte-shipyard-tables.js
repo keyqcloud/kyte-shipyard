@@ -4,9 +4,10 @@ let colDefModels = [
 
 let colDefSites = [
     {'targets':0,'data':'name','label':'Site Name'},
-    {'targets':1,'data':'cfDomain','label':'CF Domain'},
-    {'targets':2,'data':'aliasDomain','label':'Alias'},
+    {'targets':1,'data':'cfDomain','label':'CF Domain', render: function(data, type, row, meta) { return data ? data : ''}},
+    {'targets':2,'data':'aliasDomain','label':'Alias', render: function(data, type, row, meta) { return data ? data : ''}},
     {'targets':3,'data':'region','label':'region'},
+    {'targets':4,'data':'status','label':'Status', render: function(data, type, row, meta) { return data.charAt(0).toUpperCase() + data.slice(1); }},
 ];
 
 let colDefNavItem = [
