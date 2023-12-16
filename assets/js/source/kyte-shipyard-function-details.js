@@ -1,3 +1,4 @@
+import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/+esm';
 import {registerPHPSnippetLanguage} from '/assets/js/packages/utils/php-snippet/registerPHPSnippetLanguage.js';
 
 let subnavFunction = [
@@ -10,7 +11,6 @@ let subnavFunction = [
 
 
 var editor;
-let functionName = "Undefined";
 
 var colorMode = 'vs';
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -40,27 +40,6 @@ document.addEventListener("keydown", function(event) {
 });
 
 registerPHPSnippetLanguage(monaco.languages);
-
-let assignControllerElements = [
-    [
-        {
-            'field': 'controller',
-            'type': 'select',
-            'label': 'Controller',
-            'required': true,
-            'placeholder': 'Please select...',
-            'option': {
-                'ajax': true,
-                'data_model_name': 'Controller',
-                'data_model_field': '',
-                'data_model_value': '',
-                'data_model_attributes': ['name'],
-                'data_model_default_field': 'id',
-                // 'data_model_default_value': 1,
-            }
-        }
-    ]
-];
 
 $(document).ready(function() {
     let sidenav = new KyteSidenav("#sidenav", subnavFunction, "#Code");
