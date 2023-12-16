@@ -146,7 +146,16 @@ $(document).ready(function() {
             $("#userorg_colname").val(0);
             $("#userorg_colname").prop('disabled', true);
         } else {
-            $("#userorg_colname").prop('disabled', false);
+            k.get('ModelAttribute', 'dataModel', userModelIdx, [], function(r) {
+                if(r.data.length > 0) {
+                    $("#userorg_colname").html('');
+                    $("#userorg_colname").append('<option value="0">None</option>');
+                    r.data.forEach(element => {
+                        $("#userorg_colname").append('<option value="'+element.id+'" '+(element.name == app.userorg_colname ? 'selected' : '')+'>'+element.name+'</option>');
+                    });
+                }
+                $("#userorg_colname").prop('disabled', false);
+            });
         }
     });
     $("#username_colname").change(function(e) {
