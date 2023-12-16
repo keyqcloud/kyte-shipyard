@@ -1,3 +1,8 @@
+## 1.2.1
+
+* Update monaco to use CDN and EMA
+* Display path in menu selection
+
 ## 1.2.0
 
 * Add kyte-connect.js and kyte-connect-source.js to the gitignore
