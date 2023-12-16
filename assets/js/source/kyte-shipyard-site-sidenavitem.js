@@ -180,7 +180,7 @@ $(document).ready(function() {
         let pageOpt = '<select class="navitem-page-selection form-select'+(isLink ? ' d-none' : '')+'">';
         pageOpt += '<option'+((element.page == null || element.page == 0) ? ' selected' : '')+' disabled>Please select</option>'
         pages.forEach(page => {
-            pageOpt += '<option value="'+page.id+'"'+((element.page != null && element.page.id == page.id) ? ' selected' : '')+'>'+page.title+'</option>';
+            pageOpt += '<option value="'+page.id+'"'+((element.page != null && element.page.id == page.id) ? ' selected' : '')+'>'+page.title+` [${page.s3key}]</option>`;
         });
         pageOpt += '</select>';
         let menuItemHtml = '<li class="sortable-navitem-element" data-nav-idx="'+element.id+'"><div class="row navitem-row"><div class="col-auto d-flex row-grip"><i class="fas fa-grip-vertical"></i></div><div class="col"><input class="form-control navitem-title" type="text" value="'+element.title+'" /></div><div class="col"><input class="form-control navitem-faicon" type="text" placeholder="fab fa-font-awesome-flag" value="'+(element.faicon ? element.faicon : '')+'" /></div><div class="col"><input class="form-control navitem-link'+(isLink ? '' : ' d-none')+'" type="text" placeholder="url or anchor" value="'+(element.link ? element.link : '')+'" />'+pageOpt+'</div><div class="col-2">'+linkOpt+'</div><div class="col-auto d-flex row-delete"><a href="#" class="text-danger navitem-delete"><i class="fas fa-trash-alt"></i></a></div></div></li>';

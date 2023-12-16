@@ -266,7 +266,7 @@ $(document).ready(function() {
                         'data_model_name': 'KytePage',
                         'data_model_field': 'site',
                         'data_model_value': idx,
-                        'data_model_attributes': ['title'],
+                        'data_model_attributes': ['title', 's3key'],
                         'data_model_default_field': 'id',
                         // 'data_model_default_value': 1,
                     }

@@ -194,7 +194,7 @@ $(document).ready(function() {
         let pageOpt = '<select class="navitem-page-selection form-select">';
         pageOpt += '<option'+((element.page == null || element.page == 0) ? ' selected' : '')+' disabled>Please select</option>'
         pages.forEach(page => {
-            pageOpt += '<option value="'+page.id+'"'+((element.page != null && element.page.id == page.id) ? ' selected' : '')+'>'+page.title+'</option>';
+            pageOpt += '<option value="'+page.id+'"'+((element.page != null && element.page.id == page.id) ? ' selected' : '')+'>'+page.title+` [${page.s3key}]</option>`;
         });
         pageOpt += '</select>';
         // generate menu item html
