@@ -1,3 +1,7 @@
+## 1.2.2
+
+* Add missing module attribute for monaco script
+
 ## 1.2.1
 
 * Update monaco to use CDN and EMA
