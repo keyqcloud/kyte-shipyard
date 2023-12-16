@@ -1,3 +1,7 @@
+## 1.2.3
+
+* Fix issue with incorrect tagging and version number
+
 ## 1.2.2
 
 * Add missing module attribute for monaco script
