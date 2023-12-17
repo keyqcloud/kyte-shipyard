@@ -1,3 +1,7 @@
+## 1.2.4
+
+* Fix for loop to populate menus in page editor
+
 ## 1.2.3
 
 * Fix issue with incorrect tagging and version number

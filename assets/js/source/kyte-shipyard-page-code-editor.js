@@ -148,27 +148,28 @@ $(document).ready(function() {
 
                 obj = {'model': 'Application', 'idx':pageData.page.site.application.id};
                 encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                
-                k.get('Navigation', 'site', pageData.page.site.id, [], function(r) {
+
+                k.get('Navigation', 'site', pageData.page.site.id, [], function (r) {
                     let main_navigation = pageData.page.main_navigation ? pageData.page.main_navigation.id : 0;
-                    for (data of r.data) {
-                        $("#setting-main-navigation").append('<option value="'+data.id+'"'+(main_navigation == data.id ? ' selected' : '')+'>'+data.name+'</option>');
-                    }
+                    r.data.forEach(function(data) {
+                        $("#setting-main-navigation").append('<option value="' + data.id + '"' + (main_navigation == data.id ? ' selected' : '') + '>' + data.name + '</option>');
+                    });
                 });
+                
 
-                k.get('SideNav', 'site', pageData.page.site.id, [], function(r) {
+                k.get('SideNav', 'site', pageData.page.site.id, [], function (r) {
                     let side_navigation = pageData.page.side_navigation ? pageData.page.side_navigation.id : 0;
-                    for (data of r.data) {
-                        $("#setting-side-navigation").append('<option value="'+data.id+'"'+(side_navigation == data.id ? ' selected' : '')+'>'+data.name+'</option>');
-                    }
+                    r.data.forEach(function(data) {
+                        $("#setting-side-navigation").append('<option value="' + data.id + '"' + (side_navigation == data.id ? ' selected' : '') + '>' + data.name + '</option>');
+                    });
                 });
 
-                let sectionTemplateCond = btoa(JSON.stringify([{'field':'category','value':'footer'}]));
-                k.get('SectionTemplate', 'site', pageData.page.site.id, [{'name':'x-kyte-query-conditions', 'value':sectionTemplateCond}], function(r) {
+                let sectionTemplateCond = btoa(JSON.stringify([{ 'field': 'category', 'value': 'footer' }]));
+                k.get('SectionTemplate', 'site', pageData.page.site.id, [{ 'name': 'x-kyte-query-conditions', 'value': sectionTemplateCond }], function (r) {
                     let section = pageData.page.footer ? pageData.page.footer.id : 0;
-                    for (data of r.data) {
-                        $("#setting-footer").append('<option value="'+data.id+'"'+(section == data.id ? ' selected' : '')+'>'+data.title+'</option>');
-                    }
+                    r.data.forEach(function(data) {
+                        $("#setting-footer").append('<option value="' + data.id + '"' + (section == data.id ? ' selected' : '') + '>' + data.title + '</option>');
+                    });
                 });
 
                 let appnav = generateAppNav(pageData.page.site.application.name, encoded);
