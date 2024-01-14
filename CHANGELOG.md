@@ -2,6 +2,11 @@
 
 * Remove local copy of monaco editor
 * Reorganize package folder
+* Add error checking to `kyte-shipyard.js` initialization script
+* Check if `kyte-connect.js` is present
+* Check if required credentials are present inside `kyte-connect.js`
+* Add deployment script
+* Add CodeQL
 
 ## 1.2.4
 
