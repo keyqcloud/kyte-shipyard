@@ -7,6 +7,7 @@
 * Check if required credentials are present inside `kyte-connect.js`
 * Add deployment script
 * Add CodeQL
+* Update login and password reset styles
 
 ## 1.2.4
 
