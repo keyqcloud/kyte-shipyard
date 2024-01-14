@@ -1,0 +1,48 @@
+name: Deploy to CDN
+
+on:  
+  push:
+    tags:
+      - '*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out source code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Extract tag name
+      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+    - name: Prepare package
+      run: |
+        mkdir tmp
+        cp *.html tmp/
+        cp -r app tmp/app
+        mkdir tmp/assets
+        cp -r assets/css tmp/assets/
+        cp -r assets/images tmp/assets/
+        mkdir tmp/assets/js
+        cp -r assets/js/packages tmp/assets/js/
+        cp assets/js/*.js tmp/assets/js/
+        cd tmp
+        zip -r9 ../kyte-shipyard.zip .
+        cd ../
+
+    - name: Copy latest files to S3
+      run: aws s3 cp ./kyte-shipyard.zip s3://${{ secrets.S3_BUCKET }}/kyte/shipyard/stable/kyte-shipyard.zip
+
+    - name: Copy archive files to S3
+      run: aws s3 cp ./kyte-shipyard.zip s3://${{ secrets.S3_BUCKET }}/kyte/shipyard/archive/kyte-shipyard-${{ env.TAG_NAME }}.zip
+
+    - name: Invalidate CloudFront cache for latest files
+      run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CF_DISTRIBUTION_ID }} --paths '/*'
