@@ -1,4 +1,5 @@
 var KS_VERSION = '1.2.5';
+var k = null;
 
 function loadScript(url, callback) {
     var script = document.createElement('script');
@@ -23,7 +24,7 @@ function initializeKyte(callback) {
         return;
     }
 
-    var k = new Kyte(endpoint, publickey, identifier, account);
+    k = new Kyte(endpoint, publickey, identifier, account);
     k.init();
     k.addLogoutHandler("#logout");
 }

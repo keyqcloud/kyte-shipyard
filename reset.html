@@ -19,6 +19,61 @@
     <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
     <script src="/assets/js/kyte-shipyard.js"></script>
     <script src="/assets/js/reset.js"></script>
+    <style>
+        body,
+        html {
+            height: 100%;
+        }
+
+        .login-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-panel {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 25px;
+            margin: 2em;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .login-header {
+            margin-bottom: 20px;
+        }
+
+        .login-form input {
+            margin-bottom: 15px;
+        }
+
+        .brand-logo {
+            width: 150px;
+            margin-bottom: 15px;
+        }
+
+        .footer-info {
+            color: white !important;
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8em;
+            padding: 1em;
+        }
+    </style>
 </head>
 
 <body style="background: none;">
@@ -31,35 +86,32 @@
         </div>
     </div>
     <!--  -->
-
-    <!-- START LOGIN PANEL -->
-    <div class="container">
-        <div class="row my-5">
-            <div class="col-lg-4 mx-auto mt-2 order-lg-1 order-2">
-                <form id="reset-form">
-                    <h3 class="text-center text-light pb-4">Password Reset</h3>
-                    <p class="text-danger d-none" id="errorMsg"></p>
-                    <input type="email" class="my-3 form-control" name="email" placeholder="kate@example.com">
-                    <button id="signin" class="my-3 btn btn-primary d-block w-100">Reset Password</button>
-                    <a href="/" class="text-white text-center d-block">Back to sign in?</a>
-                </form>
-                <!-- <hr class="my-3">
-                <h5 class="text-light" style="font-weight: 300;">New to Kyte?</h5>
-                <button id="signup" class="my-3 btn btn-sm btn-secondary d-block w-100">Sign up for free</button> -->
-
-                <p class="text-light text-center mt-5" style="font-weight: 100;">KeyQ © 2020-2023</p>
-                <div class="text-light text-center mt-5 d-flex justify-content-between" style="font-weight: 100;font-size:0.8em;">
-                    <div>Kyte Shipyard&trade; Version <span id="kyteShipyardVersion"></span></div>
-                    <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
-                </div>
+    <!-- Reset Panel -->
+    <div class="login-container">
+        <div class="login-panel">
+            <div class="text-center">
+                <img src="/assets/images/kyte_shipyard.png" alt="Kyte Shipyard" class="brand-logo" />
+                <h1>Kyte Shipyard<sup>™</sup></h1>
+                <h4 style="font-weight: 100; font-style: italic;">Next Generation App Building</h4>
             </div>
-            <div class="col-lg-8 mx-auto mt-2 order-lg-2 order-1 text-center">
-                <img alt="Kyte Shipyard" src="/assets/images/kyte_shipyard_light.png" />
-                <h1 class="text-center text-light" style="font-weight: 300;">Kyte Shipyard<sup>&trade;</sup></h1>
-                <h4 class="text-center text-light" style="font-weight: 100; font-style: italic;">Next Generation App Building</h4>
+            <hr>
+            <form id="reset-form" class="login-form">
+                <div class="login-header">
+                    <h3 class="text-center">Reset My Password</h3>
+                    <p class="text-danger d-none" id="errorMsg"></p>
+                </div>
+                <input type="email" class="form-control" name="email" placeholder="kate@example.com">
+                <button id="signin" class="btn btn-primary w-100">Email Me Reset Instructions</button>
+                <a href="/" class="text-primary d-block text-center mt-4">Remember your login?</a>
+            </form>
+        </div>
+        <div class="footer-info">
+            <p class="mb-0">KeyQ © 2020-2024</p>
+            <div class="d-flex justify-content-between">
+                <span>Kyte Shipyard™ Version <span id="kyteShipyardVersion"></span></span>
+                <span>Kyte JS Version <span id="kyteJSVersion"></span></span>
             </div>
         </div>
     </div>
-    <!-- END LOGIN PANEL -->
 </body>
 </html>
