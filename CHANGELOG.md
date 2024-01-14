@@ -1,3 +1,8 @@
+## 1.2.5
+
+* Remove local copy of monaco editor
+* Reorganize package folder
+
 ## 1.2.4
 
 * Fix for loop to populate menus in page editor

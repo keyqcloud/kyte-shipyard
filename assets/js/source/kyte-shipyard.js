@@ -1,4 +1,4 @@
-var KS_VERSION = '1.2.4';
+var KS_VERSION = '1.2.5';
 
 $(document).ready(function() {
     document.getElementById("kyteShipyardVersion").textContent = KS_VERSION;

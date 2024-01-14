@@ -1,5 +1,5 @@
 import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/+esm';
-import {registerPHPSnippetLanguage} from '/assets/js/packages/utils/php-snippet/registerPHPSnippetLanguage.js';
+import {registerPHPSnippetLanguage} from '/assets/js/packages/php-snippet/registerPHPSnippetLanguage.js';
 
 let subnavFunction = [
     {
