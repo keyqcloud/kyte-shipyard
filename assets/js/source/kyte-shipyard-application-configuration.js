@@ -1,9 +1,32 @@
 let api = null;
 let app = null;
+
+let subnavAppConfig = [
+    {
+        faicon:'fas fa-rocket',
+        label:'App Config',
+        selector:'#App'
+    },
+    {
+        faicon:'fas fa-book',
+        label:'Environment Vars',
+        selector:'#EnvironmentVars'
+    }
+];
+
+let colDefEnvVars = [
+    {'targets':0,'data':'key','label':'Key'},
+    {'targets':1,'data':'value','label':'Value'},
+];
+
 document.addEventListener('KyteInitialized', function(e) {
     let k = e.detail.k;
     let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">');
     navbar.create();
+
+    let sidenav = new KyteSidenav("#sidenav", subnavAppConfig, "#App");
+    sidenav.create();
+    sidenav.bind();
 
     let idx;
 
@@ -12,6 +35,32 @@ document.addEventListener('KyteInitialized', function(e) {
 
         idx = k.getPageRequest();
         idx = idx.idx;
+
+        let fldsEnvVars = [
+            [
+                {
+                    'field':'key',
+                    'type':'text',
+                    'label':'Key',
+                    'required':true
+                }
+            ],
+            [
+                {
+                    'field':'value',
+                    'type':'textarea',
+                    'label':'Value',
+                    'required':true
+                }
+            ]
+        ];
+    
+        let hidden = [
+            {
+                'name': 'application',
+                'value': idx
+            }
+        ];
 
         k.get("Application", "id", idx, [], function(r) {
             if (r.data.length == 0) {
@@ -82,6 +131,13 @@ document.addEventListener('KyteInitialized', function(e) {
                 }
                 $('#pageLoaderModal').modal('hide');
             });
+
+            // get environment variabls
+            var tblEnvVars = new KyteTable(k, $("#tblEnvVars"), {'name':"KyteEnvironmentVariable",'field':'application','value':idx}, colDefEnvVars, true, [0,"asc"], true, true);
+            tblEnvVars.init();
+            var frmEnvVars = new KyteForm(k, $("#modalForm"), 'KyteEnvironmentVariable', hidden, fldsEnvVars, 'Environment Variable', tblEnvVars, true, $("#newEnvVar"));
+            frmEnvVars.init();
+            tblEnvVars.bindEdit(frmEnvVars);
         });
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);

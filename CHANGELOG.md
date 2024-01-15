@@ -1,3 +1,7 @@
+## 1.3.4
+
+* Add support for managing environment variables for an application
+
 ## 1.3.3
 
 * Fix issue with mixed content by updating CHANGELOG to https
