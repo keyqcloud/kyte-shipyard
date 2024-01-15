@@ -33,11 +33,11 @@ document.addEventListener('KyteInitialized', function(e) {
                 kyte_app = site.application.identifier;
 
                 cfDomain = site.cfDomain;
-                $("#path-preview").html('https://'+cfDomain+'/index.html');
+                var safeCfDomain = encodeURIComponent(cfDomain);
+                $("#path-preview").html('https://'+safeCfDomain+'/index.html');
 
                 var userPagePath = $("#page-path").val();
                 var correctedPagePath = userPagePath.trim(); // Remove leading and trailing spaces
-                var safeCfDomain = encodeURIComponent(cfDomain);
 
                 if (correctedPagePath === "") {
                     $("#path-preview").html('https://' + safeCfDomain + '/index.html');
@@ -50,7 +50,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         correctedPagePath += ".html"; // Add the extension if missing
                     }
                     
-                    $("#path-preview").html('https://' + safeCfDomain + '/' + correctedPagePath.replace(rePath, '-').toLowerCase());
+                    $("#path-preview").html('https://' + safeCfDomain + '/' + encodeURIComponent(correctedPagePath.replace(rePath, '-').toLowerCase()));
                 }
                 
                 let obj = {'model': 'KyteSite', 'idx':site.id};
@@ -94,7 +94,7 @@ document.addEventListener('KyteInitialized', function(e) {
                     var correctedPath = userPath.trim(); // Remove leading and trailing spaces
                 
                     if (correctedPath === "") {
-                        $("#path-preview").html('https://' + cfDomain + '/index.html');
+                        $("#path-preview").html('https://' + safeCfDomain + '/index.html');
                     } else {
                         if (correctedPath.startsWith("/")) {
                             correctedPath = correctedPath.substr(1); // Remove leading slash
@@ -104,7 +104,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             correctedPath += ".html"; // Add the extension if missing
                         }
 
-                        $("#path-preview").html('https://' + cfDomain + '/' + correctedPath.replace(rePath, '-').toLowerCase());
+                        $("#path-preview").html('https://' + safeCfDomain + '/' + correctedPath.replace(rePath, '-').toLowerCase());
                     }
                 });
                 navbar.create();
