@@ -52,7 +52,8 @@ let subnavScript = [
     },
 ];
 
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     let sidenav = new KyteSidenav("#sidenav", subnavScript, "#Content");
     sidenav.create();
     sidenav.bind();

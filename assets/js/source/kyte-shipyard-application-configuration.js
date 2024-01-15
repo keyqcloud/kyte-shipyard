@@ -1,6 +1,7 @@
 let api = null;
 let app = null;
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">');
     navbar.create();
 

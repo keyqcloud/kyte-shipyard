@@ -223,7 +223,8 @@ let colDefLibrary = [
 
 let app = null;
 
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     let sidenav = new KyteSidenav("#sidenav", subnavSite, "#Attributes");
     sidenav.create();
     sidenav.bind();

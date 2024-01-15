@@ -1,5 +1,6 @@
 
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
 
     $('#pageLoaderModal').modal('show');
 

@@ -69,7 +69,8 @@ function renderHtmlCode() {
     codeContainer.appendChild(iframe);
 }
 
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     let sidenav = new KyteSidenav("#sidenav", subnavEmail, "#HTML");
     sidenav.create();
     sidenav.bind();

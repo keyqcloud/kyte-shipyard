@@ -41,7 +41,8 @@ document.addEventListener("keydown", function(event) {
 
 registerPHPSnippetLanguage(monaco.languages);
 
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     let sidenav = new KyteSidenav("#sidenav", subnavFunction, "#Code");
     sidenav.create();
     sidenav.bind();

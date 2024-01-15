@@ -1,4 +1,5 @@
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     if (!k.isSession()) {
         location.href="/?redir="+encodeURIComponent(window.location);
         return;

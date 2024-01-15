@@ -49,7 +49,8 @@ let colDefApps = [
     {'targets':3,'data':'aws_key','label':'AWS Public Key', render: function(data, type, row, meta) { if (!row.aws_key) return 'None'; else return row.aws_key.public_key; }},
 ];
 
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">');
     navbar.create();
 

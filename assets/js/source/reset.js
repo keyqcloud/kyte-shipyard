@@ -1,4 +1,5 @@
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     $("#reset-form").submit(function(e) {
         e.preventDefault();
         e.stopPropagation();

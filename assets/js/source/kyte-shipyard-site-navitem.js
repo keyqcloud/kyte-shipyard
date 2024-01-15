@@ -2,7 +2,8 @@ let pages = []; // empty array to old object of pages
 let parentMenuItems = [];
 let itemCount = 1;
 
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     $('#pageLoaderModal').modal('show');
     
     if (k.isSession()) {

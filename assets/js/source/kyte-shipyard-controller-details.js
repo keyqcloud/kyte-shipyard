@@ -66,7 +66,8 @@ let functionFormElements = [
     ]
 ];
 
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     let sidenav = new KyteSidenav("#sidenav", subnavController, "#Functions");
     sidenav.create();
     sidenav.bind();

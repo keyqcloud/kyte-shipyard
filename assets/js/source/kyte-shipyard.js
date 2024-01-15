@@ -1,5 +1,4 @@
 var KS_VERSION = '1.2.5';
-var k = null;
 
 function loadScript(url, callback) {
     var script = document.createElement('script');
@@ -24,9 +23,13 @@ function initializeKyte(callback) {
         return;
     }
 
-    k = new Kyte(endpoint, publickey, identifier, account);
+    var k = new Kyte(endpoint, publickey, identifier, account);
     k.init();
     k.addLogoutHandler("#logout");
+
+    // Dispatch a custom event after 'k' is initialized
+    var kyteInitializedEvent = new CustomEvent('KyteInitialized', { detail: { k: k } });
+    document.dispatchEvent(kyteInitializedEvent);
 }
 
 // function displayKyteInitializationError(message) {

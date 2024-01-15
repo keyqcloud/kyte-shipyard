@@ -431,7 +431,8 @@ function download_data(format) {
     });
 }
 
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     let sidenav = new KyteSidenav("#sidenav", subnavModel, "#Attributes");
     sidenav.create();
     sidenav.bind();

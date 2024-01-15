@@ -1,4 +1,5 @@
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     let email = null;
     // setup password requirements
     var passreq = new KytePasswordRequirement(k, $("#passwordRequirements"), $("#password"), $("#password-conf"));

@@ -16,7 +16,8 @@ let subnavSettings = [
     }
 ];
 
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     let profile = null;
     let acc = null;
 

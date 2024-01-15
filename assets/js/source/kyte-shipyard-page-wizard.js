@@ -10,7 +10,8 @@ let kyte_app = '';
 
 let page_path = '';
 
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     $('#pageLoaderModal').modal('show');
     
     if (k.isSession()) {

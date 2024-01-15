@@ -1,4 +1,5 @@
-$(document).ready(function() {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     function displayLoginError(error_message) {
         $("#errorMsg").html(error_message);
         $("#errorMsg").removeClass('d-none');
