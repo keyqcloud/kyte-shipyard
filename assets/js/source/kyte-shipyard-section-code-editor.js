@@ -155,9 +155,9 @@ document.addEventListener('KyteInitialized', function(e) {
                 
                 k.get('Navigation', 'site', section.site.id, [], function(r) {
                     let navigation = section.navigation ? section.navigation.id : 0;
-                    for (data of r.data) {
-                        $("#setting-main-navigation").append('<option value="'+data.id+'"'+(navigation == data.id ? ' selected' : '')+'>'+data.name+'</option>');
-                    }
+                    r.data.forEach(item => {
+                        $("#setting-main-navigation").append('<option value="'+item.id+'"'+(navigation == item.id ? ' selected' : '')+'>'+item.name+'</option>');
+                    })
                 });
 
                 let appnav = generateAppNav(section.site.application.name, encoded);
