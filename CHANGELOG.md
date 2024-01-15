@@ -1,4 +1,4 @@
-## 1.3.1
+## 1.3.0
 
 * Previous version of kyte-connect.js may cause a conflict
 * Remove local copy of monaco editor

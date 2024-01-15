@@ -66,7 +66,8 @@ const blockEditor = grapesjs.init({
     }
 });
 
-$(document).ready(function () {
+document.addEventListener('KyteInitialized', function(e) {
+    let k = e.detail.k;
     let sidenav = new KyteSidenav("#sidenav", subnavPage, "#Page");
     sidenav.create();
     sidenav.bind();
