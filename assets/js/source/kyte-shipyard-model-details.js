@@ -118,7 +118,7 @@ function getData(idx, model, appId) {
         targets++;
         modelColDef.push({'targets':targets,'data':'date_modified','label':'date_modified'});
 
-        var tblData = createTable("#data-table", 'AppModelWrapper', modelColDef, appId, model, false, false); //true, true);
+        var tblData = new KyteTable(k, $("#data-table"), {'name':"AppModelWrapper",'field':appId,'value':model}, modelColDef, true, [0,"asc"], false, false);
         tblData.init();
         // var modelDataForm = new KyteForm(k, $("#modalDataForm"), model, null, modelFormDef, model, tblData, true, $("#newData"));
         // modelDataForm.init();
@@ -588,7 +588,8 @@ document.addEventListener('KyteInitialized', function(e) {
                 ];
 
                 // attribute table and form
-                var tblAttributes = createTable("#attributes-table", "ModelAttribute", colDefAttributes, 'dataModel', modelIdx, true, true);
+                var tblAttributes = new KyteTable(k, $("#attributes-table"), {'name':"ModelAttribute",'field':'dataModel','value':modelIdx}, colDefAttributes, true, [0,"asc"], true, true);
+                tblAttributes.init();
                 var modalForm = new KyteForm(k, $("#modalForm"), 'ModelAttribute', hidden, elements, 'Model Attribute', tblAttributes, true, $("#newAttribute"));
                 modalForm.init();
                 tblAttributes.bindEdit(modalForm);
@@ -599,7 +600,7 @@ document.addEventListener('KyteInitialized', function(e) {
         });
 
         // controller table and form
-        var tblController = createTable("#controllers-table", "Controller", colDefControllers, 'dataModel', modelIdx, true, true, '/app/controller/', 'id');
+        var tblController = new KyteTable(k, $("#controllers-table"), {'name':"Controller",'field':"dataModel",'value':modelIdx}, colDefControllers, true, [0,"asc"], true, true, 'id', '/app/controller/');
         tblController.init();
 
         $(".downloadCodeBtn").click(function(e) {

@@ -56,7 +56,11 @@ document.addEventListener('KyteInitialized', function(e) {
 
     $('#pageLoaderModal').modal('show');
     if (k.isSession()) {
-        var dataTable = createTable("#models-table", "Application", colDefApps, null, null, true, true, '/app/dashboard/', 'id', true);
+        var dataTable = new KyteTable(k, $("#models-table"), {'name':"Application",'field':null,'value':null}, colDefApps, true, [0,"asc"], true, true, 'id', '/app/dashboard/');
+        dataTable.initComplete = function() {
+            $('#pageLoaderModal').modal('hide');
+        }
+        dataTable.init();
         var modalForm = new KyteForm(k, $("#modalForm"), 'Application', null, elements, 'My App', dataTable, true, $("#new"));
         modalForm.success = function(r) {
             let connect = "let endpoint = 'https://"+r.kyte_api+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+r.data[0].identifier+"');k.init();\n\n";

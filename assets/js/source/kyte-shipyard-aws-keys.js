@@ -34,7 +34,11 @@ document.addEventListener('KyteInitialized', function(e) {
 
     $('#pageLoaderModal').modal('show');
     if (k.isSession()) {
-        var dataTable = createTable("#aws-table", "KyteAWSKey", colDefApiKey, null, null, false, true, false, null, true);
+        var dataTable = new KyteTable(k, $("#aws-table"), {'name':"KyteAWSKey",'field':null,'value':null}, colDefApiKey, true, [0,"asc"], false, true);
+        dataTable.initComplete = function() {
+            $('#pageLoaderModal').modal('hide');
+        }
+        dataTable.init();
         var modalForm = new KyteForm(k, $("#modalForm"), 'KyteAWSKey', null, elements, 'AWS Keys', dataTable, true, $("#new"));
         modalForm.init();
         dataTable.bindEdit(modalForm);

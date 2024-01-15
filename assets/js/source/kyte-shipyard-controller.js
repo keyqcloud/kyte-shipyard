@@ -51,7 +51,11 @@ document.addEventListener('KyteInitialized', function(e) {
         }
     ];
 
-    var tblControllers = createTable("#controllers-table", "Controller", colDefControllers, 'application', idx, false, true, '/app/controller/', 'id', true);
+    var tblControllers = new KyteTable(k, $("#controllers-table"), {'name':"Controller",'field':'application','value':idx}, colDefControllers, true, [0,"asc"], false, true, 'id', '/app/controller/');
+    tblControllers.initComplete = function() {
+        $('#pageLoaderModal').modal('hide');
+    }
+    tblControllers.init();
     var modalForm = new KyteForm(k, $("#modalForm"), 'Controller', hidden, elements, 'Controller', tblControllers, true, $("#new"));
     modalForm.init();
     modalForm.success = function(r) {

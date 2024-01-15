@@ -47,7 +47,11 @@ document.addEventListener('KyteInitialized', function(e) {
         }
     ];
     
-    var dataTable = createTable("#emails-table", "EmailTemplate", colDefEmails, 'application', idx, false, true, '/app/email/', 'id', true);
+    var dataTable = new KyteTable(k, $("#emails-table"), {'name':"EmailTemplate",'field':'application','value':idx}, colDefEmails, true, [0,"asc"], false, true, 'id', '/app/email/');
+    dataTable.initComplete = function() {
+        $('#pageLoaderModal').modal('hide');
+    }
+    dataTable.init();
     var modalForm = new KyteForm(k, $("#modalForm"), 'EmailTemplate', hidden, elements, 'Email Template', dataTable, true, $("#new"));
     modalForm.init();
     modalForm.success = function(r) {

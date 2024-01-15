@@ -16,6 +16,33 @@ let subnavSettings = [
     }
 ];
 
+let fldsAdmin = [
+    [
+        {
+            'field':'name',
+            'type':'text',
+            'label':'Name (*)',
+            'required':true
+        },
+    ],
+    [
+        {
+            'field':'email',
+            'type':'text',
+            'label':'E-mail (*)',
+            'required':true
+        }
+    ],
+    [
+        {
+            'field':'password',
+            'type':'password',
+            'label':'Password (leave blank for user to setup)',
+            'required':false
+        }
+    ]
+];
+
 document.addEventListener('KyteInitialized', function(e) {
     let k = e.detail.k;
     let profile = null;
@@ -57,10 +84,14 @@ document.addEventListener('KyteInitialized', function(e) {
             }
         ];
 
-        var tblAdmin = createTable("#admin-table", "KyteUser", colDefUsers, 'kyte_account', 1, true, true);
-        var frmUser = createForm("#adminForm", "Administrator", "KyteUser", fldsAdmin, hidden, tblAdmin, "#newAdmin");
-
-        var tblAPI = createTable("#api-table", "APIKey", colDefAPI, 'kyte_account', 1, false, false);
+        var tblAdmin = new KyteTable(k, $("#admin-table"), {'name':"KyteUser",'field':"kyte_account",'value':1}, colDefUsers, true, [0,"asc"], true, true);
+        tblAdmin.init();
+        var frmUser = new KyteForm(k, $("#adminForm"), "KyteUser", hidden, fldsAdmin, "Administrator", tblAdmin, true, $("#newAdmin"));
+        form.init();
+        tblAdmin.bindEdit(frmUser);
+        
+        var tblAPI = new KyteTable(k, $("#api-table"), {'name':"APIKey",'field':"kyte_account",'value':1}, colDefAPI, true, [0,"asc"], false, false);
+        tblAPI.init();
 
         $("#updateEmail").click(function(e) {
             e.preventDefault();
