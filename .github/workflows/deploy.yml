@@ -41,6 +41,9 @@ jobs:
     - name: Copy latest files to S3
       run: aws s3 cp ./kyte-shipyard.zip s3://${{ secrets.S3_BUCKET }}/kyte/shipyard/stable/kyte-shipyard.zip
 
+    - name: Copy CHANGELOG.md to S3
+      run: aws s3 cp ./CHANGELOG.md s3://${{ secrets.S3_BUCKET }}/kyte/shipyard/archive/CHANGELOG.md
+
     - name: Copy archive files to S3
       run: aws s3 cp ./kyte-shipyard.zip s3://${{ secrets.S3_BUCKET }}/kyte/shipyard/archive/kyte-shipyard-${{ env.TAG_NAME }}.zip
 
