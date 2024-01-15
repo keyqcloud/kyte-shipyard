@@ -134,9 +134,55 @@ document.addEventListener('KyteInitialized', function(e) {
         location.href="/?redir="+encodeURIComponent(window.location);
     }
 
-    $("#checkForUpdates").click(function() {
-        checkForUpdates();
+    var reloadTimeout;
+    $("#updateNow").click(function() {
+        // Open the loading modal
+        $('#updateLoadingModal').modal('show');
+    
+        // Set a cookie that Kyte is being updated
+        document.cookie = "kyte_update_in_progress=true; path=/";
+    
+        // Refresh the page after 6 seconds
+        reloadTimeout = setTimeout(function() {
+            location.reload();
+        }, 6000);
     });
+    
+    function getCookie(name) {
+        var cookieArr = document.cookie.split(";");
+        
+        for(var i = 0; i < cookieArr.length; i++) {
+            var cookiePair = cookieArr[i].split("=");
+            if(name == cookiePair[0].trim()) {
+                return decodeURIComponent(cookiePair[1]);
+            }
+        }
+        return null;
+    }
+    
+    function checkForUpdateAndOpenModal() {
+        var updateInProgress = getCookie("kyte_update_in_progress");
+        if(updateInProgress && updateInProgress === "true") {
+            $('#updateLoadingModal').modal('show');
+            // Refresh the page after 6 seconds
+            reloadTimeout = setTimeout(function() {
+                location.reload();
+            }, 6000);
+        }
+    }
+    checkForUpdateAndOpenModal();
+
+    function deleteUpdateCookieAndCloseModal() {
+        // Delete the cookie by setting its expiry to a past date
+        document.cookie = "kyte_update_in_progress=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    
+        // Dismiss the modal
+        $('#updateLoadingModal').modal('hide');
+
+        if (reloadTimeout) {
+            clearTimeout(reloadTimeout);
+        }
+    }
 
     document.getElementById("currentKSVERSION").textContent = KS_VERSION;
 
@@ -173,13 +219,15 @@ document.addEventListener('KyteInitialized', function(e) {
         
         if (isNewerVersion(latestVersion, KS_VERSION)) {
             document.getElementById('updateResultsWrapper').innerHTML = '<p>Newer version available: ' + latestVersion + '</p>';
-            document.getElementById('checkForUpdates').classList.remove('d-none');
+            document.getElementById('updateNow').classList.remove('d-none');
         } else if (latestVersion === KS_VERSION) {
             document.getElementById('updateResultsWrapper').innerHTML = '<p>You are already using the latest version.</p>';
-            document.getElementById('checkForUpdates').classList.add('d-none');
+            document.getElementById('updateNow').classList.add('d-none');
+            deleteUpdateCookieAndCloseModal();
         } else {
             document.getElementById('updateResultsWrapper').innerHTML = '<p>Unable to determine the latest version.</p>';
-            document.getElementById('checkForUpdates').classList.add('d-none');
+            document.getElementById('updateNow').classList.add('d-none');
+            deleteUpdateCookieAndCloseModal();
         }
     }
     

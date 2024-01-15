@@ -30,10 +30,22 @@
 
 <body>
     <!-- Page loading modal.  Once session is validated, the loading modal will close. -->
-    <div id="pageLoaderModal" class="modal white" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div id="pageLoaderModal" class="modal white" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" tabindex="-1">
         <div class="modal-dialog modal-sm h-100 d-flex">
             <div class="mx-auto align-self-center" style="width: 48px">
                 <div class="spinner-wrapper text-center fa-6x"><span class="fas fa-sync fa-spin"></span></div>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+
+    <!-- Page loading modal.  Once session is validated, the loading modal will close. -->
+    <div id="updateLoadingModal" class="modal white" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" tabindex="-1">
+        <div class="modal-dialog modal-sm h-100 d-flex">
+            <div class="mx-auto align-self-center text-center">
+                <h3 style="font-weight: 400;">Updating...</h3>
+                <h5>please remain on this page until completed...</h5>
+                <div class="spinner-wrapper text-center fa-6x"><span class="fas fa-circle-notch fa-spin"></span></div>
             </div>
         </div>
     </div>
@@ -112,7 +124,7 @@
                     <div class="d-flex justify-content-between mt-4">
                         <h4>Kyte Shipyard<sup>&trade;</sup></h4>
                         <div>
-                            <button class="btn btn-primary d-none" id="checkForUpdates">Update Now</button>
+                            <button class="btn btn-primary d-none" id="updateNow">Update Now</button>
                         </div>
                     </div>
 
