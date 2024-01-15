@@ -1,5 +1,6 @@
-## 1.2.5
+## 1.3.1
 
+* Previous version of kyte-connect.js may cause a conflict
 * Remove local copy of monaco editor
 * Reorganize package folder
 * Add error checking to `kyte-shipyard.js` initialization script

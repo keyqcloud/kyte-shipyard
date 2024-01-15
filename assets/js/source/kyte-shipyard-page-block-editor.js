@@ -31,7 +31,6 @@ const blockEditor = grapesjs.init({
         'grapesjs-typed',
         'grapesjs-ui-suggest-classes',
         'grapesjs-typed',
-        '@silexlabs/grapesjs-fonts',
         'gjs-blocks-basic',
         // 'grapesjs-navbar',
         'grapesjs-plugin-forms',
@@ -50,9 +49,6 @@ const blockEditor = grapesjs.init({
                 },
             },
         },
-        '@silexlabs/grapesjs-fonts': {
-            api_key: 'AIzaSyABwPYuu1wZ5ujTfv2iK5bAZMjWr0zUzqg',
-        }
     },
     canvas: {
         styles: [
