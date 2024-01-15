@@ -1,3 +1,7 @@
+## 1.3.6 (draft)
+
+* Update copyright year
+
 ## 1.3.5
 
 * Resolve version issue
