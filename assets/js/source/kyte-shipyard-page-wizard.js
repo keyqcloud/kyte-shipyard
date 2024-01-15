@@ -104,7 +104,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             correctedPath += ".html"; // Add the extension if missing
                         }
 
-                        $("#path-preview").html('https://' + safeCfDomain + '/' + correctedPath.replace(rePath, '-').toLowerCase());
+                        $("#path-preview").html('https://' + safeCfDomain + '/' + encodeURIComponent(correctedPath.replace(rePath, '-').toLowerCase()));
                     }
                 });
                 navbar.create();
