@@ -192,7 +192,7 @@ document.addEventListener('KyteInitialized', function(e) {
     document.getElementById("currentKSVERSION").textContent = KS_VERSION;
 
     function checkForUpdates() {
-        var changelogUrl = 'http://cdn.keyqcloud.com/kyte/shipyard/archive/CHANGELOG.md';
+        var changelogUrl = 'https://cdn.keyqcloud.com/kyte/shipyard/archive/CHANGELOG.md';
     
         fetch(changelogUrl)
             .then(response => {

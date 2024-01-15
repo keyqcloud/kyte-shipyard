@@ -1,3 +1,7 @@
+## 1.3.3
+
+* Fix issue with mixed content by updating CHANGELOG to https
+
 ## 1.3.2
 
 * Add ability to check for available updates
