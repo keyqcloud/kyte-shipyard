@@ -1,6 +1,8 @@
 ## 1.3.2
 
 * Add ability to check for available updates
+* Fix issue with non-static page loaders
+* Add code to trigger an update
 
 ## 1.3.1
 
