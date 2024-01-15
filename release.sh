@@ -21,6 +21,11 @@ if [ "$#" -eq 1 ]; then
         exit 1
     fi
 
+    echo "Reobfuscating all JS"
+    for filename in assets/js/source/*.js; do
+        javascript-obfuscator "$filename" --output ${filename//source/} --compact true --string-array-encoding 'base64' --string-array-wrappers-type variable
+    done
+
     echo "Creating tag for release version $1"
 
     git tag "v$1"
