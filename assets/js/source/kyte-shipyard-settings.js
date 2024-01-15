@@ -87,10 +87,10 @@ document.addEventListener('KyteInitialized', function(e) {
         var tblAdmin = new KyteTable(k, $("#admin-table"), {'name':"KyteUser",'field':"kyte_account",'value':1}, colDefUsers, true, [0,"asc"], true, true);
         tblAdmin.init();
         var frmUser = new KyteForm(k, $("#adminForm"), "KyteUser", hidden, fldsAdmin, "Administrator", tblAdmin, true, $("#newAdmin"));
-        form.init();
+        frmUser.init();
         tblAdmin.bindEdit(frmUser);
-        
-        var tblAPI = new KyteTable(k, $("#api-table"), {'name':"APIKey",'field':"kyte_account",'value':1}, colDefAPI, true, [0,"asc"], false, false);
+
+        var tblAPI = new KyteTable(k, $("#api-table"), {'name':"KyteAPIKey",'field':null,'value':null}, colDefAPI, true, [0,"asc"], false, false);
         tblAPI.init();
 
         $("#updateEmail").click(function(e) {
