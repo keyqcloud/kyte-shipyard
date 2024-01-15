@@ -138,14 +138,19 @@ document.addEventListener('KyteInitialized', function(e) {
     $("#updateNow").click(function() {
         // Open the loading modal
         $('#updateLoadingModal').modal('show');
-    
-        // Set a cookie that Kyte is being updated
-        document.cookie = "kyte_update_in_progress=true; path=/";
-    
-        // Refresh the page after 6 seconds
-        reloadTimeout = setTimeout(function() {
-            location.reload();
-        }, 6000);
+        k.post('KyteShipyardUpdate', {'current_version':KS_VERSION}, null, [], function(r) {
+            // Set a cookie that Kyte is being updated
+            document.cookie = "kyte_update_in_progress=true; path=/";
+        
+            // Refresh the page after 6 seconds
+            reloadTimeout = setTimeout(function() {
+                location.reload();
+            }, 6000);
+        }, function(e) {
+            console.error(e);
+            $('#updateLoadingModal').modal('hide');
+            alert("FAILED TO UPDATE: "+e);
+        });
     });
     
     function getCookie(name) {
