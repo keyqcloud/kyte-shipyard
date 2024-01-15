@@ -13,6 +13,11 @@ let subnavSettings = [
         faicon:'fas fa-server',
         label:'API',
         selector:'#API'
+    },
+    {
+        faicon:'fas fa-rocket',
+        label:'Kyte Shipyard<sup>&trade;</sup>',
+        selector:'#KyteShipyard'
     }
 ];
 
@@ -128,4 +133,70 @@ document.addEventListener('KyteInitialized', function(e) {
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
     }
+
+    $("#checkForUpdates").click(function() {
+        checkForUpdates();
+    });
+
+    document.getElementById("currentKSVERSION").textContent = KS_VERSION;
+
+    function checkForUpdates() {
+        var changelogUrl = 'http://cdn.keyqcloud.com/kyte/shipyard/archive/CHANGELOG.md';
+    
+        fetch(changelogUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                processChangelog(data);
+                document.getElementById('changelogContent').innerHTML = '<pre>' + data + '</pre>';
+                document.getElementById('changelogContent').style.display = 'block';
+            })
+            .catch(error => {
+                document.getElementById('updateResultsWrapper').innerHTML = '<p>Error checking for updates. Please try again later.</p>';
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    }
+    
+    function processChangelog(changelogContent) {
+        var lines = changelogContent.split('\n');
+        var latestVersion = '';
+        for (var i = 0; i < lines.length; i++) {
+            if (lines[i].startsWith('## ')) {
+                latestVersion = lines[i].substring(3).trim();
+                break;
+            }
+        }
+        
+        if (isNewerVersion(latestVersion, KS_VERSION)) {
+            document.getElementById('updateResultsWrapper').innerHTML = '<p>Newer version available: ' + latestVersion + '</p>';
+            document.getElementById('checkForUpdates').classList.remove('d-none');
+        } else if (latestVersion === KS_VERSION) {
+            document.getElementById('updateResultsWrapper').innerHTML = '<p>You are already using the latest version.</p>';
+            document.getElementById('checkForUpdates').classList.add('d-none');
+        } else {
+            document.getElementById('updateResultsWrapper').innerHTML = '<p>Unable to determine the latest version.</p>';
+            document.getElementById('checkForUpdates').classList.add('d-none');
+        }
+    }
+    
+    function isNewerVersion(newVersion, oldVersion) {
+        var newParts = newVersion.split('.').map(Number);
+        var oldParts = oldVersion.split('.').map(Number);
+    
+        for (var i = 0; i < newParts.length; i++) {
+            if (newParts[i] > (oldParts[i] || 0)) {
+                return true;
+            } else if (newParts[i] < (oldParts[i] || 0)) {
+                return false;
+            }
+        }
+        return false;
+    }
+    
+    // Run the check
+    checkForUpdates();
 });

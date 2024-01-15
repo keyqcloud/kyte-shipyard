@@ -1,3 +1,7 @@
+## 1.3.2
+
+* Add ability to check for available updates
+
 ## 1.3.1
 
 * Resolve medium security issue with DOM text reinterpreted as HTML

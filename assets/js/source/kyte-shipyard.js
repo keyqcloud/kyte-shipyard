@@ -1,4 +1,4 @@
-var KS_VERSION = '1.3.1';
+var KS_VERSION = '1.3.2';
 
 function loadScript(url, callback) {
     var script = document.createElement('script');
