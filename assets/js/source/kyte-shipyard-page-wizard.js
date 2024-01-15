@@ -24,12 +24,6 @@ document.addEventListener('KyteInitialized', function(e) {
         k.get("KyteSite", "id", idx, [], function(r) {
             if (r.data[0]) {
                 let site = r.data[0];
-                let hidden = [
-                    {
-                        'name': 'site',
-                        'value': site.id
-                    }
-                ];
 
                 kyte_endpoint = r.kyte_api;
                 console.log(kyte_endpoint);
@@ -43,9 +37,10 @@ document.addEventListener('KyteInitialized', function(e) {
 
                 var userPagePath = $("#page-path").val();
                 var correctedPagePath = userPagePath.trim(); // Remove leading and trailing spaces
-                    
+                var safeCfDomain = encodeURIComponent(cfDomain);
+
                 if (correctedPagePath === "") {
-                    $("#path-preview").html('https://' + cfDomain + '/index.html');
+                    $("#path-preview").html('https://' + safeCfDomain + '/index.html');
                 } else {
                     if (correctedPagePath.startsWith("/")) {
                         correctedPagePath = correctedPagePath.substr(1); // Remove leading slash
@@ -55,7 +50,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         correctedPagePath += ".html"; // Add the extension if missing
                     }
                     
-                    $("#path-preview").html('https://' + cfDomain + '/' + correctedPagePath.replace(rePath, '-').toLowerCase());
+                    $("#path-preview").html('https://' + safeCfDomain + '/' + correctedPagePath.replace(rePath, '-').toLowerCase());
                 }
                 
                 let obj = {'model': 'KyteSite', 'idx':site.id};
@@ -484,11 +479,12 @@ document.addEventListener('KyteInitialized', function(e) {
         //
         let columns = [];
         let fields = [];
-        let hidden = [];
         let colIdx = 0;
 
-        $("#newPageUrl").attr('href', 'https://'+cfDomain+'/'+page_path);
-        $("#newPageUrl").html('https://'+cfDomain+'/'+page_path);
+        var safeCfDomain = encodeURIComponent(cfDomain);
+        var safePagePath = encodeURIComponent(page_path);
+        $("#newPageUrl").attr('href', 'https://'+safeCfDomain+'/'+safePagePath);
+        $("#newPageUrl").html('https://'+safeCfDomain+'/'+safePagePath);
 
         switch ($("#page-type").val()) {
             case 'login':

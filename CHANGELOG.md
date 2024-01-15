@@ -1,3 +1,7 @@
+## 1.3.1
+
+* Resolve medium security issue with DOM text reinterpreted as HTML
+
 ## 1.3.0
 
 * Previous version of kyte-connect.js may cause a conflict
