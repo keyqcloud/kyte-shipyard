@@ -47,8 +47,6 @@ document.addEventListener("keydown", function(event) {
   
     // Check if the S key is pressed
     var isSPressed = event.key === "s";
-
-    var isPPressed = event.key === "p";
   
     // Check if both the Ctrl key and the S key are pressed
     if (isCtrlPressed && isSPressed) {
