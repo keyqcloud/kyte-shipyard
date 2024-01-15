@@ -1,3 +1,7 @@
+## 1.3.5
+
+* Resolve version issue
+
 ## 1.3.4
 
 * Add support for managing environment variables for an application
