@@ -116,7 +116,6 @@ document.addEventListener('KyteInitialized', function(e) {
         });
 
         var functionsTable = new KyteTable(k, $("#functions-table"), {'name':'Function','field':'controller','value':idx}, colDefFunctions, true, [0,"asc"], false, true, 'id', '/app/function/');
-        functionsTable.targetBlank = true;
         functionsTable.init();
         var modelFormFunction = new KyteForm(k, $("#modalControllerFunctionForm"), 'Function', hidden, functionFormElements, 'Function', functionsTable, true, $("#assignController"));
         modelFormFunction.init();

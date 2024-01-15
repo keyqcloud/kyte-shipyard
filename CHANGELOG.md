@@ -1,6 +1,7 @@
 ## 1.3.6 (draft)
 
 * Update copyright year
+* No longer open controller funcitons in a new tab
 
 ## 1.3.5
 
