@@ -1,3 +1,7 @@
+## 1.3.7
+
+* Handle errors from obfuscator
+
 ## 1.3.6
 
 * Update copyright year

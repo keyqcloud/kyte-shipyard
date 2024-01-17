@@ -181,9 +181,9 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
                     
-                    let rawJS = jsEditor.getValue();
-                    let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS,
-                        {
+                    try {
+                        let rawJS = jsEditor.getValue();
+                        let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS, {
                             compact: true,
                             controlFlowFlattening: true,
                             controlFlowFlatteningThreshold: 1,
@@ -194,34 +194,44 @@ document.addEventListener('KyteInitialized', function(e) {
                             splitStrings: true,
                             stringArrayWrappersType: 'variable',
                             stringArrayThreshold: 1
-                        }
-                    );
-                    let payload = {
-                        'html': htmlEditor.getValue(),
-                        'javascript': rawJS,
-                        'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
-                        'stylesheet': cssEditor.getValue(),
-                        'main_navigation':$("#setting-main-navigation").val(),
-                        'side_navigation':$("#setting-side-navigation").val(),
-                        'footer':$("#setting-footer").val(),
-                        'title':$("#setting-page-title").val(),
-                        'description':$("#setting-page-description").val(),
-                        'sitemap_include':$("#setting-sitemap-include").val(),
-                        'obfuscate_js':$("#setting-obfuscatejs").val(),
-                        'use_container':$("#setting-use_container").val(),
-                        'page_type': pageData.page.page_type == 'block' ? 'custom' : pageData.page.page_type,
-                    };
-                    k.put('KytePage', 'id', idx, payload, null, [], function(r) {
+                        });
+                    
+                        let payload = {
+                            'html': htmlEditor.getValue(),
+                            'javascript': rawJS,
+                            'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
+                            'stylesheet': cssEditor.getValue(),
+                            'main_navigation':$("#setting-main-navigation").val(),
+                            'side_navigation':$("#setting-side-navigation").val(),
+                            'footer':$("#setting-footer").val(),
+                            'title':$("#setting-page-title").val(),
+                            'description':$("#setting-page-description").val(),
+                            'sitemap_include':$("#setting-sitemap-include").val(),
+                            'obfuscate_js':$("#setting-obfuscatejs").val(),
+                            'use_container':$("#setting-use_container").val(),
+                            'page_type': pageData.page.page_type == 'block' ? 'custom' : pageData.page.page_type,
+                        };
+                        k.put('KytePage', 'id', idx, payload, null, [], function(r) {
+                            $('#pageLoaderModal').modal('hide');
+                        });
+                    
+                    } catch (error) {
+                        // Alert the user
+                        alert("An error occurred: " + error.message);
+
+                        console.error(error.message);
+                    
+                        // Hide the modal
                         $('#pageLoaderModal').modal('hide');
-                    });
+                    }
                 });
 
                 $("#publishPage").click(function() {
                     $('#pageLoaderModal').modal('show');
 
-                    let rawJS = jsEditor.getValue();
-                    let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS,
-                        {
+                    try {
+                        let rawJS = jsEditor.getValue();
+                        let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS, {
                             compact: true,
                             controlFlowFlattening: true,
                             controlFlowFlatteningThreshold: 1,
@@ -232,41 +242,51 @@ document.addEventListener('KyteInitialized', function(e) {
                             splitStrings: true,
                             stringArrayWrappersType: 'variable',
                             stringArrayThreshold: 1
-                        }
-                    );
-                    let payload = {
-                        'html': htmlEditor.getValue(),
-                        'javascript': rawJS,
-                        'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
-                        'stylesheet': cssEditor.getValue(),
-                        'main_navigation':$("#setting-main-navigation").val(),
-                        'side_navigation':$("#setting-side-navigation").val(),
-                        'footer':$("#setting-footer").val(),
-                        'title':$("#setting-page-title").val(),
-                        'description':$("#setting-page-description").val(),
-                        'sitemap_include':$("#setting-sitemap-include").val(),
-                        'obfuscate_js':$("#setting-obfuscatejs").val(),
-                        'use_container':$("#setting-use_container").val(),
-                        'page_type': pageData.page.page_type == 'block' ? 'custom' : pageData.page.page_type,
-                        'state': 1,
-                    };
-                    k.put('KytePage', 'id', idx, payload, null, [], function(r) {
-                        $('#pageLoaderModal').modal('hide');
-                    }, function(err) {
-                        if (err == 'Unable to create new invalidation') {
-                            setTimeout(() => {
-                                k.put('KytePage', 'id', idx, payload, null, [], function(r) {
-                                    $('#pageLoaderModal').modal('hide');
-                                }, function(err) {
-                                    alert(err);
-                                    $('#pageLoaderModal').modal('hide');
-                                });
-                            }, "500");
-                        } else {
-                            alert(err);
+                        });
+                    
+                        let payload = {
+                            'html': htmlEditor.getValue(),
+                            'javascript': rawJS,
+                            'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
+                            'stylesheet': cssEditor.getValue(),
+                            'main_navigation':$("#setting-main-navigation").val(),
+                            'side_navigation':$("#setting-side-navigation").val(),
+                            'footer':$("#setting-footer").val(),
+                            'title':$("#setting-page-title").val(),
+                            'description':$("#setting-page-description").val(),
+                            'sitemap_include':$("#setting-sitemap-include").val(),
+                            'obfuscate_js':$("#setting-obfuscatejs").val(),
+                            'use_container':$("#setting-use_container").val(),
+                            'page_type': pageData.page.page_type == 'block' ? 'custom' : pageData.page.page_type,
+                            'state': 1,
+                        };
+                        k.put('KytePage', 'id', idx, payload, null, [], function(r) {
                             $('#pageLoaderModal').modal('hide');
-                        }
-                    });
+                        }, function(err) {
+                            if (err == 'Unable to create new invalidation') {
+                                setTimeout(() => {
+                                    k.put('KytePage', 'id', idx, payload, null, [], function(r) {
+                                        $('#pageLoaderModal').modal('hide');
+                                    }, function(err) {
+                                        alert(err);
+                                        $('#pageLoaderModal').modal('hide');
+                                    });
+                                }, "500");
+                            } else {
+                                alert(err);
+                                $('#pageLoaderModal').modal('hide');
+                            }
+                        });
+                    
+                    } catch (error) {
+                        // Alert the user
+                        alert("An error occurred: " + error.message);
+
+                        console.error(error.message);
+                    
+                        // Hide the modal
+                        $('#pageLoaderModal').modal('hide');
+                    }
                 });
             } else {
                 alert("ERROR");
