@@ -179,8 +179,8 @@ document.addEventListener('KyteInitialized', function(e) {
                     });
                 });
 
-                let sectionTemplateCond = btoa(JSON.stringify([{ 'field': 'category', 'value': 'footer' }]));
-                k.get('SectionTemplate', 'site', pageData.page.site.id, [{ 'name': 'x-kyte-query-conditions', 'value': sectionTemplateCond }], function (r) {
+                let KyteSectionTemplateCond = btoa(JSON.stringify([{ 'field': 'category', 'value': 'footer' }]));
+                k.get('KyteSectionTemplate', 'site', pageData.page.site.id, [{ 'name': 'x-kyte-query-conditions', 'value': KyteSectionTemplateCond }], function (r) {
                     let section = pageData.page.footer ? pageData.page.footer.id : 0;
                     r.data.forEach(function(data) {
                         $("#setting-footer").append('<option value="' + data.id + '"' + (section == data.id ? ' selected' : '') + '>' + data.title + '</option>');

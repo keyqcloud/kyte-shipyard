@@ -1,7 +1,9 @@
-## 1.3.6 (draft)
+## 1.3.6
 
 * Update copyright year
 * No longer open controller funcitons in a new tab
+* Update SectionTemplate to KyteSectionTemplate
+* Add missing codicons for monaco editor
 
 ## 1.3.5
 

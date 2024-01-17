@@ -422,12 +422,12 @@ document.addEventListener('KyteInitialized', function(e) {
                 tblSideNav.bindEdit(modalFormSideNav);
 
                 // side navigation
-                var tblSections = new KyteTable(k, $("#sections-table"), {'name':'SectionTemplate','field':'site','value':idx}, colDefSections, true, [0,"asc"], true, true, 'id', '/app/section/');
+                var tblSections = new KyteTable(k, $("#sections-table"), {'name':'KyteSectionTemplate','field':'site','value':idx}, colDefSections, true, [0,"asc"], true, true, 'id', '/app/section/');
                 tblSections.initComplete = function() {
                     $('#pageLoaderModal').modal('hide');
                 }
                 tblSections.init();
-                var modalFormSection = new KyteForm(k, $("#modalFormSection"), 'SectionTemplate', hidden, sectionsFormElement, 'Section', tblSections, true, $("#addSection"));
+                var modalFormSection = new KyteForm(k, $("#modalFormSection"), 'KyteSectionTemplate', hidden, sectionsFormElement, 'Section', tblSections, true, $("#addSection"));
                 modalFormSection.init();
                 tblSections.bindEdit(modalFormSection);
 

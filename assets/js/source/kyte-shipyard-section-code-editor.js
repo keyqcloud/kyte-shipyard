@@ -75,7 +75,7 @@ document.addEventListener('KyteInitialized', function(e) {
         let idx = k.getPageRequest();
         idx = idx.idx;
 
-        k.get("SectionTemplate", "id", idx, [], function(r) {
+        k.get("KyteSectionTemplate", "id", idx, [], function(r) {
             if (r.data[0]) {
                 section = r.data[0];
                 let hidden = [
@@ -195,7 +195,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         'bgColor':$("#bgColor").val(),
                         'fgColor':$("#fgColor").val(),
                     };
-                    k.put('SectionTemplate', 'id', idx, payload, null, [], function(r) {
+                    k.put('KyteSectionTemplate', 'id', idx, payload, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
                     });
                 });
