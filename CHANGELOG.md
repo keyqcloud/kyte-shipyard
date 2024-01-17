@@ -1,3 +1,7 @@
+## 1.3.8
+
+* Fix bug where site details was missing a trailing '/'
+
 ## 1.3.7
 
 * Handle errors from obfuscator

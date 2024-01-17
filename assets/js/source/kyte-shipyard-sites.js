@@ -62,7 +62,7 @@ document.addEventListener('KyteInitialized', function(e) {
         }
     ];
     
-    var dataTable = new KyteTable(k, $("#data-table"), {'name':'KyteSite', 'field':'application', 'value':idx}, colDefSites, true, [0,"asc"], false, true, 'id', '/app/site');
+    var dataTable = new KyteTable(k, $("#data-table"), {'name':'KyteSite', 'field':'application', 'value':idx}, colDefSites, true, [0,"asc"], false, true, 'id', '/app/site/');
     dataTable.initComplete = function() {
         $('#pageLoaderModal').modal('hide');
     }
