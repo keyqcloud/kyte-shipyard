@@ -46,11 +46,18 @@ let subnavScript = [
         selector:'#Content'
     },
     {
+        faicon:'far fa-file',
+        label:'Pages',
+        selector:'#Pages'
+    },
+    {
         faicon:'fas fa-wrench',
         label:'Settings',
         selector:'#Settings'
     },
 ];
+
+
 
 document.addEventListener('KyteInitialized', function(e) {
     let k = e.detail.k;
@@ -82,7 +89,6 @@ document.addEventListener('KyteInitialized', function(e) {
                 // set page title and description
                 $("#setting-script-name").val(script.name);
                 $("#setting-script-description").val(script.description);
-                $("#setting-include-all").val(script.include_all);
                 
                 if (script.script_type == 'js') {
                     $('#obfuscatejs-option-wrapper').addClass('d-none');
@@ -120,79 +126,136 @@ document.addEventListener('KyteInitialized', function(e) {
                 let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">', 'Sites');
                 navbar.create();
 
+                // page assignment table and form
+                let hiddenScriptAssignment = [
+                    {
+                        'name': 'site',
+                        'value': script.site.id
+                    },
+                    {
+                        'name': 'script',
+                        'value': idx
+                    }
+                ];
+                let fldsPages = [
+                    [
+                        {
+                            'field':'page',
+                            'type':'select',
+                            'label':'Page',
+                            'required':false,
+                            'option': {
+                                'ajax': true,
+                                'data_model_name': 'KytePage',
+                                'data_model_field': 'site',
+                                'data_model_value': script.site.id,
+                                'data_model_attributes': ['title', 's3key'],
+                                'data_model_default_field': 'id',
+                                // 'data_model_default_value': 1,
+                            }
+                        },
+                    ],
+                ];
+                let colDefPages = [
+                    {'targets':0,'data':'page.title','label':'Page'},
+                ];
+                var tblPages = new KyteTable(k, $("#pages-table"), {'name':"KyteScriptAssignment",'field':"script",'value':idx}, colDefPages, true, [0,"asc"], false, true);
+                tblPages.init();
+                var frmPages = new KyteForm(k, $("#modalFormPages"), 'KyteScriptAssignment', hiddenScriptAssignment, fldsPages, 'Script Assignment', tblPages, true, $("#addPage"));
+                frmPages.init();
+                tblPages.bindEdit(frmPages);
+
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
                     
-                    let obfuscatedJS = script.script_type == 'js' ? JavaScriptObfuscator.obfuscate(scriptEditor.getValue(),
-                        {
-                            compact: true,
-                            controlFlowFlattening: true,
-                            controlFlowFlatteningThreshold: 1,
-                            numbersToExpressions: true,
-                            simplify: true,
-                            stringArrayEncoding: ['base64'],
-                            stringArrayShuffle: true,
-                            splitStrings: true,
-                            stringArrayWrappersType: 'variable',
-                            stringArrayThreshold: 1
-                        }
-                    ).getObfuscatedCode() : '';
-                    let payload = {
-                        'content': scriptEditor.getValue(),
-                        'javascript_obfuscated': obfuscatedJS,
-                        'name':$("#setting-script-name").val(),
-                        'description':$("#setting-script-description").val(),
-                        'obfuscate_js':$("#setting-obfuscatejs").val(),
-                        'include_all':$("#setting-include-all").val(),
-                    };
-                    k.put('KyteScript', 'id', idx, payload, null, [], function(r) {
+                    try {
+                        let obfuscatedJS = script.script_type == 'js' ? JavaScriptObfuscator.obfuscate(scriptEditor.getValue(),
+                            {
+                                compact: true,
+                                controlFlowFlattening: true,
+                                controlFlowFlatteningThreshold: 1,
+                                numbersToExpressions: true,
+                                simplify: true,
+                                stringArrayEncoding: ['base64'],
+                                stringArrayShuffle: true,
+                                splitStrings: true,
+                                stringArrayWrappersType: 'variable',
+                                stringArrayThreshold: 1
+                            }
+                        ).getObfuscatedCode() : '';
+                        let payload = {
+                            'content': scriptEditor.getValue(),
+                            'content_js_obfuscated': obfuscatedJS,
+                            'name':$("#setting-script-name").val(),
+                            'description':$("#setting-script-description").val(),
+                            'obfuscate_js':$("#setting-obfuscatejs").val(),
+                        };
+                        k.put('KyteScript', 'id', idx, payload, null, [], function(r) {
+                            $('#pageLoaderModal').modal('hide');
+                        });
+                    } catch (error) {
+                        // Alert the user
+                        alert("An error occurred: " + error.message);
+
+                        console.error(error.message);
+                    
+                        // Hide the modal
                         $('#pageLoaderModal').modal('hide');
-                    });
+                    }
                 });
 
                 $("#publishPage").click(function() {
                     $('#pageLoaderModal').modal('show');
 
-                    let obfuscatedJS = script.script_type == 'js' ? JavaScriptObfuscator.obfuscate(scriptEditor.getValue(),
-                        {
-                            compact: true,
-                            controlFlowFlattening: true,
-                            controlFlowFlatteningThreshold: 1,
-                            numbersToExpressions: true,
-                            simplify: true,
-                            stringArrayEncoding: ['base64'],
-                            stringArrayShuffle: true,
-                            splitStrings: true,
-                            stringArrayWrappersType: 'variable',
-                            stringArrayThreshold: 1
-                        }
-                    ).getObfuscatedCode() : '';
-                    let payload = {
-                        'content': scriptEditor.getValue(),
-                        'javascript_obfuscated': obfuscatedJS,
-                        'name':$("#setting-script-name").val(),
-                        'description':$("#setting-script-description").val(),
-                        'obfuscate_js':$("#setting-obfuscatejs").val(),
-                        'include_all':$("#setting-include-all").val(),
-                        'state': 1,
-                    };
-                    k.put('KyteScript', 'id', idx, payload, null, [], function(r) {
-                        $('#pageLoaderModal').modal('hide');
-                    }, function(err) {
-                        if (err == 'Unable to create new invalidation') {
-                            setTimeout(() => {
-                                k.put('KytePage', 'id', idx, payload, null, [], function(r) {
-                                    $('#pageLoaderModal').modal('hide');
-                                }, function(err) {
-                                    alert(err);
-                                    $('#pageLoaderModal').modal('hide');
-                                });
-                            }, "500");
-                        } else {
-                            alert(err);
+                    try {
+                        let obfuscatedJS = script.script_type == 'js' ? JavaScriptObfuscator.obfuscate(scriptEditor.getValue(),
+                            {
+                                compact: true,
+                                controlFlowFlattening: true,
+                                controlFlowFlatteningThreshold: 1,
+                                numbersToExpressions: true,
+                                simplify: true,
+                                stringArrayEncoding: ['base64'],
+                                stringArrayShuffle: true,
+                                splitStrings: true,
+                                stringArrayWrappersType: 'variable',
+                                stringArrayThreshold: 1
+                            }
+                        ).getObfuscatedCode() : '';
+                        let payload = {
+                            'content': scriptEditor.getValue(),
+                            'content_js_obfuscated': obfuscatedJS,
+                            'name':$("#setting-script-name").val(),
+                            'description':$("#setting-script-description").val(),
+                            'obfuscate_js':$("#setting-obfuscatejs").val(),
+                            'state': 1,
+                        };
+                        k.put('KyteScript', 'id', idx, payload, null, [], function(r) {
                             $('#pageLoaderModal').modal('hide');
-                        }
-                    });
+                        }, function(err) {
+                            if (err == 'Unable to create new invalidation') {
+                                setTimeout(() => {
+                                    k.put('KytePage', 'id', idx, payload, null, [], function(r) {
+                                        $('#pageLoaderModal').modal('hide');
+                                    }, function(err) {
+                                        alert(err);
+                                        $('#pageLoaderModal').modal('hide');
+                                    });
+                                }, "500");
+                            } else {
+                                alert(err);
+                                $('#pageLoaderModal').modal('hide');
+                            }
+                        });
+                    } catch (error) {
+                        // Alert the user
+                        alert("An error occurred: " + error.message);
+
+                        console.error(error.message);
+                    
+                        // Hide the modal
+                        $('#pageLoaderModal').modal('hide');
+                    }
                 });
             } else {
                 alert("ERROR");

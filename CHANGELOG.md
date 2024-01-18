@@ -1,3 +1,8 @@
+## 1.3.9
+
+* Add support for creating/editing/delete custom scripts (javascript and stylesheets)
+* Add support for including custom scripts in pages
+
 ## 1.3.8
 
 * Fix bug where site details was missing a trailing '/'

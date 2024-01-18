@@ -25,19 +25,6 @@ let scriptElement = [
                 }
             }
         },
-        {
-            'field':'include_all',
-            'type':'select',
-            'label':'Globally Include',
-            'required':true,
-            'option': {
-                'ajax': false,
-                'data': {
-                    0: 'No',
-                    1: 'Yes'
-                }
-            }
-        }
     ],
     [
         {

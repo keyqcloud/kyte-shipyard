@@ -192,6 +192,46 @@ document.addEventListener('KyteInitialized', function(e) {
                 let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">', 'Sites');
                 navbar.create();
 
+                // page assignment table and form
+                let hiddenScriptAssignment = [
+                    {
+                        'name': 'site',
+                        'value': pageData.page.site.id
+                    },
+                    {
+                        'name': 'page',
+                        'value': pageData.page.id
+                    }
+                ];
+                let fldsScripts = [
+                    [
+                        {
+                            'field':'script',
+                            'type':'select',
+                            'label':'Script',
+                            'required':false,
+                            'option': {
+                                'ajax': true,
+                                'data_model_name': 'KyteScript',
+                                'data_model_field': 'site',
+                                'data_model_value': pageData.page.site.id,
+                                'data_model_attributes': ['name', 's3key'],
+                                'data_model_default_field': 'id',
+                                // 'data_model_default_value': 1,
+                            }
+                        },
+                    ],
+                ];
+                let colDefScripts = [
+                    {'targets':0,'data':'script.name','label':'Script'},
+                    {'targets':1,'data':'script.s3key','label':'path'},
+                ];
+                var tblScripts = new KyteTable(k, $("#scripts-table"), {'name':"KyteScriptAssignment",'field':"page",'value':pageData.page.id}, colDefScripts, true, [0,"asc"], false, true);
+                tblScripts.init();
+                var frmScript = new KyteForm(k, $("#modalFormScripts"), 'KyteScriptAssignment', hiddenScriptAssignment, fldsScripts, 'Script Assignment', tblScripts, true, $("#addScript"));
+                frmScript.init();
+                tblScripts.bindEdit(frmScript);
+
                 $("#saveCode").click(function () {
                     $('#pageLoaderModal').modal('show');
                     let rawJS = jsEditor.getValue();
