@@ -1,3 +1,7 @@
+## 1.3.10
+
+* remove uri encoding for page creation wizard as it impacted s3 file creation.
+
 ## 1.3.9
 
 * Add support for creating/editing/delete custom scripts (javascript and stylesheets)
