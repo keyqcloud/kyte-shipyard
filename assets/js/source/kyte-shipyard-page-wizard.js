@@ -33,14 +33,13 @@ document.addEventListener('KyteInitialized', function(e) {
                 kyte_app = site.application.identifier;
 
                 cfDomain = site.cfDomain;
-                var safeCfDomain = encodeURIComponent(cfDomain);
-                $("#path-preview").html('https://'+safeCfDomain+'/index.html');
+                $("#path-preview").html('https://'+cfDomain+'/index.html');
 
                 var userPagePath = $("#page-path").val();
                 var correctedPagePath = userPagePath.trim(); // Remove leading and trailing spaces
 
                 if (correctedPagePath === "") {
-                    $("#path-preview").html('https://' + safeCfDomain + '/index.html');
+                    $("#path-preview").html('https://' + cfDomain + '/index.html');
                 } else {
                     if (correctedPagePath.startsWith("/")) {
                         correctedPagePath = correctedPagePath.substr(1); // Remove leading slash
@@ -50,7 +49,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         correctedPagePath += ".html"; // Add the extension if missing
                     }
                     
-                    $("#path-preview").html('https://' + safeCfDomain + '/' + encodeURIComponent(correctedPagePath.replace(rePath, '-').toLowerCase()));
+                    $("#path-preview").html('https://' + cfDomain + '/' + encodeURIComponent(correctedPagePath.replace(rePath, '-').toLowerCase()));
                 }
                 
                 let obj = {'model': 'KyteSite', 'idx':site.id};
@@ -94,7 +93,7 @@ document.addEventListener('KyteInitialized', function(e) {
                     var correctedPath = userPath.trim(); // Remove leading and trailing spaces
                 
                     if (correctedPath === "") {
-                        $("#path-preview").html('https://' + safeCfDomain + '/index.html');
+                        $("#path-preview").html('https://' + cfDomain + '/index.html');
                     } else {
                         if (correctedPath.startsWith("/")) {
                             correctedPath = correctedPath.substr(1); // Remove leading slash
@@ -104,7 +103,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             correctedPath += ".html"; // Add the extension if missing
                         }
 
-                        $("#path-preview").html('https://' + safeCfDomain + '/' + encodeURIComponent(correctedPath.replace(rePath, '-').toLowerCase()));
+                        $("#path-preview").html('https://' + cfDomain + '/' + encodeURIComponent(correctedPath.replace(rePath, '-').toLowerCase()));
                     }
                 });
                 navbar.create();
@@ -481,10 +480,8 @@ document.addEventListener('KyteInitialized', function(e) {
         let fields = [];
         let colIdx = 0;
 
-        var safeCfDomain = encodeURIComponent(cfDomain);
-        var safePagePath = encodeURIComponent(page_path);
-        $("#newPageUrl").attr('href', 'https://'+safeCfDomain+'/'+safePagePath);
-        $("#newPageUrl").html('https://'+safeCfDomain+'/'+safePagePath);
+        $("#newPageUrl").attr('href', 'https://'+cfDomain+'/'+page_path);
+        $("#newPageUrl").html('https://'+cfDomain+'/'+page_path);
 
         switch ($("#page-type").val()) {
             case 'login':
