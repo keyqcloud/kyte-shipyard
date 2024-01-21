@@ -43,7 +43,7 @@ for %%f in (assets\js\source\*.js) do (
 echo Creating tag for release version %~1
 
 git add .
-git commit -m "release %~1 test from windows"
+git commit -m "release %~1"
 git push
 
 if errorlevel 1 (
@@ -51,15 +51,15 @@ if errorlevel 1 (
     exit /b 1
 )
 
-@REM git tag "v%~1"
+git tag "v%~1"
 
 if errorlevel 1 (
     call :print_error "Git tag creation failed."
     exit /b 1
 )
 
-@REM :: Push the tag to the origin
-@REM git push origin --tags
+:: Push the tag to the origin
+git push origin --tags
 
 if errorlevel 1 (
     call :print_error "Git push failed."
