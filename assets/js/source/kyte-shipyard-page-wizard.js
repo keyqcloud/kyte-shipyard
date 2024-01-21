@@ -49,7 +49,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         correctedPagePath += ".html"; // Add the extension if missing
                     }
                     
-                    $("#path-preview").html('https://' + cfDomain + '/' + encodeURIComponent(correctedPagePath.replace(rePath, '-').toLowerCase()));
+                    $("#path-preview").html('https://' + cfDomain + '/' + correctedPagePath.replace(rePath, '-').toLowerCase());
                 }
                 
                 let obj = {'model': 'KyteSite', 'idx':site.id};
@@ -103,7 +103,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             correctedPath += ".html"; // Add the extension if missing
                         }
 
-                        $("#path-preview").html('https://' + cfDomain + '/' + encodeURIComponent(correctedPath.replace(rePath, '-').toLowerCase()));
+                        $("#path-preview").html('https://' + cfDomain + '/' + correctedPath.replace(rePath, '-').toLowerCase());
                     }
                 });
                 navbar.create();

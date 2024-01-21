@@ -1,3 +1,7 @@
+## 1.3.11
+
+* Remove URI encoding for page paths in creation wizard (identified additiona URI encodings that needed to be removed)
+
 ## 1.3.10
 
 * Add `start.bat` the windows equivalent of `start.sh` for starting a local web server at 8000
