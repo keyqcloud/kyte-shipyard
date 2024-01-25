@@ -165,3 +165,9 @@ document.addEventListener('KyteInitialized', function(e) {
         location.href="/?redir="+encodeURIComponent(window.location);
     }
 });
+
+window.onbeforeunload = function() {
+    if (isDirty) {
+        return "You have unsaved changes. Are you sure you want to leave?";
+    }
+};

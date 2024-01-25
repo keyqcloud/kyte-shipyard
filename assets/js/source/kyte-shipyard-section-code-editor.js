@@ -238,3 +238,9 @@ document.addEventListener('KyteInitialized', function(e) {
        $('#'+pageSelector).removeClass('d-none');
     });
 });
+
+window.onbeforeunload = function() {
+    if (isDirty) {
+        return "You have unsaved changes. Are you sure you want to leave?";
+    }
+};
