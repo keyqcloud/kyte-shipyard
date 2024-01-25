@@ -52,13 +52,16 @@
                 <div class="m-0 p-0 w-100">
                 <div class="editor-box">
                     <div class="editor-box-header">
-                        <div class="d-flex justify-content-between mt-3 px-2">
-                            <p class="mt-3 px-2"><a id="backToSite" href="#">&lt; Back to Email Templates</a></p>
+                        <div class="d-flex justify-content-between align-items-center mt-1 px-2">
                             <div>
-                                <h2 id="email-title"></h2>
+                                <a class="btn btn-sm btn-outline-danger" id="backToSite" href="#">Exit</a>
+                            </div>
+                            <div class="text-center">
+                                <h2 id="email-title" style="font-size: 1.2em; font-weight: 400;"></h2>
+                                <h3 id="email-identifier" style="font-size: 1em; font-weight: 350;"></h3>
                             </div>
                             <div>
-                                <a class="btn d-inline-block btn-md btn-warning" href="#" id="saveCode"><i class="fas fa-save me-2"></i> Save</a>
+                                <a class="btn d-inline-block btn-sm btn-warning" href="#" id="saveCode"><i class="fas fa-save me-2"></i> Save</a>
                             </div>
                         </div>
                     </div>
@@ -67,7 +70,7 @@
                             <div id="htmlEditor" style="width: 100%; height: 100%; border: 1px solid grey"></div>
                         </div>
 
-                        <div id="Preview" class="editor-container">
+                        <div id="Preview" class="editor-container d-none">
                             <div id="previewEmailTemplate" style="width: 100%; height: 100%; border: 1px solid grey"></div>
                         </div>
         

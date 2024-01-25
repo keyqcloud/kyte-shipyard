@@ -79,15 +79,27 @@
                 <div class="m-0 px-0 pt-0 pb-5 w-100">
                 <div class="editor-box">
                     <div class="editor-box-header">
-                        <div class="d-flex justify-content-between mt-3 px-2">
-                            <p class="mt-3 px-2"><a id="backToSite" href="#">&lt; Back to Site</a></p>
+                        <div class="d-flex justify-content-between align-items-center mt-1 px-2">
                             <div>
-                                <h2 id="page-title"></h2>
+                                <a class="btn btn-sm btn-outline-danger" id="backToSite" href="#">Exit</a>
+                            </div>
+                            <div class="text-center">
+                                <h2 id="page-title" style="font-size: 1.2em; font-weight: 400;"></h2>
+                                <h3 id="page-path" style="font-size: 1em; font-weight: 350;"></h3>
                             </div>
                             <div>
-                                <a class="btn d-inline-block btn-md btn-outline-success" href="#" target="_blank" id="viewPage"><i class="fas fa-eye me-2"></i> View Page</a>
-                                <a class="btn d-inline-block btn-md btn-outline-primary" href="#" id="publishPage"><i class="fas fa-upload me-2"></i> Publish</a>
-                                <a class="btn d-inline-block btn-md btn-outline-warning" href="#" id="saveCode"><i class="fas fa-save me-2"></i> Save</a>
+                                <div class="btn-group">
+                                    <a type="button" class="btn btn-sm btn-success viewPage" href="#" target="_blank"><i class="fas fa-eye me-2"></i> View Page</a>
+                                    <button type="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                      <span class="visually-hidden">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                      <li><a class="dropdown-item viewPage" href="#" target="_blank"><i class="fas fa-eye me-2"></i> View Page</a></li>
+                                      <li><a class="dropdown-item" href="#" id="downloadPage"><i class="fas fa-file-download me-2"></i> Download Page</a></li>
+                                    </ul>
+                                </div>
+                                <a class="btn d-inline-block btn-sm btn-primary" href="#" id="publishPage"><i class="fas fa-upload me-2"></i> Publish</a>
+                                <a class="btn d-inline-block btn-sm btn-warning" href="#" id="saveCode"><i class="fas fa-save me-2"></i> Save</a>
                             </div>
                         </div>
                     </div>

@@ -157,7 +157,8 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#backToSite").attr('href', '/app/site/?request='+encoded+'#Pages');
 
                 $("#page-title").html(pageData.page.title);
-                $("#viewPage").attr('href','https://'+(pageData.page.site.aliasDomain ? pageData.page.site.aliasDomain : pageData.page.site.cfDomain)+'/'+pageData.page.s3key);
+                $("#page-path").html(pageData.page.s3key);
+                $(".viewPage").attr('href','https://'+(pageData.page.site.aliasDomain ? pageData.page.site.aliasDomain : pageData.page.site.cfDomain)+'/'+pageData.page.s3key);
 
                 k.get('Navigation', 'site', pageData.page.site.id, [], function (r) {
                     let main_navigation = pageData.page.main_navigation ? pageData.page.main_navigation.id : 0;
@@ -341,7 +342,7 @@ document.addEventListener('KyteInitialized', function(e) {
     $("#downloadPage").click(function(e) {
         e.preventDefault();
 
-        fetch(page.download_link).then(res => res.blob()).then(file => {
+        fetch(pageData.download_link).then(res => res.blob()).then(file => {
             const pathnameParts = pageData.page.s3key.split('/');
             const filenameWithExtension = pathnameParts[pathnameParts.length - 1];
 
