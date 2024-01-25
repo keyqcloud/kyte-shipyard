@@ -1,3 +1,7 @@
+## 1.4.1
+
+* Improve editor UI
+
 ## 1.4.0
 
 * Major UI/UX update.

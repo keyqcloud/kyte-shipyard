@@ -152,7 +152,7 @@ let subnavPage = [
     },
     {
         faicon:'fas fa-scroll',
-        label:'Custom Includes',
+        label:'Custom Scripts',
         selector:'#Scripts'
     },
     {
