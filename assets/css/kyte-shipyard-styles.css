@@ -51,6 +51,7 @@ main {
 .section-heading {
     border-left: 10px solid black;
     padding-left: 0.5em;
+    font-weight: 300;
 }
 
 
@@ -87,8 +88,8 @@ li.back-link {
     background-color: rgb(33, 37, 44) !important;
     color: white !important;
     font-weight: 500 !important;
-    padding-top: 1em !important;
-    padding-bottom: 1em !important;
+    padding-top: 0.5em !important;
+    padding-bottom: 0.5em !important;
 }
 
 .dataTables_wrapper td:first-child, .dataTables_wrapper th:first-child {
@@ -100,8 +101,8 @@ li.back-link {
 
 .dataTables_wrapper tbody td {
     border-bottom: none !important;
-    padding-top: 1em !important;;
-    padding-bottom: 1em !important;;
+    padding-top: 0.5em !important;
+    padding-bottom: 0.5em !important;
     vertical-align: middle !important;
 }
 
