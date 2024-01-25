@@ -15,11 +15,13 @@ footer p { margin-bottom: 0; }
     width: 100%;
 }
 #application-nav {
-    background-color: #003366 !important;
+    background-color: #1f6fb9 !important;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 #mainnav {
     background-color: #CC5500  !important;
-    font-size: 0.9em !important;
+    font-size: 0.9rem !important;
     padding: 0 !important;
 }
 #mainnav .navbar-brand {
@@ -39,8 +41,6 @@ main {
 }
 
 #sidenav {
-    /* background-color: rgb(180, 207, 216); */
-    /* background-color: #0096d1; */
     background-color: #d1e8f3;
     max-width: 230px;
     min-height: 100%;
