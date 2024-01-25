@@ -44,6 +44,8 @@ main {
     background-color: #d1e8f3;
     max-width: 230px;
     min-height: 100%;
+    font-size: 0.9em !important;
+    font-weight: 300 !important;
 }
 
 .section-heading {
