@@ -65,6 +65,8 @@ li.back-link {
 
 #sidebar-nav .active { background-color: #0096d1 !important; color: #fff !important; }
 
+.page-tab-link.active { background-color: #eaf9ff !important; }
+
 /* DATA TABLE STYLES */
 .dataTables_wrapper select, .dataTables_wrapper input[type=search] {
     background-color: white !important;
