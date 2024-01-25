@@ -1,6 +1,12 @@
 ## 1.4.0
 
 * Major UI/UX update.
+* Updates to main navigation styles
+* Addition of new project specific navigation
+* Change "Application" to "Project"
+* Changes to side navigation styles
+* Update code editor styles
+* Fix page height and scroll issue with email template editor
 
 ## 1.3.12
 
