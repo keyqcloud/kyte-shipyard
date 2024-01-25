@@ -9,8 +9,8 @@ let subnavFunction = [
     },
 ];
 
-
 var editor;
+var isDirty = false;
 
 var colorMode = 'vs';
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -59,13 +59,6 @@ document.addEventListener('KyteInitialized', function(e) {
         let idx = k.getPageRequest();
         idx = idx.idx;
 
-        let hidden = [
-            {
-                'name': 'function',
-                'value': idx
-            }
-        ];
-
         k.get("Function", "id", idx, [], function(r) {
             if (r.data[0]) {
                 $("#function-name").html(r.data[0].controller.name);
@@ -84,6 +77,10 @@ document.addEventListener('KyteInitialized', function(e) {
                     wrappingIndent: 'indent'
                 });
 
+                editor.onDidChangeModelContent(function(e) {
+                    isDirty = true;
+                });
+
                 let obj = {'model': 'Controller', 'idx':r.data[0].controller.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 $("#backToController").attr('href', '/app/controller/?request='+encoded);
@@ -99,6 +96,11 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
                     k.put('Function', 'id', idx, {'code':editor.getValue()}, null, [], function(r) {
+                        $('#pageLoaderModal').modal('hide');
+                        isDirty = false;
+                    }, function(err) {
+                        alert(err);
+                        console.error(err)
                         $('#pageLoaderModal').modal('hide');
                     });
                 });

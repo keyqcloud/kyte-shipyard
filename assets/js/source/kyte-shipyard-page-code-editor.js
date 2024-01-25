@@ -5,6 +5,8 @@ var jsEditor;
 var cssEditor;
 var pageData;
 
+var isDirty = false;
+
 var colorMode = 'vs';
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     colorMode = 'vs-dark';
@@ -127,6 +129,16 @@ document.addEventListener('KyteInitialized', function(e) {
                     wordWrapMinified: true,
                     // try "same", "indent" or "none"
                     wrappingIndent: 'indent'
+                });
+
+                htmlEditor.onDidChangeModelContent(function(e) {
+                    isDirty = true;
+                });
+                jsEditor.onDidChangeModelContent(function(e) {
+                    isDirty = true;
+                });
+                cssEditor.onDidChangeModelContent(function(e) {
+                    isDirty = true;
                 });
                 
                 // hide after editor generation
@@ -253,6 +265,11 @@ document.addEventListener('KyteInitialized', function(e) {
                         };
                         k.put('KytePage', 'id', idx, payload, null, [], function(r) {
                             $('#pageLoaderModal').modal('hide');
+                            isDirty = false;
+                        }, function(err) {
+                            alert(err);
+                            console.error(err)
+                            $('#pageLoaderModal').modal('hide');
                         });
                     
                     } catch (error) {
@@ -302,20 +319,11 @@ document.addEventListener('KyteInitialized', function(e) {
                         };
                         k.put('KytePage', 'id', idx, payload, null, [], function(r) {
                             $('#pageLoaderModal').modal('hide');
+                            isDirty = false;
                         }, function(err) {
-                            if (err == 'Unable to create new invalidation') {
-                                setTimeout(() => {
-                                    k.put('KytePage', 'id', idx, payload, null, [], function(r) {
-                                        $('#pageLoaderModal').modal('hide');
-                                    }, function(err) {
-                                        alert(err);
-                                        $('#pageLoaderModal').modal('hide');
-                                    });
-                                }, "500");
-                            } else {
-                                alert(err);
-                                $('#pageLoaderModal').modal('hide');
-                            }
+                            alert(err);
+                            console.error(err)
+                            $('#pageLoaderModal').modal('hide');
                         });
                     
                     } catch (error) {
@@ -371,3 +379,9 @@ document.addEventListener('KyteInitialized', function(e) {
        $('#'+pageSelector).removeClass('d-none');
     });
 });
+
+window.onbeforeunload = function() {
+    if (isDirty) {
+        return "You have unsaved changes. Are you sure you want to leave?";
+    }
+};

@@ -5,6 +5,8 @@ var jsEditor;
 var cssEditor;
 var section;
 
+var isDirty = false;
+
 let subnavSection = [
     {
         faicon:'fas fa-code',
@@ -132,6 +134,16 @@ document.addEventListener('KyteInitialized', function(e) {
                     // try "same", "indent" or "none"
                     wrappingIndent: 'indent'
                 });
+
+                htmlEditor.onDidChangeModelContent(function(e) {
+                    isDirty = true;
+                });
+                jsEditor.onDidChangeModelContent(function(e) {
+                    isDirty = true;
+                });
+                cssEditor.onDidChangeModelContent(function(e) {
+                    isDirty = true;
+                });
                 
                 // hide after editor generation
                 if (hash != '#Section') {
@@ -196,6 +208,11 @@ document.addEventListener('KyteInitialized', function(e) {
                         'fgColor':$("#fgColor").val(),
                     };
                     k.put('KyteSectionTemplate', 'id', idx, payload, null, [], function(r) {
+                        $('#pageLoaderModal').modal('hide');
+                        isDirty = false;
+                    }, function(err) {
+                        alert(err);
+                        console.error(err)
                         $('#pageLoaderModal').modal('hide');
                     });
                 });

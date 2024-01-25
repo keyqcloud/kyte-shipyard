@@ -1,3 +1,7 @@
+## 1.3.12
+
+* Check if editor content has changed and warn user before leaving editor of unsaved changes.
+
 ## 1.3.11
 
 * Remove URI encoding for page paths in creation wizard (identified additiona URI encodings that needed to be removed)

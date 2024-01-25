@@ -21,6 +21,8 @@ let subnavEmail = [
 var htmlEditor;
 var emailTemplate;
 
+var isDirty = false;
+
 var colorMode = 'vs';
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     colorMode = 'vs-dark';
@@ -112,6 +114,10 @@ document.addEventListener('KyteInitialized', function(e) {
                     wrappingIndent: 'indent'
                 });
 
+                htmlEditor.onDidChangeModelContent(function(e) {
+                    isDirty = true;
+                });
+
                 // render preview on load
                 renderHtmlCode();
                 
@@ -140,6 +146,11 @@ document.addEventListener('KyteInitialized', function(e) {
                         'description':$("#setting-email-description").val(),
                     };
                     k.put('EmailTemplate', 'id', idx, payload, null, [], function(r) {
+                        $('#pageLoaderModal').modal('hide');
+                        isDirty = false;
+                    }, function(err) {
+                        alert(err);
+                        console.error(err)
                         $('#pageLoaderModal').modal('hide');
                     });
                 });

@@ -2,6 +2,7 @@ import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/+esm'
 
 var pageData;
 var jsEditor;
+var isDirty = false;
 
 var colorMode = 'vs';
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -146,6 +147,10 @@ document.addEventListener('KyteInitialized', function(e) {
                     wrappingIndent: 'indent'
                 });
 
+                jsEditor.onDidChangeModelContent(function(e) {
+                    isDirty = true;
+                });
+
                 // hide after editor generation
                 if (hash != '#Page') {
                     $("#Page").addClass('d-none');
@@ -266,6 +271,11 @@ document.addEventListener('KyteInitialized', function(e) {
                     console.log(payload);
 
                     k.put('KytePage', 'id', idx, payload, null, [], function (r) {
+                        $('#pageLoaderModal').modal('hide');
+                        isDirty = false;
+                    }, function(err) {
+                        alert(err);
+                        console.error(err)
                         $('#pageLoaderModal').modal('hide');
                     });
                 });

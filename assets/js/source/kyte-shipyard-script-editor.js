@@ -2,6 +2,7 @@ import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/+esm'
 
 var scriptEditor;
 var script;
+var isDirty = false;
 
 var colorMode = 'vs';
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -57,8 +58,6 @@ let subnavScript = [
     },
 ];
 
-
-
 document.addEventListener('KyteInitialized', function(e) {
     let k = e.detail.k;
     let sidenav = new KyteSidenav("#sidenav", subnavScript, "#Content");
@@ -105,6 +104,10 @@ document.addEventListener('KyteInitialized', function(e) {
                     wordWrapMinified: true,
                     // try "same", "indent" or "none"
                     wrappingIndent: 'indent'
+                });
+
+                scriptEditor.onDidChangeModelContent(function(e) {
+                    isDirty = true;
                 });
                 
                 // hide after editor generation
@@ -192,6 +195,11 @@ document.addEventListener('KyteInitialized', function(e) {
                         };
                         k.put('KyteScript', 'id', idx, payload, null, [], function(r) {
                             $('#pageLoaderModal').modal('hide');
+                            isDirty = false;
+                        }, function(err) {
+                            alert(err);
+                            console.error(err)
+                            $('#pageLoaderModal').modal('hide');
                         });
                     } catch (error) {
                         // Alert the user
@@ -232,20 +240,11 @@ document.addEventListener('KyteInitialized', function(e) {
                         };
                         k.put('KyteScript', 'id', idx, payload, null, [], function(r) {
                             $('#pageLoaderModal').modal('hide');
+                            isDirty = false;
                         }, function(err) {
-                            if (err == 'Unable to create new invalidation') {
-                                setTimeout(() => {
-                                    k.put('KytePage', 'id', idx, payload, null, [], function(r) {
-                                        $('#pageLoaderModal').modal('hide');
-                                    }, function(err) {
-                                        alert(err);
-                                        $('#pageLoaderModal').modal('hide');
-                                    });
-                                }, "500");
-                            } else {
-                                alert(err);
-                                $('#pageLoaderModal').modal('hide');
-                            }
+                            alert(err);
+                            console.error(err)
+                            $('#pageLoaderModal').modal('hide');
                         });
                     } catch (error) {
                         // Alert the user
