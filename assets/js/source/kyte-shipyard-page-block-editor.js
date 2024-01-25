@@ -166,9 +166,6 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#page-title").html(pageData.page.title);
                 $("#viewPage").attr('href', 'https://' + (pageData.page.site.aliasDomain ? pageData.page.site.aliasDomain : pageData.page.site.cfDomain) + '/' + pageData.page.s3key);
 
-                obj = { 'model': 'Application', 'idx': pageData.page.site.application.id };
-                encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-
                 k.get('Navigation', 'site', pageData.page.site.id, [], function (r) {
                     let main_navigation = pageData.page.main_navigation ? pageData.page.main_navigation.id : 0;
                     r.data.forEach(function(data) {
@@ -191,11 +188,6 @@ document.addEventListener('KyteInitialized', function(e) {
                         $("#setting-footer").append('<option value="' + data.id + '"' + (section == data.id ? ' selected' : '') + '>' + data.title + '</option>');
                     });
                 });
-
-                let appnav = generateAppNav(encoded);
-
-                let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${pageData.page.site.application.name}`);
-                navbar.create();
 
                 // page assignment table and form
                 let hiddenScriptAssignment = [

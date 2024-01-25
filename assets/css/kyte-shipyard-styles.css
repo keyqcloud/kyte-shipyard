@@ -10,7 +10,10 @@ footer p { margin-bottom: 0; }
 .text-right { text-align: right !important; }
 .text-left { text-align: left !important; }
 .text-strike { text-decoration: line-through; }
-#wrapper { height: 100%; width: 100%; }
+#wrapper {
+    height: 100%;
+    width: 100%;
+}
 #application-nav {
     background-color: #003366 !important;
 }
@@ -36,8 +39,10 @@ main {
 }
 
 #sidenav {
-    background-color: rgb(180, 207, 216);
-    width: 230px;
+    /* background-color: rgb(180, 207, 216); */
+    /* background-color: #0096d1; */
+    background-color: #d1e8f3;
+    max-width: 230px;
     min-height: 100%;
 }
 
@@ -55,7 +60,7 @@ li.back-link {
     padding-bottom: 25px;
 }
 
-#sidebar-nav .active { background-color: #f4f4f4 !important; color: #231F20 !important; }
+#sidebar-nav .active { background-color: #0096d1 !important; color: #fff !important; }
 
 /* DATA TABLE STYLES */
 .dataTables_wrapper select, .dataTables_wrapper input[type=search] {

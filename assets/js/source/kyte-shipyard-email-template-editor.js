@@ -132,11 +132,6 @@ document.addEventListener('KyteInitialized', function(e) {
 
                 $("#email-title").html(emailTemplate.title);
 
-                let appnav = generateAppNav(encoded);
-            
-                let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${emailTemplate.application.name}`);
-                navbar.create();
-
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
                     renderHtmlCode();

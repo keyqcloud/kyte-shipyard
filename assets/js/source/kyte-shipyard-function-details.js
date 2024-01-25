@@ -85,14 +85,6 @@ document.addEventListener('KyteInitialized', function(e) {
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 $("#backToController").attr('href', '/app/controller/?request='+encoded);
 
-                obj = {'model': 'Application', 'idx':r.data[0].controller.application.id};
-                encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-
-                let appnav = generateAppNav(encoded);
-            
-                let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${r.data[0].application.name}`);
-                navbar.create();
-
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
                     k.put('Function', 'id', idx, {'code':editor.getValue()}, null, [], function(r) {

@@ -121,14 +121,6 @@ document.addEventListener('KyteInitialized', function(e) {
 
                 $("#script-name").html(script.name);
 
-                obj = {'model': 'Application', 'idx':script.site.application.id};
-                encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-
-                let appnav = generateAppNav(encoded);
-            
-                let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${script.site.application.name}`);
-                navbar.create();
-
                 // page assignment table and form
                 let hiddenScriptAssignment = [
                     {

@@ -162,20 +162,12 @@ document.addEventListener('KyteInitialized', function(e) {
 
                 $("#section-title").html(section.title);
                 
-                obj = {'model': 'Application', 'idx':section.site.application.id};
-                encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                
                 k.get('Navigation', 'site', section.site.id, [], function(r) {
                     let navigation = section.navigation ? section.navigation.id : 0;
                     r.data.forEach(item => {
                         $("#setting-main-navigation").append('<option value="'+item.id+'"'+(navigation == item.id ? ' selected' : '')+'>'+item.name+'</option>');
                     })
                 });
-
-                let appnav = generateAppNav(encoded);
-            
-                let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${section.site.application.name}`);
-                navbar.create();
 
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
