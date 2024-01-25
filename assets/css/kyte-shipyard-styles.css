@@ -4,13 +4,25 @@ html, body { margin: 0; padding: 0; font-family: 'Nunito', sans-serif !important
 small.copyright {font-weight: 200;}
 #login-form, #reset-form, #enrollment-form, #password-update-form { width: 100%; margin: 0 auto; padding-bottom: 4em;}
 #login-form .col, #reset-form .col, #enrollment-form .col, #password-update-form .col { padding: 1em;}
-footer { position:fixed; bottom:0; width:100%; background-color: #191715; }
+footer { position:fixed; bottom:0; width:100%; background-color: #333333; }
 footer p { margin-bottom: 0; }
 .footer-spacer  { clear: both; height: 120px; }
 .text-right { text-align: right !important; }
 .text-left { text-align: left !important; }
 .text-strike { text-decoration: line-through; }
 #wrapper { height: 100%; width: 100%; }
+#application-nav {
+    background-color: #003366 !important;
+}
+#mainnav {
+    background-color: #CC5500  !important;
+    font-size: 0.9em !important;
+    padding: 0 !important;
+}
+#mainnav .navbar-brand {
+    font-size: 1em !important;
+}
+
 .container {
     padding-bottom: 5em !important;
 }

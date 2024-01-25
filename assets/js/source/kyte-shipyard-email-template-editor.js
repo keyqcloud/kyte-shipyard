@@ -132,9 +132,9 @@ document.addEventListener('KyteInitialized', function(e) {
 
                 $("#email-title").html(emailTemplate.title);
 
-                let appnav = generateAppNav(emailTemplate.application.name, encoded);
+                let appnav = generateAppNav(encoded);
             
-                let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">', 'Email');
+                let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${emailTemplate.application.name}`);
                 navbar.create();
 
                 $("#saveCode").click(function() {

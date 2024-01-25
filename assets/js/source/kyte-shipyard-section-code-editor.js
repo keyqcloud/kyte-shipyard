@@ -172,9 +172,9 @@ document.addEventListener('KyteInitialized', function(e) {
                     })
                 });
 
-                let appnav = generateAppNav(section.site.application.name, encoded);
+                let appnav = generateAppNav(encoded);
             
-                let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">', 'Sites');
+                let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${section.site.application.name}`);
                 navbar.create();
 
                 $("#saveCode").click(function() {

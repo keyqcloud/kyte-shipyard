@@ -20,9 +20,9 @@ document.addEventListener('KyteInitialized', function(e) {
             let obj = {'model': 'Application', 'idx':r.data[0].id};
             let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
             
-            let appnav = generateAppNav(data.name, encoded);
+            let appnav = generateAppNav(encoded);
         
-            let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">', 'Models');
+            let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${data.name}`);
             navbar.create();
 
         } else {

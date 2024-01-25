@@ -102,7 +102,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 
                 let appnav = generateAppNav(data.site.application.name, encoded);
             
-                let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">', 'Sites');
+                let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${data.site.application.name}`);
                 navbar.create();
 
                 // get pages

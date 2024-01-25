@@ -1,12 +1,6 @@
-function generateAppNav(appName, encodedRequest) {
+function generateAppNav(encodedRequest) {
     return [
         [
-            {
-                faicon:'fas fa-rocket',
-                class:'me-2 text-light',
-                label: appName,
-                href: '/app/dashboard/?request='+encodedRequest
-            },
             {
                 faicon:'fas fa-globe',
                 class:'me-2 text-light',
@@ -42,28 +36,6 @@ function generateAppNav(appName, encodedRequest) {
                 class:'me-2 text-light',
                 label:'Configuration',
                 href:'/app/configuration.html?request='+encodedRequest
-            }
-        ],
-        [
-            {
-                dropdown: true,
-                // faicon:'fas fa-server',
-                class:'me-2 text-light',
-                label:'Account',
-                items: [
-                    {
-                        faicon:'fas fa-cog',
-                        class:'me-2',
-                        label:'Settings',
-                        href:'/app/settings.html'
-                    },
-                    {
-                        logout: true,
-                        faicon:'fas fa-power-off',
-                        class:'me-2',
-                        label:'Logout'
-                    }
-                ]
             }
         ]
     ];

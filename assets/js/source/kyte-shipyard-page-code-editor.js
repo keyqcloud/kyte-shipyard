@@ -185,9 +185,9 @@ document.addEventListener('KyteInitialized', function(e) {
                     });
                 });
 
-                let appnav = generateAppNav(pageData.page.site.application.name, encoded);
+                let appnav = generateAppNav(encoded);
             
-                let navbar = new KyteNav("#mainnav", appnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">', 'Sites');
+                let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${pageData.page.site.application.name}`);
                 navbar.create();
 
                 // page assignment table and form

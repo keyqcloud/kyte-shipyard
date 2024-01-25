@@ -51,14 +51,10 @@ let fldsAdmin = [
 document.addEventListener('KyteInitialized', function(e) {
     let k = e.detail.k;
     let profile = null;
-    let acc = null;
 
     // setup password requirements
     var passreq = new KytePasswordRequirement(k, $("#passwordRequirements"), $("#new_password"), $("#confirm_password"));
     passreq.init();
-
-    let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">');
-    navbar.create();
 
     let sidenav = new KyteSidenav("#sidenav", subnavSettings, "#Profile");
     sidenav.create();

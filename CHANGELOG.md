@@ -1,3 +1,7 @@
+## 1.4.0
+
+* Major UI/UX update.
+
 ## 1.3.12
 
 * Check if editor content has changed and warn user before leaving editor of unsaved changes.
