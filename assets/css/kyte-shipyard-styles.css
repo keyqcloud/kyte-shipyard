@@ -112,7 +112,7 @@ li.back-link {
 }
 
 .dataTables_wrapper tbody tr.even {
-    background-color: rgba(155, 218, 255, 0.314) !important;
+    background-color: #e1e3ec !important;
 }
 
 .dataTables_wrapper thead th:first-child {
