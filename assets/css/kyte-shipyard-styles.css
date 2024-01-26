@@ -42,10 +42,22 @@ main {
 
 #sidenav {
     background-color: #d1e8f3;
-    max-width: 230px;
+    max-width: 250px;
     min-height: 100%;
     font-size: 0.9em !important;
     font-weight: 400 !important;
+}
+#sidenav .nav-item {
+    margin: 2px 0;
+}
+#sidenav .nav-item a span {
+    display: none;
+}
+#sidenav:hover .nav-item a span {
+    display: inline;
+}
+#sidenav .nav-item a:hover {
+    background-color: #8fc8f7;
 }
 
 .section-heading {
