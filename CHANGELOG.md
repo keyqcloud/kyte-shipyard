@@ -1,6 +1,7 @@
 ## 1.4.1
 
 * Improve editor UI
+* Make sidebar dynamically show/hide based on hover
 
 ## 1.4.0
 
