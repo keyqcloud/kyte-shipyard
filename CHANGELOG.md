@@ -2,6 +2,7 @@
 
 * Improve editor UI
 * Make sidebar dynamically show/hide based on hover
+* Update footer to have z-index to resolve issue with monaco code preview displaying above footer
 
 ## 1.4.0
 
