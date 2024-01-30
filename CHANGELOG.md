@@ -3,6 +3,7 @@
 * Improve editor UI
 * Make sidebar dynamically show/hide based on hover
 * Update footer to have z-index to resolve issue with monaco code preview displaying above footer
+* Add initial iteration of preview feature to page code editor
 
 ## 1.4.0
 

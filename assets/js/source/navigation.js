@@ -157,6 +157,11 @@ let subnavPage = [
         selector:'#Stylesheet'
     },
     {
+        faicon:'fas fa-eye',
+        label:'Preview',
+        selector:'#Preview'
+    },
+    {
         faicon:'fas fa-scroll',
         label:'Custom Scripts',
         selector:'#Scripts'

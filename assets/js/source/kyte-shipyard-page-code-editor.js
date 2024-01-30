@@ -4,6 +4,8 @@ var htmlEditor;
 var jsEditor;
 var cssEditor;
 var pageData;
+var iframe;
+var libraries;
 
 var isDirty = false;
 
@@ -45,6 +47,38 @@ document.addEventListener("keydown", function(event) {
       }    
 });
 
+function initializeIFrame() {
+    var codeContainer = document.getElementById("pagePreview");
+    // Create an iframe element
+    iframe = document.createElement("iframe");
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+    // Append the iframe to the code container
+    codeContainer.innerHTML = "";
+    codeContainer.appendChild(iframe);
+}
+
+function renderHtmlCode() {    
+    // Get the HTML code from the textarea
+    var code = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no"><title>Kyte Shipyard - Page Preview</title>`;
+    var css = cssEditor.getValue();
+    libraries.forEach(l => {
+        if (l.script_type == 'css') {
+            code += `<link rel="stylesheet" href="${l.link}">`;
+        }
+        // else if (l.script_type == 'js') {
+        //     code += `<script src="${l.link}"></script>`;
+        // }
+    });
+    code += `<style>${css}</style>`;
+    code += `</head><body>`;
+    code += htmlEditor.getValue();
+    code += `</body></html>`;
+    
+    var blob = new Blob([code], {type: "text/html; charset=utf-8"});
+    iframe.src = URL.createObjectURL(blob);
+}
+
 document.addEventListener('KyteInitialized', function(e) {
     let k = e.detail.k;
     let sidenav = new KyteSidenav("#sidenav", subnavPage, "#Page");
@@ -69,6 +103,13 @@ document.addEventListener('KyteInitialized', function(e) {
         k.get("KytePageData", "page", idx, [], function(r) {
             if (r.data[0]) {
                 pageData = r.data[0];
+
+                k.get('KyteLibrary', 'site', pageData.site, [], function(r) {
+                    libraries = r.data;
+                }, function(e) {
+                    console.error(e);
+                    alert(e);
+                });
 
                 // display page title in window
                 document.title = document.title + " - " + pageData.page.title;
@@ -140,6 +181,8 @@ document.addEventListener('KyteInitialized', function(e) {
                 cssEditor.onDidChangeModelContent(function(e) {
                     isDirty = true;
                 });
+
+                initializeIFrame();
                 
                 // hide after editor generation
                 if (hash != '#Page') {
@@ -222,6 +265,10 @@ document.addEventListener('KyteInitialized', function(e) {
                 var frmScript = new KyteForm(k, $("#modalFormScripts"), 'KyteScriptAssignment', hiddenScriptAssignment, fldsScripts, 'Script Assignment', tblScripts, true, $("#addScript"));
                 frmScript.init();
                 tblScripts.bindEdit(frmScript);
+
+                $("#Preview-nav-link").click(function() {
+                    renderHtmlCode();
+                });
 
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
