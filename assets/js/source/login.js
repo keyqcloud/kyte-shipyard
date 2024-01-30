@@ -1,17 +1,25 @@
+function displayLoginError(error_message) {
+    $("#errorMsg").html(error_message);
+    $("#errorMsg").removeClass('d-none');
+    $('#pageLoaderModal').modal('hide');
+}
+
 document.addEventListener('KyteInitialized', function(e) {
     let k = e.detail.k;
-    function displayLoginError(error_message) {
-        $("#errorMsg").html(error_message);
-        $("#errorMsg").removeClass('d-none');
-        $('#pageLoaderModal').modal('hide');
+    let redir = false;
+    redir = k.getUrlParameter("redir");
+
+    if (k.isSession()) {
+        if (redir) {
+            location.href = redir;
+        } else {
+            location.href = "/app/";
+        }
     }
     
     $("#login-form").submit(function(e) {
         e.preventDefault();
         e.stopPropagation();
-
-        let redir = false;
-        redir = k.getUrlParameter("redir");
 
         $("#errorMsg").html('');
         $("#errorMsg").addClass('d-none');
