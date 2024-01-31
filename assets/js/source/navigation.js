@@ -22,8 +22,8 @@ function generateAppNav(encodedRequest) {
             {
                 faicon:'fas fa-puzzle-piece',
                 class:'me-2 text-light',
-                label:'UI Modules',
-                href:'/app/modules.html?request='+encodedRequest
+                label:'Web Components',
+                href:'/app/components.html?request='+encodedRequest
             },
             {
                 faicon:'fas fa-table',
