@@ -279,7 +279,7 @@ document.addEventListener('KyteInitialized', function(e) {
             [
                 {
                     'field':'description',
-                    'type':'textare',
+                    'type':'textarea',
                     'label':'Description',
                     'required':false
                 }
@@ -298,7 +298,7 @@ document.addEventListener('KyteInitialized', function(e) {
             [
                 {
                     'field':'description',
-                    'type':'textare',
+                    'type':'textarea',
                     'label':'Description',
                     'required':false
                 }

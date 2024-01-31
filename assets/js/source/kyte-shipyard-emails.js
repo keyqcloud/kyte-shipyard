@@ -16,7 +16,7 @@ let elements = [
     [
         {
             'field':'description',
-            'type':'textare',
+            'type':'textarea',
             'label':'Description',
             'required':false
         }
