@@ -167,6 +167,11 @@ let subnavPage = [
         selector:'#Scripts'
     },
     {
+        faicon:'fas fa-puzzle-piece',
+        label:'Web Components',
+        selector:'#Components'
+    },
+    {
         faicon:'fas fa-wrench',
         label:'Settings',
         selector:'#Settings'

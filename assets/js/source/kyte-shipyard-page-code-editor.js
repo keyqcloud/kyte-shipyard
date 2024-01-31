@@ -267,6 +267,43 @@ document.addEventListener('KyteInitialized', function(e) {
                 frmScript.init();
                 tblScripts.bindEdit(frmScript);
 
+                // web components assignment table and form
+                let hiddenComponent = [
+                    {
+                        'name': 'page',
+                        'value': pageData.page.id
+                    }
+                ];
+                let fldsComponent = [
+                    [
+                        {
+                            'field':'component',
+                            'type':'select',
+                            'label':'Web Component',
+                            'required':false,
+                            'option': {
+                                'ajax': true,
+                                'data_model_name': 'KyteWebComponent',
+                                'data_model_field': 'application',
+                                'data_model_value': pageData.page.site.application.id,
+                                'data_model_attributes': ['name', 'identifier'],
+                                'data_model_default_field': 'id',
+                                // 'data_model_default_value': 1,
+                            }
+                        },
+                    ],
+                ];
+                let colDefComponents = [
+                    {'targets':0,'data':'component.name','label':'Web Component'},
+                    {'targets':1,'data':'component.identifier','label':'Identifier'},
+                    {'targets':2,'data':'component.description','label':'Description'},
+                ];
+                var tblComponents = new KyteTable(k, $("#components-table"), {'name':"KytePageWebComponent",'field':"page",'value':pageData.page.id}, colDefComponents, true, [0,"asc"], true, true);
+                tblComponents.init();
+                var frmComponent = new KyteForm(k, $("#modalFormComponent"), 'KytePageWebComponent', hiddenComponent, fldsComponent, 'Web Component', tblComponents, true, $("#addComponent"));
+                frmComponent.init();
+                tblComponents.bindEdit(frmComponent);
+
                 $("#Preview-nav-link").click(function() {
                     renderHtmlCode();
                 });
