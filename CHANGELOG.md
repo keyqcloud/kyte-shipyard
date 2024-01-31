@@ -1,10 +1,19 @@
 ## 1.4.1
 
-* Improve editor UI
-* Make sidebar dynamically show/hide based on hover
-* Update footer to have z-index to resolve issue with monaco code preview displaying above footer
-* Add initial iteration of preview feature to page code editor
-* If active session is present, redirct to redir URL or main page of app
+### New Features
+- **Web Component Management**: Introduced a robust management system for web components in the CMS, enabling administrators to add, edit, and remove web components seamlessly.
+- **Component Integration on Web Pages**: Enhanced the CMS to support embedding web components into web pages, allowing users to easily incorporate dynamic web components into different site areas for enriched interactivity.
+
+### Enhancements
+- **Editor User Interface**: Significantly improved the UI of the editor, making it more intuitive and user-friendly.
+- **Dynamic Sidebar**: Implemented a dynamic sidebar that automatically shows or hides based on user hover, enhancing the user experience and workspace efficiency.
+- **Footer Z-Index Adjustment**: Updated the footer to have a higher z-index, resolving the issue with Monaco code preview overlaying the footer.
+- **Preview Feature in Page Code Editor**: Rolled out the initial iteration of a preview feature in the page code editor, enabling users to see real-time renderings of their code.
+- **Session-based Redirection**: Enhanced session management to automatically redirect users to a specified URL or the main page of the application if an active session is detected.
+
+### Bug Fixes
+- Addressed various minor bugs and performance issues to improve the overall stability and functionality of the CMS.
+
 
 ## 1.4.0
 
