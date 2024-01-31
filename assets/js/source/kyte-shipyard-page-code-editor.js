@@ -116,6 +116,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 // set page title and description
                 $("#setting-page-title").val(pageData.page.title);
                 $("#setting-page-description").val(pageData.page.description);
+                $("#webcomponent_obj_name").val(pageData.page.webcomponent_obj_name);
                 
                 // if block editor, redirect to block editor page.
                 if (pageData.page.page_type == 'block' && !forceCodeEditor) {
@@ -298,6 +299,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             'footer':$("#setting-footer").val(),
                             'title':$("#setting-page-title").val(),
                             'description':$("#setting-page-description").val(),
+                            'webcomponent_obj_name': $("#webcomponent_obj_name").val(),
                             'sitemap_include':$("#setting-sitemap-include").val(),
                             'obfuscate_js':$("#setting-obfuscatejs").val(),
                             'use_container':$("#setting-use_container").val(),
@@ -351,6 +353,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             'footer':$("#setting-footer").val(),
                             'title':$("#setting-page-title").val(),
                             'description':$("#setting-page-description").val(),
+                            'webcomponent_obj_name': $("#webcomponent_obj_name").val(),
                             'sitemap_include':$("#setting-sitemap-include").val(),
                             'obfuscate_js':$("#setting-obfuscatejs").val(),
                             'use_container':$("#setting-use_container").val(),
