@@ -1,3 +1,8 @@
+## 1.4.2
+
+### New Features
+- **HTML Display of Changelogs**: Integrated the [marked.js library](https://github.com/markedjs/marked) to display changelogs in HTML format, enhancing readability and allowing for more dynamic content presentation within the CMS.
+
 ## 1.4.1
 
 ### New Features

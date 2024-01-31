@@ -1,3 +1,5 @@
+import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+
 let subnavSettings = [
     {
         faicon:'fas fa-user',
@@ -199,7 +201,7 @@ document.addEventListener('KyteInitialized', function(e) {
             })
             .then(data => {
                 processChangelog(data);
-                document.getElementById('changelogContent').innerHTML = '<pre>' + data + '</pre>';
+                document.getElementById('changelogContent').innerHTML = marked.parse( data );
                 document.getElementById('changelogContent').style.display = 'block';
             })
             .catch(error => {
