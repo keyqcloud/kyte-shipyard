@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Kyte - Shipyard</title>
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/vscode-codicons@0.0.17/dist/codicon.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/assets/css/kyte-shipyard-styles.css">
+    <link rel="stylesheet" href="/assets/css/kyte-editor-styles.css">
+    <!--  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;500;700&display=swap" rel="stylesheet">
+    <!-- javascripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
+    <!-- Kyte -->
+    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script src="/assets/js/kyte-shipyard.js"></script>
+    <script src="/assets/js/navigation.js"></script>
+    <script src="/assets/js/kyte-shipyard-tables.js"></script>
+    <script type="module" src="/assets/js/kyte-shipyard-component-details.js"></script>
+    <style>
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .editor-row {
+            display: flex;
+            flex: 1;
+        }
+
+        .box {
+            flex: 1;
+            border: 1px solid rgb(158, 157, 157);
+            margin: 2px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #htmlEditor, #cssEditor {
+            width: 100%;
+            height: 100%;
+        }
+
+        #preview {
+            width: 100%; height: 100%;
+            flex: 2;
+            background-color: #fff;
+        }
+
+        #properties {
+            width: 100%; height: 100%;
+            flex: 1;
+        }
+
+        .monaco-editor { position: absolute !important; }
+    </style>
+</head>
+
+<body>
+    <!-- Page loading modal.  Once session is validated, the loading modal will close. -->
+    <div id="pageLoaderModal" class="modal white" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-sm h-100 d-flex">
+            <div class="mx-auto align-self-center" style="width: 48px">
+                <div class="spinner-wrapper text-center fa-6x"><span class="fas fa-sync fa-spin"></span></div>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+
+    <div id="wrapper">
+        <main class="editor">
+            <!-- <div class="container container-flex m-0 p-0"> -->
+            <div class="m-0 p-0 w-100">
+                <div class="editor-box">
+                    <div class="editor-box-header">
+                        <div class="d-flex justify-content-between align-items-center mt-1 px-2">
+                            <div>
+                                <a class="btn btn-sm btn-outline-danger" id="backToController" href="#">Exit</a>
+                            </div>
+                            <div>
+                                <h2><span id="component-name"></span> <small style="font-weight: 100;" id="component-identifier"></small></spanclass>
+                            </div>
+                            <div>
+                                <a class="btn d-inline-block btn-sm btn-warning" href="#" id="saveCode"><i class="fas fa-save me-2"></i> Save</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col">HTML Editor</div>
+                        <div class="col">CSS Editor</div>
+                    </div>
+                    <div class="editor-box-content">
+                        <div class="editor-container">
+                            <div class="editor-row">
+                                <div class="box" id="htmlEditor"></div>
+                                <div class="box" id="cssEditor"></div>
+                            </div>
+                            <div class="editor-row">
+                                <div class="box" id="preview"></div>
+                                <div class="box" id="properties">
+                                    <h5>Properties</h5>
+                                    <hr/>
+                                    <h6>Placeholders</h6>
+                                    <div id="placeholderWrapper"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- modal form -->
+    <div id="modalForm"></div>
+
+    <footer>
+        <div class="text-light d-flex justify-content-between py-2 px-3">
+            <div style="font-weight: 100;font-size:0.6em;">
+                <div>Kyte Shipyard&trade; Version <span id="kyteShipyardVersion"></span></div>
+                <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
+            </div>
+            <p class="text-light" style="font-weight: 100;">KeyQ © 2020-2024</p>
+        </div>
+    </footer>
+</body>
+</html>
