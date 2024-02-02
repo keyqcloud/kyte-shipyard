@@ -63,6 +63,13 @@
         #properties {
             width: 100%; height: 100%;
             flex: 1;
+            overflow: hidden;
+        }
+
+        #propertiesWrapper {
+            max-height: 400px; /* Adjust according to your layout */
+            overflow-y: auto; /* Scrollbar as needed */
+            padding-bottom: 150px;
         }
 
         .monaco-editor { position: absolute !important; }
@@ -111,10 +118,12 @@
                             <div class="editor-row">
                                 <div class="box" id="preview"></div>
                                 <div class="box" id="properties">
-                                    <h5>Properties</h5>
-                                    <hr/>
-                                    <h6>Placeholders</h6>
-                                    <div id="placeholderWrapper"></div>
+                                    <div id="propertiesWrapper">
+                                        <h5>Properties</h5>
+                                        <hr/>
+                                        <h6>Placeholders</h6>
+                                        <div id="placeholderWrapper"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
