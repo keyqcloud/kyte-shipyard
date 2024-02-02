@@ -5,6 +5,7 @@
 
 ### Bug Fixes
 - Address issue where custom scripts in table were not clickable to view/edit code
+- Address issue where obfuscation settings in custom script editor showed for CSS but not JS
 
 ## 1.4.2
 

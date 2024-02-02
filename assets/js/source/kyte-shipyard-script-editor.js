@@ -90,7 +90,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#setting-script-description").val(script.description);
                 
                 if (script.script_type == 'js') {
-                    $('#obfuscatejs-option-wrapper').addClass('d-none');
+                    $('#obfuscatejs-option-wrapper').removeClass('d-none');
                 }
 
                 scriptEditor = monaco.editor.create(document.getElementById("scriptEditor"), {
