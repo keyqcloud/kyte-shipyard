@@ -3,6 +3,9 @@
 ### Enhancements:
 - **Scrollable Properties Section:** Implemented a fix to make the content inside the `#properties` div scrollable. This enhancement ensures that all content within the `#properties` div is now accessible, regardless of the amount of content it holds. The overflow issue, where content was previously cut off, has been effectively resolved.
 
+### Bug Fixes
+- Address issue where custom scripts in table were not clickable to view/edit code
+
 ## 1.4.2
 
 ### New Features

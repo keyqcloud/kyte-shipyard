@@ -361,7 +361,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 tblPage.init();
 
                 // scripts
-                var tblScript = new KyteTable(k, $("#scripts-table"), {'name':"KyteScript",'field':"site",'value':idx}, colDefScript, true, [0,"asc"], false, true);
+                var tblScript = new KyteTable(k, $("#scripts-table"), {'name':"KyteScript",'field':"site",'value':idx}, colDefScript, true, [0,"asc"], false, true, 'id', '/app/script/');
                 tblScript.init();
                 var modalFormScript = new KyteForm(k, $("#modalFormScript"), 'KyteScript', hidden, scriptElement, 'Script', tblScript, true, $("#newScript"));
                 modalFormScript.success = function(r) {
