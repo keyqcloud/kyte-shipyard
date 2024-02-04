@@ -132,6 +132,10 @@ document.addEventListener('KyteInitialized', function(e) {
         location.href="/?redir="+encodeURIComponent(window.location);
     }
 
+    $("#updateKyteShipyard").click(function() {
+        $("#cacheInstructionModal").modal('show');
+    });
+
     var reloadTimeout;
     $("#updateNow").click(function() {
         // Open the loading modal
@@ -222,14 +226,14 @@ document.addEventListener('KyteInitialized', function(e) {
         
         if (isNewerVersion(latestVersion, KS_VERSION)) {
             document.getElementById('updateResultsWrapper').innerHTML = '<p>Newer version available: ' + latestVersion + '</p>';
-            document.getElementById('updateNow').classList.remove('d-none');
+            document.getElementById('updateKyteShipyard').classList.remove('d-none');
         } else if (latestVersion === KS_VERSION) {
             document.getElementById('updateResultsWrapper').innerHTML = '<p>You are already using the latest version.</p>';
-            document.getElementById('updateNow').classList.add('d-none');
+            document.getElementById('updateKyteShipyard').classList.add('d-none');
             deleteUpdateCookieAndCloseModal();
         } else {
             document.getElementById('updateResultsWrapper').innerHTML = '<p>Unable to determine the latest version.</p>';
-            document.getElementById('updateNow').classList.add('d-none');
+            document.getElementById('updateKyteShipyard').classList.add('d-none');
             deleteUpdateCookieAndCloseModal();
         }
     }

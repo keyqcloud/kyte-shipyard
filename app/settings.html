@@ -140,13 +140,15 @@
                     <div class="d-flex justify-content-between mt-4">
                         <h4>Kyte Shipyard<sup>&trade;</sup></h4>
                         <div>
-                            <button class="btn btn-primary d-none" id="updateNow">Update Now</button>
+                            <button class="btn btn-primary d-none" id="updateKyteShipyard">Update Now</button>
                         </div>
                     </div>
 
                     <small>Current Version: <span id="currentKSVERSION"></span></small>
-
                     <div class="mt-2" id="updateResultsWrapper"></div>
+
+                    <hr class="my-3 "/>
+
                     <div id="changelogContent" style="max-height: 60vh; overflow-y: scroll; margin-top: 20px; display: none;"></div>
                 </div>
             </div>
@@ -155,6 +157,33 @@
 
     <!-- modal form -->
     <div id="adminForm"></div>
+
+    <!-- Update info modal -->
+    <!-- Cache Instruction Modal -->
+    <div class="modal fade" id="cacheInstructionModal" tabindex="-1" aria-labelledby="cacheInstructionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cacheInstructionModalLabel">Quick Tip for Faster Updates</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>To ensure you're viewing the latest version of the site after an update, please open your browser's Developer Tools and disable caching. Here's how:</p>
+                    <ul>
+                        <li>For Chrome: Press <kbd>F12</kbd> or <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd>, go to the Network tab, and check "Disable cache."</li>
+                        <li>For Firefox: Press <kbd>F12</kbd> or <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd>, go to the Network tab, and check "Disable cache."</li>
+                        <li>For Safari: Press <kbd>Cmd</kbd> + <kbd>Alt</kbd> + <kbd>I</kbd>, go to the Network tab, and check "Disable cache."</li>
+                    </ul>
+                    <p>This temporary step helps load the updated content directly from the server, bypassing the cache.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="updateNow">Got it! Let's Update!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <footer>
         <div class="text-light d-flex justify-content-between py-2 px-3">

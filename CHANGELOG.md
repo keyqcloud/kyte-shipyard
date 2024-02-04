@@ -2,6 +2,7 @@
 
 ### Enhancements:
 - **Scrollable Properties Section:** Implemented a fix to make the content inside the `#properties` div scrollable. This enhancement ensures that all content within the `#properties` div is now accessible, regardless of the amount of content it holds. The overflow issue, where content was previously cut off, has been effectively resolved.
+- **Clear language on update**: add modal popup with language to instruct user to open inspector for faster updates to prevent caching.
 
 ### Bug Fixes
 - Address issue where custom scripts in table were not clickable to view/edit code
