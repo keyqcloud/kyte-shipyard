@@ -6,6 +6,7 @@
 ### Bug Fixes
 - Address issue where custom scripts in table were not clickable to view/edit code
 - Address issue where obfuscation settings in custom script editor showed for CSS but not JS
+- Address issue where login screen displays session error and redirects every 30 seconds
 
 ## 1.4.2
 

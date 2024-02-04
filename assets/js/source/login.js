@@ -9,7 +9,7 @@ document.addEventListener('KyteInitialized', function(e) {
     let redir = false;
     redir = k.getUrlParameter("redir");
 
-    if (k.isSession()) {
+    if (k.isSession(false, false)) {
         if (redir) {
             location.href = redir;
         } else {
