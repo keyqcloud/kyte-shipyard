@@ -20,6 +20,11 @@ let subnavSettings = [
         faicon:'fas fa-rocket',
         label:'Kyte Shipyard<sup>&trade;</sup>',
         selector:'#KyteShipyard'
+    },
+    {
+        faicon:'fas fa-code-branch',
+        label:'Kyte API<sup>&trade;</sup>',
+        selector:'#KyteAPI'
     }
 ];
 
@@ -50,6 +55,8 @@ let fldsAdmin = [
     ]
 ];
 
+var kyte_api_version = "unknown";
+
 document.addEventListener('KyteInitialized', function(e) {
     let k = e.detail.k;
     let profile = null;
@@ -65,6 +72,8 @@ document.addEventListener('KyteInitialized', function(e) {
     $('#pageLoaderModal').modal('show');
     if (k.isSession()) {        
         k.get("KyteProfile", null, null, [], function(r) {
+            kyte_api_version = r.engine_version;
+            $("#currentKytePHPVersion").html(kyte_api_version);
             if (r.data[0]) {
                 profile = r.data[0];
                 $("#profile_email").val(profile['email']);
@@ -251,7 +260,68 @@ document.addEventListener('KyteInitialized', function(e) {
         }
         return false;
     }
+
+    function getKytePHPChangelog() {
+        var changelogUrl = 'https://raw.githubusercontent.com/keyqcloud/kyte-php/master/CHANGELOG.md';
+    
+        fetch(changelogUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('kyteChangelogContent').innerHTML = marked.parse( data );
+                document.getElementById('kyteChangelogContent').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    }
+
+    function getKytePHPLicense() {
+        var changelogUrl = 'https://raw.githubusercontent.com/keyqcloud/kyte-php/master/LICENSE';
+    
+        fetch(changelogUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('kyteLicenseContent').innerHTML = marked.parse( data );
+                document.getElementById('kyteLicenseContent').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    }
+
+    function getKyteShipyardLicense() {
+        var changelogUrl = 'https://raw.githubusercontent.com/keyqcloud/kyte-shipyard/main/LICENSE';
+    
+        fetch(changelogUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('ksLicenseContent').innerHTML = marked.parse( data );
+                document.getElementById('ksLicenseContent').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    }
     
     // Run the check
     checkForUpdates();
+
+    getKytePHPChangelog();
+    getKytePHPLicense();
+    getKyteShipyardLicense();
 });

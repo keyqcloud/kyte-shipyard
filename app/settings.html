@@ -144,12 +144,57 @@
                         </div>
                     </div>
 
-                    <small>Current Version: <span id="currentKSVERSION"></span></small>
+                    <p>Current Version: <span id="currentKSVERSION"></span></p>
                     <div class="mt-2" id="updateResultsWrapper"></div>
+                    
+                    <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="changelog-tab" data-bs-toggle="tab" data-bs-target="#changelog-tab-pane" type="button" role="tab" aria-controls="changelog-tab-pane" aria-selected="true">Change Log</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="license-tab" data-bs-toggle="tab" data-bs-target="#license-tab-pane" type="button" role="tab" aria-controls="license-tab-pane" aria-selected="false">License</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="https://github.com/keyqcloud/kyte-shipyard" target="_blank" aria-selected="false"><i class="fab fa-github me-2"></i>View on GitHub</a>
+                        </li>
+                    </ul>
+                      
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="changelog-tab-pane" role="tabpanel" aria-labelledby="changelog-tab" tabindex="0">
+                            <div id="changelogContent" style="max-height: 60vh; overflow-y: scroll; margin-top: 20px; display: none;"></div>
+                        </div>
+                        <div class="tab-pane fade" id="license-tab-pane" role="tabpanel" aria-labelledby="license-tab" tabindex="0">
+                            <div id="ksLicenseContent" style="max-height: 60vh; overflow-y: scroll; margin-top: 20px; display: none;"></div>
+                        </div>
+                    </div>
+                </div>
 
-                    <hr class="my-3 "/>
+                <div id="KyteAPI" class="mt-2 d-none">
+                    <div class="mt-4">
+                        <h4>Kyte API<sup>&trade;</sup></h4>
+                        <p>Current Version: <span id="currentKytePHPVersion"></span></p>                    
 
-                    <div id="changelogContent" style="max-height: 60vh; overflow-y: scroll; margin-top: 20px; display: none;"></div>
+                        <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="kyte-changelog-tab" data-bs-toggle="tab" data-bs-target="#kyte-changelog-tab-pane" type="button" role="tab" aria-controls="kyte-changelog-tab-pane" aria-selected="true">Change Log</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="kyte-license-tab" data-bs-toggle="tab" data-bs-target="#kyte-license-tab-pane" type="button" role="tab" aria-controls="kyte-license-tab-pane" aria-selected="false">License</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" href="https://github.com/keyqcloud/kyte-php" target="_blank" aria-selected="false"><i class="fab fa-github me-2"></i>View on GitHub</a>
+                            </li>
+                        </ul>
+                          
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="kyte-changelog-tab-pane" role="tabpanel" aria-labelledby="kyte-changelog-tab" tabindex="0">
+                                <div id="kyteChangelogContent" style="max-height: 60vh; overflow-y: scroll; margin-top: 20px; display: none;"></div>
+                            </div>
+                            <div class="tab-pane fade" id="kyte-license-tab-pane" role="tabpanel" aria-labelledby="kyte-license-tab" tabindex="0">
+                                <div id="kyteLicenseContent" style="max-height: 60vh; overflow-y: scroll; margin-top: 20px; display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
