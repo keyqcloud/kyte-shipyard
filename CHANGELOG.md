@@ -1,4 +1,4 @@
-## 1.4.4
+## 1.5.0
 
 ### Enhancements:
 - **User element class for logout:** Update to use element class for logout handler inline with Kyte JS and Kyte PHP changes.
