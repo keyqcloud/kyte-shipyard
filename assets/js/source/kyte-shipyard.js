@@ -1,4 +1,4 @@
-var KS_VERSION = '1.4.3';
+var KS_VERSION = '1.4.4';
 
 function loadScript(url, callback) {
     var script = document.createElement('script');
@@ -25,7 +25,7 @@ function initializeKyte(callback) {
 
     var k = new Kyte(endpoint, publickey, identifier, account);
     k.init();
-    k.addLogoutHandler("#logout");
+    k.addLogoutHandler(".logout");
 
     // Dispatch a custom event after 'k' is initialized
     var kyteInitializedEvent = new CustomEvent('KyteInitialized', { detail: { k: k } });
