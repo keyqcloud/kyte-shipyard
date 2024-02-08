@@ -147,7 +147,7 @@ li.back-link {
 @media (prefers-color-scheme: dark) {
     body {
         color: #eee;
-        background: #121212;
+        background: #36363c;
     }
 
     input, select, textarea {
