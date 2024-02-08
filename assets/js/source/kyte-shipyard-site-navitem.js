@@ -199,7 +199,7 @@ document.addEventListener('KyteInitialized', function(e) {
         });
         pageOpt += '</select>';
         // generate menu item html
-        let menuItemHtml = '<li class="sortable-navitem-element navitem-idx-'+element.id+'" data-nav-idx="'+element.id+'"><div class="row navitem-row"><div class="col-auto d-flex row-grip"><i class="fas fa-grip-vertical"></i></div><div class="col"><input class="form-control navitem-title" type="text" value="'+element.title+'" /></div><div class="col"><input class="form-control navitem-faicon" type="text" placeholder="fab fa-font-awesome-flag" value="'+(element.faicon ? element.faicon : '')+'" /></div><div class="col navitem-link-wrapper'+(isLink && !isLogout ? '' : ' d-none')+'"><input class="form-control navitem-link" type="text" placeholder="url or anchor" value="'+(element.link ? element.link : '')+'" /></div><div class="col navitem-targget-type-wrapper'+(isLink || isLogout ? ' d-none' : '')+'">'+pageOpt+'</div><div class="col-2">'+linkPos+'</div><div class="col-2">'+linkOpt+'</div><div class="col-2 navitem-parentItem-wrapper"></div><div class="col-auto d-flex row-delete"><a href="#" class="text-danger navitem-delete"><i class="fas fa-trash-alt"></i></a></div></div></li>';
+        let menuItemHtml = '<li class="sortable-navitem-element navitem-idx-'+element.id+'" data-nav-idx="'+element.id+'"><div class="row navitem-row"><div class="col-auto d-flex row-grip"><i class="fas fa-grip-vertical"></i></div><div class="col"><input class="form-control navitem-title" type="text" value="'+element.title+'" /></div><div class="col"><input class="form-control navitem-faicon" type="text" placeholder="fab fa-font-awesome-flag" value="'+(element.faicon ? element.faicon : '')+'" /></div><div class="col navitem-link-wrapper'+(isLink && !isLogout ? '' : ' d-none')+'"><input class="form-control navitem-link" type="text" placeholder="url or anchor" value="'+(element.link ? element.link : '')+'" /></div><div class="col navitem-target-type-wrapper'+(isLink || isLogout ? ' d-none' : '')+'">'+pageOpt+'</div><div class="col-2">'+linkPos+'</div><div class="col-2">'+linkOpt+'</div><div class="col-2 navitem-parentItem-wrapper"></div><div class="col-auto d-flex row-delete"><a href="#" class="text-danger navitem-delete"><i class="fas fa-trash-alt"></i></a></div></div></li>';
         return menuItemHtml;
     }
 
@@ -219,17 +219,17 @@ document.addEventListener('KyteInitialized', function(e) {
         let item = $(this).closest('li');
         let navitemIdx = item.data('navIdx');
         if ($(this).val() == 'link') {
-            $(this).closest('.navitem-row').find('.navitem-targget-type-wrapper').addClass('d-none');
+            $(this).closest('.navitem-row').find('.navitem-target-type-wrapper').addClass('d-none');
             $(this).closest('.navitem-row').find('.navitem-link-wrapper').removeClass('d-none');
             // update to set isLogout
             k.put('NavigationItem', 'id', navitemIdx, {'isLogout':0}, null, []);
         } else if ($(this).val() == 'page') {
-            $(this).closest('.navitem-row').find('.navitem-targget-type-wrapper').removeClass('d-none');
+            $(this).closest('.navitem-row').find('.navitem-target-type-wrapper').removeClass('d-none');
             $(this).closest('.navitem-row').find('.navitem-link-wrapper').addClass('d-none');
             // update to set isLogout
             k.put('NavigationItem', 'id', navitemIdx, {'isLogout':0}, null, []);
         } else {
-            $(this).closest('.navitem-row').find('.navitem-targget-type-wrapper').addClass('d-none');
+            $(this).closest('.navitem-row').find('.navitem-target-type-wrapper').addClass('d-none');
             $(this).closest('.navitem-row').find('.navitem-link-wrapper').addClass('d-none');
             // update to set isLogout
             k.put('NavigationItem', 'id', navitemIdx, {'isLogout':1}, null, []);

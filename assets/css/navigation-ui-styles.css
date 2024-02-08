@@ -15,17 +15,17 @@
     align-items: center;
 }
 
-.column-style-select {
+.style-select {
     text-decoration: none;
     display: inline-block;
     border-radius: 5px;
     color: blue;
 }
-.column-style-select:hover {
+.style-select:hover {
     background-color: rgb(133, 173, 200);
     color: blue;
 }
-.column-style-select.active {
+.style-select.active {
     background-color: rgb(153, 212, 255);
     color: blue;
 }

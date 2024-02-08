@@ -1,6 +1,7 @@
 let pages = []; // empty array to old object of pages
 let itemCount = 1;
 let columnStyle = 0;
+let navItemStyle = 0;
 
 document.addEventListener('KyteInitialized', function(e) {
     let k = e.detail.k;
@@ -25,8 +26,10 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#bgActiveColorHex").val(data.bgActiveColor);
                 $("#fgActiveColorHex").val(data.fgActiveColor);
                 columnStyle = data.columnStyle;
+                navItemStyle = data.labelCenterBlock;
 
                 $("#columnStyle"+columnStyle).addClass('active');
+                $("#navItemStyle"+navItemStyle).addClass('active');
 
                 // update preview
                 $("#colorPreview").css('background-color',data.bgColor);
@@ -168,6 +171,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 'bgActiveColor':$("#bgActiveColorHex").val(),
                 'fgActiveColor':$("#fgActiveColorHex").val(),
                 'columnStyle':columnStyle,
+                'labelCenterBlock':navItemStyle,
             }, null, [], function() {$('#pageLoaderModal').modal('hide');});
         });
 
@@ -177,24 +181,33 @@ document.addEventListener('KyteInitialized', function(e) {
 
     function addMenuItem(element) {
         let isLink = (element.page == null || element.page == 0) ? true : false;
-        let linkOpt = '<select class="form-select navitem-target-type"><option value="link"'+(isLink ? ' selected' : '')+'>Link</option><option value="page"'+(isLink ? '' : ' selected')+'>Page</option></select>';
-        let pageOpt = '<select class="navitem-page-selection form-select'+(isLink ? ' d-none' : '')+'">';
+        let isLogout = (element.isLogout == null || element.isLogout == 0) ? false : true;
+        let linkOpt = '<select class="form-select navitem-target-type"><option value="link"'+(isLink && !isLogout ? ' selected' : '')+'>Link</option><option value="page"'+(isLink && !isLogout ? '' : ' selected')+'>Page</option><option value="logout"'+(isLogout ? ' selected' : '')+'>Logout</option></select>';
+        let pageOpt = '<select class="navitem-page-selection form-select">';
         pageOpt += '<option'+((element.page == null || element.page == 0) ? ' selected' : '')+' disabled>Please select</option>'
         pages.forEach(page => {
             pageOpt += '<option value="'+page.id+'"'+((element.page != null && element.page.id == page.id) ? ' selected' : '')+'>'+page.title+` [${page.s3key}]</option>`;
         });
         pageOpt += '</select>';
-        let menuItemHtml = '<li class="sortable-navitem-element" data-nav-idx="'+element.id+'"><div class="row navitem-row"><div class="col-auto d-flex row-grip"><i class="fas fa-grip-vertical"></i></div><div class="col"><input class="form-control navitem-title" type="text" value="'+element.title+'" /></div><div class="col"><input class="form-control navitem-faicon" type="text" placeholder="fab fa-font-awesome-flag" value="'+(element.faicon ? element.faicon : '')+'" /></div><div class="col"><input class="form-control navitem-link'+(isLink ? '' : ' d-none')+'" type="text" placeholder="url or anchor" value="'+(element.link ? element.link : '')+'" />'+pageOpt+'</div><div class="col-2">'+linkOpt+'</div><div class="col-auto d-flex row-delete"><a href="#" class="text-danger navitem-delete"><i class="fas fa-trash-alt"></i></a></div></div></li>';
+        let menuItemHtml = '<li class="sortable-navitem-element" data-nav-idx="'+element.id+'"><div class="row navitem-row"><div class="col-auto d-flex row-grip"><i class="fas fa-grip-vertical"></i></div><div class="col"><input class="form-control navitem-title" type="text" value="'+element.title+'" /></div><div class="col"><input class="form-control navitem-faicon" type="text" placeholder="fab fa-font-awesome-flag" value="'+(element.faicon ? element.faicon : '')+'" /></div><div class="col"><input class="form-control navitem-link'+(isLink && !isLogout ? '' : ' d-none')+'" type="text" placeholder="url or anchor" value="'+(element.link ? element.link : '')+'" /></div><div class="col navitem-target-type-wrapper'+(isLink || isLogout ? ' d-none' : '')+'">'+pageOpt+'</div><div class="col-2">'+linkOpt+'</div><div class="col-auto d-flex row-delete"><a href="#" class="text-danger navitem-delete"><i class="fas fa-trash-alt"></i></a></div></div></li>';
         return menuItemHtml;
     }
 
     $("#sortable-menu-items").on('change', '.navitem-target-type', function() {
+        let item = $(this).closest('li');
+        let navitemIdx = item.data('navIdx');
         if ($(this).val() == 'link') {
-            $(this).closest('.navitem-row').find('.navitem-page-selection').addClass('d-none');
+            $(this).closest('.navitem-row').find('.navitem-target-type-wrapper').addClass('d-none');
             $(this).closest('.navitem-row').find('.navitem-link').removeClass('d-none');
-        } else {
-            $(this).closest('.navitem-row').find('.navitem-page-selection').removeClass('d-none');
+            k.put('SideNavItem', 'id', navitemIdx, {'isLogout':0}, null, []);
+        } else if ($(this).val() == 'page') {
+            $(this).closest('.navitem-row').find('.navitem-target-type-wrapper').removeClass('d-none');
             $(this).closest('.navitem-row').find('.navitem-link').addClass('d-none');
+            k.put('SideNavItem', 'id', navitemIdx, {'isLogout':0}, null, []);
+        } else {
+            $(this).closest('.navitem-row').find('.navitem-target-type-wrapper').addClass('d-none');
+            $(this).closest('.navitem-row').find('.navitem-link').addClass('d-none');
+            k.put('SideNavItem', 'id', navitemIdx, {'isLogout':1}, null, []);
         }
     });
 
@@ -284,5 +297,12 @@ document.addEventListener('KyteInitialized', function(e) {
         columnStyle = $(this).data('columnStyle');
         $(".column-style-select").removeClass('active');
         $("#columnStyle"+columnStyle).addClass('active');
+    });
+
+    $(".nav-item-style-select").click(function(e) {
+        e.preventDefault();
+        navItemStyle = $(this).data('navItemStyle');
+        $(".nav-item-style-select").removeClass('active');
+        $("#navItemStyle"+navItemStyle).addClass('active');
     });
 });

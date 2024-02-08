@@ -1,7 +1,12 @@
 ## 1.5.0
 
+### New Features
+- **Side Nav Logout Item**: Introduced ability to create a logout button in the sidenav.
+- **Side Nav Item Layout Customization**: Ability to change the side navigation item style.
+
 ### Enhancements:
 - **User element class for logout:** Update to use element class for logout handler inline with Kyte JS and Kyte PHP changes.
+- **Update dark color mode background color** Update background color for better contrast.
 
 ## 1.4.3
 
