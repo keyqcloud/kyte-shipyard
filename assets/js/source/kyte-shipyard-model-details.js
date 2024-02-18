@@ -51,6 +51,28 @@ let controllerElements = [
     ]
 ];
 
+let colDefAttributes = [
+    {'targets':0,'data':'name','label':'Name', render: function(data, type, row, meta) {
+        if (row.foreignKeyModel) {
+            return data + " ( "+row.foreignKeyModel.name+" => id )";
+        }
+        return data;
+    } },
+    {'targets':1,'data':'type','label':'Type', render: function(data, type, row, meta) {
+        if (data == "i") return "Int("+row.size+")";
+        if (data == "s") return "Varchar("+row.size+")";
+        if (data == "t") return "Text";
+        if (data == "date") return "Date";
+        
+        return data;
+    } },
+    {'targets':2,'data':'required','label':'Null', render: function(data, type, row, meta) { return data == 1 ? 'NO':'YES'; }},
+    {'targets':3,'data':'protected','label':'Private', render: function(data, type, row, meta) { return data == 1 ? 'YES':'NO'; }},
+    {'targets':4,'data':'unsigned','label':'Unsigned', render: function(data, type, row, meta) { return data == 1 ? 'YES':'NO'; }},
+    {'targets':5,'data':'defaults','label':'Default'},
+    {'targets':6,'data':'description','label':'Description'},
+];
+
 function getData(k, idx, model, appId) {
     // get attributes _ks.get() and iterate over to create table def and elements
     _ks.get("ModelAttribute", "dataModel", idx, [], function(r) {

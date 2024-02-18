@@ -9,6 +9,10 @@ let elements = [
     ]
 ];
 
+let colDefModels = [
+    {'targets':0,'data':'name','label':'User Model'},
+];
+
 document.addEventListener('KyteInitialized', function(e) {
     let _ks = e.detail._ks;
     if (!_ks.isSession()) {

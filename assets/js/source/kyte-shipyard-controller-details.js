@@ -66,6 +66,11 @@ let functionFormElements = [
     ]
 ];
 
+let colDefFunctions = [
+    {'targets':0,'data':'type','label':'Type', render: function(data, type, row, meta) { return row.name ? data+'<small class="d-block">'+row.name+'</small>' : data; }},
+    {'targets':1,'data':'description','label':'Description'},
+];
+
 document.addEventListener('KyteInitialized', function(e) {
     let _ks = e.detail._ks;
     let sidenav = new KyteSidenav("#sidenav", subnavController, "#Functions");
