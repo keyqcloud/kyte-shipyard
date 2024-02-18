@@ -98,7 +98,7 @@ document.addEventListener('KyteInitialized', function(e) {
         idx = idx.idx;
 
         // check if we are explicitly asked to use code editor even if page was made using block
-        let forceCodeEditor = _ks.geturlParameter('mode') == 'code';
+        let forceCodeEditor = _ks.getUrlParameter('mode') == 'code';
 
         _ks.get("KytePageData", "page", idx, [], function(r) {
             if (r.data[0]) {

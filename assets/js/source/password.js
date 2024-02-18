@@ -6,7 +6,7 @@ document.addEventListener('KyteInitialized', function(e) {
     passreq.init();
 
     // get token - if none found, then redir to /
-    let token = _ks.geturlParameter('token');
+    let token = _ks.getUrlParameter('token');
     if (!token) {
         location.href="/";
     }

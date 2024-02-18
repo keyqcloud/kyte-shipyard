@@ -7,7 +7,7 @@ function displayLoginError(error_message) {
 document.addEventListener('KyteInitialized', function(e) {
     let _ks = e.detail._ks;
     let redir = false;
-    redir = _ks.geturlParameter("redir");
+    redir = _ks.getUrlParameter("redir");
 
     if (_ks.isSession(false, false)) {
         if (redir) {

@@ -67,7 +67,7 @@ document.addEventListener('KyteInitialized', function(e) {
     let profile = null;
 
     // setup password requirements
-    var passreq = new KytePasswordRequirement(k, $("#passwordRequirements"), $("#new_password"), $("#confirm_password"));
+    var passreq = new KytePasswordRequirement(_ks, $("#passwordRequirements"), $("#new_password"), $("#confirm_password"));
     passreq.init();
 
     let sidenav = new KyteSidenav("#sidenav", subnavSettings, "#Profile");

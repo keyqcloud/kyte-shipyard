@@ -1,3 +1,9 @@
+## 1.5.2
+
+### Bug Fixes
+- Fix bug that prevented retrieving URL parameters
+- Fix issue where logout button wasn't working
+
 ## 1.5.1
 
 - **Update Kyte instance variable name** Update KyteShipyard's Kyte instance variable to `_ks` for interoperabililty with future preview feature
