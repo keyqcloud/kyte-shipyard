@@ -1,12 +1,12 @@
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
-    if (!k.isSession()) {
+    let _ks = e.detail._ks;
+    if (!_ks.isSession()) {
         location.href="/?redir="+encodeURIComponent(window.location);
         return;
     }
 
     // get url param
-    let idx = k.getPageRequest();
+    let idx = _ks.getPageRequest();
     idx = idx.idx;
 
     let elements = [
@@ -51,12 +51,12 @@ document.addEventListener('KyteInitialized', function(e) {
         }
     ];
 
-    var tblControllers = new KyteTable(k, $("#controllers-table"), {'name':"Controller",'field':'application','value':idx}, colDefControllers, true, [0,"asc"], false, true, 'id', '/app/controller/');
+    var tblControllers = new KyteTable(_ks, $("#controllers-table"), {'name':"Controller",'field':'application','value':idx}, colDefControllers, true, [0,"asc"], false, true, 'id', '/app/controller/');
     tblControllers.initComplete = function() {
         $('#pageLoaderModal').modal('hide');
     }
     tblControllers.init();
-    var modalForm = new KyteForm(k, $("#modalForm"), 'Controller', hidden, elements, 'Controller', tblControllers, true, $("#new"));
+    var modalForm = new KyteForm(_ks, $("#modalForm"), 'Controller', hidden, elements, 'Controller', tblControllers, true, $("#new"));
     modalForm.init();
     modalForm.success = function(r) {
         if (r.data[0]) {

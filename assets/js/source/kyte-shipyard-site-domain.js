@@ -1,10 +1,10 @@
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     $('#pageLoaderModal').modal('show');
     
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
         let hidden = [
@@ -14,7 +14,7 @@ document.addEventListener('KyteInitialized', function(e) {
             }
         ];
 
-        k.get("Domain", "id", idx, [], function(r) {
+        _ks.get("Domain", "id", idx, [], function(r) {
             if (r.data[0]) {
                 data = r.data[0];
                 $("#site-name").html(data.site.name);
@@ -37,14 +37,14 @@ document.addEventListener('KyteInitialized', function(e) {
                     e.stopPropagation();
                     if (data.assigned) {
                         // remove domain
-                        k.put('Domain', 'id', idx, {'assigned':null}, null, [], function(r) {
+                        _ks.put('Domain', 'id', idx, {'assigned':null}, null, [], function(r) {
                             $("#assign").html('<i class="fas fa-certificate me-2"></i> Assign');
                             $("#assign").removeClass('btn-outline-danger');
                             $("#assign").addClass('btn-outline-primary');
                         });
                     } else {
                         // assign domain
-                        k.put('Domain', 'id', idx, {'assigned':data.site.cfDistributionId}, null, [], function(r) {
+                        _ks.put('Domain', 'id', idx, {'assigned':data.site.cfDistributionId}, null, [], function(r) {
                             $("#assign").html('<i class="fas fa-certificate me-2"></i> Unassign');
                             $("#assign").removeClass('btn-outline-primary');
                             $("#assign").addClass('btn-outline-danger');

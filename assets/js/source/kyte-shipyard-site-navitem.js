@@ -3,15 +3,15 @@ let parentMenuItems = [];
 let itemCount = 1;
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     $('#pageLoaderModal').modal('show');
     
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
-        k.get("Navigation", "id", idx, [], function(r) {
+        _ks.get("Navigation", "id", idx, [], function(r) {
             if (r.data[0]) {
                 data = r.data[0];
                 $("#site-name").html(data.site.name);
@@ -104,7 +104,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 navbar.create();
 
                 // get pages
-                k.get('KytePage', 'site', data.site.id, [], function(r) {
+                _ks.get('KytePage', 'site', data.site.id, [], function(r) {
                     if (r.data.length > 0) {
                         pages = r.data;
                     }
@@ -120,10 +120,10 @@ document.addEventListener('KyteInitialized', function(e) {
                                     itemChanges.push({'id':navitemIdx, 'itemOrder':index});
                                 }
                             });
-                            k.put('NavItems', 'NavigationItem', itemChanges.length, {'navitems':itemChanges}, null, []);
+                            _ks.put('NavItems', 'NavigationItem', itemChanges.length, {'navitems':itemChanges}, null, []);
                         }
                     });
-                    k.get('NavigationItem', 'navigation', idx, [], function(r) {
+                    _ks.get('NavigationItem', 'navigation', idx, [], function(r) {
                         if (r.data.length > 0) {
                             let parentMenuSelect = '<select class="navitem-parentItem form-select"><option value="0">No Parent Menu</option>';
                             r.data.forEach(element => {
@@ -147,7 +147,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         e.preventDefault();
                         $('#pageLoaderModal').modal('show');
                         // add menu item
-                        k.post('NavigationItem', {
+                        _ks.post('NavigationItem', {
                             'title': 'New Navigation Item',
                             'navigation': idx,
                             'site': data.site.id,
@@ -171,7 +171,7 @@ document.addEventListener('KyteInitialized', function(e) {
             e.preventDefault();
             e.stopPropagation();
             $('#pageLoaderModal').modal('show');
-            k.put('Navigation', 'id', idx, {
+            _ks.put('Navigation', 'id', idx, {
                 'bgColor':$("#bgColorHex").val(),
                 'fgColor':$("#fgColorHex").val(),
                 'bgDropdownColor':$("#bgDropdownColorHex").val(),
@@ -206,13 +206,13 @@ document.addEventListener('KyteInitialized', function(e) {
     $("#sortable-menu-items").on('change', '.navitem-parentItem', function() {
         let item = $(this).closest('li');
         let navitemIdx = item.data('navIdx');
-        k.put('NavigationItem', 'id', navitemIdx, {'parentItem':$(this).val()}, null, []);
+        _ks.put('NavigationItem', 'id', navitemIdx, {'parentItem':$(this).val()}, null, []);
     });
 
     $("#sortable-menu-items").on('change', '.navitem-position', function() {
         let item = $(this).closest('li');
         let navitemIdx = item.data('navIdx');
-        k.put('NavigationItem', 'id', navitemIdx, {'center':$(this).val()}, null, []);
+        _ks.put('NavigationItem', 'id', navitemIdx, {'center':$(this).val()}, null, []);
     });
 
     $("#sortable-menu-items").on('change', '.navitem-target-type', function() {
@@ -222,17 +222,17 @@ document.addEventListener('KyteInitialized', function(e) {
             $(this).closest('.navitem-row').find('.navitem-target-type-wrapper').addClass('d-none');
             $(this).closest('.navitem-row').find('.navitem-link-wrapper').removeClass('d-none');
             // update to set isLogout
-            k.put('NavigationItem', 'id', navitemIdx, {'isLogout':0}, null, []);
+            _ks.put('NavigationItem', 'id', navitemIdx, {'isLogout':0}, null, []);
         } else if ($(this).val() == 'page') {
             $(this).closest('.navitem-row').find('.navitem-target-type-wrapper').removeClass('d-none');
             $(this).closest('.navitem-row').find('.navitem-link-wrapper').addClass('d-none');
             // update to set isLogout
-            k.put('NavigationItem', 'id', navitemIdx, {'isLogout':0}, null, []);
+            _ks.put('NavigationItem', 'id', navitemIdx, {'isLogout':0}, null, []);
         } else {
             $(this).closest('.navitem-row').find('.navitem-target-type-wrapper').addClass('d-none');
             $(this).closest('.navitem-row').find('.navitem-link-wrapper').addClass('d-none');
             // update to set isLogout
-            k.put('NavigationItem', 'id', navitemIdx, {'isLogout':1}, null, []);
+            _ks.put('NavigationItem', 'id', navitemIdx, {'isLogout':1}, null, []);
         }
     });
 
@@ -240,7 +240,7 @@ document.addEventListener('KyteInitialized', function(e) {
         let item = $(this).closest('li');
         let navitemIdx = item.data('navIdx');
         if (navitemIdx > 0) {
-            k.put('NavigationItem', 'id', navitemIdx, {'title':$(this).val()}, null, []);
+            _ks.put('NavigationItem', 'id', navitemIdx, {'title':$(this).val()}, null, []);
         }
     });
 
@@ -248,7 +248,7 @@ document.addEventListener('KyteInitialized', function(e) {
         let item = $(this).closest('li');
         let navitemIdx = item.data('navIdx');
         if (navitemIdx > 0) {
-            k.put('NavigationItem', 'id', navitemIdx, {'faicon':$(this).val()}, null, []);
+            _ks.put('NavigationItem', 'id', navitemIdx, {'faicon':$(this).val()}, null, []);
         }
     });
 
@@ -258,7 +258,7 @@ document.addEventListener('KyteInitialized', function(e) {
             let item = $(this).closest('li');
             let navitemIdx = item.data('navIdx');
             if (navitemIdx > 0) {
-                k.put('NavigationItem', 'id', navitemIdx, {'link':$(this).val(), 'page':null}, null, []);
+                _ks.put('NavigationItem', 'id', navitemIdx, {'link':$(this).val(), 'page':null}, null, []);
             }
         }
     });
@@ -269,7 +269,7 @@ document.addEventListener('KyteInitialized', function(e) {
             let item = $(this).closest('li');
             let navitemIdx = item.data('navIdx');
             if (navitemIdx > 0) {
-                k.put('NavigationItem', 'id', navitemIdx, {'page':$(this).val(), 'link':null}, null, []);
+                _ks.put('NavigationItem', 'id', navitemIdx, {'page':$(this).val(), 'link':null}, null, []);
             }
         }
     });
@@ -280,7 +280,7 @@ document.addEventListener('KyteInitialized', function(e) {
         let item = $(this).closest('li');
         let navitemIdx = item.data('navIdx');
         if (navitemIdx > 0) {
-            k.delete('NavigationItem', 'id', navitemIdx, [], function() {
+            _ks.delete('NavigationItem', 'id', navitemIdx, [], function() {
                 item.remove();
             }, function(err) {
                 alert('Unable to delete: '+err);

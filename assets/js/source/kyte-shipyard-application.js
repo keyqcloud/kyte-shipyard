@@ -50,16 +50,16 @@ let colDefApps = [
 ];
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     
     $('#pageLoaderModal').modal('show');
-    if (k.isSession()) {
-        var dataTable = new KyteTable(k, $("#models-table"), {'name':"Application",'field':null,'value':null}, colDefApps, true, [0,"asc"], true, true, 'id', '/app/dashboard/');
+    if (_ks.isSession()) {
+        var dataTable = new KyteTable(_ks, $("#models-table"), {'name':"Application",'field':null,'value':null}, colDefApps, true, [0,"asc"], true, true, 'id', '/app/dashboard/');
         dataTable.initComplete = function() {
             $('#pageLoaderModal').modal('hide');
         }
         dataTable.init();
-        var modalForm = new KyteForm(k, $("#modalForm"), 'Application', null, elements, 'My App', dataTable, true, $("#new"));
+        var modalForm = new KyteForm(_ks, $("#modalForm"), 'Application', null, elements, 'My App', dataTable, true, $("#new"));
         modalForm.success = function(r) {
             let connect = "let endpoint = 'https://"+r.kyte_api+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+r.data[0].identifier+"');k.init();\n\n";
             let obfuscatedConnect = JavaScriptObfuscator.obfuscate(connect,
@@ -76,7 +76,7 @@ document.addEventListener('KyteInitialized', function(e) {
                     stringArrayThreshold: 1
                 }
             );
-            k.put('Application', 'id', r.data[0].id,
+            _ks.put('Application', 'id', r.data[0].id,
             {
                 'kyte_connect': connect,
                 'kyte_connect_obfuscated': obfuscatedConnect.getObfuscatedCode(),

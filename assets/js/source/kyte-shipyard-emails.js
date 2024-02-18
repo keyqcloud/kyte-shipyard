@@ -30,14 +30,14 @@ let colDefEmails = [
 ];
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
-    if (!k.isSession()) {
+    let _ks = e.detail._ks;
+    if (!_ks.isSession()) {
         location.href="/?redir="+encodeURIComponent(window.location);
         return;
     }
 
     // get url param
-    let idx = k.getPageRequest();
+    let idx = _ks.getPageRequest();
     idx = idx.idx;
 
     let hidden = [
@@ -47,12 +47,12 @@ document.addEventListener('KyteInitialized', function(e) {
         }
     ];
     
-    var dataTable = new KyteTable(k, $("#emails-table"), {'name':"EmailTemplate",'field':'application','value':idx}, colDefEmails, true, [0,"asc"], false, true, 'id', '/app/email/');
+    var dataTable = new KyteTable(_ks, $("#emails-table"), {'name':"EmailTemplate",'field':'application','value':idx}, colDefEmails, true, [0,"asc"], false, true, 'id', '/app/email/');
     dataTable.initComplete = function() {
         $('#pageLoaderModal').modal('hide');
     }
     dataTable.init();
-    var modalForm = new KyteForm(k, $("#modalForm"), 'EmailTemplate', hidden, elements, 'Email Template', dataTable, true, $("#new"));
+    var modalForm = new KyteForm(_ks, $("#modalForm"), 'EmailTemplate', hidden, elements, 'Email Template', dataTable, true, $("#new"));
     modalForm.init();
     modalForm.success = function(r) {
         if (r.data[0]) {

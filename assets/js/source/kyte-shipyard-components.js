@@ -30,13 +30,13 @@ let colDefComponents = [
 ];
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     
     $('#pageLoaderModal').modal('show');
 
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
         let hidden = [
@@ -46,9 +46,9 @@ document.addEventListener('KyteInitialized', function(e) {
             }
         ];
 
-        var tblComponents = new KyteTable(k, $("#webcomponents-table"), {'name':'KyteWebComponent','field':'application','value':idx}, colDefComponents, true, [0,"asc"], false, true, 'id', '/app/component/');
+        var tblComponents = new KyteTable(_ks, $("#webcomponents-table"), {'name':'KyteWebComponent','field':'application','value':idx}, colDefComponents, true, [0,"asc"], false, true, 'id', '/app/component/');
         tblComponents.init();
-        var frmComponent = new KyteForm(k, $("#modalForm"), 'KyteWebComponent', hidden, fldsComponent, 'Web Component', tblComponents, true, $("#new"));
+        var frmComponent = new KyteForm(_ks, $("#modalForm"), 'KyteWebComponent', hidden, fldsComponent, 'Web Component', tblComponents, true, $("#new"));
         frmComponent.init();
         frmComponent.success = function(r) {
             if (r.data[0]) {

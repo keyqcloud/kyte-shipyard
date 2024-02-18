@@ -11,17 +11,17 @@ let kyte_app = '';
 let page_path = '';
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     $('#pageLoaderModal').modal('show');
     
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
         siteIdx = idx;
 
-        k.get("KyteSite", "id", idx, [], function(r) {
+        _ks.get("KyteSite", "id", idx, [], function(r) {
             if (r.data[0]) {
                 let site = r.data[0];
 
@@ -63,25 +63,25 @@ document.addEventListener('KyteInitialized', function(e) {
             
                 let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${site.application.name}`);
 
-                k.get('DataModel', 'application', site.application.id, [], function(r) {
+                _ks.get('DataModel', 'application', site.application.id, [], function(r) {
                     for (data of r.data) {
                         $("#page-model").append('<option value="'+data.id+'">'+data.name+'</option>');
                     }
                 });
 
-                k.get('Navigation', 'site', site.id, [], function(r) {
+                _ks.get('Navigation', 'site', site.id, [], function(r) {
                     for (data of r.data) {
                         $("#page-main-navigation").append('<option value="'+data.id+'">'+data.name+'</option>');
                     }
                 });
 
-                k.get('SideNav', 'site', site.id, [], function(r) {
+                _ks.get('SideNav', 'site', site.id, [], function(r) {
                     for (data of r.data) {
                         $("#page-side-navigation").append('<option value="'+data.id+'">'+data.name+'</option>');
                     }
                 });
 
-                k.get('KytePage', 'site', site.id, [], function(r) {
+                _ks.get('KytePage', 'site', site.id, [], function(r) {
                     for (data of r.data) {
                         $("#page-login-success-target").append('<option value="'+data.s3key+'">'+data.title+' (/'+data.s3key+')'+'</option>');
                         $("#page-table-click").append('<option value="'+data.s3key+'">'+data.title+' (/'+data.s3key+')'+'</option>');
@@ -167,7 +167,7 @@ document.addEventListener('KyteInitialized', function(e) {
 
         let condition = btoa(JSON.stringify([{"field":"site","value":siteIdx}]));
         // check if page already exists
-        k.get('KytePage', 's3key', page_path, [{'name':'x-kyte-query-conditions', 'value':condition}], function(r) {
+        _ks.get('KytePage', 's3key', page_path, [{'name':'x-kyte-query-conditions', 'value':condition}], function(r) {
             $('#pageLoaderModal').modal('hide');
             if (r.data.length > 0) {
                 $("#page-path").addClass('is-invalid');
@@ -195,7 +195,7 @@ document.addEventListener('KyteInitialized', function(e) {
             let sortable = '';
             let fields = '';
             let dropdown = '';
-            k.get('ModelAttribute', 'dataModel', $("#page-model").val(), [], function(r) {
+            _ks.get('ModelAttribute', 'dataModel', $("#page-model").val(), [], function(r) {
                 // create start of sortables
                 sortable = '<div class="row"><div class="col-6"><h5>Include</h5></div><div class="col-6"><h5>Exclude</h5></div></div><div class="row"><div class="col-6"><ul id="data-model-columns" class="connectedSortableTabbleColumns">';
                 // column headers for fields
@@ -687,7 +687,7 @@ document.addEventListener('KyteInitialized', function(e) {
         $('#pageLoaderModal').modal('show');
 
         // upload code
-        k.post('KytePage', {
+        _ks.post('KytePage', {
             'html': html,
             'javascript': javascript,
             'stylesheet': stylesheet,
@@ -706,7 +706,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 // generate kyte connect
                 let connect = "let endpoint = 'https://"+kyte_endpoint+"';var k = new Kyte(endpoint, '"+kyte_pub+"', '"+kyte_iden+"', '"+kyte_num+"', '"+kyte_app+"');k.init();\n\n";
                 // create s3 file and invalidate
-                k.put('KytePage', 'id', r.data[0].id, {'state': 1}, null, [], function(r) {
+                _ks.put('KytePage', 'id', r.data[0].id, {'state': 1}, null, [], function(r) {
                     $('#pageLoaderModal').modal('hide');
                     $("#wizard-4").addClass('d-none');
                     $("#wizard-final").removeClass('d-none');

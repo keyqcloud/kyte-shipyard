@@ -60,7 +60,7 @@ document.addEventListener("keydown", function(event) {
 });
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     let sidenav = new KyteSidenav("#sidenav", subnavSection, "#Section");
     sidenav.create();
     sidenav.bind();
@@ -72,12 +72,12 @@ document.addEventListener('KyteInitialized', function(e) {
     $(hash).removeClass('d-none');
     $(hash+'-nav-link').addClass('active');
     
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
-        k.get("KyteSectionTemplate", "id", idx, [], function(r) {
+        _ks.get("KyteSectionTemplate", "id", idx, [], function(r) {
             if (r.data[0]) {
                 section = r.data[0];
                 let hidden = [
@@ -162,7 +162,7 @@ document.addEventListener('KyteInitialized', function(e) {
 
                 $("#section-title").html(section.title);
                 
-                k.get('Navigation', 'site', section.site.id, [], function(r) {
+                _ks.get('Navigation', 'site', section.site.id, [], function(r) {
                     let navigation = section.navigation ? section.navigation.id : 0;
                     r.data.forEach(item => {
                         $("#setting-main-navigation").append('<option value="'+item.id+'"'+(navigation == item.id ? ' selected' : '')+'>'+item.name+'</option>');
@@ -199,7 +199,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         'bgColor':$("#bgColor").val(),
                         'fgColor':$("#fgColor").val(),
                     };
-                    k.put('KyteSectionTemplate', 'id', idx, payload, null, [], function(r) {
+                    _ks.put('KyteSectionTemplate', 'id', idx, payload, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
                         isDirty = false;
                     }, function(err) {

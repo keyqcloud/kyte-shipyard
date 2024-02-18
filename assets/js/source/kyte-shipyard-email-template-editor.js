@@ -71,7 +71,7 @@ function renderHtmlCode() {
 }
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     let sidenav = new KyteSidenav("#sidenav", subnavEmail, "#HTML");
     sidenav.create();
     sidenav.bind();
@@ -87,12 +87,12 @@ document.addEventListener('KyteInitialized', function(e) {
         renderHtmlCode();
     });
     
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
-        k.get("EmailTemplate", "id", idx, [], function(r) {
+        _ks.get("EmailTemplate", "id", idx, [], function(r) {
             if (r.data[0]) {
                 emailTemplate = r.data[0];
 
@@ -136,7 +136,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         'title':$("#setting-email-title").val(),
                         'description':$("#setting-email-description").val(),
                     };
-                    k.put('EmailTemplate', 'id', idx, payload, null, [], function(r) {
+                    _ks.put('EmailTemplate', 'id', idx, payload, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
                         isDirty = false;
                     }, function(err) {

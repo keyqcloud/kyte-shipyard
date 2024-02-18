@@ -1,19 +1,19 @@
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
 
     $('#pageLoaderModal').modal('show');
 
-    if (!k.isSession()) {
+    if (!_ks.isSession()) {
         location.href="/?redir="+encodeURIComponent(window.location);
         return;
     }
 
     // get url param
-    let idx = k.getPageRequest();
+    let idx = _ks.getPageRequest();
     idx = idx.idx;
 
-    k.get("Application", "id", idx, [], function(r) {
+    _ks.get("Application", "id", idx, [], function(r) {
         if (r.data[0]) {
             data = r.data[0];
 

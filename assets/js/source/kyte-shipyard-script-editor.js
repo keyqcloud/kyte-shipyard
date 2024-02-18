@@ -59,7 +59,7 @@ let subnavScript = [
 ];
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     let sidenav = new KyteSidenav("#sidenav", subnavScript, "#Content");
     sidenav.create();
     sidenav.bind();
@@ -71,15 +71,15 @@ document.addEventListener('KyteInitialized', function(e) {
     $(hash).removeClass('d-none');
     $(hash+'-nav-link').addClass('active');
     
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
         // check if we are explicitly asked to use code editor even if page was made using block
-        let forceCodeEditor = k.getUrlParameter('mode') == 'code';
+        let forceCodeEditor = _ks.geturlParameter('mode') == 'code';
 
-        k.get("KyteScript", "id", idx, [], function(r) {
+        _ks.get("KyteScript", "id", idx, [], function(r) {
             if (r.data[0]) {
                 script = r.data[0];
 
@@ -154,9 +154,9 @@ document.addEventListener('KyteInitialized', function(e) {
                 let colDefPages = [
                     {'targets':0,'data':'page.title','label':'Page'},
                 ];
-                var tblPages = new KyteTable(k, $("#pages-table"), {'name':"KyteScriptAssignment",'field':"script",'value':idx}, colDefPages, true, [0,"asc"], false, true);
+                var tblPages = new KyteTable(_ks, $("#pages-table"), {'name':"KyteScriptAssignment",'field':"script",'value':idx}, colDefPages, true, [0,"asc"], false, true);
                 tblPages.init();
-                var frmPages = new KyteForm(k, $("#modalFormPages"), 'KyteScriptAssignment', hiddenScriptAssignment, fldsPages, 'Script Assignment', tblPages, true, $("#addPage"));
+                var frmPages = new KyteForm(_ks, $("#modalFormPages"), 'KyteScriptAssignment', hiddenScriptAssignment, fldsPages, 'Script Assignment', tblPages, true, $("#addPage"));
                 frmPages.init();
                 tblPages.bindEdit(frmPages);
 
@@ -185,7 +185,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             'description':$("#setting-script-description").val(),
                             'obfuscate_js':$("#setting-obfuscatejs").val(),
                         };
-                        k.put('KyteScript', 'id', idx, payload, null, [], function(r) {
+                        _ks.put('KyteScript', 'id', idx, payload, null, [], function(r) {
                             $('#pageLoaderModal').modal('hide');
                             isDirty = false;
                         }, function(err) {
@@ -230,7 +230,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             'obfuscate_js':$("#setting-obfuscatejs").val(),
                             'state': 1,
                         };
-                        k.put('KyteScript', 'id', idx, payload, null, [], function(r) {
+                        _ks.put('KyteScript', 'id', idx, payload, null, [], function(r) {
                             $('#pageLoaderModal').modal('hide');
                             isDirty = false;
                         }, function(err) {

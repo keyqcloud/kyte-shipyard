@@ -67,7 +67,7 @@ let functionFormElements = [
 ];
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     let sidenav = new KyteSidenav("#sidenav", subnavController, "#Functions");
     sidenav.create();
     sidenav.bind();
@@ -79,9 +79,9 @@ document.addEventListener('KyteInitialized', function(e) {
     $(hash).removeClass('d-none');
     $(hash+'-nav-link').addClass('active');
     
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
         let hidden = [
@@ -91,7 +91,7 @@ document.addEventListener('KyteInitialized', function(e) {
             }
         ];
 
-        k.get("Controller", "id", idx, [], function(r) {
+        _ks.get("Controller", "id", idx, [], function(r) {
             if (r.data[0]) {
                 controllerName = r.data[0].name;
                 $("#controller-name").html(controllerName);
@@ -115,9 +115,9 @@ document.addEventListener('KyteInitialized', function(e) {
             $('#pageLoaderModal').modal('hide');
         });
 
-        var functionsTable = new KyteTable(k, $("#functions-table"), {'name':'Function','field':'controller','value':idx}, colDefFunctions, true, [0,"asc"], false, true, 'id', '/app/function/');
+        var functionsTable = new KyteTable(_ks, $("#functions-table"), {'name':'Function','field':'controller','value':idx}, colDefFunctions, true, [0,"asc"], false, true, 'id', '/app/function/');
         functionsTable.init();
-        var modelFormFunction = new KyteForm(k, $("#modalControllerFunctionForm"), 'Function', hidden, functionFormElements, 'Function', functionsTable, true, $("#assignController"));
+        var modelFormFunction = new KyteForm(_ks, $("#modalControllerFunctionForm"), 'Function', hidden, functionFormElements, 'Function', functionsTable, true, $("#assignController"));
         modelFormFunction.init();
         modelFormFunction.success = function(r) {
             if (r.data[0]) {

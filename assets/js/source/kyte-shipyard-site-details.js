@@ -211,7 +211,7 @@ let colDefLibrary = [
 let app = null;
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     let sidenav = new KyteSidenav("#sidenav", subnavSite, "#Attributes");
     sidenav.create();
     sidenav.bind();
@@ -223,9 +223,9 @@ document.addEventListener('KyteInitialized', function(e) {
     $(hash).removeClass('d-none');
     $(hash+'-nav-link').addClass('active');
     
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
         let hidden = [
@@ -305,7 +305,7 @@ document.addEventListener('KyteInitialized', function(e) {
             ]
         ];
 
-        k.get("KyteSite", "id", idx, [], function(r) {
+        _ks.get("KyteSite", "id", idx, [], function(r) {
             if (r.data[0]) {
                 app = r.data[0].application;
                 data = r.data[0];
@@ -334,7 +334,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 navbar.create();
 
                 // pages
-                var tblPage = new KyteTable(k, $("#pages-table"), {'name':'KytePage','field':'site','value':idx}, colDefPage, true, [0,"asc"], false, true, 'id', '/app/page/');
+                var tblPage = new KyteTable(_ks, $("#pages-table"), {'name':'KytePage','field':'site','value':idx}, colDefPage, true, [0,"asc"], false, true, 'id', '/app/page/');
                 tblPage.customAction = [
                     {
                         'className': 'open-block-editor',
@@ -361,9 +361,9 @@ document.addEventListener('KyteInitialized', function(e) {
                 tblPage.init();
 
                 // scripts
-                var tblScript = new KyteTable(k, $("#scripts-table"), {'name':"KyteScript",'field':"site",'value':idx}, colDefScript, true, [0,"asc"], false, true, 'id', '/app/script/');
+                var tblScript = new KyteTable(_ks, $("#scripts-table"), {'name':"KyteScript",'field':"site",'value':idx}, colDefScript, true, [0,"asc"], false, true, 'id', '/app/script/');
                 tblScript.init();
-                var modalFormScript = new KyteForm(k, $("#modalFormScript"), 'KyteScript', hidden, scriptElement, 'Script', tblScript, true, $("#newScript"));
+                var modalFormScript = new KyteForm(_ks, $("#modalFormScript"), 'KyteScript', hidden, scriptElement, 'Script', tblScript, true, $("#newScript"));
                 modalFormScript.success = function(r) {
                     if (r.data[0]) {
                         let obj = {'model': 'KyteScript', 'idx':r.data[0].id};
@@ -375,56 +375,56 @@ document.addEventListener('KyteInitialized', function(e) {
                 tblScript.bindEdit(modalFormScript);
 
                 // Library
-                var tblLibrary = new KyteTable(k, $("#libraries-table"), {'name':"KyteLibrary",'field':"site",'value':idx}, colDefLibrary, true, [0,"asc"], true, true);
+                var tblLibrary = new KyteTable(_ks, $("#libraries-table"), {'name':"KyteLibrary",'field':"site",'value':idx}, colDefLibrary, true, [0,"asc"], true, true);
                 tblLibrary.init();
-                var modalFormLibrary = new KyteForm(k, $("#modalFormLibrary"), 'KyteLibrary', hidden, libraryElement, 'Script', tblLibrary, true, $("#addLibrary"));
+                var modalFormLibrary = new KyteForm(_ks, $("#modalFormLibrary"), 'KyteLibrary', hidden, libraryElement, 'Script', tblLibrary, true, $("#addLibrary"));
                 modalFormLibrary.init();
                 tblLibrary.bindEdit(modalFormLibrary);
 
                 // media
-                var tblMedia = new KyteTable(k, $("#media-table"), {'name':"Media",'field':"site",'value':idx}, colDefMedia, true, [0,"asc"], false, true);
+                var tblMedia = new KyteTable(_ks, $("#media-table"), {'name':"Media",'field':"site",'value':idx}, colDefMedia, true, [0,"asc"], false, true);
                 tblMedia.init();
-                var modalFormMedia = new KyteForm(k, $("#modalFormMedia"), 'Media', hidden, mediaElements, 'Media', tblMedia, true, $("#newMedia"));
+                var modalFormMedia = new KyteForm(_ks, $("#modalFormMedia"), 'Media', hidden, mediaElements, 'Media', tblMedia, true, $("#newMedia"));
                 modalFormMedia.init();
                 tblMedia.bindEdit(modalFormMedia);
 
                 // navigation
-                var tblNavigation = new KyteTable(k, $("#navigation-table"), {'name':"Navigation",'field':'site','value':idx}, colDefNavigation, true, [0,"asc"], true, true, 'id', '/app/site/navigation.html');
+                var tblNavigation = new KyteTable(_ks, $("#navigation-table"), {'name':"Navigation",'field':'site','value':idx}, colDefNavigation, true, [0,"asc"], true, true, 'id', '/app/site/navigation.html');
                 tblNavigation.initComplete = function() {
                     $('#pageLoaderModal').modal('hide');
                 }
                 tblNavigation.init();
-                var modalFormNavigation = new KyteForm(k, $("#modalFormNavigation"), 'Navigation', hidden, navigationFormElements, 'Navigation', tblNavigation, true, $("#createNavigation"));
+                var modalFormNavigation = new KyteForm(_ks, $("#modalFormNavigation"), 'Navigation', hidden, navigationFormElements, 'Navigation', tblNavigation, true, $("#createNavigation"));
                 modalFormNavigation.init();
                 tblNavigation.bindEdit(modalFormNavigation);
 
                 // side navigation
-                var tblSideNav = new KyteTable(k, $("#side-navigation-table"), {'name':"SideNav",'field':'site','value':idx}, colDefSideNavigation, true, [0,"asc"], true, true, 'id', '/app/site/sidenav.html');
+                var tblSideNav = new KyteTable(_ks, $("#side-navigation-table"), {'name':"SideNav",'field':'site','value':idx}, colDefSideNavigation, true, [0,"asc"], true, true, 'id', '/app/site/sidenav.html');
                 tblSideNav.initComplete = function() {
                     $('#pageLoaderModal').modal('hide');
                 }
                 tblSideNav.init();
-                var modalFormSideNav = new KyteForm(k, $("#modalFormSideNav"), 'SideNav', hidden, sideNavigationFormElements, 'Navigation', tblSideNav, true, $("#createSideNavigation"));
+                var modalFormSideNav = new KyteForm(_ks, $("#modalFormSideNav"), 'SideNav', hidden, sideNavigationFormElements, 'Navigation', tblSideNav, true, $("#createSideNavigation"));
                 modalFormSideNav.init();
                 tblSideNav.bindEdit(modalFormSideNav);
 
                 // side navigation
-                var tblSections = new KyteTable(k, $("#sections-table"), {'name':'KyteSectionTemplate','field':'site','value':idx}, colDefSections, true, [0,"asc"], true, true, 'id', '/app/section/');
+                var tblSections = new KyteTable(_ks, $("#sections-table"), {'name':'KyteSectionTemplate','field':'site','value':idx}, colDefSections, true, [0,"asc"], true, true, 'id', '/app/section/');
                 tblSections.initComplete = function() {
                     $('#pageLoaderModal').modal('hide');
                 }
                 tblSections.init();
-                var modalFormSection = new KyteForm(k, $("#modalFormSection"), 'KyteSectionTemplate', hidden, sectionsFormElement, 'Section', tblSections, true, $("#addSection"));
+                var modalFormSection = new KyteForm(_ks, $("#modalFormSection"), 'KyteSectionTemplate', hidden, sectionsFormElement, 'Section', tblSections, true, $("#addSection"));
                 modalFormSection.init();
                 tblSections.bindEdit(modalFormSection);
 
                 // domains
-                var tblDomains = new KyteTable(k, $("#domains-table"), {'name':'Domain','field':'site','value':idx}, colDefDomains, true, [0,"asc"], false, true, 'id', '/app/site/domain.html');
+                var tblDomains = new KyteTable(_ks, $("#domains-table"), {'name':'Domain','field':'site','value':idx}, colDefDomains, true, [0,"asc"], false, true, 'id', '/app/site/domain.html');
                 tblDomains.initComplete = function() {
                     $('#pageLoaderModal').modal('hide');
                 }
                 tblDomains.init();
-                var modalFormDomain = new KyteForm(k, $("#modalFormDomain"), 'Domain', hidden, domainFormElements, 'Domain', tblDomains, true, $("#addDomain"));
+                var modalFormDomain = new KyteForm(_ks, $("#modalFormDomain"), 'Domain', hidden, domainFormElements, 'Domain', tblDomains, true, $("#addDomain"));
                 modalFormDomain.itemized = {
                     'title': 'Subject Alternative Names<small class="d-block">(i.e. www.example.com, app.example.com, *.example.com, etc.)</small>',
                     'fields': [
@@ -449,7 +449,7 @@ document.addEventListener('KyteInitialized', function(e) {
             let ga_code = $("#ga_code").val();
             let gtm_code = $("#gtm_code").val();
 
-            k.put('KyteSite', 'id', idx,
+            _ks.put('KyteSite', 'id', idx,
             {
                 'aliasDomain':aliasDomain,
                 'ga_code':ga_code,

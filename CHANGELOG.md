@@ -7,6 +7,7 @@
 ### Enhancements:
 - **User element class for logout:** Update to use element class for logout handler inline with Kyte JS and Kyte PHP changes.
 - **Update dark color mode background color** Update background color for better contrast.
+- **Update Kyte instance variable name** Update KyteShipyard's Kyte instance variable to `_ks` for interoperabililty with future preview feature
 
 ## 1.4.3
 

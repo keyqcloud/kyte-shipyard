@@ -42,7 +42,7 @@ document.addEventListener("keydown", function(event) {
 registerPHPSnippetLanguage(monaco.languages);
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     let sidenav = new KyteSidenav("#sidenav", subnavFunction, "#Code");
     sidenav.create();
     sidenav.bind();
@@ -54,12 +54,12 @@ document.addEventListener('KyteInitialized', function(e) {
     $(hash).removeClass('d-none');
     $(hash+'-nav-link').addClass('active');
     
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
-        k.get("Function", "id", idx, [], function(r) {
+        _ks.get("Function", "id", idx, [], function(r) {
             if (r.data[0]) {
                 $("#function-name").html(r.data[0].controller.name);
                 $("#function-type").html(r.data[0].type);
@@ -87,7 +87,7 @@ document.addEventListener('KyteInitialized', function(e) {
 
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
-                    k.put('Function', 'id', idx, {'code':editor.getValue()}, null, [], function(r) {
+                    _ks.put('Function', 'id', idx, {'code':editor.getValue()}, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
                         isDirty = false;
                     }, function(err) {

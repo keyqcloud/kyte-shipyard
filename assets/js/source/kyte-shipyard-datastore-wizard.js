@@ -4,14 +4,14 @@ let colDefDataStore = [
 ];
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
-    if (!k.isSession()) {
+    let _ks = e.detail._ks;
+    if (!_ks.isSession()) {
         location.href="/?redir="+encodeURIComponent(window.location);
         return;
     }
 
     // get url param
-    let idx = k.getPageRequest();
+    let idx = _ks.getPageRequest();
     idx = idx.idx;
 
     let obj = {'model': 'Application', 'idx':idx};
@@ -336,7 +336,7 @@ document.addEventListener('KyteInitialized', function(e) {
             });
         });
 
-        k.post('DataStore', {'name':bucketName, 'region': bucketRegion, 'acl': bucketAcl, 'blockPublicAccess':bucketPublicAccess, 'application': idx, 'cors':cors}, null, [], function(r) {
+        _ks.post('DataStore', {'name':bucketName, 'region': bucketRegion, 'acl': bucketAcl, 'blockPublicAccess':bucketPublicAccess, 'application': idx, 'cors':cors}, null, [], function(r) {
             $("#wizard-3").addClass('d-none');
             $("#wizard-final").removeClass('d-none');
         }, function(e) {

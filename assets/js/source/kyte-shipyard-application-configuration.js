@@ -20,7 +20,7 @@ let colDefEnvVars = [
 ];
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">');
     navbar.create();
 
@@ -31,9 +31,9 @@ document.addEventListener('KyteInitialized', function(e) {
     let idx;
 
     $('#pageLoaderModal').modal('show');
-    if (k.isSession()) {
+    if (_ks.isSession()) {
 
-        idx = k.getPageRequest();
+        idx = _ks.getPageRequest();
         idx = idx.idx;
 
         let fldsEnvVars = [
@@ -62,7 +62,7 @@ document.addEventListener('KyteInitialized', function(e) {
             }
         ];
 
-        k.get("Application", "id", idx, [], function(r) {
+        _ks.get("Application", "id", idx, [], function(r) {
             if (r.data.length == 0) {
                 alert('Failed to retrieve app data.');
                 exit();
@@ -87,7 +87,7 @@ document.addEventListener('KyteInitialized', function(e) {
             let modelIdx = null;
             let orgIdx = null;
 
-            k.get('DataModel', 'application', idx, [], function(r) {
+            _ks.get('DataModel', 'application', idx, [], function(r) {
                 if(r.data.length > 0) {
                     r.data.forEach(element => {
                         if (element.name == app.user_model) {
@@ -101,7 +101,7 @@ document.addEventListener('KyteInitialized', function(e) {
                     });
 
                     if (modelIdx != null) {
-                        k.get('ModelAttribute', 'dataModel', modelIdx, [], function(r) {
+                        _ks.get('ModelAttribute', 'dataModel', modelIdx, [], function(r) {
                             if(r.data.length > 0) {
                                 if (orgIdx != null) {
                                     $("#userorg_colname").append('<option value="0">None</option>');
@@ -133,9 +133,9 @@ document.addEventListener('KyteInitialized', function(e) {
             });
 
             // get environment variabls
-            var tblEnvVars = new KyteTable(k, $("#tblEnvVars"), {'name':"KyteEnvironmentVariable",'field':'application','value':idx}, colDefEnvVars, true, [0,"asc"], true, true);
+            var tblEnvVars = new KyteTable(_ks, $("#tblEnvVars"), {'name':"KyteEnvironmentVariable",'field':'application','value':idx}, colDefEnvVars, true, [0,"asc"], true, true);
             tblEnvVars.init();
-            var frmEnvVars = new KyteForm(k, $("#modalForm"), 'KyteEnvironmentVariable', hidden, fldsEnvVars, 'Environment Variable', tblEnvVars, true, $("#newEnvVar"));
+            var frmEnvVars = new KyteForm(_ks, $("#modalForm"), 'KyteEnvironmentVariable', hidden, fldsEnvVars, 'Environment Variable', tblEnvVars, true, $("#newEnvVar"));
             frmEnvVars.init();
             tblEnvVars.bindEdit(frmEnvVars);
         });
@@ -162,7 +162,7 @@ document.addEventListener('KyteInitialized', function(e) {
         } else {
             if (userModelIdx != orgModelIdx && typeof userModelIdx === 'number') {
                 $('#pageLoaderModal').modal('show');
-                k.get('ModelAttribute', 'dataModel', userModelIdx, [], function(r) {
+                _ks.get('ModelAttribute', 'dataModel', userModelIdx, [], function(r) {
                     $("#username_colname").html('');
                     $("#password_colname").html('');
                     $("#userorg_colname").html('');
@@ -203,7 +203,7 @@ document.addEventListener('KyteInitialized', function(e) {
             $("#userorg_colname").val(0);
             $("#userorg_colname").prop('disabled', true);
         } else {
-            k.get('ModelAttribute', 'dataModel', userModelIdx, [], function(r) {
+            _ks.get('ModelAttribute', 'dataModel', userModelIdx, [], function(r) {
                 if(r.data.length > 0) {
                     $("#userorg_colname").html('');
                     $("#userorg_colname").append('<option value="0">None</option>');
@@ -317,7 +317,7 @@ document.addEventListener('KyteInitialized', function(e) {
             }
         }
 
-        k.put('Application', 'id', idx,
+        _ks.put('Application', 'id', idx,
         {
             'obfuscate_kyte_connect':obfuscateKyteConnect,
             'kyte_connect': connect,

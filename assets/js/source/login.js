@@ -5,11 +5,11 @@ function displayLoginError(error_message) {
 }
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     let redir = false;
-    redir = k.getUrlParameter("redir");
+    redir = _ks.geturlParameter("redir");
 
-    if (k.isSession(false, false)) {
+    if (_ks.isSession(false, false)) {
         if (redir) {
             location.href = redir;
         } else {
@@ -25,7 +25,7 @@ document.addEventListener('KyteInitialized', function(e) {
         $("#errorMsg").addClass('d-none');
         if ($("input[type=password]").val() && $("input[type=email]").val()) {
             $('#pageLoaderModal').modal('show');
-            k.sessionCreate({'email' : $("input[type=email]").val(), 'password': $("input[type=password]").val()}, function(session) {
+            _ks.sessionCreate({'email' : $("input[type=email]").val(), 'password': $("input[type=password]").val()}, function(session) {
                 // check if kyte_account is 1...
                 // let kyte_account = session.data.User.kyte_account.id;
                 // if (kyte_account == 1) {
@@ -35,7 +35,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         location.href = "/app/";
                     }
                 // } else {
-                //     k.sessionDestroy();
+                //     _ks.sessionDestroy();
                 //     displayLoginError('No account found with specified credentials.');
                 // }
             }, function() {

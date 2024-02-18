@@ -125,16 +125,16 @@ function populatePropertiesPanel(htmlCode) {
 }
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     
     $('#pageLoaderModal').modal('show');
     
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
-        k.get("KyteWebComponent", "id", idx, [], function(r) {
+        _ks.get("KyteWebComponent", "id", idx, [], function(r) {
             if (r.data[0]) {
                 $("#component-name").html(r.data[0].name);
                 $("#component-identifier").html(r.data[0].identifier);
@@ -186,7 +186,7 @@ document.addEventListener('KyteInitialized', function(e) {
 
                 $("#saveCode").click(function() {
                     $('#pageLoaderModal').modal('show');
-                    k.put('KyteWebComponent', 'id', idx, {'html':htmlEditor.getValue(),'stylesheet':cssEditor.getValue()}, null, [], function(r) {
+                    _ks.put('KyteWebComponent', 'id', idx, {'html':htmlEditor.getValue(),'stylesheet':cssEditor.getValue()}, null, [], function(r) {
                         $('#pageLoaderModal').modal('hide');
                         isDirty = false;
                     }, function(err) {

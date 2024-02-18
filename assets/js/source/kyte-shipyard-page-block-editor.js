@@ -68,7 +68,7 @@ const blockEditor = grapesjs.init({
 });
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     let sidenav = new KyteSidenav("#sidenav", subnavPage, "#Page");
     sidenav.create();
     sidenav.bind();
@@ -80,12 +80,12 @@ document.addEventListener('KyteInitialized', function(e) {
     $(hash).removeClass('d-none');
     $(hash + '-nav-link').addClass('active');
 
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
-        k.get("KytePageData", "page", idx, [], function (r) {
+        _ks.get("KytePageData", "page", idx, [], function (r) {
             if (r.data[0]) {
                 pageData = r.data[0];
 
@@ -167,7 +167,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#page-path").html(pageData.page.s3key);
                 $(".viewPage").attr('href', 'https://' + (pageData.page.site.aliasDomain ? pageData.page.site.aliasDomain : pageData.page.site.cfDomain) + '/' + pageData.page.s3key);
 
-                k.get('Navigation', 'site', pageData.page.site.id, [], function (r) {
+                _ks.get('Navigation', 'site', pageData.page.site.id, [], function (r) {
                     let main_navigation = pageData.page.main_navigation ? pageData.page.main_navigation.id : 0;
                     r.data.forEach(function(data) {
                         $("#setting-main-navigation").append('<option value="' + data.id + '"' + (main_navigation == data.id ? ' selected' : '') + '>' + data.name + '</option>');
@@ -175,7 +175,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 });
                 
 
-                k.get('SideNav', 'site', pageData.page.site.id, [], function (r) {
+                _ks.get('SideNav', 'site', pageData.page.site.id, [], function (r) {
                     let side_navigation = pageData.page.side_navigation ? pageData.page.side_navigation.id : 0;
                     r.data.forEach(function(data) {
                         $("#setting-side-navigation").append('<option value="' + data.id + '"' + (side_navigation == data.id ? ' selected' : '') + '>' + data.name + '</option>');
@@ -183,7 +183,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 });
 
                 let KyteSectionTemplateCond = btoa(JSON.stringify([{ 'field': 'category', 'value': 'footer' }]));
-                k.get('KyteSectionTemplate', 'site', pageData.page.site.id, [{ 'name': 'x-kyte-query-conditions', 'value': KyteSectionTemplateCond }], function (r) {
+                _ks.get('KyteSectionTemplate', 'site', pageData.page.site.id, [{ 'name': 'x-kyte-query-conditions', 'value': KyteSectionTemplateCond }], function (r) {
                     let section = pageData.page.footer ? pageData.page.footer.id : 0;
                     r.data.forEach(function(data) {
                         $("#setting-footer").append('<option value="' + data.id + '"' + (section == data.id ? ' selected' : '') + '>' + data.title + '</option>');
@@ -224,9 +224,9 @@ document.addEventListener('KyteInitialized', function(e) {
                     {'targets':0,'data':'script.name','label':'Script'},
                     {'targets':1,'data':'script.s3key','label':'path'},
                 ];
-                var tblScripts = new KyteTable(k, $("#scripts-table"), {'name':"KyteScriptAssignment",'field':"page",'value':pageData.page.id}, colDefScripts, true, [0,"asc"], false, true);
+                var tblScripts = new KyteTable(_ks, $("#scripts-table"), {'name':"KyteScriptAssignment",'field':"page",'value':pageData.page.id}, colDefScripts, true, [0,"asc"], false, true);
                 tblScripts.init();
-                var frmScript = new KyteForm(k, $("#modalFormScripts"), 'KyteScriptAssignment', hiddenScriptAssignment, fldsScripts, 'Script Assignment', tblScripts, true, $("#addScript"));
+                var frmScript = new KyteForm(_ks, $("#modalFormScripts"), 'KyteScriptAssignment', hiddenScriptAssignment, fldsScripts, 'Script Assignment', tblScripts, true, $("#addScript"));
                 frmScript.init();
                 tblScripts.bindEdit(frmScript);
 
@@ -263,7 +263,7 @@ document.addEventListener('KyteInitialized', function(e) {
 
                     console.log(payload);
 
-                    k.put('KytePage', 'id', idx, payload, null, [], function (r) {
+                    _ks.put('KytePage', 'id', idx, payload, null, [], function (r) {
                         $('#pageLoaderModal').modal('hide');
                         isDirty = false;
                     }, function(err) {
@@ -307,12 +307,12 @@ document.addEventListener('KyteInitialized', function(e) {
                         'use_container': $("#setting-use_container").val(),
                         'state': 1,
                     };
-                    k.put('KytePage', 'id', idx, payload, null, [], function (r) {
+                    _ks.put('KytePage', 'id', idx, payload, null, [], function (r) {
                         $('#pageLoaderModal').modal('hide');
                     }, function (err) {
                         if (err == 'Unable to create new invalidation') {
                             setTimeout(() => {
-                                k.put('KytePage', 'id', idx, payload, null, [], function (r) {
+                                _ks.put('KytePage', 'id', idx, payload, null, [], function (r) {
                                     $('#pageLoaderModal').modal('hide');
                                 }, function (err) {
                                     alert(err);

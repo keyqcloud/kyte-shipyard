@@ -58,7 +58,7 @@ let fldsAdmin = [
 var kyte_api_version = "unknown";
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     let profile = null;
 
     // setup password requirements
@@ -70,8 +70,8 @@ document.addEventListener('KyteInitialized', function(e) {
     sidenav.bind();
 
     $('#pageLoaderModal').modal('show');
-    if (k.isSession()) {        
-        k.get("KyteProfile", null, null, [], function(r) {
+    if (_ks.isSession()) {        
+        _ks.get("KyteProfile", null, null, [], function(r) {
             kyte_api_version = r.engine_version;
             $("#currentKytePHPVersion").html(kyte_api_version);
             if (r.data[0]) {
@@ -96,20 +96,20 @@ document.addEventListener('KyteInitialized', function(e) {
             }
         ];
 
-        var tblAdmin = new KyteTable(k, $("#admin-table"), {'name':"KyteUser",'field':"kyte_account",'value':1}, colDefUsers, true, [0,"asc"], true, true);
+        var tblAdmin = new KyteTable(_ks, $("#admin-table"), {'name':"KyteUser",'field':"kyte_account",'value':1}, colDefUsers, true, [0,"asc"], true, true);
         tblAdmin.init();
-        var frmUser = new KyteForm(k, $("#adminForm"), "KyteUser", hidden, fldsAdmin, "Administrator", tblAdmin, true, $("#newAdmin"));
+        var frmUser = new KyteForm(_ks, $("#adminForm"), "KyteUser", hidden, fldsAdmin, "Administrator", tblAdmin, true, $("#newAdmin"));
         frmUser.init();
         tblAdmin.bindEdit(frmUser);
 
-        var tblAPI = new KyteTable(k, $("#api-table"), {'name':"KyteAPIKey",'field':null,'value':null}, colDefAPI, true, [0,"asc"], false, false);
+        var tblAPI = new KyteTable(_ks, $("#api-table"), {'name':"KyteAPIKey",'field':null,'value':null}, colDefAPI, true, [0,"asc"], false, false);
         tblAPI.init();
 
         $("#updateEmail").click(function(e) {
             e.preventDefault();
             e.stopPropagation();
 
-            k.put("KyteProfile", null, null, {"email":$("#profile_email").val()}, null, [], function(r) {
+            _ks.put("KyteProfile", null, null, {"email":$("#profile_email").val()}, null, [], function(r) {
                 if (r.data[0]) {
                     profile = r.data[0];
                     $("#profile_email").val(profile['email']);
@@ -130,7 +130,7 @@ document.addEventListener('KyteInitialized', function(e) {
             let c = $("#confirm_password").val()
 
             if (c == p && c.length >= 8 && passreq.validatePassword($("#password"))) {    
-                k.put('KyteProfile', null, null, {'password':$("#new_password").val()}, null, [], function(r) {
+                _ks.put('KyteProfile', null, null, {'password':$("#new_password").val()}, null, [], function(r) {
                     alert("Your password has been successfully update.");
                 }, function() {
                     alert("Unable to update your password. Please try again later.");
@@ -149,7 +149,7 @@ document.addEventListener('KyteInitialized', function(e) {
     $("#updateNow").click(function() {
         // Open the loading modal
         $('#updateLoadingModal').modal('show');
-        k.post('KyteShipyardUpdate', {'current_version':KS_VERSION}, null, [], function(r) {
+        _ks.post('KyteShipyardUpdate', {'current_version':KS_VERSION}, null, [], function(r) {
             // Set a cookie that Kyte is being updated
             document.cookie = "kyte_update_in_progress=true; path=/";
         

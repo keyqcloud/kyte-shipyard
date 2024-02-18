@@ -52,8 +52,8 @@ let controllerElements = [
 ];
 
 function getData(k, idx, model, appId) {
-    // get attributes k.get() and iterate over to create table def and elements
-    k.get("ModelAttribute", "dataModel", idx, [], function(r) {
+    // get attributes _ks.get() and iterate over to create table def and elements
+    _ks.get("ModelAttribute", "dataModel", idx, [], function(r) {
         let targets = 0;
         let modelJsonDef = [];
         let modelFormDef = [];
@@ -118,9 +118,9 @@ function getData(k, idx, model, appId) {
         targets++;
         modelColDef.push({'targets':targets,'data':'date_modified','label':'date_modified'});
 
-        var tblData = new KyteTable(k, $("#data-table"), {'name':"AppModelWrapper",'field':appId,'value':model}, modelColDef, true, [0,"asc"], false, false);
+        var tblData = new KyteTable(_ks, $("#data-table"), {'name':"AppModelWrapper",'field':appId,'value':model}, modelColDef, true, [0,"asc"], false, false);
         tblData.init();
-        // var modelDataForm = new KyteForm(k, $("#modalDataForm"), model, null, modelFormDef, model, tblData, true, $("#newData"));
+        // var modelDataForm = new KyteForm(_ks, $("#modalDataForm"), model, null, modelFormDef, model, tblData, true, $("#newData"));
         // modelDataForm.init();
         // tblData.bindEdit(modelDataForm);
     });
@@ -362,7 +362,7 @@ function download_code(model, code, ext) {
 
 function download_data(k, format) {
     $('#pageLoaderModal').modal('show');
-    k.get('AppModelWrapper', appId, model, [], function(r) {
+    _ks.get('AppModelWrapper', appId, model, [], function(r) {
         if(r.data.length > 0) {
 
             if (format == 'json') {
@@ -432,7 +432,7 @@ function download_data(k, format) {
 }
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     let sidenav = new KyteSidenav("#sidenav", subnavModel, "#Attributes");
     sidenav.create();
     sidenav.bind();
@@ -444,9 +444,9 @@ document.addEventListener('KyteInitialized', function(e) {
     $(hash).removeClass('d-none');
     $(hash+'-nav-link').addClass('active');
     
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         modelIdx = idx.idx;
 
         let hidden = [
@@ -456,7 +456,7 @@ document.addEventListener('KyteInitialized', function(e) {
             }
         ];
 
-        k.get("DataModel", "id", modelIdx, [], function(r) {
+        _ks.get("DataModel", "id", modelIdx, [], function(r) {
             if (r.data[0]) {
                 model = r.data[0].name;
                 $("#model-name").html(model);
@@ -588,9 +588,9 @@ document.addEventListener('KyteInitialized', function(e) {
                 ];
 
                 // attribute table and form
-                var tblAttributes = new KyteTable(k, $("#attributes-table"), {'name':"ModelAttribute",'field':'dataModel','value':modelIdx}, colDefAttributes, true, [0,"asc"], true, true);
+                var tblAttributes = new KyteTable(_ks, $("#attributes-table"), {'name':"ModelAttribute",'field':'dataModel','value':modelIdx}, colDefAttributes, true, [0,"asc"], true, true);
                 tblAttributes.init();
-                var modalForm = new KyteForm(k, $("#modalForm"), 'ModelAttribute', hidden, elements, 'Model Attribute', tblAttributes, true, $("#newAttribute"));
+                var modalForm = new KyteForm(_ks, $("#modalForm"), 'ModelAttribute', hidden, elements, 'Model Attribute', tblAttributes, true, $("#newAttribute"));
                 modalForm.init();
                 tblAttributes.bindEdit(modalForm);
             } else {
@@ -600,7 +600,7 @@ document.addEventListener('KyteInitialized', function(e) {
         });
 
         // controller table and form
-        var tblController = new KyteTable(k, $("#controllers-table"), {'name':"Controller",'field':"dataModel",'value':modelIdx}, colDefControllers, true, [0,"asc"], true, true, 'id', '/app/controller/');
+        var tblController = new KyteTable(_ks, $("#controllers-table"), {'name':"Controller",'field':"dataModel",'value':modelIdx}, colDefControllers, true, [0,"asc"], true, true, 'id', '/app/controller/');
         tblController.init();
 
         $(".downloadCodeBtn").click(function(e) {

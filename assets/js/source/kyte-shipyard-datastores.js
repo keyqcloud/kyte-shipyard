@@ -5,20 +5,20 @@ let colDefDataStore = [
 ];
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
-    if (!k.isSession()) {
+    let _ks = e.detail._ks;
+    if (!_ks.isSession()) {
         location.href="/?redir="+encodeURIComponent(window.location);
         return;
     }
 
     // get url param
-    let idx = k.getPageRequest();
+    let idx = _ks.getPageRequest();
     idx = idx.idx;
 
     let obj = {'model': 'Application', 'idx':idx};
     let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
     $("#new").attr('href', '/app/datastore/new.html?request='+encoded);
 
-    var tblDataStore = new KyteTable(k, $("#datastore-table"), {'name':'DataStore','field':'application','value':idx}, colDefDataStore, true, [0,"asc"], false, true);//, 'id', '/app/datastore/');
+    var tblDataStore = new KyteTable(_ks, $("#datastore-table"), {'name':'DataStore','field':'application','value':idx}, colDefDataStore, true, [0,"asc"], false, true);//, 'id', '/app/datastore/');
     tblDataStore.init();
 });

@@ -4,15 +4,15 @@ let columnStyle = 0;
 let navItemStyle = 0;
 
 document.addEventListener('KyteInitialized', function(e) {
-    let k = e.detail.k;
+    let _ks = e.detail._ks;
     $('#pageLoaderModal').modal('show');
     
-    if (k.isSession()) {
+    if (_ks.isSession()) {
         // get url param
-        let idx = k.getPageRequest();
+        let idx = _ks.getPageRequest();
         idx = idx.idx;
 
-        k.get("SideNav", "id", idx, [], function(r) {
+        _ks.get("SideNav", "id", idx, [], function(r) {
             if (r.data[0]) {
                 data = r.data[0];
                 $("#site-name").html(data.site.name);
@@ -109,7 +109,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 navbar.create();
 
                 // get pages
-                k.get('KytePage', 'site', data.site.id, [], function(r) {
+                _ks.get('KytePage', 'site', data.site.id, [], function(r) {
                     if (r.data.length > 0) {
                         pages = r.data;
                     }
@@ -125,10 +125,10 @@ document.addEventListener('KyteInitialized', function(e) {
                                     itemChanges.push({'id':navitemIdx, 'itemOrder':index});
                                 }
                             });
-                            k.put('NavItems', 'SideNavItem', itemChanges.length, {'navitems':itemChanges}, null, []);
+                            _ks.put('NavItems', 'SideNavItem', itemChanges.length, {'navitems':itemChanges}, null, []);
                         }
                     });
-                    k.get('SideNavItem', 'sidenav', idx, [], function(r) {
+                    _ks.get('SideNavItem', 'sidenav', idx, [], function(r) {
                         if (r.data.length > 0) {
                             r.data.forEach(element => {
                                 $("#sortable-menu-items").append(addMenuItem(element));
@@ -142,7 +142,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         e.preventDefault();
                         $('#pageLoaderModal').modal('show');
                         // add menu item
-                        k.post('SideNavItem', {
+                        _ks.post('SideNavItem', {
                             'title': 'New Navigation Item',
                             'sidenav': idx,
                             'site': data.site.id,
@@ -165,7 +165,7 @@ document.addEventListener('KyteInitialized', function(e) {
             e.preventDefault();
             e.stopPropagation();
             $('#pageLoaderModal').modal('show');
-            k.put('SideNav', 'id', idx, {
+            _ks.put('SideNav', 'id', idx, {
                 'bgColor':$("#bgColorHex").val(),
                 'fgColor':$("#fgColorHex").val(),
                 'bgActiveColor':$("#bgActiveColorHex").val(),
@@ -199,15 +199,15 @@ document.addEventListener('KyteInitialized', function(e) {
         if ($(this).val() == 'link') {
             $(this).closest('.navitem-row').find('.navitem-target-type-wrapper').addClass('d-none');
             $(this).closest('.navitem-row').find('.navitem-link').removeClass('d-none');
-            k.put('SideNavItem', 'id', navitemIdx, {'isLogout':0}, null, []);
+            _ks.put('SideNavItem', 'id', navitemIdx, {'isLogout':0}, null, []);
         } else if ($(this).val() == 'page') {
             $(this).closest('.navitem-row').find('.navitem-target-type-wrapper').removeClass('d-none');
             $(this).closest('.navitem-row').find('.navitem-link').addClass('d-none');
-            k.put('SideNavItem', 'id', navitemIdx, {'isLogout':0}, null, []);
+            _ks.put('SideNavItem', 'id', navitemIdx, {'isLogout':0}, null, []);
         } else {
             $(this).closest('.navitem-row').find('.navitem-target-type-wrapper').addClass('d-none');
             $(this).closest('.navitem-row').find('.navitem-link').addClass('d-none');
-            k.put('SideNavItem', 'id', navitemIdx, {'isLogout':1}, null, []);
+            _ks.put('SideNavItem', 'id', navitemIdx, {'isLogout':1}, null, []);
         }
     });
 
@@ -215,7 +215,7 @@ document.addEventListener('KyteInitialized', function(e) {
         let item = $(this).closest('li');
         let navitemIdx = item.data('navIdx');
         if (navitemIdx > 0) {
-            k.put('SideNavItem', 'id', navitemIdx, {'title':$(this).val()}, null, []);
+            _ks.put('SideNavItem', 'id', navitemIdx, {'title':$(this).val()}, null, []);
         }
     });
 
@@ -223,7 +223,7 @@ document.addEventListener('KyteInitialized', function(e) {
         let item = $(this).closest('li');
         let navitemIdx = item.data('navIdx');
         if (navitemIdx > 0) {
-            k.put('SideNavItem', 'id', navitemIdx, {'faicon':$(this).val()}, null, []);
+            _ks.put('SideNavItem', 'id', navitemIdx, {'faicon':$(this).val()}, null, []);
         }
     });
 
@@ -233,7 +233,7 @@ document.addEventListener('KyteInitialized', function(e) {
             let item = $(this).closest('li');
             let navitemIdx = item.data('navIdx');
             if (navitemIdx > 0) {
-                k.put('SideNavItem', 'id', navitemIdx, {'link':$(this).val(), 'page':null}, null, []);
+                _ks.put('SideNavItem', 'id', navitemIdx, {'link':$(this).val(), 'page':null}, null, []);
             }
         }
     });
@@ -244,7 +244,7 @@ document.addEventListener('KyteInitialized', function(e) {
             let item = $(this).closest('li');
             let navitemIdx = item.data('navIdx');
             if (navitemIdx > 0) {
-                k.put('SideNavItem', 'id', navitemIdx, {'page':$(this).val(), 'link':null}, null, []);
+                _ks.put('SideNavItem', 'id', navitemIdx, {'page':$(this).val(), 'link':null}, null, []);
             }
         }
     });
@@ -255,7 +255,7 @@ document.addEventListener('KyteInitialized', function(e) {
         let item = $(this).closest('li');
         let navitemIdx = item.data('navIdx');
         if (navitemIdx > 0) {
-            k.delete('SideNavItem', 'id', navitemIdx, [], function() {
+            _ks.delete('SideNavItem', 'id', navitemIdx, [], function() {
                 item.remove();
             }, function(err) {
                 alert('Unable to delete: '+err);

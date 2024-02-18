@@ -23,12 +23,12 @@ function initializeKyte(callback) {
         return;
     }
 
-    var k = new Kyte(endpoint, publickey, identifier, account);
-    k.init();
-    k.addLogoutHandler(".logout");
+    var _ks = new Kyte(endpoint, publickey, identifier, account);
+    _ks.init();
+    _ks.addLogoutHandler(".logout");
 
     // Dispatch a custom event after 'k' is initialized
-    var kyteInitializedEvent = new CustomEvent('KyteInitialized', { detail: { k: k } });
+    var kyteInitializedEvent = new CustomEvent('KyteInitialized', { detail: { _ks: _ks } });
     document.dispatchEvent(kyteInitializedEvent);
 }
 
