@@ -1,3 +1,7 @@
+### 1.5.3
+
+- Fix issue where update confirmation modal did not dismiss
+
 ## 1.5.2
 
 ### Bug Fixes

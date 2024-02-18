@@ -153,6 +153,7 @@ document.addEventListener('KyteInitialized', function(e) {
     var reloadTimeout;
     $("#updateNow").click(function() {
         // Open the loading modal
+        $("#cacheInstructionModal").modal('hide');
         $('#updateLoadingModal').modal('show');
         _ks.post('KyteShipyardUpdate', {'current_version':KS_VERSION}, null, [], function(r) {
             // Set a cookie that Kyte is being updated
