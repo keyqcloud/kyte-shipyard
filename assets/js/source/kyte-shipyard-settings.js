@@ -58,7 +58,6 @@ let fldsAdmin = [
 let colDefUsers = [
     {'targets':0,'data':'name','label':'Name'},
     {'targets':1,'data':'email','label':'E-mail'},
-    {'targets':2,'data':'role.name','label':'Role'},
 ];
 
 var kyte_api_version = "unknown";

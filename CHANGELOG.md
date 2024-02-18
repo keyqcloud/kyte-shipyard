@@ -1,7 +1,8 @@
 ## 1.5.1
 
 - **Update Kyte instance variable name** Update KyteShipyard's Kyte instance variable to `_ks` for interoperabililty with future preview feature
-- **Refactor `table.js`** - Refactor table definition code to make DRY.
+- **Refactor `table.js`** Refactor table definition code to make DRY.
+- **Remove roles from admin table** Removed role column from admin table.
 
 ## 1.5.0
 
