@@ -1,6 +1,11 @@
-### 1.5.3
+## 1.5.3
 
+### Enhancements:
+- **Display user last login:** Add last login column to user in admin list.
+
+### Bug Fixes
 - Fix issue where update confirmation modal did not dismiss
+- Fix issue where model data was not loading
 
 ## 1.5.2
 
