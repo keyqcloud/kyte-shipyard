@@ -73,7 +73,7 @@ let colDefAttributes = [
     {'targets':6,'data':'description','label':'Description'},
 ];
 
-function getData(k, idx, model, appId) {
+function getData(_ks, idx, model, appId) {
     // get attributes _ks.get() and iterate over to create table def and elements
     _ks.get("ModelAttribute", "dataModel", idx, [], function(r) {
         let targets = 0;
@@ -382,7 +382,7 @@ function download_code(model, code, ext) {
     window.URL.revokeObjectURL(url);
 }
 
-function download_data(k, format) {
+function download_data(_ks, format) {
     $('#pageLoaderModal').modal('show');
     _ks.get('AppModelWrapper', appId, model, [], function(r) {
         if(r.data.length > 0) {
@@ -483,7 +483,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 model = r.data[0].name;
                 $("#model-name").html(model);
                 appId = r.data[0].application.id;
-                getData(k, modelIdx, model, r.data[0].application.id);
+                getData(_ks, modelIdx, model, r.data[0].application.id);
                 let obj = {'model': 'Application', 'idx':r.data[0].application.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 
@@ -654,7 +654,7 @@ document.addEventListener('KyteInitialized', function(e) {
 
             let format = $(this).data('downloadFormat');
 
-            download_data(k, format);
+            download_data(_ks, format);
         });
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
