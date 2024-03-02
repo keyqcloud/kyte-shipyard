@@ -318,6 +318,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#domain-name").attr('href', 'https://'+(data.aliasDomain ? data.aliasDomain : data.cfDomain));
                 $("#region").html(data.region);
                 $("#aliasDomain").val(data.aliasDomain);
+                $("#default_lang").val(data.default_lang);
                 $("#ga_code").val(data.ga_code);
                 $("#gtm_code").val(data.gtm_code);
 
@@ -446,12 +447,14 @@ document.addEventListener('KyteInitialized', function(e) {
             e.preventDefault();
 
             let aliasDomain = $("#aliasDomain").val();
+            let default_lang = $("#default_lang").val();
             let ga_code = $("#ga_code").val();
             let gtm_code = $("#gtm_code").val();
 
             _ks.put('KyteSite', 'id', idx,
             {
                 'aliasDomain':aliasDomain,
+                'default_lang':default_lang.length > 0 ? default_lang : 'en',
                 'ga_code':ga_code,
                 'gtm_code':gtm_code,
             }, null, [], function(r) {

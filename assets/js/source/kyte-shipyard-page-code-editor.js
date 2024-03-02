@@ -117,6 +117,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#setting-page-title").val(pageData.page.title);
                 $("#setting-page-description").val(pageData.page.description);
                 $("#webcomponent_obj_name").val(pageData.page.webcomponent_obj_name);
+                $("#lang").val(pageData.page.lang.length == 0 ? 'default' : pageData.page.leng);
                 
                 // if block editor, redirect to block editor page.
                 if (pageData.page.page_type == 'block' && !forceCodeEditor) {
@@ -336,6 +337,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             'footer':$("#setting-footer").val(),
                             'title':$("#setting-page-title").val(),
                             'description':$("#setting-page-description").val(),
+                            'lang':$("#lang").val() == 'default' ? null : $("#lang").val(),
                             'webcomponent_obj_name': $("#webcomponent_obj_name").val(),
                             'sitemap_include':$("#setting-sitemap-include").val(),
                             'obfuscate_js':$("#setting-obfuscatejs").val(),
@@ -390,6 +392,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             'footer':$("#setting-footer").val(),
                             'title':$("#setting-page-title").val(),
                             'description':$("#setting-page-description").val(),
+                            'lang':$("#lang").val() == 'default' ? null : $("#lang").val(),
                             'webcomponent_obj_name': $("#webcomponent_obj_name").val(),
                             'sitemap_include':$("#setting-sitemap-include").val(),
                             'obfuscate_js':$("#setting-obfuscatejs").val(),

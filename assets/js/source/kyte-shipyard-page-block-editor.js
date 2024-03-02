@@ -94,6 +94,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 // set page title and description
                 $("#setting-page-title").val(pageData.page.title);
                 $("#setting-page-description").val(pageData.page.description);
+                $("#lang").val(pageData.page.lang.length == 0 ? 'default' : pageData.page.leng);
 
                 if (pageData.page.protected == 0) {
                     $("#sitemap-option-wrapper").removeClass('d-none');
@@ -252,6 +253,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         'side_navigation': $("#setting-side-navigation").val(),
                         'title': $("#setting-page-title").val(),
                         'description': $("#setting-page-description").val(),
+                        'lang':$("#lang").val() == 'default' ? null : $("#lang").val(),
                         'sitemap_include': $("#setting-sitemap-include").val(),
                         'block_layout': JSON.stringify(blockEditor.getProjectData()),
                         'page_type': 'block',
@@ -302,6 +304,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         'footer': $("#setting-footer").val(),
                         'title': $("#setting-page-title").val(),
                         'description': $("#setting-page-description").val(),
+                        'lang':$("#lang").val() == 'default' ? null : $("#lang").val(),
                         'sitemap_include': $("#setting-sitemap-include").val(),
                         'obfuscate_js': $("#setting-obfuscatejs").val(),
                         'use_container': $("#setting-use_container").val(),
