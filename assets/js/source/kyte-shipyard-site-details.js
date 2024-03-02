@@ -311,7 +311,17 @@ document.addEventListener('KyteInitialized', function(e) {
                 data = r.data[0];
                 // if site is not active display a message
                 if (data.status != 'active') {
-                    $("#site-detail-page-wrapper").html(`<div class="container"><div class="my-5 alert alert-info text-center" role="alert"><i class="my-3 d-block fas fa-exclamation fa-3x"></i><h3>We are ${data.status} your site.</h3><h4 style="font-weight:300">Please wait until the operation is completed.</h4></div></div>`)
+                    $("#site-detail-page-wrapper").html(`<div class="container"><div class="my-5 alert alert-info text-center" role="alert"><i class="my-3 d-block fas fa-exclamation fa-3x"></i><h3>We are ${data.status} your site.</h3><h4 style="font-weight:300">Please wait until the operation is completed.</h4><span class="fas fa-sync fa-spin my-4"></span></div></div>`);
+                    if (data.status == 'creating') {
+                        // check status every minute
+                        setTimeout(function() {
+                            _ks.get("KyteSite", "id", idx, [], function(r) {
+                                if (r.data[0].status == 'active') {
+                                    location.reload();
+                                }
+                            });
+                        }, 6000);
+                    }
                 }
                 $("#site-name").html(data.name);
                 $("#domain-name").html('<i class="fas fa-link me-2"></i>'+(data.aliasDomain ? data.aliasDomain : data.cfDomain));
