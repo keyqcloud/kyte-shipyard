@@ -2,6 +2,9 @@
 
 ### Enhancements:
 - Add support for new MySQL types: BigInt, TinyText, MediumText, LongText, Blob, TinyBlob, MediumBlob, LongBlob
+- Add language configuration for site and pages.
+- Add periodic checks from site detail page when site is in creation. Refreshes and loads site details once page status is active.
+- Add a spinning loader when site is being created.
 
 ## 1.5.3
 
