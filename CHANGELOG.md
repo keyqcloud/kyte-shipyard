@@ -1,3 +1,8 @@
+## 1.5.4
+
+### Enhancements:
+- Add support for new MySQL types: BigInt, TinyText, MediumText, LongText, Blob, TinyBlob, MediumBlob, LongBlob
+
 ## 1.5.3
 
 ### Enhancements:
