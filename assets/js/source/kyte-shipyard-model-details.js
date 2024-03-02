@@ -60,8 +60,16 @@ let colDefAttributes = [
     } },
     {'targets':1,'data':'type','label':'Type', render: function(data, type, row, meta) {
         if (data == "i") return "Int("+row.size+")";
+        if (data == "bi") return "BigInt("+row.size+")";
         if (data == "s") return "Varchar("+row.size+")";
         if (data == "t") return "Text";
+        if (data == "tt") return "TinyText";
+        if (data == "mt") return "MediumText";
+        if (data == "lt") return "LongText";
+        if (data == "b") return "Blob";
+        if (data == "tb") return "TinyBlob";
+        if (data == "mb") return "MediumBlob";
+        if (data == "lb") return "LongBlob";
         if (data == "date") return "Date";
         
         return data;
@@ -510,8 +518,16 @@ document.addEventListener('KyteInitialized', function(e) {
                                 'data': {
                                     's': 'String',
                                     't': 'Text',
+                                    'tt': 'TinyText',
+                                    'mt': 'MediumText',
+                                    'lt': 'LongText',
+                                    'b': 'Blob',
+                                    'tb': 'TinyBlob',
+                                    'mb': 'MediumBlob',
+                                    'lb': 'LongBlob',
                                     'date': 'Date',
                                     'i': 'Integer',
+                                    'bi': 'BigInt',
                                 }
                             }
                         },
