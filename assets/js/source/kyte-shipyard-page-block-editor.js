@@ -223,7 +223,8 @@ document.addEventListener('KyteInitialized', function(e) {
                 ];
                 let colDefScripts = [
                     {'targets':0,'data':'script.name','label':'Script'},
-                    {'targets':1,'data':'script.s3key','label':'path'},
+                    {'targets':1,'data':'script_type','label':'Type', render: function(data, type, row, meta) { if (data == 'css') { return 'Stylesheet'; } else if (data == 'js') { return 'JavaScript'+(row.is_js_module ? ' (module)' : ''); } else { return 'Unknown'; } }},
+                    {'targets':2,'data':'script.s3key','label':'path'},
                 ];
                 var tblScripts = new KyteTable(_ks, $("#scripts-table"), {'name':"KyteScriptAssignment",'field':"page",'value':pageData.page.id}, colDefScripts, true, [0,"asc"], false, true);
                 tblScripts.init();
