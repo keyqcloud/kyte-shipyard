@@ -11,10 +11,6 @@
     background-color: #fff;
 }
 
-.row-grip, .row-delete {
-    align-items: center;
-}
-
 .style-select {
     text-decoration: none;
     display: inline-block;
