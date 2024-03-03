@@ -6,6 +6,7 @@
 - Add periodic checks from site detail page when site is in creation. Refreshes and loads site details once page status is active.
 - Add a spinning loader when site is being created.
 - Add feature for marking custom JavaScript or JavaScript included through libraries as modules
+- Add custom field for nav item ID for both side and top navs
 
 ## 1.5.3
 

@@ -188,18 +188,78 @@ document.addEventListener('KyteInitialized', function(e) {
         let isLink = (element.page == null || element.page == 0) ? true : false;
         let isLogout = (element.isLogout == null || element.isLogout == 0) ? false : true;
         // target link type select
-        let linkOpt = '<select class="form-select navitem-target-type"><option value="link"'+(isLink && !isLogout ? ' selected' : '')+'>Link</option><option value="page"'+(isLink && !isLogout ? '' : ' selected')+'>Page</option><option value="logout"'+(isLogout ? ' selected' : '')+'>Logout</option></select>';
+        let linkOpt = `
+        <select class="form-select navitem-target-type">
+            <option value="link"${isLink && !isLogout ? ' selected' : ''}>Link</option>
+            <option value="page"${isLink && !isLogout ? '' : ' selected'}>Page</option>
+            <option value="logout"${isLogout ? ' selected' : ''}>Logout</option>
+        </select>`;
         // menu item position
-        let linkPos = '<select class="form-select navitem-position"><option value="1"'+(element.center == '1' ? ' selected' : '')+'>Center</option><option value="0"'+(element.center == '0' ? ' selected' : '')+'>Right</option></select>';
+        let linkPos = `
+        <select class="form-select navitem-position">
+            <option value="1"${element.center == '1' ? ' selected' : ''}>Center</option>
+            <option value="0"${element.center == '0' ? ' selected' : ''}>Right</option>
+        </select>`;
         // page options
-        let pageOpt = '<select class="navitem-page-selection form-select">';
-        pageOpt += '<option'+((element.page == null || element.page == 0) ? ' selected' : '')+' disabled>Please select</option>'
+        let pageOpt = `
+        <select class="navitem-page-selection form-select">
+            <option${(element.page == null || element.page == 0) ? ' selected' : ''} disabled>Please select</option>`;
         pages.forEach(page => {
-            pageOpt += '<option value="'+page.id+'"'+((element.page != null && element.page.id == page.id) ? ' selected' : '')+'>'+page.title+` [${page.s3key}]</option>`;
+            pageOpt += `<option value="${page.id}"${(element.page != null && element.page.id == page.id) ? ' selected' : ''}>${page.title} [${page.s3key}]</option>`;
         });
-        pageOpt += '</select>';
+        pageOpt += `</select>`;
         // generate menu item html
-        let menuItemHtml = '<li class="sortable-navitem-element navitem-idx-'+element.id+'" data-nav-idx="'+element.id+'"><div class="row navitem-row"><div class="col-auto d-flex row-grip"><i class="fas fa-grip-vertical"></i></div><div class="col"><input class="form-control navitem-title" type="text" value="'+element.title+'" /></div><div class="col"><input class="form-control navitem-faicon" type="text" placeholder="fab fa-font-awesome-flag" value="'+(element.faicon ? element.faicon : '')+'" /></div><div class="col navitem-link-wrapper'+(isLink && !isLogout ? '' : ' d-none')+'"><input class="form-control navitem-link" type="text" placeholder="url or anchor" value="'+(element.link ? element.link : '')+'" /></div><div class="col navitem-target-type-wrapper'+(isLink || isLogout ? ' d-none' : '')+'">'+pageOpt+'</div><div class="col-2">'+linkPos+'</div><div class="col-2">'+linkOpt+'</div><div class="col-2 navitem-parentItem-wrapper"></div><div class="col-auto d-flex row-delete"><a href="#" class="text-danger navitem-delete"><i class="fas fa-trash-alt"></i></a></div></div></li>';
+        let menuItemHtml = `
+        <li class="sortable-navitem-element navitem-idx-${element.id}" data-nav-idx="${element.id}">
+            <div class="row navitem-row">
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <small style="font-weight: 600">Label</small>
+                            <input class="form-control navitem-title" type="text" value="${element.title}" />
+                        </div>
+                        <div class="col navitem-link-wrapper${isLink && !isLogout ? '' : ' d-none'}">
+                            <small style="font-weight: 600">Link URL</small>
+                            <input class="form-control navitem-link" type="text" placeholder="url or anchor" value="${element.link ? element.link : ''}" />
+                        </div>
+                        <div class="col navitem-target-type-wrapper${isLink || isLogout ? ' d-none' : ''}">
+                            <small style="font-weight: 600">Page</small>
+                            ${pageOpt}
+                        </div>
+                        <div class="col-2">
+                            <small style="font-weight: 600">Link Type</small>
+                            ${linkOpt}
+                        </div>
+                        <div class="col">
+                            <small style="font-weight: 600">Dropdown Parent</small>
+                            <div class="navitem-parentItem-wrapper"></div>
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col">
+                            <small style="font-weight: 600">Font Awesome</small>
+                            <input class="form-control navitem-faicon" type="text" placeholder="fab fa-font-awesome-flag" value="${element.faicon ? element.faicon : ''}" />
+                        </div>
+                        <div class="col">
+                            <small style="font-weight: 600">Element ID</small>
+                            <input class="form-control navitem-element-id" type="text" placeholder="MyAmazingNavItem" value="${element.element_id ? element.element_id : ''}" />
+                        </div>
+                        <div class="col">
+                            <small style="font-weight: 600">Element Class</small>
+                            <input class="form-control navitem-element-class" type="text" placeholder="my-nav-item text-primary" value="${element.element_class ? element.element_class : ''}" />
+                        </div>
+                        <div class="col-2">
+                            <small style="font-weight: 600">Position</small>
+                            ${linkPos}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto d-flex align-items-center position-relative">
+                    <i class="fas fa-arrows-alt position-absolute top-0" style="right:5px"></i>
+                    <a href="#" class="text-danger navitem-delete"><i class="fas fa-trash-alt"></i></a>
+                </div>
+            </div>
+        </li>`;
         return menuItemHtml;
     }
 
@@ -271,6 +331,22 @@ document.addEventListener('KyteInitialized', function(e) {
             if (navitemIdx > 0) {
                 _ks.put('NavigationItem', 'id', navitemIdx, {'page':$(this).val(), 'link':null}, null, []);
             }
+        }
+    });
+
+    $("#sortable-menu-items").on('change', '.navitem-element-id', function() {
+        let item = $(this).closest('li');
+        let navitemIdx = item.data('navIdx');
+        if (navitemIdx > 0) {
+            _ks.put('NavigationItem', 'id', navitemIdx, {'element_id':$(this).val()}, null, []);
+        }
+    });
+
+    $("#sortable-menu-items").on('change', '.navitem-element-class', function() {
+        let item = $(this).closest('li');
+        let navitemIdx = item.data('navIdx');
+        if (navitemIdx > 0) {
+            _ks.put('NavigationItem', 'id', navitemIdx, {'element_class':$(this).val()}, null, []);
         }
     });
 
