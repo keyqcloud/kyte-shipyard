@@ -117,7 +117,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#setting-page-title").val(pageData.page.title);
                 $("#setting-page-description").val(pageData.page.description);
                 $("#webcomponent_obj_name").val(pageData.page.webcomponent_obj_name);
-                $("#lang").val(pageData.page.lang.length == 0 ? 'default' : pageData.page.leng);
+                $("#lang").val(pageData.page.lang.length == 0 ? 'default' : pageData.page.lang);
                 
                 // if block editor, redirect to block editor page.
                 if (pageData.page.page_type == 'block' && !forceCodeEditor) {
