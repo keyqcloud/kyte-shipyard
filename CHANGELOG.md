@@ -8,6 +8,9 @@
 - Add feature for marking custom JavaScript or JavaScript included through libraries as modules
 - Add custom field for nav item ID for both side and top navs
 
+### Bug Fixes:
+- Add missing lang attribute for HTML
+
 ## 1.5.3
 
 ### Enhancements:
