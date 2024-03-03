@@ -45,15 +45,30 @@ let libraryElement = [
             'required':true
         },
         {
+            'id':'library_script_type',
             'field':'script_type',
             'type':'select',
-            'label':'Script Stype',
+            'label':'Script Type',
             'required':true,
             'option': {
                 'ajax': false,
                 'data': {
                     'css': 'CSS Stylesheet',
                     'js': 'JavaScript'
+                }
+            }
+        },
+        {
+            'id':'library_is_js_module',
+            'field':'is_js_module',
+            'type':'select',
+            'label':'JavaScript Module',
+            'required':true,
+            'option': {
+                'ajax': false,
+                'data': {
+                    0: 'No',
+                    1: 'Yes'
                 }
             }
         },
@@ -89,6 +104,15 @@ let libraryElement = [
         },
     ],
 ];
+function checkScriptTypeAndUpdateModule() {
+    let scriptType = $("#library_script_type").val();
+    if (scriptType == 'js') {
+        $("#library_is_js_module").prop('disabled', false);
+    } else {
+        $("#library_is_js_module").val(0);
+        $("#library_is_js_module").prop('disabled', true);
+    }
+}
 
 let sectionsFormElement = [
     [
@@ -391,6 +415,10 @@ document.addEventListener('KyteInitialized', function(e) {
                 var modalFormLibrary = new KyteForm(_ks, $("#modalFormLibrary"), 'KyteLibrary', hidden, libraryElement, 'Script', tblLibrary, true, $("#addLibrary"));
                 modalFormLibrary.init();
                 tblLibrary.bindEdit(modalFormLibrary);
+                checkScriptTypeAndUpdateModule();
+                $("#library_script_type").change(function() {
+                    checkScriptTypeAndUpdateModule();
+                });
 
                 // media
                 var tblMedia = new KyteTable(_ks, $("#media-table"), {'name':"Media",'field':"site",'value':idx}, colDefMedia, true, [0,"asc"], false, true);
