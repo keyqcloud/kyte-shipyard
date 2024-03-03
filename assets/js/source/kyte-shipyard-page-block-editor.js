@@ -94,7 +94,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 // set page title and description
                 $("#setting-page-title").val(pageData.page.title);
                 $("#setting-page-description").val(pageData.page.description);
-                $("#lang").val(pageData.page.lang.length == 0 ? 'default' : pageData.page.leng);
+                $("#lang").val(pageData.page.lang.length == 0 ? 'default' : pageData.page.lang);
 
                 if (pageData.page.protected == 0) {
                     $("#sitemap-option-wrapper").removeClass('d-none');
