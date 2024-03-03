@@ -254,7 +254,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         </div>
                     </div>
                 </div>
-                <div class="col-auto d-flex row-delete position-relative">
+                <div class="col-auto d-flex position-relative">
                     <i class="fas fa-arrows-alt position-absolute top-0" style="right:5px"></i>
                     <a href="#" class="text-danger navitem-delete"><i class="fas fa-trash-alt"></i></a>
                 </div>
