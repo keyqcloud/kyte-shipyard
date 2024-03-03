@@ -45,15 +45,30 @@ let libraryElement = [
             'required':true
         },
         {
+            'id':'library_script_type',
             'field':'script_type',
             'type':'select',
-            'label':'Script Stype',
+            'label':'Script Type',
             'required':true,
             'option': {
                 'ajax': false,
                 'data': {
                     'css': 'CSS Stylesheet',
                     'js': 'JavaScript'
+                }
+            }
+        },
+        {
+            'id':'library_is_js_module',
+            'field':'is_js_module',
+            'type':'select',
+            'label':'JavaScript Module',
+            'required':true,
+            'option': {
+                'ajax': false,
+                'data': {
+                    0: 'No',
+                    1: 'Yes'
                 }
             }
         },
@@ -89,6 +104,15 @@ let libraryElement = [
         },
     ],
 ];
+function checkScriptTypeAndUpdateModule() {
+    let scriptType = $("#library_script_type").val();
+    if (scriptType == 'js') {
+        $("#library_is_js_module").prop('disabled', false);
+    } else {
+        $("#library_is_js_module").val(0);
+        $("#library_is_js_module").prop('disabled', true);
+    }
+}
 
 let sectionsFormElement = [
     [
@@ -193,7 +217,7 @@ let colDefSideNavigation = [
 // table def
 let colDefScript = [
     {'targets':0,'data':'name','label':'Name'},
-    {'targets':1,'data':'script_type','label':'Type', render: function(data, type, row, meta) { if (data == 'css') { return 'Stylesheet'; } else if (data == 'js') { return 'JavaScript'; } else { return 'Unknown'; } }},
+    {'targets':1,'data':'script_type','label':'Type', render: function(data, type, row, meta) { if (data == 'css') { return 'Stylesheet'; } else if (data == 'js') { return 'JavaScript'+(row.is_js_module ? ' (module)' : ''); } else { return 'Unknown'; } }},
     {'targets':2,'data':'s3key','label':'Path'},
     {'targets':3,'data':'state','label':'Status', render: function(data, type, row, meta) { if (data == 0) { return 'Not Published'; } else if (data == 1) { return 'Published'; } else { return 'Published (Stale)'; }}},
     {'targets':4,'data':'include_all','label':'Include All', render: function(data, type, row, meta) { if (data == 0) { return 'No'; } else if (data == 1) { return 'Yes'; } else { return 'Unknown'; }}},
@@ -202,7 +226,7 @@ let colDefScript = [
 
 let colDefLibrary = [
     {'targets':0,'data':'name','label':'Name'},
-    {'targets':1,'data':'script_type','label':'Type', render: function(data, type, row, meta) { if (data == 'css') { return 'Stylesheet'; } else if (data == 'js') { return 'JavaScript'; } else { return 'Unknown'; } }},
+    {'targets':1,'data':'script_type','label':'Type', render: function(data, type, row, meta) { if (data == 'css') { return 'Stylesheet'; } else if (data == 'js') { return 'JavaScript'+(row.is_js_module ? ' (module)' : ''); } else { return 'Unknown'; } }},
     {'targets':2,'data':'link','label':'Link'},
     {'targets':3,'data':'include_all','label':'Include All', render: function(data, type, row, meta) { if (data == 0) { return 'No'; } else if (data == 1) { return 'Yes'; } else { return 'Unknown'; }}},
     {'targets':4,'data':'date_modified','label':'Date Modified', render: function(data, type, row, meta) { return data ? data : '' }}
@@ -391,6 +415,10 @@ document.addEventListener('KyteInitialized', function(e) {
                 var modalFormLibrary = new KyteForm(_ks, $("#modalFormLibrary"), 'KyteLibrary', hidden, libraryElement, 'Script', tblLibrary, true, $("#addLibrary"));
                 modalFormLibrary.init();
                 tblLibrary.bindEdit(modalFormLibrary);
+                checkScriptTypeAndUpdateModule();
+                $("#library_script_type").change(function() {
+                    checkScriptTypeAndUpdateModule();
+                });
 
                 // media
                 var tblMedia = new KyteTable(_ks, $("#media-table"), {'name':"Media",'field':"site",'value':idx}, colDefMedia, true, [0,"asc"], false, true);

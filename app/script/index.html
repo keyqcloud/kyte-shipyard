@@ -85,26 +85,37 @@
                             </div>
                         </div>
 
+                        <!-- Settings -->
                         <div id="Settings" class="mt-2 px-3 d-none">
                             <div class="px-2">
+                                <!-- Name -->
                                 <div class="card mb-3">
                                     <div class="card-header">Name</div>
                                     <div class="card-body">
-                                        <!-- <h5 class="card-title"></h5> -->
                                         <input type="text" class="form-control" id="setting-script-name" />
                                     </div>
                                 </div>
+                                <!-- Description -->
                                 <div class="card mb-3">
                                     <div class="card-header">Description</div>
                                     <div class="card-body">
-                                        <!-- <h5 class="card-title"></h5> -->
                                         <textarea class="form-control" id="setting-script-description"></textarea>
                                     </div>
                                 </div>
-                                <div class="card mb-3 d-none" id="obfuscatejs-option-wrapper">
-                                    <div class="card-header">Obfuscate Javascript</div>
+                                <!-- JavaScript Module -->
+                                <div class="card mb-3 d-none" id="jsmodule-option-wrapper">
+                                    <div class="card-header">JavaScript Module</div>
                                     <div class="card-body">
-                                        <!-- <h5 class="card-title"></h5> -->
+                                        <select id="setting-jsmodule">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Obfuscate JavaScript -->
+                                <div class="card mb-3 d-none" id="obfuscatejs-option-wrapper">
+                                    <div class="card-header">Obfuscate JavaScript</div>
+                                    <div class="card-body">
                                         <select id="setting-obfuscatejs">
                                             <option value="0">No</option>
                                             <option value="1">Yes</option>
@@ -113,6 +124,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- End Settings -->
                     </div>
                 </div>
             </div>

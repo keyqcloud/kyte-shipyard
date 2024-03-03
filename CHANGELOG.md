@@ -5,6 +5,7 @@
 - Add language configuration for site and pages.
 - Add periodic checks from site detail page when site is in creation. Refreshes and loads site details once page status is active.
 - Add a spinning loader when site is being created.
+- Add feature for marking custom JavaScript or JavaScript included through libraries as modules
 
 ## 1.5.3
 

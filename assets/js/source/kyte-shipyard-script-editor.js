@@ -90,7 +90,13 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#setting-script-description").val(script.description);
                 
                 if (script.script_type == 'js') {
+                    $("#setting-obfuscatejs").val(script.obfuscate_js)
                     $('#obfuscatejs-option-wrapper').removeClass('d-none');
+                }
+
+                if (script.script_type == 'js') {
+                    $("#setting-jsmodule").val(script.is_js_module);
+                    $("#jsmodule-option-wrapper").removeClass('d-none');
                 }
 
                 scriptEditor = monaco.editor.create(document.getElementById("scriptEditor"), {
@@ -184,6 +190,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             'name':$("#setting-script-name").val(),
                             'description':$("#setting-script-description").val(),
                             'obfuscate_js':$("#setting-obfuscatejs").val(),
+                            'is_js_module':$("#setting-jsmodule").val(),
                         };
                         _ks.put('KyteScript', 'id', idx, payload, null, [], function(r) {
                             $('#pageLoaderModal').modal('hide');
@@ -228,6 +235,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             'name':$("#setting-script-name").val(),
                             'description':$("#setting-script-description").val(),
                             'obfuscate_js':$("#setting-obfuscatejs").val(),
+                            'is_js_module':$("#setting-jsmodule").val(),
                             'state': 1,
                         };
                         _ks.put('KyteScript', 'id', idx, payload, null, [], function(r) {
