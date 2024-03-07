@@ -1,3 +1,8 @@
+## 1.5.5
+
+### Bug Fixes:
+- Resolve issue where query an s3 path resulted in a CORS error
+
 ## 1.5.4
 
 ### Enhancements:
