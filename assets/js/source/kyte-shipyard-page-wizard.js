@@ -165,9 +165,9 @@ document.addEventListener('KyteInitialized', function(e) {
         // display model
         $('#pageLoaderModal').modal('show');
 
-        let condition = btoa(JSON.stringify([{"field":"site","value":siteIdx}]));
+        let condition = btoa(JSON.stringify([{"field":"s3key","value":page_path}]));
         // check if page already exists
-        _ks.get('KytePage', 's3key', page_path, [{'name':'x-kyte-query-conditions', 'value':condition}], function(r) {
+        _ks.get('KytePage', 'site', siteIdx, [{'name':'x-kyte-query-conditions', 'value':condition}], function(r) {
             $('#pageLoaderModal').modal('hide');
             if (r.data.length > 0) {
                 $("#page-path").addClass('is-invalid');
