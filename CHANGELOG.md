@@ -1,3 +1,9 @@
+## 1.5.7
+
+### Bug Fixes:
+- Resolve UI issue where footer overlapped data table navigation at the bottom of models pages.
+
+
 ## 1.5.6
 
 ### Bug Fixes:
