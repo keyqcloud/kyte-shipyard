@@ -1,3 +1,8 @@
+## 1.5.6
+
+### Bug Fixes:
+- Enhance UI for models by using max width instead of container for better visibility.
+
 ## 1.5.5
 
 ### Bug Fixes:
