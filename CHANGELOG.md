@@ -1,3 +1,8 @@
+## 1.5.8
+
+### Enhancements:
+- Add viewer for error logs generated at the application level
+
 ## 1.5.7
 
 ### Bug Fixes:
