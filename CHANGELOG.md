@@ -2,6 +2,7 @@
 
 ### Enhancements:
 - General style changes
+- Add session inspector
 
 ## 1.5.9
 

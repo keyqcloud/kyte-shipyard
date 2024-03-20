@@ -38,6 +38,12 @@ function generateAppNav(encodedRequest) {
                 href:'/app/controllers.html?request='+encodedRequest
             },
             {
+                faicon:'fas fa-key',
+                class:'me-2 text-light',
+                label:'Sessions',
+                href:'/app/sessions.html?request='+encodedRequest
+            },
+            {
                 faicon:'fas fa-bomb',
                 class:'me-2 text-light',
                 label:'Error Log',
