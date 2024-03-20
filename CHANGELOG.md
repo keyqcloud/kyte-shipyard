@@ -1,3 +1,8 @@
+## 1.5.10
+
+### Enhancements:
+- General style changes
+
 ## 1.5.9
 
 ### Enhancements:
