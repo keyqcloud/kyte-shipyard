@@ -1,5 +1,9 @@
 ## 1.5.9
 
+### Enhancements:
+- Add page access column to list of pages
+- Add JavaScript module toggle to page settings
+
 ### Bug Fixes:
 - Added back missing Page access select option in page settings.
 
