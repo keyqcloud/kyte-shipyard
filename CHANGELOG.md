@@ -1,3 +1,8 @@
+## 1.5.9
+
+### Bug Fixes:
+- Added back missing Page access select option in page settings.
+
 ## 1.5.8
 
 ### Enhancements:
@@ -7,7 +12,6 @@
 
 ### Bug Fixes:
 - Resolve UI issue where footer overlapped data table navigation at the bottom of models pages.
-
 
 ## 1.5.6
 
