@@ -103,6 +103,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 }
 
                 $("#setting-obfuscatejs").val(pageData.page.obfuscate_js);
+                $("#setting-is_js_module").val(pageData.page.is_js_module);
                 $("#setting-use_container").val(pageData.page.use_container);
 
                 // if code editor, redirect to code editor page
@@ -262,6 +263,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         'html': blockEditor.getHtml().match(/<body[^>]*>([\s\S]*)<\/body>/)[1],
                         'javascript': rawJS + blockEditor.getJs(),
                         'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
+                        'is_js_module': $("#setting-is_js_module").val(),
                         'stylesheet': blockEditor.getCss(),
                         'protected': $("#setting-protected").val(),
                     };
@@ -310,6 +312,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         'lang':$("#lang").val() == 'default' ? null : $("#lang").val(),
                         'sitemap_include': $("#setting-sitemap-include").val(),
                         'obfuscate_js': $("#setting-obfuscatejs").val(),
+                        'is_js_module': $("#setting-is_js_module").val(),
                         'use_container': $("#setting-use_container").val(),
                         'state': 1,
                         'protected': $("#setting-protected").val(),

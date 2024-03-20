@@ -134,6 +134,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 }
 
                 $("#setting-obfuscatejs").val(pageData.page.obfuscate_js);
+                $("#setting-is_js_module").val(pageData.page.is_js_module);
                 $("#setting-use_container").val(pageData.page.use_container);
 
                 htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {
@@ -343,6 +344,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             'webcomponent_obj_name': $("#webcomponent_obj_name").val(),
                             'sitemap_include':$("#setting-sitemap-include").val(),
                             'obfuscate_js':$("#setting-obfuscatejs").val(),
+                            'is_js_module': $("#setting-is_js_module").val(),
                             'use_container':$("#setting-use_container").val(),
                             'page_type': pageData.page.page_type == 'block' ? 'custom': pageData.page.page_type,
                             'protected': $("#setting-protected").val(),
@@ -399,6 +401,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             'webcomponent_obj_name': $("#webcomponent_obj_name").val(),
                             'sitemap_include':$("#setting-sitemap-include").val(),
                             'obfuscate_js':$("#setting-obfuscatejs").val(),
+                            'is_js_module': $("#setting-is_js_module").val(),
                             'use_container':$("#setting-use_container").val(),
                             'page_type': pageData.page.page_type == 'block' ? 'custom' : pageData.page.page_type,
                             'state': 1,
