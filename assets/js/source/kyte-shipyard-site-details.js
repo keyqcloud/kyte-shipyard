@@ -180,9 +180,10 @@ let mediaElements = [
 let colDefPage = [
     {'targets':0,'data':'title','label':'Page Title'},
     {'targets':1,'data':'s3key','label':'Path', render: function(data, type, row, meta) { return '/'+data; }},
-    {'targets':2,'data':'page_type','label':'Editor', render: function(data, type, row, meta) { return data == 'block' ? 'Block' : 'Code'; }},
-    {'targets':3,'data':'state','label':'Status', render: function(data, type, row, meta) { if (data == 0) { return 'Not Published'; } else if (data == 1) { return 'Published'; } else { return 'Published (Stale)'; }}},
-    {'targets':4,'data':'date_modified','label':'Last Modified'},
+    {'targets':2,'data':'protected','label':'Access', render: function(data, type, row, meta) { return parseInt(data) ? 'Protected' : 'Public'; }},
+    {'targets':3,'data':'page_type','label':'Editor', render: function(data, type, row, meta) { return data == 'block' ? 'Block' : 'Code'; }},
+    {'targets':4,'data':'state','label':'Status', render: function(data, type, row, meta) { if (data == 0) { return 'Not Published'; } else if (data == 1) { return 'Published'; } else { return 'Published (Stale)'; }}},
+    {'targets':5,'data':'date_modified','label':'Last Modified'},
 ];
 
 let colDefSections = [
