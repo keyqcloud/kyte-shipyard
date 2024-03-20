@@ -127,6 +127,7 @@ document.addEventListener('KyteInitialized', function(e) {
                     window.location = '/app/page/blockeditor.html?request='+encoded;
                 }
 
+                $("#setting-protected").val(pageData.page.protected);
                 if (pageData.page.protected == 0) {
                     $("#sitemap-option-wrapper").removeClass('d-none');
                     $('#setting-sitemap-include').val(pageData.page.sitemap_include);
@@ -343,7 +344,8 @@ document.addEventListener('KyteInitialized', function(e) {
                             'sitemap_include':$("#setting-sitemap-include").val(),
                             'obfuscate_js':$("#setting-obfuscatejs").val(),
                             'use_container':$("#setting-use_container").val(),
-                            'page_type': pageData.page.page_type == 'block' ? 'custom' : pageData.page.page_type,
+                            'page_type': pageData.page.page_type == 'block' ? 'custom': pageData.page.page_type,
+                            'protected': $("#setting-protected").val(),
                         };
                         _ks.put('KytePage', 'id', idx, payload, null, [], function(r) {
                             $('#pageLoaderModal').modal('hide');
@@ -400,6 +402,7 @@ document.addEventListener('KyteInitialized', function(e) {
                             'use_container':$("#setting-use_container").val(),
                             'page_type': pageData.page.page_type == 'block' ? 'custom' : pageData.page.page_type,
                             'state': 1,
+                            'protected': $("#setting-protected").val(),
                         };
                         _ks.put('KytePage', 'id', idx, payload, null, [], function(r) {
                             $('#pageLoaderModal').modal('hide');

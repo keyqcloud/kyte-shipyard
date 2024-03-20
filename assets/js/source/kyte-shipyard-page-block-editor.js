@@ -96,6 +96,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#setting-page-description").val(pageData.page.description);
                 $("#lang").val(pageData.page.lang.length == 0 ? 'default' : pageData.page.lang);
 
+                $("#setting-protected").val(pageData.page.protected);
                 if (pageData.page.protected == 0) {
                     $("#sitemap-option-wrapper").removeClass('d-none');
                     $('#setting-sitemap-include').val(pageData.page.sitemap_include);
@@ -262,6 +263,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         'javascript': rawJS + blockEditor.getJs(),
                         'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
                         'stylesheet': blockEditor.getCss(),
+                        'protected': $("#setting-protected").val(),
                     };
 
                     console.log(payload);
@@ -310,6 +312,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         'obfuscate_js': $("#setting-obfuscatejs").val(),
                         'use_container': $("#setting-use_container").val(),
                         'state': 1,
+                        'protected': $("#setting-protected").val(),
                     };
                     _ks.put('KytePage', 'id', idx, payload, null, [], function (r) {
                         $('#pageLoaderModal').modal('hide');
