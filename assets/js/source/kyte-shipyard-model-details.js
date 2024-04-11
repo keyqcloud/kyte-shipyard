@@ -532,6 +532,12 @@ document.addEventListener('KyteInitialized', function(e) {
                             }
                         },
                         {
+                            'field':'size',
+                            'type':'text',
+                            'label':'Size',
+                            'required':false,
+                        },
+                        {
                             'field':'required',
                             'type':'select',
                             'label':'Required',
@@ -542,7 +548,8 @@ document.addEventListener('KyteInitialized', function(e) {
                                     1: 'Yes',
                                     0: 'No'
                                 }
-                            }
+                            },
+                            'col': 2
                         },
                         {
                             'field': 'foreignKeyModel',
@@ -562,12 +569,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         }
                     ],
                     [
-                        {
-                            'field':'size',
-                            'type':'text',
-                            'label':'Size',
-                            'required':false,
-                        },
+                        
                         {
                             'field':'unsigned',
                             'type':'select',
@@ -580,7 +582,8 @@ document.addEventListener('KyteInitialized', function(e) {
                                     1: 'Yes',
                                     0: 'No'
                                 }
-                            }
+                            },
+                            'col': 2
                         },
                         {
                             'field':'protected',
@@ -593,7 +596,8 @@ document.addEventListener('KyteInitialized', function(e) {
                                     0: 'No',
                                     1: 'Yes'
                                 }
-                            }
+                            },
+                            'col': 2
                         },
                         {
                             'field':'password',
@@ -606,7 +610,22 @@ document.addEventListener('KyteInitialized', function(e) {
                                     0: 'No',
                                     1: 'Yes'
                                 }
-                            }
+                            },
+                            'col': 2
+                        },
+                        {
+                            'field':'encrypt',
+                            'type':'select',
+                            'label':'Encrypt',
+                            'required':false,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    0: 'No',
+                                    1: 'Yes'
+                                }
+                            },
+                            'col': 2
                         },
                         {
                             'field':'defaults',
