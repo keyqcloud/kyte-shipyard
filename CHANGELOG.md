@@ -1,3 +1,8 @@
+## 1.5.11
+
+### Enhancements:
+- Add ability to toggle encryption of database columns
+
 ## 1.5.10
 
 ### Enhancements:
