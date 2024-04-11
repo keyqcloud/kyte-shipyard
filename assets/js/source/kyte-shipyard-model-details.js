@@ -92,7 +92,7 @@ function getData(_ks, idx, model, appId) {
             modelStructure = r.data;
             r.data.forEach(col => {
                 targets++;
-                modelColDef.push({'targets':targets,'data':col.name,'label':col.name, render: function(data, type, row, meta) { return (typeof data === 'object' ? JSON.stringify(data, undefined, 4) : data); }});
+                modelColDef.push({'targets':targets,'data':col.name,'label':col.name, render: function(data, type, row, meta) { return (typeof data === 'object' ? JSON.stringify(data, undefined, 4) : data ? data : ''); }});
                 if (col.foreignKeyModel !== null && col.foreignKeyModel.id > 0 && col.foreignKeyAttribute.length > 0) {
                     modelFormDef.push([{
                         'field':col.name,
@@ -144,15 +144,18 @@ function getData(_ks, idx, model, appId) {
             dart = generate_dart(model);
         }
         targets++;
-        modelColDef.push({'targets':targets,'data':'date_created','label':'date_created'});
+        modelColDef.push({'targets':targets,'data':'date_created','label':'date_created', render: function(data, type, row, meta) { return data ? data : '';}});
         targets++;
-        modelColDef.push({'targets':targets,'data':'date_modified','label':'date_modified'});
+        modelColDef.push({'targets':targets,'data':'date_modified','label':'date_modified', render: function(data, type, row, meta) { return data ? data : '';}});
 
-        var tblData = new KyteTable(_ks, $("#data-table"), {'name':"AppModelWrapper",'field':appId,'value':model}, modelColDef, true, [0,"asc"], false, false);
+        var tblData = new KyteTable(_ks, $("#data-table"), {'name':"AppModelWrapper",'field':null,'value':null}, modelColDef, true, [0,"asc"], true, true);
+        tblData.httpHeaders = [{'name':'x-kyte-app-id','value':appId},{'name':'x-kyte-app-model','value':model}];
         tblData.init();
-        // var modelDataForm = new KyteForm(_ks, $("#modalDataForm"), model, null, modelFormDef, model, tblData, true, $("#newData"));
-        // modelDataForm.init();
-        // tblData.bindEdit(modelDataForm);
+        // init form
+        var modelDataForm = new KyteForm(_ks, $("#modalDataForm"), 'AppModelWrapper', null, modelFormDef, model, tblData, true, $("#newData"));
+        modelDataForm.httpHeaders = [{'name':'x-kyte-app-id','value':appId},{'name':'x-kyte-app-model','value':model}];
+        modelDataForm.init();
+        tblData.bindEdit(modelDataForm);
     });
 }
 

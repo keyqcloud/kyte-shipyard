@@ -1,3 +1,7 @@
+## 1.5.11
+
+- Update to use custom headers for application model wrapper.
+
 ## 1.5.10
 
 ### Enhancements:
