@@ -34,6 +34,17 @@ Before executing the release script, complete the following checklist:
 - [ ] Verified access to this repository.
 - [ ] Set up the necessary environment variables and secrets for GitHub Actions.
 
+## Kyte API Credentials
+
+To connect Kyte Shipyard to your Kyte API, you must create a file called `kyte-connect.js` in the `/assets/js/` directory. The file should be obfuscated and must contain the following:
+
+```javascript
+let endpoint = 'https://api.example.com';
+let publickey = 'PUBLIC_KEY';
+let identifier = 'ACCOUNT_IDENTIFIER';
+let account = 'ACCOUNT_NUMBER';
+```
+
 ## Support
 Encountering issues or have suggestions? Feel free to open a bug report or feature request on our [Issues](https://github.com/keyqcloud/kyte-shipyard/issues) page. We appreciate your feedback and contributions!
 
