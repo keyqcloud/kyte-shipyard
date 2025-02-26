@@ -373,6 +373,16 @@ document.addEventListener('KyteInitialized', function(e) {
                 var tblPage = new KyteTable(_ks, $("#pages-table"), {'name':'KytePage','field':'site','value':idx}, colDefPage, true, [0,"asc"], false, true, 'id', '/app/page/');
                 tblPage.customAction = [
                     {
+                        'className': 'open-rich-editor',
+                        'label': 'Open in Rich Text Editor',
+                        'faicon': 'fas fa-edit',
+                        'callback': function(data, model) {
+                            const obj = { 'model': model, 'idx': data['id'] };
+                            const encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                            location.href='/app/page/richeditor.html?request='+encoded;
+                        }
+                    },                    
+                    {
                         'className': 'open-block-editor',
                         'label': 'Open in Block Editor',
                         'faicon': 'fas fa-cubes',
