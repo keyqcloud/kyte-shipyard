@@ -237,9 +237,6 @@ let app = null;
 
 document.addEventListener('KyteInitialized', function(e) {
     let _ks = e.detail._ks;
-    let sidenav = new KyteSidenav("#sidenav", subnavSite, "#Attributes");
-    sidenav.create();
-    sidenav.bind();
 
     $('#pageLoaderModal').modal('show');
 
