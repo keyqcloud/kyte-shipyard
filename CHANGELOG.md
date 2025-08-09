@@ -1,3 +1,7 @@
+## 1.6.0
+
+- Major UI improvement
+
 ## 1.5.11
 
 - Update to use custom headers for application model wrapper.
