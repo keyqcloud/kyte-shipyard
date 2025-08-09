@@ -81,9 +81,9 @@ function renderHtmlCode() {
 
 document.addEventListener('KyteInitialized', function(e) {
     let _ks = e.detail._ks;
-    let sidenav = new KyteSidenav("#sidenav", subnavPage, "#Page");
-    sidenav.create();
-    sidenav.bind();
+    // let sidenav = new KyteSidenav("#sidenav", subnavPage, "#Page");
+    // sidenav.create();
+    // sidenav.bind();
 
     $('#pageLoaderModal').modal('show');
 
@@ -187,21 +187,12 @@ document.addEventListener('KyteInitialized', function(e) {
                 });
 
                 initializeIFrame();
-                
-                // hide after editor generation
-                if (hash != '#Page') {
-                    $("#Page").addClass('d-none');
-                }
-                if (hash != '#JavaScript') {
-                    $("#JavaScript").addClass('d-none');
-                }
-                if (hash != '#Stylesheet') {
-                    $("#Stylesheet").addClass('d-none');
-                }
 
                 let obj = {'model': 'KyteSite', 'idx':pageData.page.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                $("#backToSite").attr('href', '/app/site/?request='+encoded+'#Pages');
+                $("#backToSite").on('click', function() {
+                    window.location='/app/site/?request='+encoded+'#Pages';
+                });
 
                 $("#page-title").html(pageData.page.title);
                 $("#page-path").html(pageData.page.s3key);
