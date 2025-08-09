@@ -117,11 +117,11 @@ body {
     padding: 1rem 0;
 }
 
-.nav-section {
+.sidebar-nav .nav-section {
     margin-bottom: 2rem;
 }
 
-.nav-section-title {
+.sidebar-nav .nav-section-title {
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -131,11 +131,11 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.nav-item {
+.sidebar-nav .nav-item {
     margin: 0;
 }
 
-.nav-link {
+.sidebar-nav .nav-link {
     display: flex !important;
     align-items: center !important;
     padding: 0.75rem 1.5rem !important;
@@ -151,20 +151,20 @@ body {
     margin: 0 !important;
 }
 
-.nav-link:hover {
+.sidebar-nav .nav-link:hover {
     background: #f8fafc !important;
     color: #2d3748 !important;
     transform: translateX(4px);
 }
 
-.nav-link.active {
+.sidebar-nav .nav-link.active {
     background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(247, 147, 30, 0.1)) !important;
     color: #ff6b35 !important;
     border-right: 3px solid #ff6b35 !important;
     font-weight: 600 !important;
 }
 
-.nav-link i {
+.sidebar-nav .nav-link i {
     width: 20px !important;
     margin-right: 12px !important;
     font-size: 1.1rem !important;
