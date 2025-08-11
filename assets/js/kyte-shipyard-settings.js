@@ -1,1 +1,506 @@
-var a0_0x262b41=a0_0x2158;(function(_0x3d1d58,_0x5468e5){var _0xae4f4d=a0_0x2158,_0x3f2770=_0x3d1d58();while(!![]){try{var _0x5455a3=-parseInt(_0xae4f4d(0xa9))/0x1+-parseInt(_0xae4f4d(0xfa))/0x2*(-parseInt(_0xae4f4d(0xaf))/0x3)+parseInt(_0xae4f4d(0x10a))/0x4*(-parseInt(_0xae4f4d(0x100))/0x5)+-parseInt(_0xae4f4d(0xb5))/0x6*(-parseInt(_0xae4f4d(0xe7))/0x7)+-parseInt(_0xae4f4d(0xeb))/0x8*(-parseInt(_0xae4f4d(0xed))/0x9)+parseInt(_0xae4f4d(0xbf))/0xa+-parseInt(_0xae4f4d(0xaa))/0xb*(-parseInt(_0xae4f4d(0xa7))/0xc);if(_0x5455a3===_0x5468e5)break;else _0x3f2770['push'](_0x3f2770['shift']());}catch(_0x16a101){_0x3f2770['push'](_0x3f2770['shift']());}}}(a0_0x26d4,0xc777f));function a0_0x2158(_0x1b3b66,_0x59b958){var _0x26d4d2=a0_0x26d4();return a0_0x2158=function(_0x2158dd,_0x13726b){_0x2158dd=_0x2158dd-0xa4;var _0x3860e0=_0x26d4d2[_0x2158dd];if(a0_0x2158['WSMqHg']===undefined){var _0x26f47f=function(_0x55271a){var _0x5dd92a='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';var _0xcfc926='',_0x534854='';for(var _0x38a97d=0x0,_0x26c59a,_0x4311ec,_0x14f979=0x0;_0x4311ec=_0x55271a['charAt'](_0x14f979++);~_0x4311ec&&(_0x26c59a=_0x38a97d%0x4?_0x26c59a*0x40+_0x4311ec:_0x4311ec,_0x38a97d++%0x4)?_0xcfc926+=String['fromCharCode'](0xff&_0x26c59a>>(-0x2*_0x38a97d&0x6)):0x0){_0x4311ec=_0x5dd92a['indexOf'](_0x4311ec);}for(var _0x8909cc=0x0,_0xd943d0=_0xcfc926['length'];_0x8909cc<_0xd943d0;_0x8909cc++){_0x534854+='%'+('00'+_0xcfc926['charCodeAt'](_0x8909cc)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x534854);};a0_0x2158['kDrGLe']=_0x26f47f,_0x1b3b66=arguments,a0_0x2158['WSMqHg']=!![];}var _0x3f57e8=_0x26d4d2[0x0],_0xbfc54e=_0x2158dd+_0x3f57e8,_0x3ac754=_0x1b3b66[_0xbfc54e];return!_0x3ac754?(_0x3860e0=a0_0x2158['kDrGLe'](_0x3860e0),_0x1b3b66[_0xbfc54e]=_0x3860e0):_0x3860e0=_0x3ac754,_0x3860e0;},a0_0x2158(_0x1b3b66,_0x59b958);}import{marked}from'https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js';function a0_0x26d4(){var _0x1ebd32=['mtf6AgDksNK','i25LD19WyxnZD29Yza','Cg9ZDa','s3L0zvvZzxi','s3L0zvnOAxb5yxjKvxbKyxrL','ntG1mJyXrMDmDKjI','ChjLDMvUDerLzMf1Bhq','zc1UB25L','Dgv4Da','AhrTBa','zw5NAw5Lx3zLCNnPB24','mta3odmWmKzytMLNEq','vw5HyMXLihrVihvWzgf0zsb5B3vYihbHC3n3B3jKlIbqBgvHC2uGDhj5igfNywLUigXHDgvYlG','A3L0zuXPy2vUC2vdB250zw50','rxjYB3iGCMv0CMLLDMLUzYbWCM9MAwXLigLUzM9YBwf0Aw9UlG','iYmG','CMvSB2fK','qvbj','y2HHBMDLBg9Nq29UDgvUDa','C3r5Bgu','ugfZC3DVCMrZigrVig5VDcbTyxrJAcbVCIb0Agv5igrVig5VDcbTzwv0ihrOzsbWyxnZD29YzcbYzxf1AxjLBwvUDc4','otaXnZqZmeD2DMrquW','lZ9YzwrPCJ0','i3bHC3n3B3jK','i3bHz2vmB2fKzxjnB2rHBa','C3bSAxq','i2n1CNjLBNrlExrLueHqvMvYC2LVBG','y29VA2LL','Dgv4DenVBNrLBNq','yMLUza','Dw5RBM93BG','A3L0zv91CgrHDgvFAw5FChjVz3jLC3m9oYbLEhbPCMvZpvrODsWGmdeGsMfUide5nZaGmda6mda6mdaGvvrdoYbWyxrOps87','tgfZDcbmB2DPBG','pha+tMv3zxiGDMvYC2LVBIbHDMfPBgfIBgu6ia','DxbKyxrLs3L0zvnOAxb5yxjK','pha+rxjYB3iGy2HLy2TPBMCGzM9YihvWzgf0zxmUifbSzwfZzsb0CNKGywDHAw4GBgf0zxiUpc9WpG','rs1TywLSicGQkq','i2nVBMzPCM1FCgfZC3DVCMq','zw1HAwW','BwfW','zMfZigzHlxvZzxiTC2HPzwXK','CMvTB3zL','BgvUz3rO','y3vYCMvUDeTtvKvsu0LptG','s3L0zvbYB2zPBgu','i2fWAs10ywjSzq','zMfZigzHlxvZzxi','A3L0zv91CgrHDgvFAw5FChjVz3jLC3m','i1bYB2zPBgu','i2fJy291BNroDw1Izxi','zgf0yq','C3rHCNrZv2L0Aa','vgHLCMuGAgfZigjLzw4GysbWCM9IBgvTihDPDgGGEw91CIbMzxrJAcbVCgvYyxrPB246','CgfZC3DVCMq','zMfZigzHlxnLCNzLCG','DMfS','yMXVy2S','i3nPzgvUyxy','i3bYB2zPBgvFzw1HAwW','i3vWzgf0zvbHC3n3B3jK','pha+vw5HyMXLihrVigrLDgvYBwLUzsb0AguGBgf0zxn0ihzLCNnPB24Upc9WpG','n1HpvMnqvG','y3jLyxrL','s3L0zufqsuTLEq','yxnJ','nJm0otzsAurlvLO','z2v0','ndvvvMzWywW','qwrTAw5PC3rYyxrVCNm','CgfYC2u','AgLKzq','tMv0D29YAYbYzxnWB25Zzsb3yxmGBM90ig9R','Ahr0Chm6lY9YyxCUz2L0AhvIDxnLCMnVBNrLBNqUy29Tl2TLExfJBg91zc9RExrLlxbOCc9Tyxn0zxiVq0HbtKDfte9hlM1K','rs1TywLSihn1y2nLC3nMDwXSEsb1CgrHDgvKiq','y2f0y2G','C3rVCfbYB3bHz2f0Aw9U','A3L0zunOyw5NzwXVz0nVBNrLBNq','y2XPy2S','DhjPBq','rKfjteveifrpifvqrefurtOG','mKrnA1fwzG','A3L0zv9Hy2nVDw50','z2v0rwXLBwvUDej5swq','Ahr0Chm6lY9YyxCUz2L0AhvIDxnLCMnVBNrLBNqUy29Tl2TLExfJBg91zc9RExrLlxnOAxb5yxjKl21HAw4VteLdru5trq','ywrK','i3bHC3n3B3jKuMvXDwLYzw1LBNrZ','nde1CKztChDP','C2HVDW','pc9WpG','Bw9KywW','i2fKBwLUrM9YBq','y2XHC3nmAxn0','i2nHy2HLsw5ZDhj1y3rPB25nB2rHBa','tMfTzq','Dhj1zq','Chv0','nZe3mJrICfD5wNO','BNvTyMvY','zgv0ywLS','s3L0zsbtAgLWEwfYzdXZDxa+jNrYywrLoZWVC3vWpG','i0T5DgvtAgLWEwfYza','A3nmAwnLBNnLq29UDgvUDa','DxbKyxrLuMvZDwX0C1DYyxbWzxi','i0fqsq','i3vWzgf0zuXVywrPBMDnB2rHBa','i2fKBwLUlxrHyMXL','DgHLBG','zgLZCgXHEq','s3L0zuLUAxrPywXPEMvK','i3vWzgf0zuvTywLS','AhjLzG','Aw5Uzxjive1m','Ahr0Chm6lY9Jzg4UA2v5CwnSB3vKlMnVBs9RExrLl3nOAxb5yxjKl2fYy2HPDMuVq0HbtKDfte9hlM1K','Aw5PDa','A3L0zv91CgrHDgvFAw5FChjVz3jLC3m9Dhj1ztSGCgf0Ad0V','zxjYB3i','mtK4mtK1otzeD0Hqvha','AxntzxnZAw9U','nJyYnty5A1H0qufx'];a0_0x26d4=function(){return _0x1ebd32;};return a0_0x26d4();}let subnavSettings=[{'faicon':a0_0x262b41(0xd8),'label':'My\x20Profile','selector':a0_0x262b41(0xda)},{'faicon':a0_0x262b41(0xd2),'label':a0_0x262b41(0xee),'selector':'#Administrators'},{'faicon':a0_0x262b41(0xe0),'label':a0_0x262b41(0xbb),'selector':a0_0x262b41(0x111)},{'faicon':'fas\x20fa-rocket','label':a0_0x262b41(0x10d),'selector':a0_0x262b41(0x10e)},{'faicon':'fas\x20fa-code-branch','label':'Kyte\x20API<sup>&trade;</sup>','selector':'#KyteAPI'}],fldsAdmin=[[{'field':'name','type':a0_0x262b41(0xb2),'label':'Name\x20(*)','required':!![]}],[{'field':a0_0x262b41(0xd0),'type':a0_0x262b41(0xb2),'label':a0_0x262b41(0xce),'required':!![]}],[{'field':a0_0x262b41(0xdf),'type':a0_0x262b41(0xdf),'label':'Password\x20(leave\x20blank\x20for\x20user\x20to\x20setup)','required':![]}]],colDefUsers=[{'targets':0x0,'data':'name','label':a0_0x262b41(0x107)},{'targets':0x1,'data':a0_0x262b41(0xd0),'label':'E-mail'},{'targets':0x2,'data':'lastLogin','label':a0_0x262b41(0xca)}];var kyte_api_version=a0_0x262b41(0xc8);document['addEventListener'](a0_0x262b41(0x116),function(_0x55271a){var _0x41a050=a0_0x262b41;let _0x5dd92a=_0x55271a[_0x41a050(0x10c)]['_ks'],_0xcfc926=null;var _0x534854=new KytePasswordRequirement(_0x5dd92a,$(_0x41a050(0xff)),$(_0x41a050(0xab)),$(_0x41a050(0xcf)));_0x534854[_0x41a050(0xa4)]();let _0x38a97d=new KyteSidenav(_0x41a050(0xe3),subnavSettings,'#Profile');_0x38a97d[_0x41a050(0xe8)](),_0x38a97d[_0x41a050(0xc7)](),$(_0x41a050(0xc2))['modal'](_0x41a050(0x101));if(_0x5dd92a[_0x41a050(0xa8)]()){_0x5dd92a[_0x41a050(0xec)](_0x41a050(0xd6),null,null,[],function(_0x3f098e){var _0x3951a3=_0x41a050;kyte_api_version=_0x3f098e[_0x3951a3(0xb4)],$(_0x3951a3(0xc4))[_0x3951a3(0xb3)](kyte_api_version),_0x3f098e['data'][0x0]&&(_0xcfc926=_0x3f098e[_0x3951a3(0xdc)][0x0],$('#profile_email')[_0x3951a3(0xe1)](_0xcfc926[_0x3951a3(0xd0)]),$(_0x3951a3(0xdb))[_0x3951a3(0xe1)](_0xcfc926[_0x3951a3(0xfb)][_0x3951a3(0x10b)])),$('#pageLoaderModal')[_0x3951a3(0x103)]('hide');},function(_0x3cd166){var _0x2af419=_0x41a050;alert(_0x2af419(0xb8)+_0x3cd166[_0x2af419(0xa6)]),$(_0x2af419(0xc2))['modal']('hide');});let _0x393eec=[{'name':'kyte_account','value':0x1},{'name':'role','value':0x1}];var _0x26c59a=new KyteTable(_0x5dd92a,$(_0x41a050(0x113)),{'name':_0x41a050(0xad),'field':_0x41a050(0xfb),'value':0x1},colDefUsers,!![],[0x0,_0x41a050(0xea)],!![],!![]);_0x26c59a[_0x41a050(0xa4)]();var _0x4311ec=new KyteForm(_0x5dd92a,$(_0x41a050(0x104)),_0x41a050(0xad),_0x393eec,fldsAdmin,'Administrator',_0x26c59a,!![],$('#newAdmin'));_0x4311ec[_0x41a050(0xa4)](),_0x26c59a['bindEdit'](_0x4311ec);var _0x14f979=new KyteTable(_0x5dd92a,$(_0x41a050(0xd7)),{'name':_0x41a050(0xe9),'field':null,'value':null},colDefAPI,!![],[0x0,_0x41a050(0xea)],![],![]);_0x14f979['init'](),$(_0x41a050(0x117))[_0x41a050(0xf7)](function(_0x229405){var _0x30b9db=_0x41a050;_0x229405['preventDefault'](),_0x229405['stopPropagation'](),_0x5dd92a[_0x30b9db(0x109)](_0x30b9db(0xd6),null,null,{'email':$(_0x30b9db(0xe4))['val']()},null,[],function(_0x54b9ee){var _0x51b18b=_0x30b9db;_0x54b9ee[_0x51b18b(0xdc)][0x0]&&(_0xcfc926=_0x54b9ee[_0x51b18b(0xdc)][0x0],$(_0x51b18b(0xe4))['val'](_0xcfc926[_0x51b18b(0xd0)])),alert(_0x51b18b(0xf3));},function(_0x158e55){var _0x33b869=_0x30b9db;alert('Unable\x20to\x20update\x20e-mail.\x20'+_0x158e55[_0x33b869(0xa6)]),$(_0x33b869(0xe4))['val'](_0xcfc926[_0x33b869(0xd0)]);});}),$(_0x41a050(0xe5))[_0x41a050(0xf7)](function(_0x1fe85e){var _0x1b4f30=_0x41a050;_0x1fe85e[_0x1b4f30(0xb0)](),_0x1fe85e[_0x1b4f30(0xf5)]();let _0x3e039f=$(_0x1b4f30(0xab))['val'](),_0x493249=$(_0x1b4f30(0xcf))[_0x1b4f30(0xe1)]();if(_0x493249==_0x3e039f&&_0x493249['length']>=0x8&&_0x534854['validatePassword']($(_0x1b4f30(0xc1))))_0x5dd92a[_0x1b4f30(0x109)]('KyteProfile',null,null,{'password':$('#new_password')[_0x1b4f30(0xe1)]()},null,[],function(_0x5eb90a){alert('Your\x20password\x20has\x20been\x20successfully\x20update.');},function(){var _0x1ece65=_0x1b4f30;alert(_0x1ece65(0xb6));});else alert(_0x1b4f30(0xbe));});}else location[_0x41a050(0x118)]=_0x41a050(0xc0)+encodeURIComponent(window['location']);$('#updateKyteShipyard')[_0x41a050(0xf7)](function(){var _0x4e6193=_0x41a050;$(_0x4e6193(0x106))[_0x4e6193(0x103)]('show');});var _0x8909cc;$('#updateNow')[_0x41a050(0xf7)](function(){var _0x48d892=_0x41a050;$(_0x48d892(0x106))['modal'](_0x48d892(0xf0)),$(_0x48d892(0x112))[_0x48d892(0x103)](_0x48d892(0x101)),_0x5dd92a[_0x48d892(0xac)](_0x48d892(0xae),{'current_version':KS_VERSION},null,[],function(_0x868424){var _0x22d63c=_0x48d892;document[_0x22d63c(0xc5)]=_0x22d63c(0xa5),_0x8909cc=setTimeout(function(){location['reload']();},0x1770);},function(_0xe81553){var _0x1dbcca=_0x48d892;console[_0x1dbcca(0xa6)](_0xe81553),$(_0x1dbcca(0x112))[_0x1dbcca(0x103)](_0x1dbcca(0xf0)),alert(_0x1dbcca(0xf9)+_0xe81553);});});function _0xd943d0(_0x71704b){var _0x4e115e=_0x41a050,_0x132a74=document['cookie']['split'](';');for(var _0x166944=0x0;_0x166944<_0x132a74[_0x4e115e(0xd4)];_0x166944++){var _0x272a53=_0x132a74[_0x166944][_0x4e115e(0xc3)]('=');if(_0x71704b==_0x272a53[0x0][_0x4e115e(0xf8)]())return decodeURIComponent(_0x272a53[0x1]);}return null;}function _0x42bbe7(){var _0x385dab=_0x41a050,_0x1af117=_0xd943d0(_0x385dab(0xd9));_0x1af117&&_0x1af117===_0x385dab(0x108)&&($(_0x385dab(0x112))[_0x385dab(0x103)](_0x385dab(0x101)),_0x8909cc=setTimeout(function(){var _0xb7b869=_0x385dab;location[_0xb7b869(0xba)]();},0x1770));}_0x42bbe7();function _0x21b00b(){var _0x3feab9=_0x41a050;document[_0x3feab9(0xc5)]=_0x3feab9(0xc9),$('#updateLoadingModal')[_0x3feab9(0x103)](_0x3feab9(0xf0)),_0x8909cc&&clearTimeout(_0x8909cc);}document[_0x41a050(0xfc)](_0x41a050(0xd5))[_0x41a050(0xc6)]=KS_VERSION;function _0x487c69(){var _0x3ff9ef=_0x41a050,_0x96843e=_0x3ff9ef(0x11a);fetch(_0x96843e)[_0x3ff9ef(0x114)](_0x510016=>{var _0x358b58=_0x3ff9ef;if(!_0x510016['ok'])throw new Error(_0x358b58(0xf1));return _0x510016[_0x358b58(0xb2)]();})[_0x3ff9ef(0x114)](_0xdc1db6=>{var _0x28f539=_0x3ff9ef;_0x50dca2(_0xdc1db6),document[_0x28f539(0xfc)](_0x28f539(0xbc))[_0x28f539(0x119)]=marked[_0x28f539(0xef)](_0xdc1db6),document[_0x28f539(0xfc)]('changelogContent')[_0x28f539(0xbd)][_0x28f539(0x115)]='block';})[_0x3ff9ef(0xf4)](_0x29284d=>{var _0x529a25=_0x3ff9ef;document['getElementById'](_0x529a25(0x110))[_0x529a25(0x119)]=_0x529a25(0xcd),console[_0x529a25(0xa6)](_0x529a25(0xde),_0x29284d);});}function _0x50dca2(_0x5a309e){var _0x3a1fb7=_0x41a050,_0x285ff0=_0x5a309e['split']('\x0a'),_0x5cf4bb='';for(var _0x267061=0x0;_0x267061<_0x285ff0[_0x3a1fb7(0xd4)];_0x267061++){if(_0x285ff0[_0x267061][_0x3a1fb7(0xdd)](_0x3a1fb7(0xb9))){_0x5cf4bb=_0x285ff0[_0x267061]['substring'](0x3)[_0x3a1fb7(0xf8)]();break;}}if(_0x309afa(_0x5cf4bb,KS_VERSION))document[_0x3a1fb7(0xfc)]('updateResultsWrapper')[_0x3a1fb7(0x119)]=_0x3a1fb7(0xcb)+_0x5cf4bb+_0x3a1fb7(0x102),document['getElementById'](_0x3a1fb7(0xcc))[_0x3a1fb7(0x105)][_0x3a1fb7(0xd3)](_0x3a1fb7(0xb1));else _0x5cf4bb===KS_VERSION?(document[_0x3a1fb7(0xfc)](_0x3a1fb7(0x110))[_0x3a1fb7(0x119)]='<p>You\x20are\x20already\x20using\x20the\x20latest\x20version.</p>',document['getElementById'](_0x3a1fb7(0xcc))[_0x3a1fb7(0x105)][_0x3a1fb7(0xfe)](_0x3a1fb7(0xb1)),_0x21b00b()):(document['getElementById'](_0x3a1fb7(0x110))[_0x3a1fb7(0x119)]=_0x3a1fb7(0xe6),document[_0x3a1fb7(0xfc)](_0x3a1fb7(0xcc))['classList'][_0x3a1fb7(0xfe)](_0x3a1fb7(0xb1)),_0x21b00b());}function _0x309afa(_0x209313,_0x19990a){var _0xf1bc15=_0x41a050,_0x186470=_0x209313[_0xf1bc15(0xc3)]('.')[_0xf1bc15(0xd1)](Number),_0x3a8c12=_0x19990a[_0xf1bc15(0xc3)]('.')[_0xf1bc15(0xd1)](Number);for(var _0x190a77=0x0;_0x190a77<_0x186470[_0xf1bc15(0xd4)];_0x190a77++){if(_0x186470[_0x190a77]>(_0x3a8c12[_0x190a77]||0x0))return!![];else{if(_0x186470[_0x190a77]<(_0x3a8c12[_0x190a77]||0x0))return![];}}return![];}function _0x349465(){var _0x342497=_0x41a050,_0x25520d=_0x342497(0xf2);fetch(_0x25520d)['then'](_0x384323=>{var _0x462eb6=_0x342497;if(!_0x384323['ok'])throw new Error(_0x462eb6(0xf1));return _0x384323['text']();})[_0x342497(0x114)](_0xeece7f=>{var _0x4ee5d8=_0x342497;document[_0x4ee5d8(0xfc)](_0x4ee5d8(0xf6))[_0x4ee5d8(0x119)]=marked[_0x4ee5d8(0xef)](_0xeece7f),document['getElementById'](_0x4ee5d8(0xf6))[_0x4ee5d8(0xbd)][_0x4ee5d8(0x115)]=_0x4ee5d8(0xe2);})['catch'](_0xcc36f9=>{var _0x520afa=_0x342497;console[_0x520afa(0xa6)](_0x520afa(0xde),_0xcc36f9);});}function _0x320258(){var _0x2ba75a=_0x41a050,_0x5b4b10='https://raw.githubusercontent.com/keyqcloud/kyte-php/master/LICENSE';fetch(_0x5b4b10)[_0x2ba75a(0x114)](_0x2c1cf8=>{var _0x1b2255=_0x2ba75a;if(!_0x2c1cf8['ok'])throw new Error(_0x1b2255(0xf1));return _0x2c1cf8['text']();})[_0x2ba75a(0x114)](_0x382ba7=>{var _0x27541a=_0x2ba75a;document[_0x27541a(0xfc)](_0x27541a(0xb7))[_0x27541a(0x119)]=marked[_0x27541a(0xef)](_0x382ba7),document[_0x27541a(0xfc)](_0x27541a(0xb7))[_0x27541a(0xbd)][_0x27541a(0x115)]='block';})[_0x2ba75a(0xf4)](_0x388644=>{var _0x49f92b=_0x2ba75a;console[_0x49f92b(0xa6)]('There\x20has\x20been\x20a\x20problem\x20with\x20your\x20fetch\x20operation:',_0x388644);});}function _0x23693c(){var _0x1322d4=_0x41a050,_0x3a4a7e=_0x1322d4(0xfd);fetch(_0x3a4a7e)[_0x1322d4(0x114)](_0x34dbeb=>{var _0x8758fe=_0x1322d4;if(!_0x34dbeb['ok'])throw new Error(_0x8758fe(0xf1));return _0x34dbeb['text']();})[_0x1322d4(0x114)](_0x160e5c=>{var _0x1fe2ed=_0x1322d4;document[_0x1fe2ed(0xfc)](_0x1fe2ed(0x10f))['innerHTML']=marked[_0x1fe2ed(0xef)](_0x160e5c),document[_0x1fe2ed(0xfc)](_0x1fe2ed(0x10f))[_0x1fe2ed(0xbd)]['display']='block';})[_0x1322d4(0xf4)](_0x5befa7=>{var _0x57e8f0=_0x1322d4;console[_0x57e8f0(0xa6)](_0x57e8f0(0xde),_0x5befa7);});}_0x487c69(),_0x349465(),_0x320258(),_0x23693c();});
+// Updated kyte-shipyard-settings.js
+import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+
+let fldsAdmin = [
+    [
+        {
+            'field': 'name',
+            'type': 'text',
+            'label': 'Name (*)',
+            'required': true
+        },
+    ],
+    [
+        {
+            'field': 'email',
+            'type': 'text',
+            'label': 'E-mail (*)',
+            'required': true
+        }
+    ],
+    [
+        {
+            'field': 'password',
+            'type': 'password',
+            'label': 'Password (leave blank for user to setup)',
+            'required': false
+        }
+    ]
+];
+
+let colDefUsers = [
+    { 'targets': 0, 'data': 'name', 'label': 'Name' },
+    { 'targets': 1, 'data': 'email', 'label': 'E-mail' },
+    { 'targets': 2, 'data': 'lastLogin', 'label': 'Last Login' },
+];
+
+let colDefAPI = [
+    { 'targets': 0, 'data': 'username', 'label': 'Key Name' },
+    { 'targets': 1, 'data': 'public_key', 'label': 'Public Key' },
+    { 'targets': 2, 'data': 'date_created', 'label': 'Created' },
+];
+
+var kyte_api_version = "unknown";
+
+class SettingsManager {
+    constructor(kyteSession) {
+        this._ks = kyteSession;
+        this.profile = null;
+        this.reloadTimeout = null;
+        this.init();
+    }
+
+    init() {
+        // Setup password requirements
+        this.setupPasswordRequirements();
+        
+        // Load profile data
+        this.loadProfile();
+        
+        // Setup event handlers
+        this.setupEventHandlers();
+        
+        // Initialize update checking
+        this.initializeUpdateSystem();
+        
+        // Load external content
+        this.loadExternalContent();
+    }
+
+    setupPasswordRequirements() {
+        // Initialize password requirement validator
+        if (typeof KytePasswordRequirement !== 'undefined') {
+            this.passreq = new KytePasswordRequirement(
+                this._ks, 
+                $("#passwordRequirements"), 
+                $("#new_password"), 
+                $("#confirm_password")
+            );
+            this.passreq.init();
+        }
+    }
+
+    loadProfile() {
+        $('#pageLoaderModal').modal('show');
+        
+        this._ks.get("KyteProfile", null, null, [], (response) => {
+            kyte_api_version = response.engine_version;
+            $("#currentKytePHPVersion").text(kyte_api_version);
+            
+            if (response.data && response.data[0]) {
+                this.profile = response.data[0];
+                $("#profile_email").val(this.profile['email']);
+                $("#accountNumber").text(this.profile['kyte_account']['number']);
+            }
+            
+            // Initialize data tables
+            this.initializeDataTables();
+            
+            $('#pageLoaderModal').modal('hide');
+        }, (error) => {
+            this.showError("Error retrieving profile information: " + error.error);
+            $('#pageLoaderModal').modal('hide');
+        });
+    }
+
+    initializeDataTables() {
+        // Admin table setup
+        const hidden = [
+            { 'name': 'kyte_account', 'value': 1 },
+            { 'name': 'role', 'value': 1 }
+        ];
+
+        if (typeof KyteTable !== 'undefined' && typeof KyteForm !== 'undefined') {
+            // Admin table
+            this.tblAdmin = new KyteTable(
+                this._ks, 
+                $("#admin-table"), 
+                { 'name': "KyteUser", 'field': "kyte_account", 'value': 1 }, 
+                colDefUsers, 
+                true, 
+                [0, "asc"], 
+                true, 
+                true
+            );
+            this.tblAdmin.init();
+
+            // Admin form
+            this.frmUser = new KyteForm(
+                this._ks, 
+                $("#adminForm"), 
+                "KyteUser", 
+                hidden, 
+                fldsAdmin, 
+                "Administrator", 
+                this.tblAdmin, 
+                true, 
+                $("#newAdmin")
+            );
+            this.frmUser.init();
+            this.tblAdmin.bindEdit(this.frmUser);
+
+            // API table
+            this.tblAPI = new KyteTable(
+                this._ks, 
+                $("#api-table"), 
+                { 'name': "KyteAPIKey", 'field': null, 'value': null }, 
+                colDefAPI, 
+                true, 
+                [0, "asc"], 
+                false, 
+                false
+            );
+            this.tblAPI.init();
+        }
+    }
+
+    setupEventHandlers() {
+        // Email update handler
+        $("#updateEmail").click((e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.updateEmail();
+        });
+
+        // Password update handler
+        $("#updatePassword").click((e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.updatePassword();
+        });
+
+        // Update system handlers
+        $("#updateKyteShipyard").click(() => {
+            $("#cacheInstructionModal").modal('show');
+        });
+
+        $("#updateNow").click(() => {
+            this.startUpdate();
+        });
+    }
+
+    updateEmail() {
+        const newEmail = $("#profile_email").val();
+        
+        if (!this.validateEmail(newEmail)) {
+            this.showError("Please enter a valid email address.");
+            return;
+        }
+
+        this._ks.put("KyteProfile", null, null, { "email": newEmail }, null, [], (response) => {
+            if (response.data && response.data[0]) {
+                this.profile = response.data[0];
+                $("#profile_email").val(this.profile['email']);
+            }
+            this.showSuccess("Email successfully updated!");
+        }, (error) => {
+            this.showError("Unable to update email: " + error.error);
+            // Revert to old email
+            $("#profile_email").val(this.profile['email']);
+        });
+    }
+
+    updatePassword() {
+        const newPassword = $("#new_password").val();
+        const confirmPassword = $("#confirm_password").val();
+
+        if (confirmPassword !== newPassword) {
+            this.showError("Passwords do not match.");
+            return;
+        }
+
+        if (newPassword.length < 8) {
+            this.showError("Password must be at least 8 characters long.");
+            return;
+        }
+
+        if (this.passreq && !this.passreq.validatePassword($("#new_password"))) {
+            this.showError("Password does not meet the requirements.");
+            return;
+        }
+
+        this._ks.put('KyteProfile', null, null, { 'password': newPassword }, null, [], (response) => {
+            this.showSuccess("Your password has been successfully updated.");
+            $("#new_password").val('');
+            $("#confirm_password").val('');
+        }, (error) => {
+            this.showError("Unable to update your password. Please try again later.");
+        });
+    }
+
+    initializeUpdateSystem() {
+        // Set current version
+        if (typeof KS_VERSION !== 'undefined') {
+            document.getElementById("currentKSVERSION").textContent = KS_VERSION;
+        }
+
+        // Check for updates on load
+        this.checkForUpdates();
+        
+        // Check for update in progress
+        this.checkForUpdateAndOpenModal();
+    }
+
+    checkForUpdates() {
+        const changelogUrl = 'https://cdn.keyqcloud.com/kyte/shipyard/archive/CHANGELOG.md';
+
+        fetch(changelogUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                this.processChangelog(data);
+                document.getElementById('changelogContent').innerHTML = marked.parse(data);
+                document.getElementById('changelogContent').style.display = 'block';
+            })
+            .catch(error => {
+                this.showUpdateError('Error checking for updates. Please try again later.');
+                console.error('Update check error:', error);
+            });
+    }
+
+    processChangelog(changelogContent) {
+        const lines = changelogContent.split('\n');
+        let latestVersion = '';
+        
+        for (let i = 0; i < lines.length; i++) {
+            if (lines[i].startsWith('## ')) {
+                latestVersion = lines[i].substring(3).trim();
+                break;
+            }
+        }
+
+        const currentVersion = typeof KS_VERSION !== 'undefined' ? KS_VERSION : '0.0.0';
+        
+        if (this.isNewerVersion(latestVersion, currentVersion)) {
+            this.showUpdateAvailable(latestVersion);
+        } else if (latestVersion === currentVersion) {
+            this.showUpToDate();
+        } else {
+            this.showUpdateError('Unable to determine the latest version.');
+        }
+    }
+
+    showUpdateAvailable(version) {
+        const wrapper = document.getElementById('updateResultsWrapper');
+        wrapper.innerHTML = `
+            <div class="update-status warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Newer version available: <strong>${version}</strong>
+            </div>
+        `;
+        document.getElementById('updateKyteShipyard').classList.remove('d-none');
+    }
+
+    showUpToDate() {
+        const wrapper = document.getElementById('updateResultsWrapper');
+        wrapper.innerHTML = `
+            <div class="update-status success">
+                <i class="fas fa-check-circle me-2"></i>
+                You are already using the latest version.
+            </div>
+        `;
+        document.getElementById('updateKyteShipyard').classList.add('d-none');
+        this.deleteUpdateCookieAndCloseModal();
+    }
+
+    showUpdateError(message) {
+        const wrapper = document.getElementById('updateResultsWrapper');
+        wrapper.innerHTML = `
+            <div class="update-status warning">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                ${message}
+            </div>
+        `;
+        document.getElementById('updateKyteShipyard').classList.add('d-none');
+        this.deleteUpdateCookieAndCloseModal();
+    }
+
+    isNewerVersion(newVersion, oldVersion) {
+        const newParts = newVersion.split('.').map(Number);
+        const oldParts = oldVersion.split('.').map(Number);
+
+        for (let i = 0; i < Math.max(newParts.length, oldParts.length); i++) {
+            const newPart = newParts[i] || 0;
+            const oldPart = oldParts[i] || 0;
+            
+            if (newPart > oldPart) return true;
+            if (newPart < oldPart) return false;
+        }
+        return false;
+    }
+
+    startUpdate() {
+        $("#cacheInstructionModal").modal('hide');
+        $('#updateLoadingModal').modal('show');
+        
+        const currentVersion = typeof KS_VERSION !== 'undefined' ? KS_VERSION : '0.0.0';
+        
+        this._ks.post('KyteShipyardUpdate', { 'current_version': currentVersion }, null, [], (response) => {
+            // Set a cookie that Kyte is being updated
+            document.cookie = "kyte_update_in_progress=true; path=/";
+        
+            // Refresh the page after 6 seconds
+            this.reloadTimeout = setTimeout(() => {
+                location.reload();
+            }, 6000);
+        }, (error) => {
+            console.error(error);
+            $('#updateLoadingModal').modal('hide');
+            this.showError("FAILED TO UPDATE: " + error);
+        });
+    }
+
+    checkForUpdateAndOpenModal() {
+        const updateInProgress = this.getCookie("kyte_update_in_progress");
+        if (updateInProgress && updateInProgress === "true") {
+            $('#updateLoadingModal').modal('show');
+            // Refresh the page after 6 seconds
+            this.reloadTimeout = setTimeout(() => {
+                location.reload();
+            }, 6000);
+        }
+    }
+
+    deleteUpdateCookieAndCloseModal() {
+        // Delete the cookie by setting its expiry to a past date
+        document.cookie = "kyte_update_in_progress=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    
+        // Dismiss the modal
+        $('#updateLoadingModal').modal('hide');
+
+        if (this.reloadTimeout) {
+            clearTimeout(this.reloadTimeout);
+        }
+    }
+
+    loadExternalContent() {
+        // Load Kyte PHP changelog and license
+        this.getKytePHPChangelog();
+        this.getKytePHPLicense();
+        this.getKyteShipyardLicense();
+    }
+
+    getKytePHPChangelog() {
+        const changelogUrl = 'https://raw.githubusercontent.com/keyqcloud/kyte-php/master/CHANGELOG.md';
+
+        fetch(changelogUrl)
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('kyteChangelogContent').innerHTML = marked.parse(data);
+                document.getElementById('kyteChangelogContent').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Kyte PHP changelog fetch error:', error);
+            });
+    }
+
+    getKytePHPLicense() {
+        const licenseUrl = 'https://raw.githubusercontent.com/keyqcloud/kyte-php/master/LICENSE';
+
+        fetch(licenseUrl)
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('kyteLicenseContent').innerHTML = marked.parse(data);
+                document.getElementById('kyteLicenseContent').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Kyte PHP license fetch error:', error);
+            });
+    }
+
+    getKyteShipyardLicense() {
+        const licenseUrl = 'https://raw.githubusercontent.com/keyqcloud/kyte-shipyard/main/LICENSE';
+
+        fetch(licenseUrl)
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('ksLicenseContent').innerHTML = marked.parse(data);
+                document.getElementById('ksLicenseContent').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Kyte Shipyard license fetch error:', error);
+            });
+    }
+
+    // Utility methods
+    getCookie(name) {
+        const cookieArr = document.cookie.split(";");
+        
+        for (let i = 0; i < cookieArr.length; i++) {
+            const cookiePair = cookieArr[i].split("=");
+            if (name === cookiePair[0].trim()) {
+                return decodeURIComponent(cookiePair[1]);
+            }
+        }
+        return null;
+    }
+
+    validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    showSuccess(message) {
+        // You can implement a toast notification system here
+        alert(message);
+    }
+
+    showError(message) {
+        alert(message);
+    }
+}
+
+// Global instance
+window.SettingsManager = null;
+
+// Main initialization
+document.addEventListener('KyteInitialized', function(e) {
+    let _ks = e.detail._ks;
+    
+    if (_ks.isSession()) {
+        // Initialize the settings manager
+        window.SettingsManager = new SettingsManager(_ks);
+    } else {
+        location.href = "/?redir=" + encodeURIComponent(window.location);
+    }
+});
+
+
+// Navigation functionality
+document.querySelectorAll('[data-target]').forEach(button => {
+    button.addEventListener('click', function() {
+        const target = this.dataset.target;
+        
+        // Update active nav item
+        document.querySelectorAll('[data-target]').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Show corresponding content
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        document.getElementById(target).classList.add('active');
+    });
+});
+
+// Initialize tooltips and other Bootstrap components
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize any tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
