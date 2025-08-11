@@ -190,9 +190,7 @@ document.addEventListener('KyteInitialized', function(e) {
 
                 let obj = {'model': 'KyteSite', 'idx':pageData.page.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                $("#backToSite").on('click', function() {
-                    window.location='/app/site/?request='+encoded+'#Pages';
-                });
+                $("#backToSite").attr('href', '/app/site/?request='+encoded+'#Pages');
 
                 $("#page-title").html(pageData.page.title);
                 $("#page-path").html(pageData.page.s3key);
