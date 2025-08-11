@@ -9,7 +9,7 @@ document.addEventListener('KyteInitialized', function(e) {
     }
 
     // get user info from token
-    _ks.get('PasswordReset', 'token', token, [], function(response) {
+    _ks.get('KytePasswordReset', 'token', token, [], function(response) {
         if (response.data.length < 1) { location.href = "/"; }
         email = response.data[0].email;
         $("#email").val(email);
@@ -165,8 +165,7 @@ document.addEventListener('KyteInitialized', function(e) {
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating Password...';
         submitButton.disabled = true;
 
-        _ks.put('PasswordReset', 'email', encodeURIComponent(email), {'token':token, 'password':$("#password").val()}, null, [], function(response) {
-            alert("Your password has been successfully update.");
+        _ks.put('KytePasswordReset', 'email', encodeURIComponent(email), {'token':token, 'password':$("#password").val()}, null, [], function(response) {
             submitButton.innerHTML = originalText;
             // Show success message
             successMsg.classList.remove('d-none');

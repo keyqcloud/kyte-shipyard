@@ -26,7 +26,7 @@ document.addEventListener('KyteInitialized', function(e) {
         submitButton.disabled = true;
         
         if ($("input[type=email]").val()) {
-            _ks.post("PasswordReset", {'email' : $("input[type=email]").val()}, null, [], function() {
+            _ks.post("KytePasswordReset", {'email' : $("input[type=email]").val()}, null, [], function() {
                 // alert("If the email you provided is correct, an email with reset instructions was sent to you.");
                 submitButton.innerHTML = originalText;
                 submitButton.disabled = false;
