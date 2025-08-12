@@ -6,6 +6,12 @@ let validationStartTime = null;
 let validationTimer = null;
 let progressInterval = null;
 
+// Navigation Management Variables
+let currentNavigationData = null;
+let currentSitePages = [];
+let navigationItems = [];
+let navigationItemCount = 1;
+
 let scriptElement = [
     [
         {
@@ -210,12 +216,6 @@ let colDefMedia = [
     {'targets':1,'data':'s3key','label':'Path', render: function(data, type, row, meta) { if (row.site.cfMediaDomain) return 'https://'+row.site.cfMediaDomain+'/'+data; else return '/'+data; }}
 ];
 
-let colDefNavigation = [
-    {'targets':0,'data':'name','label':'Name'},
-    {'targets':1,'data':'description','label':'Description'},
-    // {'targets':2,'data':'link','label':'Target', render: function(data, type, row, meta) { console.log(row); if (data) { return data; } else { if (row.page) { return row.page.title; } else {return 'No'; }} }}
-];
-
 let colDefSideNavigation = [
     {'targets':0,'data':'name','label':'Name'},
     {'targets':1,'data':'description','label':'Description'},
@@ -261,57 +261,6 @@ document.addEventListener('KyteInitialized', function(e) {
                 'name': 'site',
                 'value': idx
             }
-        ];
-
-        let navigationFormElements = [
-            [
-                {
-                    'field':'name',
-                    'type':'text',
-                    'label':'Name',
-                    'required':true
-                },
-                {
-                    'field':'page',
-                    'type':'select',
-                    'label':'Page',
-                    'required':false,
-                    'placeholder': 'N/A',
-                    'option': {
-                        'ajax': true,
-                        'data_model_name': 'KytePage',
-                        'data_model_field': 'site',
-                        'data_model_value': idx,
-                        'data_model_attributes': ['title', 's3key'],
-                        'data_model_default_field': 'id',
-                        // 'data_model_default_value': 1,
-                    }
-                },
-            ],
-            [
-                {
-                    'field':'link',
-                    'type':'text',
-                    'label':'Link URL (optional if page or logout is set)',
-                    'required':false
-                },
-            ],
-            [
-                {
-                    'field':'logo',
-                    'type':'text',
-                    'label':'Logo URL',
-                    'required':false
-                },
-            ],
-            [
-                {
-                    'field':'description',
-                    'type':'textarea',
-                    'label':'Description',
-                    'required':false
-                }
-            ]
         ];
 
         let sideNavigationFormElements = [
@@ -430,16 +379,6 @@ document.addEventListener('KyteInitialized', function(e) {
                 var modalFormMedia = new KyteForm(_ks, $("#modalFormMedia"), 'Media', hidden, mediaElements, 'Media', tblMedia, true, $("#newMedia"));
                 modalFormMedia.init();
                 tblMedia.bindEdit(modalFormMedia);
-
-                // navigation
-                var tblNavigation = new KyteTable(_ks, $("#navigation-table"), {'name':"Navigation",'field':'site','value':idx}, colDefNavigation, true, [0,"asc"], true, true, 'id', '/app/site/navigation.html');
-                tblNavigation.initComplete = function() {
-                    $('#pageLoaderModal').modal('hide');
-                }
-                tblNavigation.init();
-                var modalFormNavigation = new KyteForm(_ks, $("#modalFormNavigation"), 'Navigation', hidden, navigationFormElements, 'Navigation', tblNavigation, true, $("#createNavigation"));
-                modalFormNavigation.init();
-                tblNavigation.bindEdit(modalFormNavigation);
 
                 // side navigation
                 var tblSideNav = new KyteTable(_ks, $("#side-navigation-table"), {'name':"SideNav",'field':'site','value':idx}, colDefSideNavigation, true, [0,"asc"], true, true, 'id', '/app/site/sidenav.html');
@@ -587,6 +526,17 @@ document.addEventListener('KyteInitialized', function(e) {
                 // Show corresponding section
                 document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
                 document.getElementById(section).classList.add('active');
+                
+                // Special handling for Navigation section
+                if (section === 'Navigation') {
+                    // Ensure navigation data is loaded when section is first viewed
+                    if (!currentNavigationData) {
+                        const selector = document.getElementById('navigation-selector');
+                        if (selector && selector.value) {
+                            loadNavigationData(_ks, selector.value);
+                        }
+                    }
+                }
             });
         });
 
@@ -958,6 +908,461 @@ document.addEventListener('KyteInitialized', function(e) {
         }
 
         setupEnhancedDomainEventListeners();
+
+        // Navigation Management code
+        // Initialize Navigation Management
+        function initializeNavigationManagement(_ks, siteId) {
+            // Load site pages for dropdown population
+            _ks.get('KytePage', 'site', siteId, [], function(r) {
+                if (r.data && r.data.length > 0) {
+                    currentSitePages = r.data;
+                }
+                loadNavigationMenus(_ks, siteId);
+            });
+
+            // Setup navigation event handlers
+            setupNavigationEventHandlers(_ks, siteId);
+        }
+
+        // Load available navigation menus
+        function loadNavigationMenus(_ks, siteId) {
+            _ks.get('Navigation', 'site', siteId, [], function(r) {
+                const selector = document.getElementById('navigation-selector');
+                selector.innerHTML = '<option value="">Create new navigation (or select one from below)...</option>';
+                
+                if (r.data && r.data.length > 0) {
+                    r.data.forEach(nav => {
+                        const option = document.createElement('option');
+                        option.value = nav.id;
+                        option.textContent = nav.name;
+                        selector.appendChild(option);
+                    });
+                    
+                    // Auto-select first navigation if only one exists
+                    if (r.data.length === 1) {
+                        selector.value = r.data[0].id;
+                        loadNavigationData(_ks, r.data[0].id);
+                    }
+                } else {
+                    selector.innerHTML = '<option value="">No navigation menus found</option>';
+                }
+            });
+        }
+
+        // Load navigation data and items
+        function loadNavigationData(_ks, navigationId) {
+            if (!navigationId) {
+                showNoNavigationSelected();
+                return;
+            }
+
+            _ks.get('Navigation', 'id', navigationId, [], function(r) {
+                if (r.data && r.data.length > 0) {
+                    currentNavigationData = r.data[0];
+                    
+                    // Update styles form
+                    updateNavigationStylesForm(currentNavigationData);
+                    
+                    // Load navigation items
+                    loadNavigationItems(_ks, navigationId);
+                    
+                    // Show navigation container
+                    document.getElementById('navigation-items-container').style.display = 'block';
+                    document.getElementById('no-navigation-selected').style.display = 'none';
+                    document.getElementById('current-navigation-name').textContent = currentNavigationData.name;
+                }
+            });
+        }
+
+        // Load navigation items
+        function loadNavigationItems(_ks, navigationId) {
+            _ks.get('NavigationItem', 'navigation', navigationId, [], function(r) {
+                navigationItems = r.data || [];
+                renderNavigationItems();
+                
+                if (navigationItems.length === 0) {
+                    document.getElementById('navigation-empty-state').style.display = 'block';
+                } else {
+                    document.getElementById('navigation-empty-state').style.display = 'none';
+                }
+            });
+        }
+
+        // Render navigation items
+        function renderNavigationItems() {
+            const container = document.getElementById('sortable-navigation-items');
+            container.innerHTML = '';
+            
+            // Sort items by itemOrder
+            navigationItems.sort((a, b) => (a.itemOrder || 0) - (b.itemOrder || 0));
+            
+            navigationItems.forEach(item => {
+                const itemElement = createNavigationItemElement(item);
+                container.appendChild(itemElement);
+            });
+            
+            // Initialize sortable if jQuery UI is available
+            if (typeof $ !== 'undefined' && $.fn.sortable) {
+                $("#sortable-navigation-items").sortable({
+                    handle: '.fa-grip-vertical',
+                    update: function(event, ui) {
+                        updateNavigationItemOrder();
+                    }
+                });
+            }
+        }
+
+        // Create navigation item element
+        function createNavigationItemElement(item) {
+            const template = document.getElementById('navigation-item-template');
+            const clone = template.content.cloneNode(true);
+            const listItem = clone.querySelector('.navigation-item');
+            
+            // Set data attribute
+            listItem.setAttribute('data-nav-item-id', item.id);
+            
+            // Populate form fields
+            clone.querySelector('.nav-item-title').value = item.title || '';
+            clone.querySelector('.nav-item-icon').value = item.faicon || '';
+            clone.querySelector('.nav-item-element-id').value = item.element_id || '';
+            clone.querySelector('.nav-item-element-class').value = item.element_class || '';
+            clone.querySelector('.nav-item-position').value = item.center || '1';
+            
+            // Set link type and show/hide appropriate fields
+            const linkType = determineItemLinkType(item);
+            clone.querySelector('.nav-item-type').value = linkType;
+            
+            // Populate pages dropdown
+            const pageSelect = clone.querySelector('.nav-item-page');
+            pageSelect.innerHTML = '<option value="">Select a page...</option>';
+            currentSitePages.forEach(page => {
+                const option = document.createElement('option');
+                option.value = page.id;
+                option.textContent = `${page.title} [/${page.s3key}]`;
+                if (item.page && item.page.id === page.id) {
+                    option.selected = true;
+                }
+                pageSelect.appendChild(option);
+            });
+            
+            // Populate parent items dropdown
+            const parentSelect = clone.querySelector('.nav-item-parent');
+            parentSelect.innerHTML = '<option value="0">No Parent (Top Level)</option>';
+            navigationItems.forEach(navItem => {
+                if (navItem.id !== item.id) { // Don't allow self as parent
+                    const option = document.createElement('option');
+                    option.value = navItem.id;
+                    option.textContent = navItem.title;
+                    if (item.parentItem && item.parentItem.id === navItem.id) {
+                        option.selected = true;
+                    }
+                    parentSelect.appendChild(option);
+                }
+            });
+            
+            // Set link value if custom link
+            if (linkType === 'link') {
+                clone.querySelector('.nav-item-link').value = item.link || '';
+            }
+            
+            // Show/hide appropriate fields based on type
+            toggleNavigationItemFields(clone, linkType);
+            
+            return clone;
+        }
+
+        // Determine item link type
+        function determineItemLinkType(item) {
+            if (item.isLogout) return 'logout';
+            if (item.page) return 'page';
+            return 'link';
+        }
+
+        // Toggle navigation item fields based on type
+        function toggleNavigationItemFields(element, type) {
+            const pageWrapper = element.querySelector('.nav-item-page-wrapper');
+            const linkWrapper = element.querySelector('.nav-item-link-wrapper');
+            
+            switch(type) {
+                case 'page':
+                    pageWrapper.style.display = 'block';
+                    linkWrapper.style.display = 'none';
+                    break;
+                case 'link':
+                    pageWrapper.style.display = 'none';
+                    linkWrapper.style.display = 'block';
+                    break;
+                case 'logout':
+                    pageWrapper.style.display = 'none';
+                    linkWrapper.style.display = 'none';
+                    break;
+            }
+        }
+
+        // Update navigation styles form
+        function updateNavigationStylesForm(navData) {
+            document.getElementById('nav-sticky-top').value = navData.isStickyTop || '1';
+            document.getElementById('nav-bg-color').value = navData.bgColor || '#343a40';
+            document.getElementById('nav-text-color').value = navData.fgColor || '#ffffff';
+            document.getElementById('nav-dropdown-bg-color').value = navData.bgDropdownColor || '#ffffff';
+            document.getElementById('nav-dropdown-text-color').value = navData.fgDropdownColor || '#212529';
+            
+            // Update preview
+            updateNavigationPreview();
+        }
+
+        // Update navigation preview
+        function updateNavigationPreview() {
+            const navbar = document.getElementById('preview-navbar');
+            const bgColor = document.getElementById('nav-bg-color').value;
+            const textColor = document.getElementById('nav-text-color').value;
+            const dropdownBg = document.getElementById('nav-dropdown-bg-color').value;
+            const dropdownText = document.getElementById('nav-dropdown-text-color').value;
+            
+            // Apply styles to preview
+            navbar.style.backgroundColor = bgColor;
+            navbar.querySelectorAll('.navbar-brand, .nav-link').forEach(el => {
+                el.style.color = textColor;
+            });
+            navbar.querySelectorAll('.dropdown-menu').forEach(el => {
+                el.style.backgroundColor = dropdownBg;
+            });
+            navbar.querySelectorAll('.dropdown-item').forEach(el => {
+                el.style.color = dropdownText;
+            });
+        }
+
+        // Setup navigation event handlers
+        function setupNavigationEventHandlers(_ks, siteId) {
+            // Navigation selector change
+            document.getElementById('navigation-selector').addEventListener('change', function() {
+                const navigationId = this.value;
+                if (navigationId) {
+                    loadNavigationData(_ks, navigationId);
+                } else {
+                    showNoNavigationSelected();
+                }
+            });
+
+            // Add navigation item button
+            document.getElementById('addNavigationItem').addEventListener('click', function() {
+                if (!currentNavigationData) {
+                    alert('Please select a navigation menu first.');
+                    return;
+                }
+                addNavigationItem(_ks);
+            });
+
+            // Create new navigation button
+            document.getElementById('create-new-navigation').addEventListener('click', function() {
+                createNewNavigation(_ks, siteId);
+            });
+
+            // Publish navigation button
+            document.getElementById('publishNavigation').addEventListener('click', function() {
+                if (!currentNavigationData) {
+                    alert('Please select a navigation menu first.');
+                    return;
+                }
+                publishNavigationStyles(_ks);
+            });
+
+            // Color input changes for live preview
+            ['nav-bg-color', 'nav-text-color', 'nav-dropdown-bg-color', 'nav-dropdown-text-color'].forEach(id => {
+                document.getElementById(id).addEventListener('change', updateNavigationPreview);
+            });
+
+            // Event delegation for navigation item controls
+            document.getElementById('sortable-navigation-items').addEventListener('change', handleNavigationItemChange.bind(null, _ks));
+            document.getElementById('sortable-navigation-items').addEventListener('click', handleNavigationItemClick.bind(null, _ks));
+        }
+
+        // Handle navigation item form changes
+        function handleNavigationItemChange(_ks, event) {
+            const target = event.target;
+            const listItem = target.closest('.navigation-item');
+            const itemId = listItem.getAttribute('data-nav-item-id');
+            
+            if (!itemId) return;
+
+            let updateData = {};
+            
+            if (target.classList.contains('nav-item-title')) {
+                updateData.title = target.value;
+            } else if (target.classList.contains('nav-item-type')) {
+                const linkType = target.value;
+                toggleNavigationItemFields(listItem, linkType);
+                
+                switch(linkType) {
+                    case 'page':
+                        updateData.isLogout = 0;
+                        updateData.link = null;
+                        break;
+                    case 'link':
+                        updateData.isLogout = 0;
+                        updateData.page = null;
+                        break;
+                    case 'logout':
+                        updateData.isLogout = 1;
+                        updateData.page = null;
+                        updateData.link = null;
+                        break;
+                }
+            } else if (target.classList.contains('nav-item-page')) {
+                updateData.page = target.value || null;
+                updateData.link = null;
+            } else if (target.classList.contains('nav-item-link')) {
+                updateData.link = target.value;
+                updateData.page = null;
+            } else if (target.classList.contains('nav-item-parent')) {
+                updateData.parentItem = target.value === '0' ? null : target.value;
+            } else if (target.classList.contains('nav-item-position')) {
+                updateData.center = target.value;
+            } else if (target.classList.contains('nav-item-icon')) {
+                updateData.faicon = target.value;
+            } else if (target.classList.contains('nav-item-element-id')) {
+                updateData.element_id = target.value;
+            } else if (target.classList.contains('nav-item-element-class')) {
+                updateData.element_class = target.value;
+            }
+            
+            // Update the item
+            if (Object.keys(updateData).length > 0) {
+                _ks.put('NavigationItem', 'id', itemId, updateData, null, []);
+            }
+        }
+
+        // Handle navigation item clicks (delete button)
+        function handleNavigationItemClick(_ks, event) {
+            if (event.target.closest('.delete-nav-item')) {
+                event.preventDefault();
+                const listItem = event.target.closest('.navigation-item');
+                const itemId = listItem.getAttribute('data-nav-item-id');
+                
+                if (confirm('Are you sure you want to delete this navigation item?')) {
+                    deleteNavigationItem(_ks, itemId, listItem);
+                }
+            }
+        }
+
+        // Add new navigation item
+        function addNavigationItem(_ks) {
+            const newItemData = {
+                title: 'New Navigation Item',
+                navigation: currentNavigationData.id,
+                site: currentNavigationData.site.id,
+                itemOrder: navigationItemCount++
+            };
+            
+            _ks.post('NavigationItem', newItemData, null, [], function(r) {
+                if (r.data && r.data.length > 0) {
+                    navigationItems.push(r.data[0]);
+                    renderNavigationItems();
+                    document.getElementById('navigation-empty-state').style.display = 'none';
+                } else {
+                    alert('Failed to create navigation item.');
+                }
+            });
+        }
+
+        // Delete navigation item
+        function deleteNavigationItem(_ks, itemId, listItem) {
+            _ks.delete('NavigationItem', 'id', itemId, [], function(r) {
+                // Remove from local array
+                navigationItems = navigationItems.filter(item => item.id !== parseInt(itemId));
+                
+                // Remove from DOM
+                listItem.remove();
+                
+                // Show empty state if no items left
+                if (navigationItems.length === 0) {
+                    document.getElementById('navigation-empty-state').style.display = 'block';
+                }
+            }, function(err) {
+                alert('Unable to delete navigation item: ' + err);
+            });
+        }
+
+        // Update navigation item order after drag/drop
+        function updateNavigationItemOrder() {
+            const items = document.querySelectorAll('.navigation-item');
+            const updates = [];
+            
+            items.forEach((item, index) => {
+                const itemId = item.getAttribute('data-nav-item-id');
+                if (itemId) {
+                    updates.push({
+                        id: parseInt(itemId),
+                        itemOrder: index
+                    });
+                }
+            });
+            
+            if (updates.length > 0) {
+                // Use the same API pattern as the original code
+                if (typeof _ks !== 'undefined') {
+                    _ks.put('NavItems', 'NavigationItem', updates.length, {navitems: updates}, null, []);
+                }
+            }
+        }
+
+        // Create new navigation menu
+        function createNewNavigation(_ks, siteId) {
+            const name = prompt('Enter navigation menu name:');
+            if (!name) return;
+            
+            const newNavData = {
+                name: name,
+                site: siteId,
+                bgColor: '#343a40',
+                fgColor: '#ffffff',
+                bgDropdownColor: '#ffffff',
+                fgDropdownColor: '#212529',
+                isStickyTop: 1
+            };
+            
+            _ks.post('Navigation', newNavData, null, [], function(r) {
+                if (r.data && r.data.length > 0) {
+                    // Reload navigation menus and select the new one
+                    loadNavigationMenus(_ks, siteId);
+                    setTimeout(() => {
+                        document.getElementById('navigation-selector').value = r.data[0].id;
+                        loadNavigationData(_ks, r.data[0].id);
+                    }, 100);
+                } else {
+                    alert('Failed to create navigation menu.');
+                }
+            });
+        }
+
+        // Publish navigation styles
+        function publishNavigationStyles(_ks) {
+            const updateData = {
+                bgColor: document.getElementById('nav-bg-color').value,
+                fgColor: document.getElementById('nav-text-color').value,
+                bgDropdownColor: document.getElementById('nav-dropdown-bg-color').value,
+                fgDropdownColor: document.getElementById('nav-dropdown-text-color').value,
+                isStickyTop: document.getElementById('nav-sticky-top').value
+            };
+            
+            _ks.put('Navigation', 'id', currentNavigationData.id, updateData, null, [], function(r) {
+                if (r.data && r.data.length > 0) {
+                    alert('Navigation styles published successfully!');
+                    currentNavigationData = {...currentNavigationData, ...updateData};
+                } else {
+                    alert('Failed to publish navigation styles.');
+                }
+            });
+        }
+
+        // Show no navigation selected state
+        function showNoNavigationSelected() {
+            document.getElementById('navigation-items-container').style.display = 'none';
+            document.getElementById('no-navigation-selected').style.display = 'block';
+            currentNavigationData = null;
+        }
+
+        initializeNavigationManagement(_ks, idx);
 
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
