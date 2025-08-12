@@ -12,6 +12,13 @@ let currentSitePages = [];
 let navigationItems = [];
 let navigationItemCount = 1;
 
+// Side Navigation Management Variables
+let currentSideNavData = null;
+let sideNavItems = [];
+let sideNavItemCount = 1;
+let currentColumnStyle = 0;
+let currentNavItemStyle = 0;
+
 let scriptElement = [
     [
         {
@@ -216,11 +223,6 @@ let colDefMedia = [
     {'targets':1,'data':'s3key','label':'Path', render: function(data, type, row, meta) { if (row.site.cfMediaDomain) return 'https://'+row.site.cfMediaDomain+'/'+data; else return '/'+data; }}
 ];
 
-let colDefSideNavigation = [
-    {'targets':0,'data':'name','label':'Name'},
-    {'targets':1,'data':'description','label':'Description'},
-];
-
 // table def
 let colDefScript = [
     {'targets':0,'data':'name','label':'Name'},
@@ -261,25 +263,6 @@ document.addEventListener('KyteInitialized', function(e) {
                 'name': 'site',
                 'value': idx
             }
-        ];
-
-        let sideNavigationFormElements = [
-            [
-                {
-                    'field':'name',
-                    'type':'text',
-                    'label':'Name',
-                    'required':true
-                }
-            ],
-            [
-                {
-                    'field':'description',
-                    'type':'textarea',
-                    'label':'Description',
-                    'required':false
-                }
-            ]
         ];
 
         _ks.get("KyteSite", "id", idx, [], function(r) {
@@ -380,17 +363,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 modalFormMedia.init();
                 tblMedia.bindEdit(modalFormMedia);
 
-                // side navigation
-                var tblSideNav = new KyteTable(_ks, $("#side-navigation-table"), {'name':"SideNav",'field':'site','value':idx}, colDefSideNavigation, true, [0,"asc"], true, true, 'id', '/app/site/sidenav.html');
-                tblSideNav.initComplete = function() {
-                    $('#pageLoaderModal').modal('hide');
-                }
-                tblSideNav.init();
-                var modalFormSideNav = new KyteForm(_ks, $("#modalFormSideNav"), 'SideNav', hidden, sideNavigationFormElements, 'Navigation', tblSideNav, true, $("#createSideNavigation"));
-                modalFormSideNav.init();
-                tblSideNav.bindEdit(modalFormSideNav);
-
-                // side navigation
+                // sections
                 var tblSections = new KyteTable(_ks, $("#sections-table"), {'name':'KyteSectionTemplate','field':'site','value':idx}, colDefSections, true, [0,"asc"], true, true, 'id', '/app/section/');
                 tblSections.initComplete = function() {
                     $('#pageLoaderModal').modal('hide');
@@ -527,13 +500,21 @@ document.addEventListener('KyteInitialized', function(e) {
                 document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
                 document.getElementById(section).classList.add('active');
                 
-                // Special handling for Navigation section
+                // Special handling for Navigation and SideNav sections
                 if (section === 'Navigation') {
                     // Ensure navigation data is loaded when section is first viewed
                     if (!currentNavigationData) {
                         const selector = document.getElementById('navigation-selector');
                         if (selector && selector.value) {
                             loadNavigationData(_ks, selector.value);
+                        }
+                    }
+                } else if (section === 'SideNav') {
+                    // Ensure side navigation data is loaded when section is first viewed
+                    if (!currentSideNavData) {
+                        const selector = document.getElementById('sidenav-selector');
+                        if (selector && selector.value) {
+                            loadSideNavigationData(_ks, selector.value);
                         }
                     }
                 }
@@ -928,7 +909,7 @@ document.addEventListener('KyteInitialized', function(e) {
         function loadNavigationMenus(_ks, siteId) {
             _ks.get('Navigation', 'site', siteId, [], function(r) {
                 const selector = document.getElementById('navigation-selector');
-                selector.innerHTML = '<option value="">Create new navigation (or select one from below)...</option>';
+                selector.innerHTML = '<option value="">Create a new navigation menu (or select one from this dropdown)...</option>';
                 
                 if (r.data && r.data.length > 0) {
                     r.data.forEach(nav => {
@@ -1363,6 +1344,616 @@ document.addEventListener('KyteInitialized', function(e) {
         }
 
         initializeNavigationManagement(_ks, idx);
+
+        // Initialize Side Navigation Management
+        function initializeSideNavigationManagement(_ks, siteId) {
+            // Load side navigation menus
+            loadSideNavigationMenus(_ks, siteId);
+            
+            // Setup side navigation event handlers
+            setupSideNavigationEventHandlers(_ks, siteId);
+        }
+
+        // Load available side navigation menus
+        function loadSideNavigationMenus(_ks, siteId) {
+            _ks.get('SideNav', 'site', siteId, [], function(r) {
+                const selector = document.getElementById('sidenav-selector');
+                selector.innerHTML = '<option value="">Create a new side navigation menu (or select one from this dropdown)...</option>';
+                
+                if (r.data && r.data.length > 0) {
+                    r.data.forEach(sidenav => {
+                        const option = document.createElement('option');
+                        option.value = sidenav.id;
+                        option.textContent = sidenav.name;
+                        selector.appendChild(option);
+                    });
+                    
+                    // Auto-select first side navigation if only one exists
+                    if (r.data.length === 1) {
+                        selector.value = r.data[0].id;
+                        loadSideNavigationData(_ks, r.data[0].id);
+                    }
+                } else {
+                    selector.innerHTML = '<option value="">No side navigation menus found</option>';
+                }
+            });
+        }
+
+        // Load side navigation data and items
+        function loadSideNavigationData(_ks, sideNavId) {
+            if (!sideNavId) {
+                showNoSideNavSelected();
+                return;
+            }
+
+            _ks.get('SideNav', 'id', sideNavId, [], function(r) {
+                if (r.data && r.data.length > 0) {
+                    currentSideNavData = r.data[0];
+                    
+                    // Update styles form
+                    updateSideNavigationStylesForm(currentSideNavData);
+                    
+                    // Load side navigation items
+                    loadSideNavigationItems(_ks, sideNavId);
+                    
+                    // Show side navigation container
+                    document.getElementById('sidenav-items-container').style.display = 'block';
+                    document.getElementById('no-sidenav-selected').style.display = 'none';
+                    document.getElementById('current-sidenav-name').textContent = currentSideNavData.name;
+                }
+            });
+        }
+
+        // Load side navigation items
+        function loadSideNavigationItems(_ks, sideNavId) {
+            _ks.get('SideNavItem', 'sidenav', sideNavId, [], function(r) {
+                sideNavItems = r.data || [];
+                renderSideNavigationItems();
+                
+                if (sideNavItems.length === 0) {
+                    document.getElementById('sidenav-empty-state').style.display = 'block';
+                } else {
+                    document.getElementById('sidenav-empty-state').style.display = 'none';
+                }
+            });
+        }
+
+        // Render side navigation items
+        function renderSideNavigationItems() {
+            const container = document.getElementById('sortable-sidenav-items');
+            container.innerHTML = '';
+            
+            // Sort items by itemOrder
+            sideNavItems.sort((a, b) => (a.itemOrder || 0) - (b.itemOrder || 0));
+            
+            sideNavItems.forEach(item => {
+                const itemElement = createSideNavigationItemElement(item);
+                container.appendChild(itemElement);
+            });
+            
+            // Initialize sortable if jQuery UI is available
+            if (typeof $ !== 'undefined' && $.fn.sortable) {
+                $("#sortable-sidenav-items").sortable({
+                    handle: '.fa-grip-vertical',
+                    update: function(event, ui) {
+                        updateSideNavigationItemOrder();
+                    }
+                });
+            }
+        }
+
+        // Create side navigation item element
+        function createSideNavigationItemElement(item) {
+            const template = document.getElementById('sidenav-item-template');
+            const clone = template.content.cloneNode(true);
+            const listItem = clone.querySelector('.sidenav-item');
+            
+            // Set data attribute
+            listItem.setAttribute('data-sidenav-item-id', item.id);
+            
+            // Populate form fields
+            clone.querySelector('.sidenav-item-title').value = item.title || '';
+            clone.querySelector('.sidenav-item-icon').value = item.faicon || '';
+            clone.querySelector('.sidenav-item-element-id').value = item.element_id || '';
+            clone.querySelector('.sidenav-item-element-class').value = item.element_class || '';
+            
+            // Set link type and show/hide appropriate fields
+            const linkType = determineSideNavItemLinkType(item);
+            clone.querySelector('.sidenav-item-type').value = linkType;
+            
+            // Populate pages dropdown
+            const pageSelect = clone.querySelector('.sidenav-item-page');
+            pageSelect.innerHTML = '<option value="">Select a page...</option>';
+            currentSitePages.forEach(page => {
+                const option = document.createElement('option');
+                option.value = page.id;
+                option.textContent = `${page.title} [/${page.s3key}]`;
+                if (item.page && item.page.id === page.id) {
+                    option.selected = true;
+                }
+                pageSelect.appendChild(option);
+            });
+            
+            // Set link value if custom link
+            if (linkType === 'link') {
+                clone.querySelector('.sidenav-item-link').value = item.link || '';
+            }
+            
+            // Show/hide appropriate fields based on type
+            toggleSideNavigationItemFields(clone, linkType);
+            
+            return clone;
+        }
+
+        // Determine side nav item link type
+        function determineSideNavItemLinkType(item) {
+            if (item.isLogout) return 'logout';
+            if (item.page) return 'page';
+            return 'link';
+        }
+
+        // Toggle side navigation item fields based on type
+        function toggleSideNavigationItemFields(element, type) {
+            const pageWrapper = element.querySelector('.sidenav-item-page-wrapper');
+            const linkWrapper = element.querySelector('.sidenav-item-link-wrapper');
+            
+            switch(type) {
+                case 'page':
+                    pageWrapper.style.display = 'block';
+                    linkWrapper.style.display = 'none';
+                    break;
+                case 'link':
+                    pageWrapper.style.display = 'none';
+                    linkWrapper.style.display = 'block';
+                    break;
+                case 'logout':
+                    pageWrapper.style.display = 'none';
+                    linkWrapper.style.display = 'none';
+                    break;
+            }
+        }
+
+        // Update side navigation styles form
+        function updateSideNavigationStylesForm(sideNavData) {
+            // Set color values
+            document.getElementById('sidenav-bg-color').value = sideNavData.bgColor || '#343a40';
+            document.getElementById('sidenav-text-color').value = sideNavData.fgColor || '#ffffff';
+            document.getElementById('sidenav-active-bg-color').value = sideNavData.bgActiveColor || '#007bff';
+            document.getElementById('sidenav-active-text-color').value = sideNavData.fgActiveColor || '#ffffff';
+            
+            // Set style selections
+            currentColumnStyle = sideNavData.columnStyle || 0;
+            currentNavItemStyle = sideNavData.labelCenterBlock || 0;
+            
+            // Update radio buttons
+            const columnStyleRadio = document.querySelector(`input[name="columnStyle"][value="${currentColumnStyle}"]`);
+            if (columnStyleRadio) columnStyleRadio.checked = true;
+            
+            const navItemStyleRadio = document.querySelector(`input[name="navItemStyle"][value="${currentNavItemStyle}"]`);
+            if (navItemStyleRadio) navItemStyleRadio.checked = true;
+            
+            // Update layout option selections visually
+            document.querySelectorAll('.layout-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            const selectedLayout = document.querySelector(`[data-column-style="${currentColumnStyle}"]`);
+            if (selectedLayout) selectedLayout.classList.add('selected');
+            
+            document.querySelectorAll('.nav-item-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            const selectedNavItem = document.querySelector(`[data-nav-item-style="${currentNavItemStyle}"]`);
+            if (selectedNavItem) selectedNavItem.classList.add('selected');
+            
+            // Update preview
+            updateSideNavigationPreview();
+        }
+
+        // Update side navigation preview
+        function updateSideNavigationPreview() {
+            const preview = document.getElementById('preview-sidenav');
+            const bgColor = document.getElementById('sidenav-bg-color').value;
+            const textColor = document.getElementById('sidenav-text-color').value;
+            const activeBgColor = document.getElementById('sidenav-active-bg-color').value;
+            const activeTextColor = document.getElementById('sidenav-active-text-color').value;
+            
+            // Apply background to container
+            const container = document.getElementById('sidenav-preview');
+            container.style.backgroundColor = bgColor;
+            
+            // Apply styles to nav links
+            preview.querySelectorAll('.nav-link').forEach(link => {
+                link.style.color = textColor;
+                link.style.borderColor = 'transparent';
+                
+                if (link.classList.contains('active')) {
+                    link.style.backgroundColor = activeBgColor;
+                    link.style.color = activeTextColor;
+                } else {
+                    link.style.backgroundColor = 'transparent';
+                }
+            });
+            
+            // Apply nav item style (icon positioning)
+            preview.querySelectorAll('.nav-link').forEach(link => {
+                if (currentNavItemStyle === 1) {
+                    // Centered - icon above text
+                    link.style.flexDirection = 'column';
+                    link.style.textAlign = 'center';
+                    link.style.alignItems = 'center';
+                } else {
+                    // Left aligned - icon next to text
+                    link.style.flexDirection = 'row';
+                    link.style.textAlign = 'left';
+                    link.style.alignItems = 'center';
+                }
+            });
+        }
+
+        // Setup side navigation event handlers
+        function setupSideNavigationEventHandlers(_ks, siteId) {
+            // Side navigation selector change
+            document.getElementById('sidenav-selector').addEventListener('change', function() {
+                const sideNavId = this.value;
+                if (sideNavId) {
+                    loadSideNavigationData(_ks, sideNavId);
+                } else {
+                    showNoSideNavSelected();
+                }
+            });
+
+            // Add side navigation item button
+            document.getElementById('addSideNavigationItem').addEventListener('click', function() {
+                if (!currentSideNavData) {
+                    alert('Please select a side navigation menu first.');
+                    return;
+                }
+                addSideNavigationItem(_ks);
+            });
+
+            // Create new side navigation button
+            document.getElementById('create-new-sidenav').addEventListener('click', function() {
+                createNewSideNavigation(_ks, siteId);
+            });
+
+            // Publish side navigation button
+            document.getElementById('publishSideNavigation').addEventListener('click', function() {
+                if (!currentSideNavData) {
+                    alert('Please select a side navigation menu first.');
+                    return;
+                }
+                publishSideNavigationStyles(_ks);
+            });
+
+            // Color input changes for live preview
+            ['sidenav-bg-color', 'sidenav-text-color', 'sidenav-active-bg-color', 'sidenav-active-text-color'].forEach(id => {
+                document.getElementById(id).addEventListener('change', updateSideNavigationPreview);
+            });
+
+            // Layout style selection
+            document.addEventListener('change', function(event) {
+                if (event.target.name === 'columnStyle') {
+                    currentColumnStyle = parseInt(event.target.value);
+                    // Update visual selection
+                    document.querySelectorAll('.layout-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    const selectedLayout = document.querySelector(`[data-column-style="${currentColumnStyle}"]`);
+                    if (selectedLayout) selectedLayout.classList.add('selected');
+                }
+                
+                if (event.target.name === 'navItemStyle') {
+                    currentNavItemStyle = parseInt(event.target.value);
+                    // Update visual selection
+                    document.querySelectorAll('.nav-item-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    const selectedNavItem = document.querySelector(`[data-nav-item-style="${currentNavItemStyle}"]`);
+                    if (selectedNavItem) selectedNavItem.classList.add('selected');
+                    
+                    // Update preview
+                    updateSideNavigationPreview();
+                }
+            });
+
+            // Event delegation for side navigation item controls
+            document.getElementById('sortable-sidenav-items').addEventListener('change', handleSideNavigationItemChange.bind(null, _ks));
+            document.getElementById('sortable-sidenav-items').addEventListener('click', handleSideNavigationItemClick.bind(null, _ks));
+        }
+
+        // Handle side navigation item form changes
+        function handleSideNavigationItemChange(_ks, event) {
+            const target = event.target;
+            const listItem = target.closest('.sidenav-item');
+            const itemId = listItem.getAttribute('data-sidenav-item-id');
+            
+            if (!itemId) return;
+
+            let updateData = {};
+            
+            if (target.classList.contains('sidenav-item-title')) {
+                updateData.title = target.value;
+            } else if (target.classList.contains('sidenav-item-type')) {
+                const linkType = target.value;
+                toggleSideNavigationItemFields(listItem, linkType);
+                
+                switch(linkType) {
+                    case 'page':
+                        updateData.isLogout = 0;
+                        updateData.link = null;
+                        break;
+                    case 'link':
+                        updateData.isLogout = 0;
+                        updateData.page = null;
+                        break;
+                    case 'logout':
+                        updateData.isLogout = 1;
+                        updateData.page = null;
+                        updateData.link = null;
+                        break;
+                }
+            } else if (target.classList.contains('sidenav-item-page')) {
+                updateData.page = target.value || null;
+                updateData.link = null;
+            } else if (target.classList.contains('sidenav-item-link')) {
+                updateData.link = target.value;
+                updateData.page = null;
+            } else if (target.classList.contains('sidenav-item-icon')) {
+                updateData.faicon = target.value;
+            } else if (target.classList.contains('sidenav-item-element-id')) {
+                updateData.element_id = target.value;
+            } else if (target.classList.contains('sidenav-item-element-class')) {
+                updateData.element_class = target.value;
+            }
+            
+            // Update the item
+            if (Object.keys(updateData).length > 0) {
+                _ks.put('SideNavItem', 'id', itemId, updateData, null, []);
+            }
+        }
+
+        // Handle side navigation item clicks (delete button)
+        function handleSideNavigationItemClick(_ks, event) {
+            if (event.target.closest('.delete-sidenav-item')) {
+                event.preventDefault();
+                const listItem = event.target.closest('.sidenav-item');
+                const itemId = listItem.getAttribute('data-sidenav-item-id');
+                
+                if (confirm('Are you sure you want to delete this side navigation item?')) {
+                    deleteSideNavigationItem(_ks, itemId, listItem);
+                }
+            }
+        }
+
+        // Add new side navigation item
+        function addSideNavigationItem(_ks) {
+            const newItemData = {
+                title: 'New Side Nav Item',
+                sidenav: currentSideNavData.id,
+                site: currentSideNavData.site.id,
+                itemOrder: sideNavItemCount++
+            };
+            
+            _ks.post('SideNavItem', newItemData, null, [], function(r) {
+                if (r.data && r.data.length > 0) {
+                    sideNavItems.push(r.data[0]);
+                    renderSideNavigationItems();
+                    document.getElementById('sidenav-empty-state').style.display = 'none';
+                } else {
+                    alert('Failed to create side navigation item.');
+                }
+            });
+        }
+
+        // Delete side navigation item
+        function deleteSideNavigationItem(_ks, itemId, listItem) {
+            _ks.delete('SideNavItem', 'id', itemId, [], function(r) {
+                // Remove from local array
+                sideNavItems = sideNavItems.filter(item => item.id !== parseInt(itemId));
+                
+                // Remove from DOM
+                listItem.remove();
+                
+                // Show empty state if no items left
+                if (sideNavItems.length === 0) {
+                    document.getElementById('sidenav-empty-state').style.display = 'block';
+                }
+            }, function(err) {
+                alert('Unable to delete side navigation item: ' + err);
+            });
+        }
+
+        // Update side navigation item order after drag/drop
+        function updateSideNavigationItemOrder() {
+            const items = document.querySelectorAll('.sidenav-item');
+            const updates = [];
+            
+            items.forEach((item, index) => {
+                const itemId = item.getAttribute('data-sidenav-item-id');
+                if (itemId) {
+                    updates.push({
+                        id: parseInt(itemId),
+                        itemOrder: index
+                    });
+                }
+            });
+            
+            if (updates.length > 0) {
+                // Use the same API pattern as the original code
+                if (typeof _ks !== 'undefined') {
+                    _ks.put('NavItems', 'SideNavItem', updates.length, {navitems: updates}, null, []);
+                }
+            }
+        }
+
+        // Create new side navigation menu
+        function createNewSideNavigation(_ks, siteId) {
+            const name = prompt('Enter side navigation menu name:');
+            if (!name) return;
+            
+            const newSideNavData = {
+                name: name,
+                site: siteId,
+                bgColor: '#343a40',
+                fgColor: '#ffffff',
+                bgActiveColor: '#007bff',
+                fgActiveColor: '#ffffff',
+                columnStyle: 0,
+                labelCenterBlock: 0
+            };
+            
+            _ks.post('SideNav', newSideNavData, null, [], function(r) {
+                if (r.data && r.data.length > 0) {
+                    // Reload side navigation menus and select the new one
+                    loadSideNavigationMenus(_ks, siteId);
+                    setTimeout(() => {
+                        document.getElementById('sidenav-selector').value = r.data[0].id;
+                        loadSideNavigationData(_ks, r.data[0].id);
+                    }, 100);
+                } else {
+                    alert('Failed to create side navigation menu.');
+                }
+            });
+        }
+
+        // Publish side navigation styles
+        function publishSideNavigationStyles(_ks) {
+            const updateData = {
+                bgColor: document.getElementById('sidenav-bg-color').value,
+                fgColor: document.getElementById('sidenav-text-color').value,
+                bgActiveColor: document.getElementById('sidenav-active-bg-color').value,
+                fgActiveColor: document.getElementById('sidenav-active-text-color').value,
+                columnStyle: currentColumnStyle,
+                labelCenterBlock: currentNavItemStyle
+            };
+            
+            _ks.put('SideNav', 'id', currentSideNavData.id, updateData, null, [], function(r) {
+                if (r.data && r.data.length > 0) {
+                    alert('Side navigation styles published successfully!');
+                    currentSideNavData = {...currentSideNavData, ...updateData};
+                } else {
+                    alert('Failed to publish side navigation styles.');
+                }
+            });
+        }
+
+        // Show no side navigation selected state
+        function showNoSideNavSelected() {
+            document.getElementById('sidenav-items-container').style.display = 'none';
+            document.getElementById('no-sidenav-selected').style.display = 'block';
+            currentSideNavData = null;
+        }
+
+        // Additional helper functions for side navigation management
+
+        // Initialize layout and nav item style selections
+        function initializeSideNavStyleSelections() {
+            // Add click handlers for layout options
+            document.querySelectorAll('.layout-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const styleValue = this.getAttribute('data-column-style');
+                    currentColumnStyle = parseInt(styleValue);
+                    
+                    // Update radio button
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) radio.checked = true;
+                    
+                    // Update visual selection
+                    document.querySelectorAll('.layout-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            
+            // Add click handlers for nav item style options
+            document.querySelectorAll('.nav-item-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const styleValue = this.getAttribute('data-nav-item-style');
+                    currentNavItemStyle = parseInt(styleValue);
+                    
+                    // Update radio button
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) radio.checked = true;
+                    
+                    // Update visual selection
+                    document.querySelectorAll('.nav-item-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    // Update preview immediately
+                    updateSideNavigationPreview();
+                });
+            });
+        }
+
+        // Validate side navigation item data
+        function validateSideNavItem(itemData) {
+            if (!itemData.title || itemData.title.trim() === '') {
+                return { valid: false, message: 'Navigation item title is required.' };
+            }
+            
+            if (itemData.type === 'link' && (!itemData.link || itemData.link.trim() === '')) {
+                return { valid: false, message: 'Link URL is required for custom link items.' };
+            }
+            
+            if (itemData.type === 'page' && !itemData.page) {
+                return { valid: false, message: 'Page selection is required for page link items.' };
+            }
+            
+            return { valid: true };
+        }
+
+        // Enhanced error handling for side navigation operations
+        function handleSideNavError(operation, error) {
+            console.error(`Side Navigation ${operation} Error:`, error);
+            
+            const errorMessages = {
+                'load': 'Failed to load side navigation data. Please refresh the page and try again.',
+                'save': 'Failed to save side navigation changes. Please check your connection and try again.',
+                'delete': 'Failed to delete side navigation item. Please try again.',
+                'create': 'Failed to create side navigation item. Please try again.',
+                'publish': 'Failed to publish side navigation styles. Please try again.'
+            };
+            
+            alert(errorMessages[operation] || 'An unexpected error occurred. Please try again.');
+        }
+
+        // Debounced function for live preview updates
+        let previewUpdateTimeout;
+        function debouncedPreviewUpdate() {
+            clearTimeout(previewUpdateTimeout);
+            previewUpdateTimeout = setTimeout(updateSideNavigationPreview, 150);
+        }
+
+        // Enhanced side navigation preview with animation
+        function updateSideNavigationPreviewAnimated() {
+            const preview = document.getElementById('preview-sidenav');
+            
+            // Add loading state
+            preview.style.opacity = '0.5';
+            preview.style.transition = 'opacity 0.3s ease';
+            
+            setTimeout(() => {
+                updateSideNavigationPreview();
+                preview.style.opacity = '1';
+            }, 150);
+        }
+
+        // Export management functions for external use if needed
+        window.sideNavigationManager = {
+            loadData: loadSideNavigationData,
+            addItem: addSideNavigationItem,
+            publishStyles: publishSideNavigationStyles,
+            updatePreview: updateSideNavigationPreview,
+            getCurrentData: () => currentSideNavData,
+            getCurrentItems: () => sideNavItems
+        };
+
+        // Initialize style selections when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize style selections after a short delay to ensure DOM is fully loaded
+            setTimeout(initializeSideNavStyleSelections, 100);
+        });
+
+        initializeSideNavigationManagement(_ks, idx);
 
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
