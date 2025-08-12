@@ -212,7 +212,6 @@
         }
 
         .wizard-step {
-            display: none;
             height: 100%;
             min-height: 600px;
         }
@@ -345,52 +344,6 @@
             color: #475569;
             border: 1px solid #e2e8f0;
             font-size: 0.9rem;
-        }
-
-        /* Region Selector */
-        .region-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .region-card {
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .region-card:hover {
-            border-color: #ff6b35;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.1);
-        }
-
-        .region-card.selected {
-            border-color: #ff6b35;
-            background: rgba(255, 107, 53, 0.05);
-        }
-
-        .region-flag {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .region-name {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 0.25rem;
-        }
-
-        .region-code {
-            font-size: 0.8rem;
-            color: #718096;
-            font-family: 'JetBrains Mono', monospace;
         }
 
         /* ACL Selection */
@@ -708,10 +661,6 @@
                 font-size: 1.5rem;
             }
 
-            .region-grid {
-                grid-template-columns: 1fr;
-            }
-
             .cors-section {
                 padding: 2rem;
             }
@@ -726,8 +675,8 @@
             }
         }
 
-        /* Hide all wizard steps by default */
-        .wizard-step {
+        /* Hide all wizard steps by default except active */
+        .wizard-step:not(.active) {
             display: none;
         }
 
@@ -895,7 +844,7 @@
                 </div>
 
                 <!-- Step 2: Privacy Settings -->
-                <div id="wizard-2" class="wizard-step">
+                <div id="wizard-2" class="wizard-step d-none">
                     <div class="wizard-step-content">
                         <div class="wizard-left-panel">
                             <div class="wizard-welcome">
@@ -1012,7 +961,7 @@
                 </div>
 
                 <!-- Step 3: CORS Configuration -->
-                <div id="wizard-3" class="wizard-step">
+                <div id="wizard-3" class="wizard-step d-none">
                     <div class="cors-section">
                         <div class="cors-header">
                             <div class="cors-title">
@@ -1054,7 +1003,7 @@
                 </div>
 
                 <!-- Final Step: Success -->
-                <div id="wizard-final" class="wizard-step">
+                <div id="wizard-final" class="wizard-step d-none">
                     <div class="wizard-final">
                         <div class="success-icon">
                             <i class="fas fa-check"></i>
@@ -1086,196 +1035,6 @@
             </div>
         </footer>
     </div>
-
-    <script>
-        // Wizard navigation functionality
-        let currentStep = 1;
-        const totalSteps = 3;
-
-        function updateProgress() {
-            const progressFill = document.getElementById('progressFill');
-            const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
-            progressFill.style.width = progressPercentage + '%';
-
-            // Update step indicators
-            for (let i = 1; i <= totalSteps; i++) {
-                const indicator = document.getElementById(`step-indicator-${i}`);
-                const circle = indicator.querySelector('.step-circle');
-                
-                indicator.classList.remove('active', 'complete');
-                
-                if (i < currentStep) {
-                    indicator.classList.add('complete');
-                    circle.innerHTML = '<i class="fas fa-check"></i>';
-                } else if (i === currentStep) {
-                    indicator.classList.add('active');
-                    circle.textContent = i;
-                } else {
-                    circle.textContent = i;
-                }
-            }
-        }
-
-        function showStep(stepNumber) {
-            // Hide all steps
-            document.querySelectorAll('.wizard-step').forEach(step => {
-                step.classList.remove('active');
-            });
-            
-            // Show current step
-            const currentStepElement = document.getElementById(`wizard-${stepNumber}`);
-            if (currentStepElement) {
-                currentStepElement.classList.add('active');
-            }
-            
-            currentStep = stepNumber;
-            updateProgress();
-        }
-
-        // Bucket name input handler
-        document.getElementById('bucket-name')?.addEventListener('input', function() {
-            const bucketName = this.value || 'your-bucket-name';
-            const preview = document.getElementById('bucket-url-preview');
-            if (preview) {
-                preview.textContent = `s3://${bucketName}`;
-            }
-        });
-
-        // ACL selection handlers
-        document.querySelectorAll('.acl-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const section = this.closest('.wizard-section');
-                const hiddenInput = section.querySelector('input[type="hidden"]');
-                
-                // Remove selected class from siblings
-                section.querySelectorAll('.acl-option').forEach(opt => opt.classList.remove('selected'));
-                
-                // Add selected class to clicked option
-                this.classList.add('selected');
-                
-                // Update hidden input value
-                if (hiddenInput) {
-                    hiddenInput.value = this.dataset.value;
-                }
-            });
-        });
-
-        // Navigation event listeners
-        document.getElementById('wizard-1-next')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            const bucketName = document.getElementById('bucket-name').value;
-            if (bucketName.trim()) {
-                showStep(2);
-            } else {
-                document.getElementById('bucket-name').classList.add('is-invalid');
-            }
-        });
-
-        document.getElementById('wizard-2-back')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            showStep(1);
-        });
-
-        document.getElementById('wizard-2-next')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            showStep(3);
-        });
-
-        document.getElementById('wizard-3-back')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            showStep(2);
-        });
-
-        document.getElementById('wizard-3-next')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            // This would typically make an API call to create the data store
-            showStep('final');
-        });
-
-        // CORS management
-        let corsCount = 0;
-
-        document.getElementById('addCORS')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            addCORSPolicy();
-        });
-
-        function addCORSPolicy() {
-            corsCount++;
-            const corsWrapper = document.getElementById('cors-wrapper');
-            
-            // Remove empty state if this is the first CORS policy
-            if (corsCount === 1) {
-                corsWrapper.innerHTML = '';
-            }
-            
-            const corsCard = document.createElement('div');
-            corsCard.className = 'cors-card';
-            corsCard.innerHTML = `
-                <div class="cors-card-header">
-                    <h6 class="mb-0">CORS Policy ${corsCount}</h6>
-                    <button class="cors-remove" onclick="removeCORSPolicy(this)">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Allowed Origins</label>
-                        <input type="text" class="form-control" placeholder="https://example.com" name="cors-origins-${corsCount}">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Allowed Methods</label>
-                        <select class="form-select" name="cors-methods-${corsCount}" multiple>
-                            <option value="GET">GET</option>
-                            <option value="POST">POST</option>
-                            <option value="PUT">PUT</option>
-                            <option value="DELETE">DELETE</option>
-                            <option value="HEAD">HEAD</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Allowed Headers</label>
-                        <input type="text" class="form-control" placeholder="Content-Type, Authorization" name="cors-headers-${corsCount}">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Max Age (seconds)</label>
-                        <input type="number" class="form-control" value="3600" name="cors-maxage-${corsCount}">
-                    </div>
-                </div>
-            `;
-            
-            corsWrapper.appendChild(corsCard);
-        }
-
-        function removeCORSPolicy(button) {
-            const corsCard = button.closest('.cors-card');
-            corsCard.remove();
-            corsCount--;
-            
-            // Show empty state if no policies remain
-            if (corsCount === 0) {
-                const corsWrapper = document.getElementById('cors-wrapper');
-                corsWrapper.innerHTML = `
-                    <div class="text-center py-5 text-muted">
-                        <i class="fas fa-info-circle fa-3x mb-3"></i>
-                        <h5>No CORS Policies Configured</h5>
-                        <p>Add CORS policies to enable cross-origin requests to your data store.</p>
-                    </div>
-                `;
-            }
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateProgress();
-            
-            // Initialize bucket URL preview
-            const preview = document.getElementById('bucket-url-preview');
-            if (preview) {
-                preview.textContent = 's3://your-bucket-name';
-            }
-        });
-    </script>
 </body>
 
 </html>
