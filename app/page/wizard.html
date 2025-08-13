@@ -11,12 +11,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/assets/css/kyte-shipyard-styles.css">
-    <link rel="stylesheet" href="/assets/css/step-styles.css">
+    <!-- <link rel="stylesheet" href="/assets/css/kyte-shipyard-styles.css"> -->
+    <!-- <link rel="stylesheet" href="/assets/css/step-styles.css"> -->
     <!--  -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Nunito:wght@200;500;700&display=swap" rel="stylesheet">
     <!-- javascripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -27,10 +27,597 @@
     <script src="/assets/js/navigation.js"></script>
     <script src="/assets/js/kyte-shipyard-tables.js"></script>
     <script src="/assets/js/kyte-shipyard-page-wizard.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Navigation Styles */
+        #application-nav {
+            background: linear-gradient(135deg, #2d3748, #4a5568) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.75rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700 !important;
+            font-size: 1.4rem !important;
+            color: white !important;
+            text-decoration: none !important;
+            display: flex !important;
+            align-items: center !important;
+            margin-left: 0.5em;
+        }
+
+        .navbar-brand img {
+            height: 24px;
+            margin-left: 0.5rem;
+        }
+
+        #application-nav .nav-link {
+            font-weight: 500 !important;
+            transition: all 0.3s ease !important;
+            border-radius: 8px !important;
+            margin: 0 4px !important;
+            padding: 8px 16px !important;
+        }
+
+        #application-nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-1px);
+        }
+
+        #mainnav {
+            background: linear-gradient(135deg, #4a5568, #718096) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            min-height: 60px;
+        }
+
+        /* Main Container */
+        .container-flex {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-heading {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #2d3748, #4a5568);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Modern Progress Bar */
+        .wizard-progress {
+            margin: 3rem 0;
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            z-index: 1;
+        }
+
+        .progress-line-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .step-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            border: 4px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #718096;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-indicator.active .step-circle {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        .step-indicator.complete .step-circle {
+            background: #22c55e;
+            color: white;
+        }
+
+        .step-indicator.complete .step-circle i {
+            font-size: 1.2rem;
+        }
+
+        .step-title {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #718096;
+            text-align: center;
+            transition: color 0.3s ease;
+        }
+
+        .step-indicator.active .step-title {
+            color: #2d3748;
+        }
+
+        .step-indicator.complete .step-title {
+            color: #22c55e;
+        }
+
+        /* Wizard Content */
+        .wizard-content {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        .wizard-step {
+            display: none;
+            height: 100%;
+            min-height: 600px;
+        }
+
+        .wizard-step.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wizard-step-content {
+            display: flex;
+            flex: 1;
+            min-height: 500px;
+        }
+
+        .wizard-left-panel {
+            flex: 1;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+        }
+
+        .wizard-right-panel {
+            flex: 1;
+            padding: 3rem;
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wizard-welcome {
+            font-size: 2rem;
+            font-weight: 300;
+            color: #2d3748;
+            margin-bottom: 2rem;
+        }
+
+        .wizard-section {
+            margin-bottom: 2rem;
+        }
+
+        .wizard-section h5 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        .wizard-section p {
+            color: #718096;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .wizard-section small {
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        /* Enhanced Form Controls */
+        .form-select, 
+        .form-control {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+            font-weight: 500;
+        }
+
+        .form-select:focus, 
+        .form-control:focus {
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            background: white;
+            outline: none;
+        }
+
+        .form-select-lg {
+            padding: 1.25rem 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Path Preview */
+        #path-preview {
+            background: #f1f5f9;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            font-family: 'Courier New', monospace;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Wizard Navigation */
+        .wizard-navigation {
+            padding: 2rem 3rem;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-wizard {
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-wizard-primary {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-wizard-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-wizard-secondary {
+            background: #6b7280;
+            color: white;
+            box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+        }
+
+        .btn-wizard-secondary:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-wizard-danger {
+            background: #ef4444;
+            color: white;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-wizard-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-wizard-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-wizard-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Illustration */
+        .wizard-illustration {
+            max-width: 100%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Customization Panels */
+        .customization-section {
+            display: none;
+        }
+
+        .customization-section.active {
+            display: block;
+        }
+
+        /* Table Columns and Form Fields */
+        .configuration-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .configuration-card h4 {
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .configuration-card p {
+            color: #718096;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Sortable Lists */
+        #data-model-columns, 
+        #data-model-columns-exclude, 
+        #data-model-fields-1, 
+        #data-model-fields-2, 
+        #data-model-fields-3, 
+        #data-model-fields-4 {
+            list-style-type: none;
+            border: 2px dashed #e2e8f0;
+            border-radius: 12px;
+            min-height: 120px;
+            padding: 1rem;
+            margin: 0;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+        }
+
+        #data-model-columns:empty::before,
+        #data-model-columns-exclude:empty::before {
+            content: "Drop items here";
+            color: #a0aec0;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+        }
+
+        #data-model-columns li, 
+        #data-model-columns-exclude li, 
+        #data-model-fields-1 li, 
+        #data-model-fields-2 li, 
+        #data-model-fields-3 li, 
+        #data-model-fields-4 li {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: grab;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #data-model-columns li:hover, 
+        #data-model-columns-exclude li:hover, 
+        #data-model-fields-1 li:hover, 
+        #data-model-fields-2 li:hover, 
+        #data-model-fields-3 li:hover, 
+        #data-model-fields-4 li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .blank-card {
+            height: 195px;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border: 2px dashed #cbd5e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        /* Final Step */
+        .wizard-final {
+            text-align: center;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wizard-final h3 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #2d3748;
+            margin-bottom: 2rem;
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem auto;
+            animation: successPulse 2s infinite;
+        }
+
+        .success-icon i {
+            font-size: 3rem;
+            color: white;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #2d3748, #4a5568);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 1rem 1.5rem;
+        }
+
+        /* Loading Modal */
+        .modal.white {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .spinner-wrapper {
+            color: #ff6b35;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container-flex {
+                padding: 1rem;
+            }
+
+            .section-heading {
+                font-size: 2rem;
+            }
+
+            .wizard-step-content {
+                flex-direction: column;
+            }
+
+            .wizard-left-panel,
+            .wizard-right-panel {
+                flex: none;
+                padding: 2rem;
+            }
+
+            .wizard-navigation {
+                padding: 1.5rem 2rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .progress-container {
+                margin-bottom: 1rem;
+            }
+
+            .step-circle {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .step-title {
+                font-size: 0.9rem;
+            }
+
+            .wizard-welcome {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Hide all wizard steps by default */
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: flex;
+        }
+
+        /* Show customization sections */
+        .customization-section {
+            display: none;
+        }
+
+        .customization-section.show {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Page loading modal.  Once session is validated, the loading modal will close. -->
+    <!-- Page loading modal -->
     <div id="pageLoaderModal" class="modal white" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
         <div class="modal-dialog modal-sm h-100 d-flex">
             <div class="mx-auto align-self-center" style="width: 48px">
@@ -38,25 +625,34 @@
             </div>
         </div>
     </div>
-    <!--  -->
 
     <div id="wrapper">
         <!-- START APPLICATION NAV -->
-        <nav id="application-nav" class="navbar navbar-dark bg-dark navbar-expand-sm">
-            <a href="/app/" class="navbar-brand">Kyte Shipyard<sup>™</sup><img src="/assets/images/kyte_shipyard_light.png"></a>
+        <nav id="application-nav" class="navbar navbar-dark navbar-expand-sm">
+            <a href="/app/" class="navbar-brand">
+                Kyte Shipyard<sup>™</sup>
+                <img src="/assets/images/kyte_shipyard_light.png" alt="Kyte Shipyard">
+            </a>
             <button data-bs-toggle="collapse" class="navbar-toggler" type="button" data-bs-target="#application-navcol" aria-controls="#application-navcol" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="application-navcol">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link me-2 text-light" href="/app/"><span>Projects</span></a></li>
+                    <li class="nav-item">
+                        <a class="nav-link me-2 text-light" href="/app/">
+                            <i class="fas fa-rocket me-2"></i>Projects
+                        </a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle me-2 text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"><span>Account</span></a>
+                        <a class="nav-link dropdown-toggle me-2 text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-2"></i>Account
+                        </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item me-2" href="/app/settings.html"><i class="fas fa-cog me-2"></i><span>Settings</span></a></li>
-                            <li><a class="dropdown-item me-2 logout" href="#"><i class="fas fa-power-off me-2"></i><span>Logout</span></a></li>
+                            <li><a class="dropdown-item me-2" href="/app/settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item me-2 logout" href="#"><i class="fas fa-power-off me-2"></i>Logout</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -64,34 +660,48 @@
         </nav>
         <!-- END APPLICATION NAV -->
         
-        <!-- START NAV -->
-        <nav id="mainnav" class="navbar navbar-dark bg-dark navbar-expand-lg"></nav>
-        <!-- END NAV -->
+        <!-- START PROJECT NAV -->
+        <nav id="mainnav" class="navbar navbar-dark navbar-expand-lg">
+            <!-- Project navigation will be populated by JavaScript -->
+        </nav>
+        <!-- END PROJECT NAV -->
 
-        <div class="container container-flex px-5">
-            <h2 class="section-heading my-4">Create a New Page</h2>
+        <div class="container container-flex">
+            <h2 class="section-heading">Create a New Page</h2>
 
-            <!-- https://codepen.io/Cormac-Maher/pen/KGpXqZ -->
-            <div class="row pgb p-0 mt-3">
-                <div class="col step p-0 active" id="wizard-step-1"><p>1</p><span class="img-circle"></span></div>
-                <div class="col step p-0" id="wizard-step-2"><p>2</p><span class="img-circle"></span></div>
-                <div class="col step p-0" id="wizard-step-3"><p>3</p><span class="img-circle"></span></div>
+            <!-- Modern Progress Indicator -->
+            <div class="wizard-progress">
+                <div class="progress-container">
+                    <div class="progress-line">
+                        <div class="progress-line-fill" id="progressFill"></div>
+                    </div>
+                    
+                    <div class="step-indicator active" id="step-indicator-1">
+                        <div class="step-circle">1</div>
+                        <div class="step-title">Page Info</div>
+                    </div>
+                    
+                    <div class="step-indicator" id="step-indicator-2">
+                        <div class="step-circle">2</div>
+                        <div class="step-title">Configuration</div>
+                    </div>
+                    
+                    <div class="step-indicator" id="step-indicator-3">
+                        <div class="step-circle">3</div>
+                        <div class="step-title">Customization</div>
+                    </div>
+                </div>
             </div>
-            <div class="row pgb p-0">
-                <div class="col text-center"><h2>Page Info</h2></div>
-                <div class="col text-center"><h2>Customization</h2></div>
-                <div class="col text-center"><h2>Save &amp; Generate</h2></div>
-            </div>
 
-            <div id="content-data-wrapper" class="mt-2">
-
-                <!-- STEP 1 -->
-                <!-- WIZARD 1 -->
-                <div id="wizard-1" style="height: 100%; display: flex; flex-direction: column;">
-                    <div class="row flex-grow-1">
-                        <div class="col-5 px-1" style="position: relative;">
-                            <h4 class="mt-4" style="font-weight: 300;">Let's get started!</h4>
-                            <div class="pb-3">
+            <!-- Wizard Content -->
+            <div class="wizard-content">
+                <!-- Step 1: Page Type Selection -->
+                <div id="wizard-1" class="wizard-step active">
+                    <div class="wizard-step-content">
+                        <div class="wizard-left-panel">
+                            <h3 class="wizard-welcome">Let's get started!</h3>
+                            
+                            <div class="wizard-section">
                                 <h5>What kind of page are you creating?</h5>
                                 <select class="form-select form-select-lg" id="page-type">
                                     <option selected disabled>Please select one</option>
@@ -103,265 +713,493 @@
                                 </select>
                                 <small>Further customization is available even after selection.</small>
                             </div>
-
-                            <div class="w-100 mt-auto">
-                                <div class="d-flex justify-content-between">
-                                    <a class="btn btn-danger backToSite" href="#">Cancel</a>
-                                    <a id="wizard-1-next" class="btn btn-primary" href="#">Next</a>
-                                </div>
-                            </div>
                         </div>
-                        <div class="col-7"><img src="/assets/images/woman-paints-in-an-art-workshop.png" class="w-100"></div>
+                        
+                        <div class="wizard-right-panel">
+                            <img src="/assets/images/woman-paints-in-an-art-workshop.png" alt="Getting Started" class="wizard-illustration">
+                        </div>
+                    </div>
+                    
+                    <div class="wizard-navigation">
+                        <a class="btn-wizard btn-wizard-danger backToSite" href="#">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </a>
+                        <a id="wizard-1-next" class="btn-wizard btn-wizard-primary" href="#">
+                            Next
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
-                <!--  -->
 
-                <!-- WIZARD 2 -->
-                <div id="wizard-2" class="d-none" style="height: 100%; display: flex; flex-direction: column;">
-                    <div class="row flex-grow-1">
-                        <div class="col-5 px-1" style="position: relative;">
-                            <div class="pb-3">
+                <!-- Step 2: Page Configuration -->
+                <div id="wizard-2" class="wizard-step">
+                    <div class="wizard-step-content">
+                        <div class="wizard-left-panel">
+                            <div class="wizard-section">
                                 <h5>What is the path to your page?</h5>
-                                <p class="mb-0">This will be what you see in the URL.</p>
-                                <input type="text" class="form-control" id="page-path">
-                                <span id="path-preview" class="d-block" style="font-size: 0.9em;"></span>
+                                <p>This will be what you see in the URL.</p>
+                                <input type="text" class="form-control" id="page-path" placeholder="my-awesome-page">
+                                <div id="path-preview">https://example.com/</div>
                             </div>
-                            <div class="py-3">
-                                <div class="row">
-                                    <div class="col-8"><h5>Does your page require users to be logged in to view it?</h5></div>
-                                    <div class="col-4">
-                                        <select class="form-select form-select-lg" id="page-requires-session">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="sitemap-settings-wrapper" class="py-3 d-none">
-                                <h5>Would you like to include this page in the sitemap for crawlers to index?</h5>
-                                <small>Recommended if SEO and site visibility is important.</small>
-                                <select id="sitemap-include">
+                            
+                            <div class="wizard-section">
+                                <h5>Does your page require users to be logged in to view it?</h5>
+                                <select class="form-select form-select-lg" id="page-requires-session">
                                     <option value="1">Yes</option>
                                     <option value="0">No</option>
                                 </select>
                             </div>
 
-                            <div class="py-3">
-                                <h5>Does your page require a main nav bar?</h5>
-                                <select class="form-select form-select-lg" id="page-main-navigation">
+                            <div id="sitemap-settings-wrapper" class="wizard-section" style="display: none;">
+                                <h5>Would you like to include this page in the sitemap for crawlers to index?</h5>
+                                <small>Recommended if SEO and site visibility is important.</small>
+                                <select class="form-select" id="sitemap-include">
+                                    <option value="1">Yes</option>
                                     <option value="0">No</option>
                                 </select>
                             </div>
 
-                            <div class="w-100 mt-auto">
-                                <div class="d-flex justify-content-between">
-                                    <a id="wizard-2-back" class="btn btn-secondary" href="#">Back</a><a id="wizard-2-next" class="btn btn-primary" href="#">Next</a>
-                                </div>
+                            <div class="wizard-section">
+                                <h5>Does your page require a main navigation bar?</h5>
+                                <select class="form-select form-select-lg" id="page-main-navigation">
+                                    <option value="0">No</option>
+                                    <!-- Options will be populated by JavaScript -->
+                                </select>
                             </div>
                         </div>
-                        <div class="col-7"><img src="/assets/images/woman-paints-in-an-art-workshop.png" class="w-100"></div>
-                    </div>
-                </div>
-                <!--  -->
-
-                <!-- WIZARD 3 -->
-                <div id="wizard-3" class="d-none" style="height: 100%; display: flex; flex-direction: column;">
-                    <div class="row flex-grow-1">
-                        <div class="col-5 px-1" style="position: relative;">
-                            <div class="pb-3">
-                                <h5>Pick a user and search engine friendly title.</h5>
-                                <input type="text" class="form-control" id="page-title">
-                            </div>
-                            <div class="py-3">
-                                <h5>Write a short description of what this page is about. <small>(optional)</small></h5>
-                                <textarea class="form-control" id="page-description"></textarea>
-                            </div>
-
-                            <p>You can skip the description if you require your users to login to view the page your are about to create.</p>
-
-                            <div class="w-100 mt-auto">
-                                <div class="d-flex justify-content-between">
-                                    <a id="wizard-3-back" class="btn btn-secondary" href="#">Back</a><a id="wizard-3-next" class="btn btn-primary" href="#">Next</a>
-                                </div>
-                            </div>
+                        
+                        <div class="wizard-right-panel">
+                            <img src="/assets/images/woman-paints-in-an-art-workshop.png" alt="Configuration" class="wizard-illustration">
                         </div>
-                        <div class="col-7"><img src="/assets/images/woman-paints-in-an-art-workshop.png" class="w-100"></div>
+                    </div>
+                    
+                    <div class="wizard-navigation">
+                        <a id="wizard-2-back" class="btn-wizard btn-wizard-secondary" href="#">
+                            <i class="fas fa-arrow-left"></i>
+                            Back
+                        </a>
+                        <a id="wizard-2-next" class="btn-wizard btn-wizard-primary" href="#">
+                            Next
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
-                <!--  -->
 
-                <!-- STEP 2 -->
-                <!-- WIZARD 4 -->
-                <div id="wizard-4" class="d-none" style="height: 100%; display: flex; flex-direction: column;">
-                    <div class="row flex-grow-1">
-                        <div id="customization-left-panel" class="col-5 pb-5 px-1" style="position: relative;">
-                            <h4 class="mt-4" style="font-weight: 300;">Let's customize your <span id="label-page-type">page</span>!</h4>
+                <!-- Step 3: Page Details -->
+                <div id="wizard-3" class="wizard-step">
+                    <div class="wizard-step-content">
+                        <div class="wizard-left-panel">
+                            <div class="wizard-section">
+                                <h5>Pick a user and search engine friendly title</h5>
+                                <input type="text" class="form-control" id="page-title" placeholder="My Awesome Page">
+                            </div>
+                            
+                            <div class="wizard-section">
+                                <h5>Write a short description of what this page is about <small>(optional)</small></h5>
+                                <textarea class="form-control" id="page-description" placeholder="This page helps users manage their account settings and preferences..."></textarea>
+                            </div>
 
-                            <!-- Login -->
-                            <div id="customization-login" class="d-none">
-                                <div class="pb-3">
-                                    <h5>Give your login page a heading, i.e Welcome to my App!</h5>
-                                    <input type="text" class="form-control" id="page-login-heading">
+                            <p class="text-muted">You can skip the description if you require your users to login to view the page you are about to create.</p>
+                        </div>
+                        
+                        <div class="wizard-right-panel">
+                            <img src="/assets/images/woman-paints-in-an-art-workshop.png" alt="Page Details" class="wizard-illustration">
+                        </div>
+                    </div>
+                    
+                    <div class="wizard-navigation">
+                        <a id="wizard-3-back" class="btn-wizard btn-wizard-secondary" href="#">
+                            <i class="fas fa-arrow-left"></i>
+                            Back
+                        </a>
+                        <a id="wizard-3-next" class="btn-wizard btn-wizard-primary" href="#">
+                            Next
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Step 4: Customization -->
+                <div id="wizard-4" class="wizard-step">
+                    <div class="wizard-step-content">
+                        <div class="wizard-left-panel">
+                            <h3 class="wizard-welcome">Let's customize your <span id="label-page-type">page</span>!</h3>
+
+                            <!-- Login Page Customization -->
+                            <div id="customization-login" class="customization-section">
+                                <div class="wizard-section">
+                                    <h5>Give your login page a heading</h5>
+                                    <p>For example: "Welcome to my App!"</p>
+                                    <input type="text" class="form-control" id="page-login-heading" placeholder="Welcome to MyApp!">
                                 </div>
-                                <div class="py-3">
+                                
+                                <div class="wizard-section">
                                     <h5>What will your users use to login?</h5>
                                     <select class="form-select form-select-lg" id="page-login-field-name">
-                                        <option value="email">Email &plus; Password</option>
-                                        <option value="username">Username &plus; Password</option>
+                                        <option value="email">Email + Password</option>
+                                        <option value="username">Username + Password</option>
                                     </select>
                                 </div>
-                                <div class="py-3">
+                                
+                                <div class="wizard-section">
                                     <h5>After login, where should your users be directed to?</h5>
                                     <select class="form-select form-select-lg" id="page-login-success-target">
                                         <option selected disabled>Please select one</option>
+                                        <!-- Options will be populated by JavaScript -->
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- Custom (Advanced Editing) -->
-                            <div id="customization-table" class="d-none">
-                                <!-- <div class="py-3">
-                                    <div class="row">
-                                        <div class="col-8"><h5>Does this page require a requested index from a previous page?</h5></div>
-                                        <div class="col-4">
-                                            <select class="form-select form-select-lg" id="page-req">
-                                                <option value="1">Yes</option>
-                                                <option value="0">No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div> -->
-                                <div class="py-3">
+                            <!-- Table Page Customization -->
+                            <div id="customization-table" class="customization-section">
+                                <div class="wizard-section">
                                     <h5>Which data model are we using?</h5>
                                     <select class="form-select form-select-lg" id="page-model">
                                         <option selected disabled>Please select one</option>
+                                        <!-- Options will be populated by JavaScript -->
                                     </select>
                                 </div>
-                                <div class="py-3 d-none" id="customize-page-form-title">
-                                    <h5>Give your form a heading.</h5>
-                                    <input type="text" class="form-control" id="page-form-title">
+                                
+                                <div class="wizard-section" id="customize-page-form-title" style="display: none;">
+                                    <h5>Give your form a heading</h5>
+                                    <input type="text" class="form-control" id="page-form-title" placeholder="Add New Item">
                                 </div>
-                                <div class="py-3">
-                                    <h5>Give your table a heading.</h5>
-                                    <input type="text" class="form-control" id="page-table-title">
+                                
+                                <div class="wizard-section">
+                                    <h5>Give your table a heading</h5>
+                                    <input type="text" class="form-control" id="page-table-title" placeholder="My Data Table">
                                 </div>
-                                <div class="py-3 d-none" id="customize-page-table-add">
-                                    <div class="row">
-                                        <div class="col-8"><h5>Will users be able to add a new row?</h5></div>
-                                        <div class="col-4">
-                                            <select class="form-select form-select-lg" id="page-table-add">
-                                                <option value="1">Yes</option>
-                                                <option value="0">No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="py-3 d-none" id="customize-page-table-edit">
-                                    <div class="row">
-                                        <div class="col-8"><h5>Will users be able to edit rows?</h5></div>
-                                        <div class="col-4">
-                                            <select class="form-select form-select-lg" id="page-table-edit">
-                                                <option value="1">Yes</option>
-                                                <option value="0">No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="py-3">
-                                    <div class="row">
-                                        <div class="col-8"><h5>Will users be able to delete rows?</h5></div>
-                                        <div class="col-4">
-                                            <select class="form-select form-select-lg" id="page-table-delete">
-                                                <option value="1">Yes</option>
-                                                <option value="0">No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="py-3">
-                                    <h5>Where should users be directed when they click a row?</h5>
-                                    <select class="form-select form-select-lg" id="page-table-click">
-                                        <option value="0">None</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Custom (Advanced & Block Editing) -->
-                            <div id="customization-custom" class="d-none">
-                                <div class="pb-3">
-                                    <h5>Does your page have a side nav?</h5>
-                                    <select class="form-select form-select-lg" id="page-side-navigation">
+                                
+                                <div class="wizard-section" id="customize-page-table-add" style="display: none;">
+                                    <h5>Will users be able to add a new row?</h5>
+                                    <select class="form-select form-select-lg" id="page-table-add">
+                                        <option value="1">Yes</option>
                                         <option value="0">No</option>
                                     </select>
                                 </div>
+                                
+                                <div class="wizard-section" id="customize-page-table-edit" style="display: none;">
+                                    <h5>Will users be able to edit rows?</h5>
+                                    <select class="form-select form-select-lg" id="page-table-edit">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="wizard-section">
+                                    <h5>Will users be able to delete rows?</h5>
+                                    <select class="form-select form-select-lg" id="page-table-delete">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="wizard-section">
+                                    <h5>Where should users be directed when they click a row?</h5>
+                                    <select class="form-select form-select-lg" id="page-table-click">
+                                        <option value="0">None</option>
+                                        <!-- Options will be populated by JavaScript -->
+                                    </select>
+                                </div>
                             </div>
 
-                            <!-- nav buttons -->
-                            <div class="w-100 mt-auto">
-                                <div class="d-flex justify-content-between">
-                                    <a id="wizard-4-back" class="btn btn-secondary" href="#">Back</a><a id="wizard-4-next" class="btn btn-warning" href="#">Save &amp; Generate</a>
+                            <!-- Custom Page Customization -->
+                            <div id="customization-custom" class="customization-section">
+                                <div class="wizard-section">
+                                    <h5>Does your page have a side navigation?</h5>
+                                    <select class="form-select form-select-lg" id="page-side-navigation">
+                                        <option value="0">No</option>
+                                        <!-- Options will be populated by JavaScript -->
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <div id="customization-right-panel" class="col-7">
-                            <img src="/assets/images/woman-paints-in-an-art-workshop.png" class="w-100" id="image-placeholder">
-                            <div id="customization-table-columns" class="card d-none">
-                                <div class="card-body">
-                                    <h4>Table Columns</h4>
-                                    <p>All columns are included by default. To exclude any from your table, drag them over to the exclude area to the right.</p>
-                                    <div id="data-model-columns-wrapper"><h3 style="font-weight: 300;" class="text-center">Please select a model.</h3></div>
-                                </div>
-                            </div>
-                            <div id="customization-form-fields" class="card d-none mt-3">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between mt-4 mb-3">
-                                        <div>
-                                            <h4>Form Fields</h4>
+                        
+                        <div class="wizard-right-panel">
+                            <img src="/assets/images/woman-paints-in-an-art-workshop.png" alt="Customization" class="wizard-illustration" id="image-placeholder">
+                            
+                            <!-- Table Columns Configuration -->
+                            <div id="customization-table-columns" class="configuration-card" style="display: none;">
+                                <h4>Table Columns</h4>
+                                <p>All columns are included by default. To exclude any from your table, drag them over to the exclude area.</p>
+                                <div id="data-model-columns-wrapper">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h6>Included Columns</h6>
+                                            <ul id="data-model-columns"></ul>
                                         </div>
-                                        <div>
-                                            <div class="dropdown d-inline-block">
-                                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Available Fields</button>
-                                                <ul id="form-fields-available" class="dropdown-menu"></ul>
-                                            </div>
-                                            <a href="#" id="addBlankFieldCard" class="btn btn-warning">Add Spacer</a>
+                                        <div class="col-6">
+                                            <h6>Excluded Columns</h6>
+                                            <ul id="data-model-columns-exclude"></ul>
                                         </div>
                                     </div>
-                                    <p>Drag fields to their desired location. If occupied columns are less than four, then the fields will expand to fill the width of the form.</p>
-                                    <div id="data-model-form-fields-wrapper"><h3 style="font-weight: 300;" class="text-center">Please select a model.</h3></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Form Fields Configuration -->
+                            <div id="customization-form-fields" class="configuration-card mt-3" style="display: none;">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h4>Form Fields</h4>
+                                        <p>Drag fields to their desired location. Fields will expand to fill the width if less than four columns are used.</p>
+                                    </div>
+                                    <div>
+                                        <div class="dropdown d-inline-block me-2">
+                                            <button class="btn btn-wizard btn-wizard-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Available Fields
+                                            </button>
+                                            <ul id="form-fields-available" class="dropdown-menu"></ul>
+                                        </div>
+                                        <a href="#" id="addBlankFieldCard" class="btn-wizard btn-wizard-warning">Add Spacer</a>
+                                    </div>
+                                </div>
+                                
+                                <div id="data-model-form-fields-wrapper">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <h6>Column 1</h6>
+                                            <ul id="data-model-fields-1"></ul>
+                                        </div>
+                                        <div class="col-3">
+                                            <h6>Column 2</h6>
+                                            <ul id="data-model-fields-2"></ul>
+                                        </div>
+                                        <div class="col-3">
+                                            <h6>Column 3</h6>
+                                            <ul id="data-model-fields-3"></ul>
+                                        </div>
+                                        <div class="col-3">
+                                            <h6>Column 4</h6>
+                                            <ul id="data-model-fields-4"></ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!--  -->
-
-                <!-- WIZARD FINAL -->
-                <div id="wizard-final" class="d-none">
-                    <div class="text-center">
-                        <h3 class="mt-4" style="font-weight: 300;">Your page has been created!</h3>
-
-                        <p>Take a peak at your new page <a id="newPageUrl" href="#" target="_blank"></a></p>
-
-                        <a class="btn btn-danger mx-auto backToSite" href="#">Done</a>
+                    
+                    <div class="wizard-navigation">
+                        <a id="wizard-4-back" class="btn-wizard btn-wizard-secondary" href="#">
+                            <i class="fas fa-arrow-left"></i>
+                            Back
+                        </a>
+                        <a id="wizard-4-next" class="btn-wizard btn-wizard-warning" href="#">
+                            <i class="fas fa-magic"></i>
+                            Save &amp; Generate
+                        </a>
                     </div>
                 </div>
-                <!--  -->
+
+                <!-- Final Step: Success -->
+                <div id="wizard-final" class="wizard-step">
+                    <div class="wizard-final">
+                        <div class="success-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        
+                        <h3>Your page has been created!</h3>
+                        
+                        <p class="mb-4">
+                            Take a peek at your new page: 
+                            <a id="newPageUrl" href="#" target="_blank" class="fw-bold text-decoration-none" style="color: #ff6b35;">
+                                View Page <i class="fas fa-external-link-alt ms-1"></i>
+                            </a>
+                        </p>
+
+                        <a class="btn-wizard btn-wizard-primary backToSite" href="#">
+                            <i class="fas fa-check"></i>
+                            Done
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content d-flex justify-content-between align-items-center">
+                <div class="d-flex gap-3">
+                    <span>Kyte Shipyard™ Version <span id="kyteShipyardVersion">1.0.0</span></span>
+                    <span>Kyte JS Version <span id="kyteJSVersion">2.0.0</span></span>
+                </div>
+                <span>KeyQ © 2020-2025</span>
+            </div>
+        </footer>
     </div>
 
     <!-- modal form -->
     <div id="modalForm"></div>
 
-    <footer>
-        <div class="text-light d-flex justify-content-between py-2 px-3">
-            <div style="font-weight: 100;font-size:0.6em;">
-                <div>Kyte Shipyard&trade; Version <span id="kyteShipyardVersion"></span></div>
-                <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
-            </div>
-            <p class="text-light" style="font-weight: 100;">KeyQ © 2020-2024</p>
-        </div>
-    </footer>
+    <script>
+        // Wizard navigation functionality
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            progressFill.style.width = progressPercentage + '%';
+
+            // Update step indicators
+            for (let i = 1; i <= totalSteps; i++) {
+                const indicator = document.getElementById(`step-indicator-${i}`);
+                const circle = indicator.querySelector('.step-circle');
+                
+                indicator.classList.remove('active', 'complete');
+                
+                if (i < currentStep) {
+                    indicator.classList.add('complete');
+                    circle.innerHTML = '<i class="fas fa-check"></i>';
+                } else if (i === currentStep) {
+                    indicator.classList.add('active');
+                    circle.textContent = i;
+                } else {
+                    circle.textContent = i;
+                }
+            }
+        }
+
+        function showStep(stepNumber) {
+            // Hide all steps
+            document.querySelectorAll('.wizard-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            // Show current step
+            const currentStepElement = document.getElementById(`wizard-${stepNumber}`);
+            if (currentStepElement) {
+                currentStepElement.classList.add('active');
+            }
+            
+            currentStep = stepNumber;
+            updateProgress();
+        }
+
+        // Navigation event listeners
+        document.getElementById('wizard-1-next')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (document.getElementById('page-type').value !== 'Please select one') {
+                showStep(2);
+            }
+        });
+
+        document.getElementById('wizard-2-back')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            showStep(1);
+        });
+
+        document.getElementById('wizard-2-next')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            showStep(3);
+        });
+
+        document.getElementById('wizard-3-back')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            showStep(2);
+        });
+
+        document.getElementById('wizard-3-next')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            showStep(4);
+        });
+
+        document.getElementById('wizard-4-back')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            showStep(3);
+        });
+
+        document.getElementById('wizard-4-next')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            // This would typically make an API call to create the page
+            showStep('final');
+        });
+
+        // Page type change handler
+        document.getElementById('page-type')?.addEventListener('change', function() {
+            const pageType = this.value;
+            const labelElement = document.getElementById('label-page-type');
+            
+            if (labelElement) {
+                labelElement.textContent = pageType === 'custom' ? 'advanced code editor' : pageType + ' page';
+            }
+
+            // Show/hide customization sections based on page type
+            document.querySelectorAll('.customization-section').forEach(section => {
+                section.classList.remove('show');
+                section.style.display = 'none';
+            });
+
+            if (pageType === 'login') {
+                const loginSection = document.getElementById('customization-login');
+                if (loginSection) {
+                    loginSection.classList.add('show');
+                    loginSection.style.display = 'block';
+                }
+            } else if (pageType === 'table' || pageType === 'form') {
+                const tableSection = document.getElementById('customization-table');
+                if (tableSection) {
+                    tableSection.classList.add('show');
+                    tableSection.style.display = 'block';
+                }
+            } else if (pageType === 'custom' || pageType === 'block') {
+                const customSection = document.getElementById('customization-custom');
+                if (customSection) {
+                    customSection.classList.add('show');
+                    customSection.style.display = 'block';
+                }
+            }
+        });
+
+        // Path preview functionality
+        document.getElementById('page-path')?.addEventListener('input', function() {
+            const pathPreview = document.getElementById('path-preview');
+            const baseDomain = 'https://example.com/';
+            const path = this.value || 'your-page-path';
+            pathPreview.textContent = baseDomain + path;
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+            
+            // Initialize path preview
+            const pathPreview = document.getElementById('path-preview');
+            if (pathPreview) {
+                pathPreview.textContent = 'https://example.com/your-page-path';
+            }
+        });
+
+        // Page requires session change handler
+        document.getElementById('page-requires-session')?.addEventListener('change', function() {
+            const sitemapWrapper = document.getElementById('sitemap-settings-wrapper');
+            if (this.value === '0') {
+                sitemapWrapper.style.display = 'block';
+            } else {
+                sitemapWrapper.style.display = 'none';
+            }
+        });
+
+        // Form field interactions for table/form pages
+        document.getElementById('page-type')?.addEventListener('change', function() {
+            const pageType = this.value;
+            
+            // Show/hide form-specific options
+            const formTitleSection = document.getElementById('customize-page-form-title');
+            const tableAddSection = document.getElementById('customize-page-table-add');
+            const tableEditSection = document.getElementById('customize-page-table-edit');
+            
+            if (pageType === 'form') {
+                formTitleSection?.style.removeProperty('display');
+                tableAddSection?.style.removeProperty('display');
+                tableEditSection?.style.removeProperty('display');
+            } else {
+                formTitleSection?.style.setProperty('display', 'none');
+                tableAddSection?.style.setProperty('display', 'none');
+                tableEditSection?.style.setProperty('display', 'none');
+            }
+        });
+    </script>
 </body>
+
 </html>

@@ -1,7 +1,6 @@
-let colDefDataStore = [
-    {'targets':0,'data':'name','label':'Name'},
-    {'targets':1,'data':'region','label':'Region'},
-];
+// Wizard navigation functionality
+let currentStep = 1;
+const totalSteps = 3;
 
 document.addEventListener('KyteInitialized', function(e) {
     let _ks = e.detail._ks;
@@ -18,51 +17,149 @@ document.addEventListener('KyteInitialized', function(e) {
     let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
     $(".backToDS").attr('href', '/app/datastores.html?request='+encoded);
 
-    // **** add cors handler
+    function updateProgress() {
+        const progressFill = document.getElementById('progressFill');
+        const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        progressFill.style.width = progressPercentage + '%';
+
+        // Update step indicators
+        for (let i = 1; i <= totalSteps; i++) {
+            const indicator = document.getElementById(`step-indicator-${i}`);
+            const circle = indicator.querySelector('.step-circle');
+            
+            indicator.classList.remove('active', 'complete');
+            
+            if (i < currentStep) {
+                indicator.classList.add('complete');
+                circle.innerHTML = '<i class="fas fa-check"></i>';
+            } else if (i === currentStep) {
+                indicator.classList.add('active');
+                circle.textContent = i;
+            } else {
+                circle.textContent = i;
+            }
+        }
+    }
+
+    function showStep(stepNumber) {
+        // Hide all steps using d-none (matching original)
+        document.querySelectorAll('.wizard-step').forEach(step => {
+            step.classList.add('d-none');
+            step.classList.remove('active');
+        });
+        
+        // Show current step
+        const currentStepElement = document.getElementById(`wizard-${stepNumber}`);
+        if (currentStepElement) {
+            currentStepElement.classList.remove('d-none');
+            currentStepElement.classList.add('active');
+        }
+        
+        currentStep = stepNumber;
+        updateProgress();
+    }
+
+    // Bucket name input handler
+    document.getElementById('bucket-name')?.addEventListener('input', function() {
+        const bucketName = this.value || 'your-bucket-name';
+        const preview = document.getElementById('bucket-url-preview');
+        if (preview) {
+            preview.textContent = `s3://${bucketName}`;
+        }
+    });
+
+    // ACL selection handlers
+    document.querySelectorAll('.acl-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const section = this.closest('.wizard-section');
+            const hiddenInput = section.querySelector('input[type="hidden"]');
+            
+            // Remove selected class from siblings
+            section.querySelectorAll('.acl-option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selected class to clicked option
+            this.classList.add('selected');
+            
+            // Update hidden input value
+            if (hiddenInput) {
+                hiddenInput.value = this.dataset.value;
+            }
+        });
+    });
+
+    // **** add cors handler (matching original structure)
     $("#addCORS").click(function(e) {
         e.stopPropagation();
         e.preventDefault();
 
+        const corsWrapper = document.getElementById('cors-wrapper');
+        
+        // Remove empty state if there are no existing CORS cards
+        const existingCards = corsWrapper.querySelectorAll('.cors-policy');
+        if (existingCards.length === 0) {
+            corsWrapper.innerHTML = '';
+        }
+
         $("#cors-wrapper").append(`
-        <div class="cors-policy my-2 p-2">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h6>Headers</h6>
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <input type="text" class="form-control corsHeaders" value="*">
-                                </div>
-                                <div class="col-1 mx-0 px-0 text-left">
-                                    <a href="#" class="policy-add-header"><i class="fas fa-plus"></i></a>
-                                </div>
+        <div class="cors-policy my-3">
+            <div class="cors-card">
+                <div class="cors-card-header">
+                    <h6 class="mb-0">CORS Policy</h6>
+                    <button class="cors-remove delete-policy" type="button">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>Headers</h6>
+                        <div class="row align-items-center mb-2">
+                            <div class="col">
+                                <input type="text" class="form-control corsHeaders" value="*" placeholder="Content-Type">
                             </div>
-                            <div class="policy-headers-wrapper">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <h6>Methods</h6>
-                            <div class="d-inline me-2"><input type="checkbox" class="corsMethodGet"> GET</div>
-                            <div class="d-inline me-2"><input type="checkbox" class="corsMethodPost"> POST</div>
-                            <div class="d-inline me-2"><input type="checkbox" class="corsMethodPut"> PUT</div>
-                            <div class="d-inline"><input type="checkbox" class="corsMethodDelete"> DELETE</div>
-                            <div class="d-block"><input type="checkbox" class="corsMethodHead"> HEAD</div>
-                        </div>
-                        <div class="col">
-                            <h6>Origins</h6>
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <input type="text" class="form-control corsOrigins" value="*">
-                                </div>
-                                <div class="col-1 mx-0 px-0 text-left">
-                                    <a href="#" class="policy-add-origin"><i class="fas fa-plus"></i></a>
-                                </div>
-                            </div>
-                            <div class="policy-origins-wrapper">
+                            <div class="col-auto">
+                                <a href="#" class="policy-add-header btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-plus"></i>
+                                </a>
                             </div>
                         </div>
-                        <div class="col-1 text-right"><a href="#" class="delete-policy"><i class="fas fa-times-circle text-danger"></i></a></div>
+                        <div class="policy-headers-wrapper"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Methods</h6>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input corsMethodGet" id="get-${Date.now()}">
+                            <label class="form-check-label" for="get-${Date.now()}">GET</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input corsMethodPost" id="post-${Date.now()}">
+                            <label class="form-check-label" for="post-${Date.now()}">POST</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input corsMethodPut" id="put-${Date.now()}">
+                            <label class="form-check-label" for="put-${Date.now()}">PUT</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input corsMethodDelete" id="delete-${Date.now()}">
+                            <label class="form-check-label" for="delete-${Date.now()}">DELETE</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input corsMethodHead" id="head-${Date.now()}">
+                            <label class="form-check-label" for="head-${Date.now()}">HEAD</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Origins</h6>
+                        <div class="row align-items-center mb-2">
+                            <div class="col">
+                                <input type="text" class="form-control corsOrigins" value="*" placeholder="https://example.com">
+                            </div>
+                            <div class="col-auto">
+                                <a href="#" class="policy-add-origin btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-plus"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="policy-origins-wrapper"></div>
                     </div>
                 </div>
             </div>
@@ -78,10 +175,12 @@ document.addEventListener('KyteInitialized', function(e) {
         $(this).closest('.row').next('.policy-headers-wrapper').append(`
         <div class="row my-2 align-items-center policy-header-info">
             <div class="col">
-                <input type="text" class="form-control corsHeaders">
+                <input type="text" class="form-control corsHeaders" placeholder="Authorization">
             </div>
-            <div class="col-1 mx-0 px-0 text-left">
-                <a href="#" class="policy-remove-header"><i class="fas fa-times-circle text-secondary"></i></a>
+            <div class="col-auto">
+                <a href="#" class="policy-remove-header btn btn-sm btn-outline-danger">
+                    <i class="fas fa-times"></i>
+                </a>
             </div>
         </div>
         `);
@@ -103,10 +202,12 @@ document.addEventListener('KyteInitialized', function(e) {
         $(this).closest('.row').next('.policy-origins-wrapper').append(`
         <div class="row my-2 align-items-center policy-origin-info">
             <div class="col">
-                <input type="text" class="form-control corsOrigins">
+                <input type="text" class="form-control corsOrigins" placeholder="https://yoursite.com">
             </div>
-            <div class="col-1 mx-0 px-0 text-left">
-                <a href="#" class="policy-remove-origin"><i class="fas fa-times-circle text-secondary"></i></a>
+            <div class="col-auto">
+                <a href="#" class="policy-remove-origin btn btn-sm btn-outline-danger">
+                    <i class="fas fa-times"></i>
+                </a>
             </div>
         </div>
         `);
@@ -126,9 +227,24 @@ document.addEventListener('KyteInitialized', function(e) {
         e.preventDefault();
 
         $(this).closest('.cors-policy').remove();
+        
+        // Check remaining CORS cards
+        const corsWrapper = document.getElementById('cors-wrapper');
+        const remainingCards = corsWrapper.querySelectorAll('.cors-policy');
+        
+        // Show empty state if no policies remain
+        if (remainingCards.length === 0) {
+            corsWrapper.innerHTML = `
+                <div class="text-center py-5 text-muted">
+                    <i class="fas fa-info-circle fa-3x mb-3"></i>
+                    <h5>No CORS Policies Configured</h5>
+                    <p>Add CORS policies to enable cross-origin requests to your data store.</p>
+                </div>
+            `;
+        }
     });
 
-    // **** Navigation
+    // Navigation event listeners (matching original navigation system)
     $("#wizard-1-next").click(function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -168,35 +284,28 @@ document.addEventListener('KyteInitialized', function(e) {
         }
         $("#bucket-public-access").removeClass('is-invalid');
 
-        $("#wizard-1").addClass('d-none');
-        $("#wizard-2").removeClass('d-none');
+        showStep(2);
     });
 
     $("#wizard-2-back").click(function(e) {
         e.stopPropagation();
         e.preventDefault();
-
-        $("#wizard-2").addClass('d-none');
-        $("#wizard-1").removeClass('d-none');
+        showStep(1);
     });
 
     $("#wizard-2-next").click(function(e) {
         e.stopPropagation();
         e.preventDefault();
-
-        $("#wizard-2").addClass('d-none');
-        $("#wizard-3").removeClass('d-none');
+        showStep(3);
     });
 
     $("#wizard-3-back").click(function(e) {
         e.stopPropagation();
         e.preventDefault();
-
-        $("#wizard-3").addClass('d-none');
-        $("#wizard-2").removeClass('d-none');
+        showStep(2);
     });
 
-    // create bucket
+    // create bucket (matching original API call structure)
     $("#wizard-3-next").click(function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -336,11 +445,26 @@ document.addEventListener('KyteInitialized', function(e) {
             });
         });
 
-        _ks.post('DataStore', {'name':bucketName, 'region': bucketRegion, 'acl': bucketAcl, 'blockPublicAccess':bucketPublicAccess, 'application': idx, 'cors':cors}, null, [], function(r) {
-            $("#wizard-3").addClass('d-none');
-            $("#wizard-final").removeClass('d-none');
+        _ks.post('DataStore', {
+            'name': bucketName, 
+            'region': bucketRegion, 
+            'acl': bucketAcl, 
+            'blockPublicAccess': bucketPublicAccess, 
+            'application': idx, 
+            'cors': cors
+        }, null, [], function(r) {
+            showStep('final');
         }, function(e) {
             alert("Unable to create a data store at this time. Please try again later or contact support if problem persists.");
         });
     });
+
+    // Initialize on page load
+    updateProgress();
+    
+    // Initialize bucket URL preview
+    const preview = document.getElementById('bucket-url-preview');
+    if (preview) {
+        preview.textContent = 's3://your-bucket-name';
+    }
 });

@@ -53,4 +53,4 @@ Kyte Shipyard™  is available under the [MIT License](LICENSE).
 
 ---
 
-© 2020-2024 KeyQ. All rights reserved.
+© 2020-2025 KeyQ. All rights reserved.

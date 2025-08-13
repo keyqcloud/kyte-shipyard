@@ -103,8 +103,6 @@ document.addEventListener('KyteInitialized', function(e) {
                 if (r.data[0].dataModel) {
                     modelName = r.data[0].dataModel.name;
                 }
-                $("#model-name").html(modelName)
-
                 let obj = {'model': 'Application', 'idx':r.data[0].application.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
 
@@ -112,6 +110,11 @@ document.addEventListener('KyteInitialized', function(e) {
             
                 let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${r.data[0].application.name}`);
                 navbar.create();
+
+                // create link to model and update model name
+                obj = {'model': 'Model', 'idx':r.data[0].dataModel.id};
+                encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                $("#model-name").html(`<a href="/app/model/?request=${encoded}">${modelName}</a>`);
             } else {
                 $("#controller-name").html("Undefined");
                 $("#model-name").html("Undefined");
