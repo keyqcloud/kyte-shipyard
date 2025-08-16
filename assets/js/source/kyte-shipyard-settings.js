@@ -1,33 +1,5 @@
 import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
 
-let subnavSettings = [
-    {
-        faicon:'fas fa-user',
-        label:'My Profile',
-        selector:'#Profile'
-    },
-    {
-        faicon:'fas fa-user-shield',
-        label:'Administrators',
-        selector:'#Administrators'
-    },
-    {
-        faicon:'fas fa-server',
-        label:'API',
-        selector:'#API'
-    },
-    {
-        faicon:'fas fa-rocket',
-        label:'Kyte Shipyard<sup>&trade;</sup>',
-        selector:'#KyteShipyard'
-    },
-    {
-        faicon:'fas fa-code-branch',
-        label:'Kyte API<sup>&trade;</sup>',
-        selector:'#KyteAPI'
-    }
-];
-
 let fldsAdmin = [
     [
         {
@@ -70,10 +42,6 @@ document.addEventListener('KyteInitialized', function(e) {
     // setup password requirements
     var passreq = new KytePasswordRequirement(_ks, $("#passwordRequirements"), $("#new_password"), $("#confirm_password"));
     passreq.init();
-
-    let sidenav = new KyteSidenav("#sidenav", subnavSettings, "#Profile");
-    sidenav.create();
-    sidenav.bind();
 
     $('#pageLoaderModal').modal('show');
     if (_ks.isSession()) {        
@@ -325,6 +293,8 @@ document.addEventListener('KyteInitialized', function(e) {
             });
     }
     
+    setupNavigationHandlers();
+
     // Run the check
     checkForUpdates();
 
@@ -332,3 +302,21 @@ document.addEventListener('KyteInitialized', function(e) {
     getKytePHPLicense();
     getKyteShipyardLicense();
 });
+
+
+// Setup navigation handlers
+function setupNavigationHandlers() {
+    document.querySelectorAll('[data-section]').forEach(button => {
+        button.addEventListener('click', function() {
+            const section = this.dataset.section;
+            
+            // Update active nav item
+            document.querySelectorAll('[data-section]').forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show corresponding section
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+        });
+    });
+}
