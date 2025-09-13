@@ -573,6 +573,297 @@
                 gap: 1rem;
             }
         }
+
+        /* Version Status Banner */
+            .version-status-banner {
+                margin-bottom: 2rem;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                transition: all 0.3s ease;
+            }
+
+            .version-status-banner.up-to-date {
+                background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+                border: 1px solid #10b981;
+            }
+
+            .version-status-banner.outdated {
+                background: linear-gradient(135deg, #fef3c7, #fde68a);
+                border: 1px solid #f59e0b;
+            }
+
+            .version-status-banner.error {
+                background: linear-gradient(135deg, #fef2f2, #fee2e2);
+                border: 1px solid #ef4444;
+            }
+
+            .status-indicator {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+
+            .status-icon {
+                font-size: 1.25rem;
+            }
+
+            .version-status-banner.up-to-date .status-icon {
+                color: #059669;
+            }
+
+            .version-status-banner.outdated .status-icon {
+                color: #d97706;
+            }
+
+            .version-status-banner.error .status-icon {
+                color: #dc2626;
+            }
+
+            .status-text {
+                font-weight: 600;
+                font-size: 1.1rem;
+            }
+
+            .version-status-banner.up-to-date .status-text {
+                color: #065f46;
+            }
+
+            .version-status-banner.outdated .status-text {
+                color: #92400e;
+            }
+
+            .version-status-banner.error .status-text {
+                color: #b91c1c;
+            }
+
+            /* Code Comparison Container */
+            .code-comparison-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .code-panel {
+                border: 2px solid #e2e8f0;
+                border-radius: 12px;
+                overflow: hidden;
+                background: white;
+                transition: all 0.3s ease;
+            }
+
+            .code-panel.current-version {
+                border-color: rgba(59, 130, 246, 0.3);
+            }
+
+            .code-panel.system-version {
+                border-color: rgba(16, 185, 129, 0.3);
+            }
+
+            .code-panel.has-changes {
+                border-color: rgba(245, 158, 11, 0.5);
+                box-shadow: 0 0 20px rgba(245, 158, 11, 0.1);
+            }
+
+            .code-panel-header {
+                padding: 1.5rem;
+                background: #f8fafc;
+                border-bottom: 1px solid #e2e8f0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .code-panel.current-version .code-panel-header {
+                background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(147, 197, 253, 0.05));
+            }
+
+            .code-panel.system-version .code-panel-header {
+                background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(110, 231, 183, 0.05));
+            }
+
+            .code-panel-title {
+                margin: 0;
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: #374151;
+            }
+
+            .code-panel.current-version .code-panel-title {
+                color: #1e40af;
+            }
+
+            .code-panel.system-version .code-panel-title {
+                color: #059669;
+            }
+
+            .version-badge {
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                font-size: 0.85rem;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+            }
+
+            .version-badge.current {
+                background: rgba(59, 130, 246, 0.1);
+                color: #1e40af;
+                border: 1px solid rgba(59, 130, 246, 0.2);
+            }
+
+            .version-badge.system {
+                background: rgba(16, 185, 129, 0.1);
+                color: #059669;
+                border: 1px solid rgba(16, 185, 129, 0.2);
+            }
+
+            .code-panel-content {
+                max-height: 400px;
+                overflow: hidden;
+                position: relative;
+            }
+
+            .code-wrapper {
+                max-height: 400px;
+                overflow: auto;
+                background: #1e293b;
+                color: #e2e8f0;
+            }
+
+            .code-block {
+                margin: 0;
+                padding: 1.5rem;
+                background: transparent;
+                border: none;
+                font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                font-size: 0.9rem;
+                line-height: 1.5;
+                color: inherit;
+                white-space: pre-wrap;
+                word-break: break-word;
+            }
+
+            /* Code Actions */
+            .code-actions {
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            .btn-secondary {
+                background: #6b7280;
+                border: none;
+                border-radius: 8px;
+                padding: 10px 20px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                color: white;
+            }
+
+            .btn-secondary:hover {
+                background: #4b5563;
+                transform: translateY(-1px);
+            }
+
+            .btn-outline-info {
+                background: transparent;
+                border: 2px solid #06b6d4;
+                border-radius: 8px;
+                padding: 10px 20px;
+                font-weight: 500;
+                color: #06b6d4;
+                transition: all 0.3s ease;
+            }
+
+            .btn-outline-info:hover {
+                background: #06b6d4;
+                color: white;
+                transform: translateY(-1px);
+            }
+
+            /* Diff Summary */
+            .diff-summary {
+                margin-top: 1.5rem;
+                padding: 1.5rem;
+                background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+                border: 1px solid #0284c7;
+                border-radius: 12px;
+            }
+
+            .diff-stats {
+                display: flex;
+                gap: 2rem;
+                align-items: center;
+            }
+
+            .diff-stat {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-weight: 600;
+            }
+
+            .diff-stat.additions {
+                color: #059669;
+            }
+
+            .diff-stat.deletions {
+                color: #dc2626;
+            }
+
+            .diff-stat.modifications {
+                color: #d97706;
+            }
+
+            /* Loading States */
+            .code-block.loading {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100px;
+                color: #6b7280;
+                font-style: italic;
+            }
+
+            /* Mobile Responsiveness */
+            @media (max-width: 1024px) {
+                .code-comparison-container {
+                    grid-template-columns: 1fr;
+                    gap: 1.5rem;
+                }
+                
+                .code-actions {
+                    justify-content: center;
+                }
+                
+                .diff-stats {
+                    flex-direction: column;
+                    gap: 1rem;
+                    align-items: flex-start;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .code-panel-header {
+                    flex-direction: column;
+                    gap: 1rem;
+                    align-items: flex-start;
+                }
+                
+                .code-actions {
+                    flex-direction: column;
+                    width: 100%;
+                }
+                
+                .code-actions button {
+                    width: 100%;
+                    justify-content: center;
+                }
+            }
     </style>
 </head>
 
@@ -645,6 +936,10 @@
                             <i class="fas fa-code"></i>
                             Environment Variables
                         </button>
+                        <button class="nav-link" data-section="KyteConnect">
+                            <i class="fas fa-rocket"></i>
+                            Kyte Connect
+                        </button>
                     </div>
                 </div>
             </div>
@@ -653,28 +948,6 @@
             <div class="main-content">
                 <!-- App Configuration Section -->
                 <div id="App" class="content-section active">
-                    <!-- Obfuscation Settings -->
-                    <div class="config-card">
-                        <div class="config-card-header">
-                            <div class="config-card-icon">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
-                            <div>
-                                <h3 class="config-card-title">Kyte Connect Obfuscation</h3>
-                            </div>
-                        </div>
-                        <p class="config-card-description">
-                            Control whether JavaScript for connecting to the Kyte API endpoint is obfuscated. Obfuscation is recommended for security, but if organizational policies (such as firewall requirements) prevent obfuscated code, you can disable it here.
-                        </p>
-                        <div class="form-group">
-                            <label class="form-label">Obfuscation Setting</label>
-                            <select id="obfuscate_kyte_connect" class="form-select">
-                                <option value="1">Obfuscate (Recommended)</option>
-                                <option value="0">Do Not Obfuscate (Not Recommended)</option>
-                            </select>
-                        </div>
-                    </div>
-
                     <!-- User Table Configuration -->
                     <div class="config-card">
                         <div class="config-card-header">
@@ -778,10 +1051,10 @@
                     </div>
 
                     <!-- Save Button -->
-                    <div class="d-flex justify-content-end">
-                        <button id="saveSettings" class="btn btn-primary">
+                    <div class="d-flex justify-content-end pb-3 pe-3">
+                        <button id="saveAppSettings" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>
-                            Save Configuration
+                            Save App Configuration
                         </button>
                     </div>
                 </div>
@@ -803,6 +1076,142 @@
                             </p>
                         </div>
                         <table id="tblEnvVars" class="table table-striped w-100"></table>
+                    </div>
+                </div>
+
+                <!-- Kyte Connect Section -->
+                <div id="KyteConnect" class="content-section">
+                    <!-- Obfuscation Settings -->
+                    <div class="config-card">
+                        <div class="config-card-header">
+                            <div class="config-card-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div>
+                                <h3 class="config-card-title">Kyte Connect Obfuscation</h3>
+                            </div>
+                        </div>
+                        <p class="config-card-description">
+                            Control whether JavaScript for connecting to the Kyte API endpoint is obfuscated. Obfuscation is recommended for security, but if organizational policies (such as firewall requirements) prevent obfuscated code, you can disable it here.
+                            <br><br>
+                            <strong>Important:</strong> Changing this setting will automatically regenerate the Kyte Connect code and update all published pages with the new version. You can review the updated code in the "Kyte Connect Code Comparison" section below before it's applied.
+                        </p>
+                        <div class="form-group">
+                            <label class="form-label">Obfuscation Setting</label>
+                            <select id="obfuscate_kyte_connect" class="form-select">
+                                <option value="1">Obfuscate (Recommended)</option>
+                                <option value="0">Do Not Obfuscate (Not Recommended)</option>
+                            </select>
+                        </div>
+                        <!-- Save Button -->
+                        <div class="d-flex justify-content-end">
+                            <button id="saveObfuscationSettings" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>
+                                Save Obfuscation Settings
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Kyte Connect Configuration -->
+                    <div class="config-card">
+                        <div class="config-card-header">
+                            <div class="config-card-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <div>
+                                <h3 class="config-card-title">Kyte Connect Code Comparison</h3>
+                            </div>
+                        </div>
+                        <p class="config-card-description">
+                            Compare your current Kyte Connect JavaScript with the latest system version. Update your application to use the latest code when API endpoints or configurations change.
+                        </p>
+                        
+                        <!-- Version Status Banner -->
+                        <div id="version-status-banner" class="version-status-banner">
+                            <div class="status-indicator">
+                                <i class="fas fa-sync-alt status-icon"></i>
+                                <span class="status-text">Checking versions...</span>
+                            </div>
+                        </div>
+
+                        <!-- Code Comparison Container -->
+                        <div class="code-comparison-container">
+                            <!-- Current Version -->
+                            <div class="code-panel current-version">
+                                <div class="code-panel-header">
+                                    <h4 class="code-panel-title">
+                                        <i class="fas fa-file-code me-2"></i>
+                                        Current Application Version
+                                    </h4>
+                                    <div class="code-panel-info">
+                                        <span class="version-badge current">
+                                            <i class="fas fa-clock me-1"></i>
+                                            <span id="current-version-date">Loading...</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="code-panel-content">
+                                    <div class="code-wrapper">
+                                        <pre id="current-kyte-code" class="code-block"><code>Loading current version...</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- System Version -->
+                            <div class="code-panel system-version">
+                                <div class="code-panel-header">
+                                    <h4 class="code-panel-title">
+                                        <i class="fas fa-cloud me-2"></i>
+                                        Latest System Version
+                                    </h4>
+                                    <div class="code-panel-info">
+                                        <span class="version-badge system">
+                                            <i class="fas fa-rocket me-1"></i>
+                                            <span id="system-version-date">Loading...</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="code-panel-content">
+                                    <div class="code-wrapper">
+                                        <pre id="system-kyte-code" class="code-block"><code>Loading system version...</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="code-actions">
+                            <button id="refresh-comparison" class="btn btn-secondary">
+                                <i class="fas fa-sync-alt me-2"></i>
+                                Refresh Comparison
+                            </button>
+                            <button id="update-to-system" class="btn btn-primary" disabled>
+                                <i class="fas fa-upload me-2"></i>
+                                Update to System Version
+                            </button>
+                            <button id="view-diff" class="btn btn-outline-info">
+                                <i class="fas fa-search me-2"></i>
+                                View Detailed Diff
+                            </button>
+                        </div>
+
+                        <!-- Diff Modal Trigger (Hidden, will be shown when differences exist) -->
+                        <div id="diff-summary" class="diff-summary" style="display: none;">
+                            <div class="diff-stats">
+                                <span class="diff-stat additions">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span id="additions-count">0</span> additions
+                                </span>
+                                <span class="diff-stat deletions">
+                                    <i class="fas fa-minus-circle"></i>
+                                    <span id="deletions-count">0</span> deletions
+                                </span>
+                                <span class="diff-stat modifications">
+                                    <i class="fas fa-edit"></i>
+                                    <span id="modifications-count">0</span> changes
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

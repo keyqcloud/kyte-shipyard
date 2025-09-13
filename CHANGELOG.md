@@ -1,3 +1,9 @@
+## 1.6.1 (pending)
+
+- Add feature to allow for kyte_connect updates.
+- When kyte_connect changes, or kyte_connect obfuscation preference changes, forces a page republish
+- Fix issue where account number was not showing in KS settings
+
 ## 1.6.0
 
 - Major UI improvement
