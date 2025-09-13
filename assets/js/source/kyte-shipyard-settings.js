@@ -51,7 +51,7 @@ document.addEventListener('KyteInitialized', function(e) {
             if (r.data[0]) {
                 profile = r.data[0];
                 $("#profile_email").val(profile['email']);
-                $("#accountNumber").val(profile['kyte_account']['number']);
+                $("#accountNumber").html(profile['kyte_account']['number']);
             }
             $('#pageLoaderModal').modal('hide');
         }, function(err) {
