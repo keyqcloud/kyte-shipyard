@@ -4,6 +4,9 @@
 - When kyte_connect changes, or kyte_connect obfuscation preference changes, forces a page republish
 - Fix issue where account number was not showing in KS settings
 - Fix missing option for page div wrapper settings
+- Add UI for viewing page versions
+- Add feature to preview and restore to past versions
+- Add feature to add change summaries when saving or publishing
 
 ## 1.6.0
 
