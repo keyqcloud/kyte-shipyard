@@ -79,7 +79,8 @@
 
 /* Form container styling */
 .modal-body {
-    padding: 0 !important;
+    padding: 0;
+    padding-top: 1em;
     background: white !important;
 }
 
@@ -89,111 +90,13 @@
 }
 
 /* Enhanced form groups */
-.form-group {
+.modal-body .form-group {
     margin-bottom: 1.75rem !important;
     position: relative !important;
 }
 
-/* Create sections based on your element structure */
-.row.my-2:first-child {
-    position: relative;
-    padding-top: 1rem;
-}
-
-.row.my-2:first-child::before {
-    content: 'Basic Information';
-    position: absolute;
-    top: -0.5rem;
-    left: 0;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.row.my-2:first-child::after {
-    content: '';
-    position: absolute;
-    top: -0.25rem;
-    left: -0.5rem;
-    width: 3px;
-    height: 1.25rem;
-    background: var(--primary-gradient);
-    border-radius: 2px;
-}
-
-.row.my-2:nth-child(3) {
-    position: relative;
-    padding-top: 2rem;
-    margin-top: 2rem;
-    border-top: 1px solid var(--border-color);
-}
-
-.row.my-2:nth-child(3)::before {
-    content: 'Configuration';
-    position: absolute;
-    top: 0.5rem;
-    left: 0;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.row.my-2:nth-child(3)::after {
-    content: '';
-    position: absolute;
-    top: 0.75rem;
-    left: -0.5rem;
-    width: 3px;
-    height: 1.25rem;
-    background: var(--primary-gradient);
-    border-radius: 2px;
-}
-
-.row.my-2:last-child {
-    position: relative;
-    padding-top: 2rem;
-    margin-top: 2rem;
-    border-top: 1px solid var(--border-color);
-}
-
-.row.my-2:last-child::before {
-    content: 'Documentation';
-    position: absolute;
-    top: 0.5rem;
-    left: 0;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.row.my-2:last-child::after {
-    content: '';
-    position: absolute;
-    top: 0.75rem;
-    left: -0.5rem;
-    width: 3px;
-    height: 1.25rem;
-    background: var(--primary-gradient);
-    border-radius: 2px;
-}
-
 /* Enhanced labels */
-label {
+.modal-body label {
     font-weight: 600 !important;
     color: var(--text-primary) !important;
     margin-bottom: 0.75rem !important;
@@ -203,93 +106,12 @@ label {
     font-size: 0.95rem !important;
 }
 
-/* Add icons to labels based on field type */
-label[for*="name"]::before {
-    content: '\f02b';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-label[for*="type"]::before {
-    content: '\f121';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-label[for*="required"]::before {
-    content: '\f071';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-label[for*="foreignKeyModel"]::before {
-    content: '\f0c1';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-label[for*="size"]::before {
-    content: '\f547';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-label[for*="unsigned"]::before {
-    content: '\f055';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-label[for*="protected"]::before {
-    content: '\f3ed';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-label[for*="password"]::before {
-    content: '\f084';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-label[for*="defaults"]::before {
-    content: '\f02b';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-label[for*="description"]::before {
-    content: '\f075';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
 /* Required field indicators */
-input[required] + label::after,
-select[required] + label::after,
-label[for*="name"]::after,
-label[for*="type"]::after,
-label[for*="required"]::after {
+.modal-body input[required] + label::after,
+.modal-body select[required] + label::after,
+.modal-body label[for*="name"]::after,
+.modal-body label[for*="type"]::after,
+.modal-body label[for*="required"]::after {
     content: '*';
     color: var(--error-color);
     font-size: 0.8rem;
@@ -297,7 +119,7 @@ label[for*="required"]::after {
 }
 
 /* Modern input styling */
-.form-control, .form-select {
+.modal-body .form-control, .modal-body .form-select {
     border: 2px solid var(--border-color) !important;
     border-radius: 12px !important;
     padding: 0.875rem 1.125rem !important;
@@ -307,19 +129,19 @@ label[for*="required"]::after {
     position: relative !important;
 }
 
-.form-control:focus, .form-select:focus {
+.modal-body .form-control:focus, .modal-body .form-select:focus {
     border-color: var(--primary-color) !important;
     box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1) !important;
     outline: none !important;
     transform: translateY(-1px) !important;
 }
 
-.form-control:hover, .form-select:hover {
+.modal-body  .form-control:hover, .modal-body .form-select:hover {
     border-color: #cbd5e0 !important;
 }
 
 /* Enhanced submit button */
-.btn-primary, input[type="submit"], button[type="submit"] {
+.modal-body .btn-primary, .modal-body input[type="submit"], .modal-body button[type="submit"] {
     background: var(--primary-gradient) !important;
     border: none !important;
     color: white !important;
@@ -333,14 +155,14 @@ label[for*="required"]::after {
     box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3) !important;
 }
 
-.btn-primary:hover, input[type="submit"]:hover, button[type="submit"]:hover {
+.modal-body .btn-primary:hover, .modal-body input[type="submit"]:hover, .modal-body button[type="submit"]:hover {
     transform: translateY(-2px) !important;
     box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4) !important;
     background: linear-gradient(135deg, #e55a2b, #e8841a) !important;
     color: white !important;
 }
 
-.btn-primary::before, input[type="submit"]::before, button[type="submit"]::before {
+.modal-body .btn-primary::before, .modal-body input[type="submit"]::before, .modal-body button[type="submit"]::before {
     content: '\f0c7';
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
@@ -348,7 +170,7 @@ label[for*="required"]::after {
 }
 
 /* Form actions styling */
-.row.my-4 {
+.modal-body .row.my-4 {
     background: var(--bg-light) !important;
     padding: 1.5rem 2.5rem !important;
     margin: 2rem -2.5rem 0 !important;
@@ -379,7 +201,7 @@ label[for*="required"]::after {
 }
 
 /* Error message styling */
-.error-msg {
+.modal-body .error-msg {
     background: rgba(239, 68, 68, 0.1) !important;
     border: 1px solid rgba(239, 68, 68, 0.2) !important;
     color: var(--error-color) !important;
@@ -392,7 +214,7 @@ label[for*="required"]::after {
     gap: 0.5rem !important;
 }
 
-.error-msg::before {
+.modal-body .error-msg::before {
     content: '\f071';
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
@@ -400,86 +222,12 @@ label[for*="required"]::after {
 }
 
 /* Validation states */
-.is-valid {
+.modal-body .is-valid {
     border-color: var(--success-color) !important;
 }
 
-.is-invalid {
+.modal-body .is-invalid {
     border-color: var(--error-color) !important;
-}
-
-/* Help text for complex fields */
-.form-group:has(select[name="foreignKeyModel"]) {
-    position: relative;
-}
-
-.form-group:has(select[name="foreignKeyModel"])::after {
-    content: 'Link to another model for relational data';
-    position: absolute;
-    bottom: -1.5rem;
-    left: 0;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-}
-
-.form-group:has(select[name="foreignKeyModel"])::before {
-    content: '\f129';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    position: absolute;
-    bottom: -1.45rem;
-    left: -1.25rem;
-    font-size: 0.7rem;
-}
-
-.form-group:has(input[name="defaults"])::after {
-    content: 'Default value when creating new records';
-    position: absolute;
-    bottom: -1.5rem;
-    left: 0;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-}
-
-.form-group:has(input[name="defaults"])::before {
-    content: '\f0eb';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    position: absolute;
-    bottom: -1.45rem;
-    left: -1.25rem;
-    font-size: 0.7rem;
-}
-
-.form-group:has(input[name="description"])::after {
-    content: 'Help others understand what this attribute is used for';
-    position: absolute;
-    bottom: -1.5rem;
-    left: 0;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-}
-
-.form-group:has(input[name="description"])::before {
-    content: '\f0eb';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--primary-color);
-    position: absolute;
-    bottom: -1.45rem;
-    left: -1.25rem;
-    font-size: 0.7rem;
 }
 
 /* Responsive design */
@@ -488,15 +236,15 @@ label[for*="required"]::after {
         padding: 1.5rem !important;
     }
     
-    .row.my-2 {
+    .modal-body .row.my-2 {
         flex-direction: column !important;
     }
     
-    .col-sm {
+    .modal-body .col-sm {
         margin-bottom: 1rem !important;
     }
     
-    .row.my-4 {
+    .modal-body .row.my-4 {
         flex-direction: column !important;
         padding: 1.5rem !important;
         margin: 1.5rem -1.5rem 0 !important;

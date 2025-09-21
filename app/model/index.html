@@ -638,6 +638,139 @@
                 transition-duration: 0.01ms !important;
             }
         }
+
+        
+        .form-group:has(input[name="defaults"])::after {
+            content: 'Default value when creating new records';
+            position: absolute;
+            bottom: -1.5rem;
+            left: 0;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        /* Help text for complex fields */
+        .form-group:has(input[name="defaults"])::before {
+            content: '\f0eb';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            position: absolute;
+            bottom: -1.45rem;
+            left: -1.25rem;
+            font-size: 0.7rem;
+        }
+        
+        .form-group:has(select[name="foreignKeyModel"]) {
+            position: relative;
+        }
+
+        .form-group:has(select[name="foreignKeyModel"])::after {
+            content: 'Link to another model for relational data';
+            position: absolute;
+            bottom: -1.5rem;
+            left: 0;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .form-group:has(select[name="foreignKeyModel"])::before {
+            content: '\f129';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            position: absolute;
+            bottom: -1.45rem;
+            left: -1.25rem;
+            font-size: 0.7rem;
+        }
+
+        /* Add icons to labels based on field type */
+        .modal-body label[for*="name"]::before {
+            content: '\f02b';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .modal-body label[for*="type"]::before {
+            content: '\f121';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .modal-body label[for*="required"]::before {
+            content: '\f071';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .modal-body label[for*="foreignKeyModel"]::before {
+            content: '\f0c1';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .modal-body label[for*="size"]::before {
+            content: '\f547';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .modal-body label[for*="unsigned"]::before {
+            content: '\f055';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .modal-body label[for*="protected"]::before {
+            content: '\f3ed';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .modal-body label[for*="password"]::before {
+            content: '\f084';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .modal-body label[for*="defaults"]::before {
+            content: '\f02b';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .modal-body label[for*="description"]::before {
+            content: '\f075';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 
