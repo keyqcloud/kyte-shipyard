@@ -1199,6 +1199,11 @@
                                         <i class="fas fa-palette me-2"></i>Styles & Preview
                                     </button>
                                 </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" id="nav-settings-tab" data-bs-toggle="tab" data-bs-target="#nav-settings-content">
+                                        <i class="fas fa-cog me-2"></i>Settings
+                                    </button>
+                                </li>
                             </ul>
 
                             <div class="tab-content">
@@ -1329,6 +1334,81 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Navigation Settings Tab -->
+                                <div class="tab-pane fade" id="nav-settings-content">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0"><i class="fas fa-cog me-2"></i>General Settings</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label for="nav-name" class="form-label fw-bold">Navigation Name</label>
+                                                        <input type="text" class="form-control" id="nav-name" placeholder="Enter navigation menu name">
+                                                        <small class="text-muted">This name is used to identify the navigation menu in the admin panel</small>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <label for="nav-page" class="form-label fw-bold">Navigation Page</label>
+                                                        <select class="form-select" id="nav-page">
+                                                            <option value="">Select page for navbar title/logo click...</option>
+                                                            <!-- Pages will be populated by JavaScript -->
+                                                        </select>
+                                                        <small class="text-muted">Page to navigate to when the navbar title/logo is clicked</small>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <label for="nav-logo" class="form-label fw-bold">Navigation Logo URL <span class="text-muted">(optional)</span></label>
+                                                        <input type="url" class="form-control" id="nav-logo" placeholder="https://example.com/logo.png">
+                                                        <small class="text-muted">URL to logo image. Leave blank to use text-based brand name</small>
+                                                    </div>
+                                                    
+                                                    <div class="d-flex gap-2 mt-4">
+                                                        <button type="button" class="btn btn-primary" id="save-nav-settings">
+                                                            <i class="fas fa-save me-2"></i>Save Settings
+                                                        </button>
+                                                        <button type="button" class="btn btn-outline-secondary" id="delete-navigation">
+                                                            <i class="fas fa-trash me-2"></i>Delete Navigation
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Information</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <small class="text-muted d-block mb-1">Navigation ID:</small>
+                                                        <span id="nav-info-id" class="badge bg-secondary">-</span>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <small class="text-muted d-block mb-1">Total Items:</small>
+                                                        <span id="nav-info-item-count" class="badge bg-info">0</span>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <small class="text-muted d-block mb-1">Last Modified:</small>
+                                                        <span id="nav-info-modified" class="text-muted">-</span>
+                                                    </div>
+                                                    
+                                                    <div class="alert alert-info mb-0">
+                                                        <small>
+                                                            <i class="fas fa-lightbulb me-1"></i>
+                                                            <strong>Tip:</strong> You can set a specific page for users to navigate to when they click on your site's logo or title in the navigation bar.
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- No Navigation Selected State -->
@@ -1448,6 +1528,11 @@
                                 <li class="nav-item">
                                     <button class="nav-link" id="sidenav-styles-tab" data-bs-toggle="tab" data-bs-target="#sidenav-styles-content">
                                         <i class="fas fa-palette me-2"></i>Styles & Layout
+                                    </button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" id="sidenav-settings-tab" data-bs-toggle="tab" data-bs-target="#sidenav-settings-content">
+                                        <i class="fas fa-cog me-2"></i>Settings
                                     </button>
                                 </li>
                             </ul>
@@ -1607,6 +1692,76 @@
                                                         </div>
                                                     </div>
                                                     <small class="text-muted mt-2 d-block">Preview updates as you change styles above</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Side Navigation Settings Tab -->
+                                <div class="tab-pane fade" id="sidenav-settings-content">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0"><i class="fas fa-cog me-2"></i>General Settings</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label for="sidenav-name" class="form-label fw-bold">Side Navigation Name</label>
+                                                        <input type="text" class="form-control" id="sidenav-name" placeholder="Enter side navigation menu name">
+                                                        <small class="text-muted">This name is used to identify the side navigation menu in the admin panel</small>
+                                                    </div>
+                                                    
+                                                    <div class="d-flex gap-2 mt-4">
+                                                        <button type="button" class="btn btn-primary" id="save-sidenav-settings">
+                                                            <i class="fas fa-save me-2"></i>Save Settings
+                                                        </button>
+                                                        <button type="button" class="btn btn-outline-secondary" id="delete-sidenav">
+                                                            <i class="fas fa-trash me-2"></i>Delete Side Navigation
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Information</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <small class="text-muted d-block mb-1">Side Navigation ID:</small>
+                                                        <span id="sidenav-info-id" class="badge bg-secondary">-</span>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <small class="text-muted d-block mb-1">Total Items:</small>
+                                                        <span id="sidenav-info-item-count" class="badge bg-info">0</span>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <small class="text-muted d-block mb-1">Column Style:</small>
+                                                        <span id="sidenav-info-column-style" class="badge bg-success">Default</span>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <small class="text-muted d-block mb-1">Item Style:</small>
+                                                        <span id="sidenav-info-item-style" class="badge bg-warning">Left Aligned</span>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <small class="text-muted d-block mb-1">Last Modified:</small>
+                                                        <span id="sidenav-info-modified" class="text-muted">-</span>
+                                                    </div>
+                                                    
+                                                    <div class="alert alert-info mb-0">
+                                                        <small>
+                                                            <i class="fas fa-lightbulb me-1"></i>
+                                                            <strong>Tip:</strong> Side navigation menus are perfect for creating vertical navigation panels that can be embedded in your page layouts.
+                                                        </small>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

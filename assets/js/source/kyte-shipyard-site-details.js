@@ -960,6 +960,9 @@ document.addEventListener('KyteInitialized', function(e) {
             _ks.get('NavigationItem', 'navigation', navigationId, [], function(r) {
                 navigationItems = r.data || [];
                 renderNavigationItems();
+
+                // Update info panel with current item count
+                document.getElementById('nav-info-item-count').textContent = navigationItems.length;
                 
                 if (navigationItems.length === 0) {
                     document.getElementById('navigation-empty-state').style.display = 'block';
@@ -1087,9 +1090,41 @@ document.addEventListener('KyteInitialized', function(e) {
             document.getElementById('nav-text-color').value = navData.fgColor || '#ffffff';
             document.getElementById('nav-dropdown-bg-color').value = navData.bgDropdownColor || '#ffffff';
             document.getElementById('nav-dropdown-text-color').value = navData.fgDropdownColor || '#212529';
+
+            // navigation settings
+            document.getElementById('nav-name').value = navData.name || '';
+            document.getElementById('nav-logo').value = navData.logo || '';
             
+            // Populate pages dropdown for settings
+            const navPageSelect = document.getElementById('nav-page');
+            navPageSelect.innerHTML = '<option value="">Select page for navbar title/logo click...</option>';
+            currentSitePages.forEach(page => {
+                const option = document.createElement('option');
+                option.value = page.id;
+                option.textContent = `${page.title} [/${page.s3key}]`;
+                if (navData.page && navData.page.id === page.id) {
+                    option.selected = true;
+                }
+                navPageSelect.appendChild(option);
+            });
+            
+            // Update info panel
+            updateNavigationInfoPanel(navData);
+
             // Update preview
             updateNavigationPreview();
+        }
+
+        function updateNavigationInfoPanel(navData) {
+            document.getElementById('nav-info-id').textContent = navData.id || '-';
+            document.getElementById('nav-info-item-count').textContent = navigationItems.length || '0';
+            
+            if (navData.date_modified) {
+                const date = new Date(navData.date_modified);
+                document.getElementById('nav-info-modified').textContent = date.toLocaleDateString();
+            } else {
+                document.getElementById('nav-info-modified').textContent = '-';
+            }
         }
 
         // Update navigation preview
@@ -1156,6 +1191,73 @@ document.addEventListener('KyteInitialized', function(e) {
             // Event delegation for navigation item controls
             document.getElementById('sortable-navigation-items').addEventListener('change', handleNavigationItemChange.bind(null, _ks));
             document.getElementById('sortable-navigation-items').addEventListener('click', handleNavigationItemClick.bind(null, _ks));
+
+            // Save navigation settings
+            document.getElementById('save-nav-settings').addEventListener('click', function() {
+                saveNavigationSettings(_ks);
+            });
+            
+            // Delete navigation
+            document.getElementById('delete-navigation').addEventListener('click', function() {
+                deleteNavigation(_ks, siteId);
+            });
+        }
+
+        function saveNavigationSettings(_ks) {
+            if (!currentNavigationData) {
+                alert('No navigation selected.');
+                return;
+            }
+            
+            const updateData = {
+                name: document.getElementById('nav-name').value,
+                logo: document.getElementById('nav-logo').value || null,
+                page: document.getElementById('nav-page').value || null
+            };
+            
+            _ks.put('Navigation', 'id', currentNavigationData.id, updateData, null, [], function(r) {
+                if (r.data && r.data.length > 0) {
+                    alert('Navigation settings saved successfully!');
+                    currentNavigationData = {...currentNavigationData, ...updateData};
+                    
+                    // Update the navigation selector dropdown text
+                    const selector = document.getElementById('navigation-selector');
+                    const selectedOption = selector.querySelector(`option[value="${currentNavigationData.id}"]`);
+                    if (selectedOption) {
+                        selectedOption.textContent = updateData.name;
+                    }
+                    
+                    // Update the page title
+                    document.getElementById('current-navigation-name').textContent = updateData.name;
+                } else {
+                    alert('Failed to save navigation settings.');
+                }
+            }, function(err) {
+                alert('Error saving navigation settings: ' + err);
+            });
+        }
+
+        function deleteNavigation(_ks, siteId) {
+            if (!currentNavigationData) {
+                alert('No navigation selected.');
+                return;
+            }
+            
+            if (!confirm(`Are you sure you want to delete the navigation menu "${currentNavigationData.name}"? This will also delete all navigation items.`)) {
+                return;
+            }
+            
+            _ks.delete('Navigation', 'id', currentNavigationData.id, [], function(r) {
+                alert('Navigation menu deleted successfully!');
+                
+                // Reset the interface
+                showNoNavigationSelected();
+                
+                // Reload navigation menus
+                loadNavigationMenus(_ks, siteId);
+            }, function(err) {
+                alert('Error deleting navigation: ' + err);
+            });
         }
 
         // Handle navigation item form changes
@@ -1240,6 +1342,7 @@ document.addEventListener('KyteInitialized', function(e) {
                     navigationItems.push(r.data[0]);
                     renderNavigationItems();
                     document.getElementById('navigation-empty-state').style.display = 'none';
+                    document.getElementById('nav-info-item-count').textContent = navigationItems.length;
                 } else {
                     alert('Failed to create navigation item.');
                 }
@@ -1254,6 +1357,8 @@ document.addEventListener('KyteInitialized', function(e) {
                 
                 // Remove from DOM
                 listItem.remove();
+
+                document.getElementById('nav-info-item-count').textContent = navigationItems.length;
                 
                 // Show empty state if no items left
                 if (navigationItems.length === 0) {
@@ -1409,6 +1514,9 @@ document.addEventListener('KyteInitialized', function(e) {
             _ks.get('SideNavItem', 'sidenav', sideNavId, [], function(r) {
                 sideNavItems = r.data || [];
                 renderSideNavigationItems();
+
+                // Update info panel with current item count
+                document.getElementById('sidenav-info-item-count').textContent = sideNavItems.length;
                 
                 if (sideNavItems.length === 0) {
                     document.getElementById('sidenav-empty-state').style.display = 'block';
@@ -1544,9 +1652,37 @@ document.addEventListener('KyteInitialized', function(e) {
             });
             const selectedNavItem = document.querySelector(`[data-nav-item-style="${currentNavItemStyle}"]`);
             if (selectedNavItem) selectedNavItem.classList.add('selected');
+
+            // Populate settings form
+            document.getElementById('sidenav-name').value = sideNavData.name || '';
+            
+            // Update info panel
+            updateSideNavigationInfoPanel(sideNavData);
             
             // Update preview
             updateSideNavigationPreview();
+        }
+
+        function updateSideNavigationInfoPanel(sideNavData) {
+            document.getElementById('sidenav-info-id').textContent = sideNavData.id || '-';
+            document.getElementById('sidenav-info-item-count').textContent = sideNavItems.length || '0';
+            
+            // Update column style display
+            const columnStyleNames = ['Default Style', 'Rounded Corners', 'Rounded + Full Height'];
+            const columnStyleName = columnStyleNames[sideNavData.columnStyle || 0];
+            document.getElementById('sidenav-info-column-style').textContent = columnStyleName;
+            
+            // Update item style display
+            const itemStyleNames = ['Left Aligned', 'Centered'];
+            const itemStyleName = itemStyleNames[sideNavData.labelCenterBlock || 0];
+            document.getElementById('sidenav-info-item-style').textContent = itemStyleName;
+            
+            if (sideNavData.date_modified) {
+                const date = new Date(sideNavData.date_modified);
+                document.getElementById('sidenav-info-modified').textContent = date.toLocaleDateString();
+            } else {
+                document.getElementById('sidenav-info-modified').textContent = '-';
+            }
         }
 
         // Update side navigation preview
@@ -1640,6 +1776,8 @@ document.addEventListener('KyteInitialized', function(e) {
                     });
                     const selectedLayout = document.querySelector(`[data-column-style="${currentColumnStyle}"]`);
                     if (selectedLayout) selectedLayout.classList.add('selected');
+                    const columnStyleNames = ['Default Style', 'Rounded Corners', 'Rounded + Full Height'];
+                    document.getElementById('sidenav-info-column-style').textContent = columnStyleNames[currentColumnStyle];
                 }
                 
                 if (event.target.name === 'navItemStyle') {
@@ -1650,7 +1788,9 @@ document.addEventListener('KyteInitialized', function(e) {
                     });
                     const selectedNavItem = document.querySelector(`[data-nav-item-style="${currentNavItemStyle}"]`);
                     if (selectedNavItem) selectedNavItem.classList.add('selected');
-                    
+                    const itemStyleNames = ['Left Aligned', 'Centered'];
+                    document.getElementById('sidenav-info-item-style').textContent = itemStyleNames[currentNavItemStyle];
+
                     // Update preview
                     updateSideNavigationPreview();
                 }
@@ -1659,6 +1799,71 @@ document.addEventListener('KyteInitialized', function(e) {
             // Event delegation for side navigation item controls
             document.getElementById('sortable-sidenav-items').addEventListener('change', handleSideNavigationItemChange.bind(null, _ks));
             document.getElementById('sortable-sidenav-items').addEventListener('click', handleSideNavigationItemClick.bind(null, _ks));
+
+            // Save side navigation settings
+            document.getElementById('save-sidenav-settings').addEventListener('click', function() {
+                saveSideNavigationSettings(_ks);
+            });
+            
+            // Delete side navigation
+            document.getElementById('delete-sidenav').addEventListener('click', function() {
+                deleteSideNavigation(_ks, siteId);
+            });
+        }
+
+        function saveSideNavigationSettings(_ks) {
+            if (!currentSideNavData) {
+                alert('No side navigation selected.');
+                return;
+            }
+            
+            const updateData = {
+                name: document.getElementById('sidenav-name').value
+            };
+            
+            _ks.put('SideNav', 'id', currentSideNavData.id, updateData, null, [], function(r) {
+                if (r.data && r.data.length > 0) {
+                    alert('Side navigation settings saved successfully!');
+                    currentSideNavData = {...currentSideNavData, ...updateData};
+                    
+                    // Update the side navigation selector dropdown text
+                    const selector = document.getElementById('sidenav-selector');
+                    const selectedOption = selector.querySelector(`option[value="${currentSideNavData.id}"]`);
+                    if (selectedOption) {
+                        selectedOption.textContent = updateData.name;
+                    }
+                    
+                    // Update the page title
+                    document.getElementById('current-sidenav-name').textContent = updateData.name;
+                } else {
+                    alert('Failed to save side navigation settings.');
+                }
+            }, function(err) {
+                alert('Error saving side navigation settings: ' + err);
+            });
+        }
+
+        function deleteSideNavigation(_ks, siteId) {
+            if (!currentSideNavData) {
+                alert('No side navigation selected.');
+                return;
+            }
+            
+            if (!confirm(`Are you sure you want to delete the side navigation menu "${currentSideNavData.name}"? This will also delete all side navigation items.`)) {
+                return;
+            }
+            
+            _ks.delete('SideNav', 'id', currentSideNavData.id, [], function(r) {
+                alert('Side navigation menu deleted successfully!');
+                
+                // Reset the interface
+                showNoSideNavSelected();
+                
+                // Reload side navigation menus
+                loadSideNavigationMenus(_ks, siteId);
+            }, function(err) {
+                alert('Error deleting side navigation: ' + err);
+            });
         }
 
         // Handle side navigation item form changes
@@ -1739,6 +1944,7 @@ document.addEventListener('KyteInitialized', function(e) {
                     sideNavItems.push(r.data[0]);
                     renderSideNavigationItems();
                     document.getElementById('sidenav-empty-state').style.display = 'none';
+                    document.getElementById('sidenav-info-item-count').textContent = sideNavItems.length;
                 } else {
                     alert('Failed to create side navigation item.');
                 }
@@ -1753,6 +1959,8 @@ document.addEventListener('KyteInitialized', function(e) {
                 
                 // Remove from DOM
                 listItem.remove();
+
+                document.getElementById('sidenav-info-item-count').textContent = sideNavItems.length;
                 
                 // Show empty state if no items left
                 if (sideNavItems.length === 0) {
@@ -1882,59 +2090,6 @@ document.addEventListener('KyteInitialized', function(e) {
                     updateSideNavigationPreview();
                 });
             });
-        }
-
-        // Validate side navigation item data
-        function validateSideNavItem(itemData) {
-            if (!itemData.title || itemData.title.trim() === '') {
-                return { valid: false, message: 'Navigation item title is required.' };
-            }
-            
-            if (itemData.type === 'link' && (!itemData.link || itemData.link.trim() === '')) {
-                return { valid: false, message: 'Link URL is required for custom link items.' };
-            }
-            
-            if (itemData.type === 'page' && !itemData.page) {
-                return { valid: false, message: 'Page selection is required for page link items.' };
-            }
-            
-            return { valid: true };
-        }
-
-        // Enhanced error handling for side navigation operations
-        function handleSideNavError(operation, error) {
-            console.error(`Side Navigation ${operation} Error:`, error);
-            
-            const errorMessages = {
-                'load': 'Failed to load side navigation data. Please refresh the page and try again.',
-                'save': 'Failed to save side navigation changes. Please check your connection and try again.',
-                'delete': 'Failed to delete side navigation item. Please try again.',
-                'create': 'Failed to create side navigation item. Please try again.',
-                'publish': 'Failed to publish side navigation styles. Please try again.'
-            };
-            
-            alert(errorMessages[operation] || 'An unexpected error occurred. Please try again.');
-        }
-
-        // Debounced function for live preview updates
-        let previewUpdateTimeout;
-        function debouncedPreviewUpdate() {
-            clearTimeout(previewUpdateTimeout);
-            previewUpdateTimeout = setTimeout(updateSideNavigationPreview, 150);
-        }
-
-        // Enhanced side navigation preview with animation
-        function updateSideNavigationPreviewAnimated() {
-            const preview = document.getElementById('preview-sidenav');
-            
-            // Add loading state
-            preview.style.opacity = '0.5';
-            preview.style.transition = 'opacity 0.3s ease';
-            
-            setTimeout(() => {
-                updateSideNavigationPreview();
-                preview.style.opacity = '1';
-            }, 150);
         }
 
         // Export management functions for external use if needed
