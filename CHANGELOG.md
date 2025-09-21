@@ -8,6 +8,7 @@
 - Add feature to preview and restore to past versions
 - Add feature to add change summaries when saving or publishing
 - Improve library and script assignment UI by separating out global vs local
+- Improve navigatio and side menu management UI
 
 ## 1.6.0
 

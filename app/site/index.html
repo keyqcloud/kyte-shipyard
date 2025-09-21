@@ -1174,47 +1174,51 @@
                 <div id="Navigation" class="content-section">
                     <div class="section-header">
                         <h2 class="section-title">Navigation</h2>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-outline-primary" id="publishNavigation">
-                                <i class="fas fa-upload me-2"></i>Publish Navigation
-                            </button>
-                            <button class="btn-new" id="addNavigationItem">
-                                <i class="fas fa-plus"></i>
-                                Add Navigation Item
-                            </button>
-                        </div>
+                        <div></div>
                     </div>
                     <div class="section-content">
-                        <!-- Navigation Management Tabs -->
-                        <ul class="nav nav-tabs nav-fill mb-4">
-                            <li class="nav-item">
-                                <button class="nav-link active" id="nav-items-tab" data-bs-toggle="tab" data-bs-target="#nav-items-content">
-                                    <i class="fas fa-list me-2"></i>Navigation Items
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" id="nav-styles-tab" data-bs-toggle="tab" data-bs-target="#nav-styles-content">
-                                    <i class="fas fa-palette me-2"></i>Styles & Preview
-                                </button>
-                            </li>
-                        </ul>
+                        <!-- Navigation Selector -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Select Navigation Menu:</label>
+                            <select class="form-select" id="navigation-selector">
+                                <option value="">Loading navigation menus...</option>
+                            </select>
+                        </div>
 
-                        <div class="tab-content">
-                            <!-- Navigation Items Tab -->
-                            <div class="tab-pane fade show active" id="nav-items-content">
-                                <!-- Navigation Selector -->
-                                <div class="mb-4">
-                                    <label class="form-label fw-bold">Select Navigation Menu:</label>
-                                    <select class="form-select" id="navigation-selector">
-                                        <option value="">Loading navigation menus...</option>
-                                    </select>
-                                </div>
+                        <!-- Navigation Items Container -->
+                        <div id="navigation-items-container" style="display: none;">
+                            <!-- Navigation Management Tabs -->
+                            <ul class="nav nav-tabs nav-fill mb-4">
+                                <li class="nav-item">
+                                    <button class="nav-link active" id="nav-items-tab" data-bs-toggle="tab" data-bs-target="#nav-items-content">
+                                        <i class="fas fa-list me-2"></i>Navigation Items
+                                    </button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" id="nav-styles-tab" data-bs-toggle="tab" data-bs-target="#nav-styles-content">
+                                        <i class="fas fa-palette me-2"></i>Styles & Preview
+                                    </button>
+                                </li>
+                            </ul>
 
-                                <!-- Navigation Items Container -->
-                                <div id="navigation-items-container" style="display: none;">
+                            <div class="tab-content">
+                                <!-- Navigation Items Tab -->
+                                <div class="tab-pane fade show active" id="nav-items-content">
+                            
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <h5 class="mb-0" id="current-navigation-name">Navigation Items</h5>
-                                        <small class="text-muted">Drag items to reorder</small>
+                                        <div>
+                                            <h5 class="mb-0" id="current-navigation-name">Navigation Items</h5>
+                                            <small class="text-muted">Drag items to reorder</small>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-outline-primary" id="publishNavigation">
+                                                <i class="fas fa-upload me-2"></i>Publish Navigation
+                                            </button>
+                                            <button class="btn-new" id="addNavigationItem">
+                                                <i class="fas fa-plus"></i>
+                                                Add Navigation Item
+                                            </button>
+                                        </div>
                                     </div>
                                     
                                     <!-- Sortable Navigation Items -->
@@ -1230,112 +1234,111 @@
                                     </div>
                                 </div>
 
-                                <!-- No Navigation Selected State -->
-                                <div id="no-navigation-selected" class="text-center py-5">
-                                    <i class="fas fa-compass fa-3x text-muted mb-3"></i>
-                                    <h5 class="text-muted">No Navigation Menu Selected</h5>
-                                    <p class="text-muted">Select a navigation menu from the dropdown above, or create a new one.</p>
-                                    <button class="btn btn-outline-primary" id="create-new-navigation">
-                                        <i class="fas fa-plus me-2"></i>Create New Navigation Menu
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Styles Tab -->
-                            <div class="tab-pane fade" id="nav-styles-content">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h6 class="mb-0"><i class="fas fa-cog me-2"></i>Navigation Settings</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold">Sticky Top</label>
-                                                    <select class="form-select" id="nav-sticky-top">
-                                                        <option value="1">Yes - Stick to top when scrolling</option>
-                                                        <option value="0">No - Normal positioning</option>
-                                                    </select>
-                                                    <small class="text-muted">Make navigation bar stick to top when scrolling</small>
+                                <!-- Styles Tab -->
+                                <div class="tab-pane fade" id="nav-styles-content">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0"><i class="fas fa-cog me-2"></i>Navigation Settings</h6>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="card mt-3">
-                                            <div class="card-header">
-                                                <h6 class="mb-0"><i class="fas fa-palette me-2"></i>Color Scheme</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <label class="form-label fw-bold">Background Color</label>
-                                                        <input type="color" class="form-control form-control-color" id="nav-bg-color" />
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <label class="form-label fw-bold">Text Color</label>
-                                                        <input type="color" class="form-control form-control-color" id="nav-text-color" />
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-3">
-                                                    <div class="col-6">
-                                                        <label class="form-label fw-bold">Dropdown Background</label>
-                                                        <input type="color" class="form-control form-control-color" id="nav-dropdown-bg-color" />
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <label class="form-label fw-bold">Dropdown Text</label>
-                                                        <input type="color" class="form-control form-control-color" id="nav-dropdown-text-color" />
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Sticky Top</label>
+                                                        <select class="form-select" id="nav-sticky-top">
+                                                            <option value="1">Yes - Stick to top when scrolling</option>
+                                                            <option value="0">No - Normal positioning</option>
+                                                        </select>
+                                                        <small class="text-muted">Make navigation bar stick to top when scrolling</small>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h6 class="mb-0"><i class="fas fa-eye me-2"></i>Live Preview</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div id="navigation-preview" class="border rounded">
-                                                    <nav class="navbar navbar-expand-lg" id="preview-navbar">
-                                                        <div class="container-fluid">
-                                                            <a class="navbar-brand" href="#">Brand</a>
-                                                            <button class="navbar-toggler" type="button">
-                                                                <span class="navbar-toggler-icon"></span>
-                                                            </button>
-                                                            <div class="collapse navbar-collapse">
-                                                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link active">Home</a>
-                                                                    </li>
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link">About</a>
-                                                                    </li>
-                                                                    <li class="nav-item dropdown">
-                                                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                                                            Services
-                                                                        </a>
-                                                                        <ul class="dropdown-menu">
-                                                                            <li><a class="dropdown-item" href="#">Web Design</a></li>
-                                                                            <li><a class="dropdown-item" href="#">Development</a></li>
-                                                                            <li><hr class="dropdown-divider"></li>
-                                                                            <li><a class="dropdown-item" href="#">Consulting</a></li>
-                                                                        </ul>
-                                                                    </li>
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link">Contact</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
+                                            <div class="card mt-3">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0"><i class="fas fa-palette me-2"></i>Color Scheme</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <label class="form-label fw-bold">Background Color</label>
+                                                            <input type="color" class="form-control form-control-color" id="nav-bg-color" />
                                                         </div>
-                                                    </nav>
+                                                        <div class="col-6">
+                                                            <label class="form-label fw-bold">Text Color</label>
+                                                            <input type="color" class="form-control form-control-color" id="nav-text-color" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-3">
+                                                        <div class="col-6">
+                                                            <label class="form-label fw-bold">Dropdown Background</label>
+                                                            <input type="color" class="form-control form-control-color" id="nav-dropdown-bg-color" />
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="form-label fw-bold">Dropdown Text</label>
+                                                            <input type="color" class="form-control form-control-color" id="nav-dropdown-text-color" />
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <small class="text-muted mt-2 d-block">Preview updates as you change colors above</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0"><i class="fas fa-eye me-2"></i>Live Preview</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div id="navigation-preview" class="border rounded">
+                                                        <nav class="navbar navbar-expand-lg" id="preview-navbar">
+                                                            <div class="container-fluid">
+                                                                <a class="navbar-brand" href="#">Brand</a>
+                                                                <button class="navbar-toggler" type="button">
+                                                                    <span class="navbar-toggler-icon"></span>
+                                                                </button>
+                                                                <div class="collapse navbar-collapse">
+                                                                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link active">Home</a>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link">About</a>
+                                                                        </li>
+                                                                        <li class="nav-item dropdown">
+                                                                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                                                                Services
+                                                                            </a>
+                                                                            <ul class="dropdown-menu">
+                                                                                <li><a class="dropdown-item" href="#">Web Design</a></li>
+                                                                                <li><a class="dropdown-item" href="#">Development</a></li>
+                                                                                <li><hr class="dropdown-divider"></li>
+                                                                                <li><a class="dropdown-item" href="#">Consulting</a></li>
+                                                                            </ul>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link">Contact</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </nav>
+                                                    </div>
+                                                    <small class="text-muted mt-2 d-block">Preview updates as you change colors above</small>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <!-- No Navigation Selected State -->
+                        <div id="no-navigation-selected" class="text-center py-5">
+                            <i class="fas fa-compass fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Navigation Menu Selected</h5>
+                            <p class="text-muted">Select a navigation menu from the dropdown above, or create a new one.</p>
+                            <button class="btn btn-outline-primary" id="create-new-navigation">
+                                <i class="fas fa-plus me-2"></i>Create New Navigation Menu
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1422,47 +1425,50 @@
                 <div id="SideNav" class="content-section">
                     <div class="section-header">
                         <h2 class="section-title">Side Navigation</h2>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-outline-primary" id="publishSideNavigation">
-                                <i class="fas fa-upload me-2"></i>Publish Side Nav
-                            </button>
-                            <button class="btn-new" id="addSideNavigationItem">
-                                <i class="fas fa-plus"></i>
-                                Add Side Nav Item
-                            </button>
-                        </div>
+                        <div></div>
                     </div>
                     <div class="section-content">
-                        <!-- Side Navigation Management Tabs -->
-                        <ul class="nav nav-tabs nav-fill mb-4">
-                            <li class="nav-item">
-                                <button class="nav-link active" id="sidenav-items-tab" data-bs-toggle="tab" data-bs-target="#sidenav-items-content">
-                                    <i class="fas fa-list me-2"></i>Navigation Items
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" id="sidenav-styles-tab" data-bs-toggle="tab" data-bs-target="#sidenav-styles-content">
-                                    <i class="fas fa-palette me-2"></i>Styles & Layout
-                                </button>
-                            </li>
-                        </ul>
+                        <!-- Side Navigation Selector -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Select Side Navigation Menu:</label>
+                            <select class="form-select" id="sidenav-selector">
+                                <option value="">Loading side navigation menus...</option>
+                            </select>
+                        </div>
 
-                        <div class="tab-content">
-                            <!-- Side Navigation Items Tab -->
-                            <div class="tab-pane fade show active" id="sidenav-items-content">
-                                <!-- Side Navigation Selector -->
-                                <div class="mb-4">
-                                    <label class="form-label fw-bold">Select Side Navigation Menu:</label>
-                                    <select class="form-select" id="sidenav-selector">
-                                        <option value="">Loading side navigation menus...</option>
-                                    </select>
-                                </div>
+                        <!-- Side Navigation Items Container -->
+                        <div id="sidenav-items-container" style="display: none;">
+                            <!-- Side Navigation Management Tabs -->
+                            <ul class="nav nav-tabs nav-fill mb-4">
+                                <li class="nav-item">
+                                    <button class="nav-link active" id="sidenav-items-tab" data-bs-toggle="tab" data-bs-target="#sidenav-items-content">
+                                        <i class="fas fa-list me-2"></i>Navigation Items
+                                    </button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" id="sidenav-styles-tab" data-bs-toggle="tab" data-bs-target="#sidenav-styles-content">
+                                        <i class="fas fa-palette me-2"></i>Styles & Layout
+                                    </button>
+                                </li>
+                            </ul>
 
-                                <!-- Side Navigation Items Container -->
-                                <div id="sidenav-items-container" style="display: none;">
+                            <div class="tab-content">
+                                <!-- Side Navigation Items Tab -->
+                                <div class="tab-pane fade show active" id="sidenav-items-content">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <h5 class="mb-0" id="current-sidenav-name">Side Navigation Items</h5>
-                                        <small class="text-muted">Drag items to reorder</small>
+                                        <div>
+                                            <h5 class="mb-0" id="current-sidenav-name">Side Navigation Items</h5>
+                                            <small class="text-muted">Drag items to reorder</small>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-outline-primary" id="publishSideNavigation">
+                                                <i class="fas fa-upload me-2"></i>Publish Side Nav
+                                            </button>
+                                            <button class="btn-new" id="addSideNavigationItem">
+                                                <i class="fas fa-plus"></i>
+                                                Add Side Nav Item
+                                            </button>
+                                        </div>
                                     </div>
                                     
                                     <!-- Sortable Side Navigation Items -->
@@ -1477,146 +1483,146 @@
                                         <p class="text-muted">Click "Add Side Nav Item" to create your first side navigation link.</p>
                                     </div>
                                 </div>
-
-                                <!-- No Side Navigation Selected State -->
-                                <div id="no-sidenav-selected" class="text-center py-5">
-                                    <i class="fas fa-bars fa-3x text-muted mb-3"></i>
-                                    <h5 class="text-muted">No Side Navigation Menu Selected</h5>
-                                    <p class="text-muted">Select a side navigation menu from the dropdown above, or create a new one.</p>
-                                    <button class="btn btn-outline-primary" id="create-new-sidenav">
-                                        <i class="fas fa-plus me-2"></i>Create New Side Navigation Menu
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Styles Tab -->
-                            <div class="tab-pane fade" id="sidenav-styles-content">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <!-- Layout Style -->
-                                        <div class="card mb-4">
-                                            <div class="card-header">
-                                                <h6 class="mb-0"><i class="fas fa-layout me-2"></i>Layout Style</h6>
+                            
+                                <!-- Styles Tab -->
+                                <div class="tab-pane fade" id="sidenav-styles-content">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <!-- Layout Style -->
+                                            <div class="card mb-4">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0"><i class="fas fa-layout me-2"></i>Layout Style</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row text-center">
+                                                        <div class="col-4">
+                                                            <div class="layout-option" data-column-style="0">
+                                                                <div class="layout-preview mb-2">
+                                                                    <img src="/assets/images/icons/column-type-icons-01.png" alt="Default Style" class="img-fluid" style="max-height: 80px;">
+                                                                </div>
+                                                                <h6 class="small">Default Style</h6>
+                                                                <input type="radio" name="columnStyle" value="0" class="form-check-input">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="layout-option" data-column-style="1">
+                                                                <div class="layout-preview mb-2">
+                                                                    <img src="/assets/images/icons/column-type-icons-02.png" alt="Rounded Corners" class="img-fluid" style="max-height: 80px;">
+                                                                </div>
+                                                                <h6 class="small">Rounded Corners</h6>
+                                                                <input type="radio" name="columnStyle" value="1" class="form-check-input">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="layout-option" data-column-style="2">
+                                                                <div class="layout-preview mb-2">
+                                                                    <img src="/assets/images/icons/column-type-icons-03.png" alt="Rounded + Full Height" class="img-fluid" style="max-height: 80px;">
+                                                                </div>
+                                                                <h6 class="small">Rounded + Full Height</h6>
+                                                                <input type="radio" name="columnStyle" value="2" class="form-check-input">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="card-body">
-                                                <div class="row text-center">
-                                                    <div class="col-4">
-                                                        <div class="layout-option" data-column-style="0">
-                                                            <div class="layout-preview mb-2">
-                                                                <img src="/assets/images/icons/column-type-icons-01.png" alt="Default Style" class="img-fluid" style="max-height: 80px;">
+
+                                            <!-- Navigation Item Style -->
+                                            <div class="card mb-4">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0"><i class="fas fa-th-list me-2"></i>Navigation Item Style</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row text-center">
+                                                        <div class="col-6">
+                                                            <div class="nav-item-option" data-nav-item-style="0">
+                                                                <div class="nav-item-preview mb-2">
+                                                                    <img src="/assets/images/icons/side-nav-item-type-icons-01.png" alt="Left Aligned" class="img-fluid" style="max-height: 80px;">
+                                                                </div>
+                                                                <h6 class="small">Left Aligned<br>Icon + Text</h6>
+                                                                <input type="radio" name="navItemStyle" value="0" class="form-check-input">
                                                             </div>
-                                                            <h6 class="small">Default Style</h6>
-                                                            <input type="radio" name="columnStyle" value="0" class="form-check-input">
                                                         </div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div class="layout-option" data-column-style="1">
-                                                            <div class="layout-preview mb-2">
-                                                                <img src="/assets/images/icons/column-type-icons-02.png" alt="Rounded Corners" class="img-fluid" style="max-height: 80px;">
+                                                        <div class="col-6">
+                                                            <div class="nav-item-option" data-nav-item-style="1">
+                                                                <div class="nav-item-preview mb-2">
+                                                                    <img src="/assets/images/icons/side-nav-item-type-icons-02.png" alt="Centered" class="img-fluid" style="max-height: 80px;">
+                                                                </div>
+                                                                <h6 class="small">Centered<br>Icon Above Text</h6>
+                                                                <input type="radio" name="navItemStyle" value="1" class="form-check-input">
                                                             </div>
-                                                            <h6 class="small">Rounded Corners</h6>
-                                                            <input type="radio" name="columnStyle" value="1" class="form-check-input">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div class="layout-option" data-column-style="2">
-                                                            <div class="layout-preview mb-2">
-                                                                <img src="/assets/images/icons/column-type-icons-03.png" alt="Rounded + Full Height" class="img-fluid" style="max-height: 80px;">
-                                                            </div>
-                                                            <h6 class="small">Rounded + Full Height</h6>
-                                                            <input type="radio" name="columnStyle" value="2" class="form-check-input">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Navigation Item Style -->
-                                        <div class="card mb-4">
-                                            <div class="card-header">
-                                                <h6 class="mb-0"><i class="fas fa-th-list me-2"></i>Navigation Item Style</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row text-center">
-                                                    <div class="col-6">
-                                                        <div class="nav-item-option" data-nav-item-style="0">
-                                                            <div class="nav-item-preview mb-2">
-                                                                <img src="/assets/images/icons/side-nav-item-type-icons-01.png" alt="Left Aligned" class="img-fluid" style="max-height: 80px;">
-                                                            </div>
-                                                            <h6 class="small">Left Aligned<br>Icon + Text</h6>
-                                                            <input type="radio" name="navItemStyle" value="0" class="form-check-input">
+                                        <div class="col-md-6">
+                                            <!-- Color Scheme -->
+                                            <div class="card mb-4">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0"><i class="fas fa-palette me-2"></i>Color Scheme</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row g-3">
+                                                        <div class="col-6">
+                                                            <label class="form-label fw-bold">Background Color</label>
+                                                            <input type="color" class="form-control form-control-color" id="sidenav-bg-color" />
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="form-label fw-bold">Text Color</label>
+                                                            <input type="color" class="form-control form-control-color" id="sidenav-text-color" />
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="form-label fw-bold">Active Background</label>
+                                                            <input type="color" class="form-control form-control-color" id="sidenav-active-bg-color" />
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="form-label fw-bold">Active Text Color</label>
+                                                            <input type="color" class="form-control form-control-color" id="sidenav-active-text-color" />
                                                         </div>
                                                     </div>
-                                                    <div class="col-6">
-                                                        <div class="nav-item-option" data-nav-item-style="1">
-                                                            <div class="nav-item-preview mb-2">
-                                                                <img src="/assets/images/icons/side-nav-item-type-icons-02.png" alt="Centered" class="img-fluid" style="max-height: 80px;">
-                                                            </div>
-                                                            <h6 class="small">Centered<br>Icon Above Text</h6>
-                                                            <input type="radio" name="navItemStyle" value="1" class="form-check-input">
+                                                </div>
+                                            </div>
+
+                                            <!-- Live Preview -->
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0"><i class="fas fa-eye me-2"></i>Live Preview</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div id="sidenav-preview" class="border rounded p-3">
+                                                        <div class="nav flex-column nav-pills" id="preview-sidenav" aria-orientation="vertical">
+                                                            <button class="nav-link active mb-2" type="button">
+                                                                <i class="fas fa-home me-2"></i>Home
+                                                            </button>
+                                                            <button class="nav-link mb-2" type="button">
+                                                                <i class="fas fa-user me-2"></i>Profile
+                                                            </button>
+                                                            <button class="nav-link mb-2" type="button">
+                                                                <i class="fas fa-cog me-2"></i>Settings
+                                                            </button>
+                                                            <button class="nav-link" type="button" disabled>
+                                                                <i class="fas fa-ban me-2"></i>Disabled
+                                                            </button>
                                                         </div>
                                                     </div>
+                                                    <small class="text-muted mt-2 d-block">Preview updates as you change styles above</small>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <!-- Color Scheme -->
-                                        <div class="card mb-4">
-                                            <div class="card-header">
-                                                <h6 class="mb-0"><i class="fas fa-palette me-2"></i>Color Scheme</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row g-3">
-                                                    <div class="col-6">
-                                                        <label class="form-label fw-bold">Background Color</label>
-                                                        <input type="color" class="form-control form-control-color" id="sidenav-bg-color" />
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <label class="form-label fw-bold">Text Color</label>
-                                                        <input type="color" class="form-control form-control-color" id="sidenav-text-color" />
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <label class="form-label fw-bold">Active Background</label>
-                                                        <input type="color" class="form-control form-control-color" id="sidenav-active-bg-color" />
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <label class="form-label fw-bold">Active Text Color</label>
-                                                        <input type="color" class="form-control form-control-color" id="sidenav-active-text-color" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Live Preview -->
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h6 class="mb-0"><i class="fas fa-eye me-2"></i>Live Preview</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div id="sidenav-preview" class="border rounded p-3">
-                                                    <div class="nav flex-column nav-pills" id="preview-sidenav" aria-orientation="vertical">
-                                                        <button class="nav-link active mb-2" type="button">
-                                                            <i class="fas fa-home me-2"></i>Home
-                                                        </button>
-                                                        <button class="nav-link mb-2" type="button">
-                                                            <i class="fas fa-user me-2"></i>Profile
-                                                        </button>
-                                                        <button class="nav-link mb-2" type="button">
-                                                            <i class="fas fa-cog me-2"></i>Settings
-                                                        </button>
-                                                        <button class="nav-link" type="button" disabled>
-                                                            <i class="fas fa-ban me-2"></i>Disabled
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <small class="text-muted mt-2 d-block">Preview updates as you change styles above</small>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- No Side Navigation Selected State -->
+                        <div id="no-sidenav-selected" class="text-center py-5">
+                            <i class="fas fa-bars fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Side Navigation Menu Selected</h5>
+                            <p class="text-muted">Select a side navigation menu from the dropdown above, or create a new one.</p>
+                            <button class="btn btn-outline-primary" id="create-new-sidenav">
+                                <i class="fas fa-plus me-2"></i>Create New Side Navigation Menu
+                            </button>
                         </div>
                     </div>
                 </div>
