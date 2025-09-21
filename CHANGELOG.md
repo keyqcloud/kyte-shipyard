@@ -10,6 +10,8 @@
 - Improve library and script assignment UI by separating out global vs local
 - Improve navigatio and side menu management UI
 - Add back navigation and side nav settings
+- Change navigation logo to dropdown that uses static media assets
+- Add navigation logo preview in settings
 
 ## 1.6.0
 

@@ -1,5 +1,8 @@
+let currentSiteData = null; // Store site data including cfMediaDomain
+let mediaAssets = []; // Store loaded media assets
 let currentDomainData = null;
 let siteId = null;
+let app = null;
 
 // Enhanced domain state management
 let validationStartTime = null;
@@ -241,8 +244,6 @@ let colDefLibrary = [
     {'targets':4,'data':'date_modified','label':'Date Modified', render: function(data, type, row, meta) { return data ? data : '' }}
 ];
 
-let app = null;
-
 document.addEventListener('KyteInitialized', function(e) {
     let _ks = e.detail._ks;
 
@@ -268,11 +269,11 @@ document.addEventListener('KyteInitialized', function(e) {
         _ks.get("KyteSite", "id", idx, [], function(r) {
             if (r.data[0]) {
                 app = r.data[0].application;
-                data = r.data[0];
+                currentSiteData = r.data[0];
                 // if site is not active display a message
-                if (data.status != 'active') {
-                    $("#site-detail-page-wrapper").html(`<div class="container"><div class="my-5 alert alert-info text-center" role="alert"><i class="my-3 d-block fas fa-exclamation fa-3x"></i><h3>We are ${data.status} your site.</h3><h4 style="font-weight:300">Please wait until the operation is completed.</h4><span class="fas fa-sync fa-spin my-4"></span></div></div>`);
-                    if (data.status == 'creating') {
+                if (currentSiteData.status != 'active') {
+                    $("#site-detail-page-wrapper").html(`<div class="container"><div class="my-5 alert alert-info text-center" role="alert"><i class="my-3 d-block fas fa-exclamation fa-3x"></i><h3>We are ${currentSiteData.status} your site.</h3><h4 style="font-weight:300">Please wait until the operation is completed.</h4><span class="fas fa-sync fa-spin my-4"></span></div></div>`);
+                    if (currentSiteData.status == 'creating') {
                         // check status every minute
                         setTimeout(function() {
                             _ks.get("KyteSite", "id", idx, [], function(r) {
@@ -283,16 +284,16 @@ document.addEventListener('KyteInitialized', function(e) {
                         }, 6000);
                     }
                 }
-                $("#site-name").html(data.name);
-                $("#domain-name").html('<i class="fas fa-link me-2"></i>'+(data.aliasDomain ? data.aliasDomain : data.cfDomain));
-                $("#domain-name").attr('href', 'https://'+(data.aliasDomain ? data.aliasDomain : data.cfDomain));
-                $("#region").html(data.region);
-                $("#aliasDomain").val(data.aliasDomain);
-                $("#default_lang").val(data.default_lang);
-                $("#ga_code").val(data.ga_code);
-                $("#gtm_code").val(data.gtm_code);
+                $("#site-name").html(currentSiteData.name);
+                $("#domain-name").html('<i class="fas fa-link me-2"></i>'+(currentSiteData.aliasDomain ? currentSiteData.aliasDomain : currentSiteData.cfDomain));
+                $("#domain-name").attr('href', 'https://'+(currentSiteData.aliasDomain ? currentSiteData.aliasDomain : currentSiteData.cfDomain));
+                $("#region").html(currentSiteData.region);
+                $("#aliasDomain").val(currentSiteData.aliasDomain);
+                $("#default_lang").val(currentSiteData.default_lang);
+                $("#ga_code").val(currentSiteData.ga_code);
+                $("#gtm_code").val(currentSiteData.gtm_code);
 
-                let obj = {'model': 'KyteSite', 'idx':data.id};
+                let obj = {'model': 'KyteSite', 'idx':currentSiteData.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                 $("#createPage").attr('href', '/app/page/wizard.html?request='+encoded);
 
@@ -893,6 +894,8 @@ document.addEventListener('KyteInitialized', function(e) {
         // Navigation Management code
         // Initialize Navigation Management
         function initializeNavigationManagement(_ks, siteId) {
+            loadMediaAssets(_ks, siteId);
+
             // Load site pages for dropdown population
             _ks.get('KytePage', 'site', siteId, [], function(r) {
                 if (r.data && r.data.length > 0) {
@@ -903,6 +906,36 @@ document.addEventListener('KyteInitialized', function(e) {
 
             // Setup navigation event handlers
             setupNavigationEventHandlers(_ks, siteId);
+        }
+
+        function loadMediaAssets(_ks, siteId) {
+            _ks.get('Media', 'site', siteId, [], function(r) {
+                mediaAssets = r.data || [];
+                populateLogoDropdown();
+            }, function(err) {
+                console.error('Error loading media assets:', err);
+                const logoSelect = document.getElementById('nav-logo');
+                logoSelect.innerHTML = '<option value="">Error loading media assets</option>';
+            });
+        }
+
+        function populateLogoDropdown() {
+            const logoSelect = document.getElementById('nav-logo');
+            logoSelect.innerHTML = '<option value="">No logo (use text-based brand name)</option>';
+            
+            // Filter for image files only
+            const imageAssets = mediaAssets.filter(asset => {
+                const extension = asset.s3key.toLowerCase().split('.').pop();
+                return ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'].includes(extension);
+            });
+            
+            imageAssets.forEach(asset => {
+                const option = document.createElement('option');
+                const fullUrl = `https://${asset.site.cfMediaDomain}/${asset.s3key}`;
+                option.value = fullUrl;
+                option.textContent = asset.name;
+                logoSelect.appendChild(option);
+            });
         }
 
         // Load available navigation menus
@@ -1093,7 +1126,21 @@ document.addEventListener('KyteInitialized', function(e) {
 
             // navigation settings
             document.getElementById('nav-name').value = navData.name || '';
+            // Set logo dropdown value - this will match the full URL
             document.getElementById('nav-logo').value = navData.logo || '';
+
+            // Show logo preview for existing data
+            const logoUrl = navData.logo;
+            const previewContainer = document.getElementById('logo-preview-container');
+            const previewDiv = document.getElementById('logo-preview');
+            
+            if (logoUrl) {
+                previewDiv.innerHTML = `<img src="${logoUrl}" alt="Logo Preview" style="max-height: 40px; max-width: 200px;" class="img-fluid">`;
+                previewContainer.style.display = 'block';
+            } else {
+                previewDiv.innerHTML = '<span class="text-muted">Text-based brand name will be used</span>';
+                previewContainer.style.display = 'block';
+            }
             
             // Populate pages dropdown for settings
             const navPageSelect = document.getElementById('nav-page');
@@ -1200,6 +1247,21 @@ document.addEventListener('KyteInitialized', function(e) {
             // Delete navigation
             document.getElementById('delete-navigation').addEventListener('click', function() {
                 deleteNavigation(_ks, siteId);
+            });
+
+            // Logo selection change handler for preview
+            document.getElementById('nav-logo').addEventListener('change', function() {
+                const logoUrl = this.value;
+                const previewContainer = document.getElementById('logo-preview-container');
+                const previewDiv = document.getElementById('logo-preview');
+                
+                if (logoUrl) {
+                    previewDiv.innerHTML = `<img src="${logoUrl}" alt="Logo Preview" style="max-height: 40px; max-width: 200px;" class="img-fluid">`;
+                    previewContainer.style.display = 'block';
+                } else {
+                    previewDiv.innerHTML = '<span class="text-muted">Text-based brand name will be used</span>';
+                    previewContainer.style.display = 'block';
+                }
             });
         }
 

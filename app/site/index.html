@@ -1360,9 +1360,19 @@
                                                     </div>
                                                     
                                                     <div class="mb-3">
-                                                        <label for="nav-logo" class="form-label fw-bold">Navigation Logo URL <span class="text-muted">(optional)</span></label>
-                                                        <input type="url" class="form-control" id="nav-logo" placeholder="https://example.com/logo.png">
-                                                        <small class="text-muted">URL to logo image. Leave blank to use text-based brand name</small>
+                                                        <label for="nav-logo" class="form-label fw-bold">Navigation Logo <span class="text-muted">(optional)</span></label>
+                                                        <select class="form-select" id="nav-logo">
+                                                            <option value="">Loading media assets...</option>
+                                                        </select>
+                                                        <small class="text-muted">Select a logo image from your media library. Leave blank to use text-based brand name</small>
+                                                        
+                                                        <!-- Logo Preview -->
+                                                        <div class="mt-2 p-2 bg-light rounded" id="logo-preview-container" style="display: none;">
+                                                            <small class="text-muted d-block mb-1">Preview:</small>
+                                                            <div id="logo-preview" class="d-flex align-items-center">
+                                                                <!-- Preview content will be inserted here -->
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     
                                                     <div class="d-flex gap-2 mt-4">
