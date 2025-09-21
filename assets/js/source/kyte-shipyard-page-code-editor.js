@@ -1599,6 +1599,43 @@ document.addEventListener('KyteInitialized', function(e) {
                 var frmScript = new KyteForm(_ks, $("#modalFormScripts"), 'KyteScriptAssignment', hiddenScriptAssignment, fldsScripts, 'Script Assignment', tblScripts, true, $("#addScript"));
                 frmScript.init();
                 tblScripts.bindEdit(frmScript);
+                // global scripts
+                var tblGlobalScripts = new KyteTable(_ks, $("#global-scripts-table"), {'name':"KyteScriptGlobalAssignment",'field':"page",'value':pageData.page.id}, colDefScripts, true, [0,"asc"], false, false);
+                tblGlobalScripts.init();
+
+                // Custom library assignment table and form
+                let fldsLibraries = [
+                    [
+                        {
+                            'field':'library',
+                            'type':'select',
+                            'label':'Library',
+                            'required':false,
+                            'option': {
+                                'ajax': true,
+                                'data_model_name': 'KyteLibrary',
+                                'data_model_field': 'site',
+                                'data_model_value': pageData.page.site.id,
+                                'data_model_attributes': ['name', 'link'],
+                                'data_model_default_field': 'id',
+                                // 'data_model_default_value': 1,
+                            }
+                        },
+                    ],
+                ];
+                let colDefLibraries = [
+                    {'targets':0,'data':'library.name','label':'Script'},
+                    {'targets':1,'data':'library.script_type','label':'Type', render: function(data, type, row, meta) { if (data == 'css') { return 'Stylesheet'; } else if (data == 'js') { return 'JavaScript'; } else { return 'Unknown'; } }},
+                    {'targets':2,'data':'library.link','label':'path'},
+                ];
+                var tblLibraries = new KyteTable(_ks, $("#libraries-table"), {'name':"KyteLibraryAssignment",'field':"page",'value':pageData.page.id}, colDefLibraries, true, [0,"asc"], false, true);
+                tblLibraries.init();
+                var frmLibrary = new KyteForm(_ks, $("#modalFormLibraries"), 'KyteLibraryAssignment', hiddenScriptAssignment, fldsLibraries, 'Script Assignment', tblLibraries, true, $("#addLibrary"));
+                frmLibrary.init();
+                tblLibraries.bindEdit(frmLibrary);
+                // global libraries
+                var tblGlobalLibraries = new KyteTable(_ks, $("#global-libraries-table"), {'name':"KyteLibraryGlobalAssignment",'field':"page",'value':pageData.page.id}, colDefLibraries, true, [0,"asc"], false, false);
+                tblGlobalLibraries.init();
 
                 // web components assignment table and form
                 let hiddenComponent = [
@@ -1642,7 +1679,7 @@ document.addEventListener('KyteInitialized', function(e) {
                     {'targets': 0, 'data': 'version_number', 'label': 'Version'},
                     {'targets': 1, 'data': 'date_created', 'label': 'Date'},
                     {'targets': 2, 'data': 'change_summary', 'label': 'Summary'},
-                    {'targets': 3, 'data': 'created_by.name', 'label': 'Author'},
+                    {'targets': 3, 'data': 'created_by.name', 'label': 'Author', render: function(data, type, row, meta) { return data ? data : ''; }},
                     {'targets': 4, 'data': 'can_revert', 'label': 'Current Version', render: function(data, type, row, meta) { return data == false ? '<i class="fas fa-check text-success"></i> Yes' : '<i class="fas fa-times text-danger"></i> No'; }},
                 ];
 
