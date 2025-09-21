@@ -679,3 +679,356 @@ document.addEventListener('KyteInitialized', function(e) {
         location.href="/?redir="+encodeURIComponent(window.location);
     }
 });
+
+// Kyte Form overrides
+// Wait for KyteForm to be initialized, then enhance it
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to enhance KyteForm after it's created
+    function enhanceKyteForm() {
+        // Wait for modal to be in DOM
+        const modalObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        // Check if this is a KyteForm modal
+                        const modal = node.querySelector('.modal') || (node.classList && node.classList.contains('modal') ? node : null);
+                        if (modal && modal.querySelector('form[id*="form_ModelAttribute"]')) {
+                            enhanceModalForm(modal);
+                        }
+                    }
+                });
+            });
+        });
+
+        modalObserver.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+    // Function to enhance the modal form
+    function enhanceModalForm(modal) {
+        console.log('Enhancing KyteForm modal...');
+        
+        // Add modern classes to modal
+        const modalContent = modal.querySelector('.modal-content');
+        const modalHeader = modal.querySelector('.modal-header');
+        const modalBody = modal.querySelector('.modal-body');
+        
+        if (modalContent) {
+            modalContent.style.borderRadius = '20px';
+            modalContent.style.border = 'none';
+            modalContent.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.15)';
+            modalContent.style.overflow = 'hidden';
+        }
+
+        // Add real-time validation
+        addRealTimeValidation(modal);
+        
+        // Add help text to specific fields
+        addHelpText(modal);
+        
+        // Enhance form submission
+        enhanceFormSubmission(modal);
+        
+        // Add field-specific enhancements
+        addFieldEnhancements(modal);
+    }
+
+    // Add real-time validation
+    function addRealTimeValidation(modal) {
+        const requiredFields = modal.querySelectorAll('input[required], select[required]');
+        
+        requiredFields.forEach(field => {
+            field.addEventListener('blur', function() {
+                validateField(this);
+            });
+            
+            field.addEventListener('input', function() {
+                if (this.classList.contains('is-invalid')) {
+                    validateField(this);
+                }
+            });
+        });
+    }
+
+    // Field validation function
+    function validateField(field) {
+        const value = field.value.trim();
+        const isValid = field.type === 'select-one' ? value !== '' : value.length > 0;
+        
+        if (isValid) {
+            field.classList.remove('is-invalid');
+            field.classList.add('is-valid');
+            removeErrorMessage(field);
+        } else {
+            field.classList.remove('is-valid');
+            field.classList.add('is-invalid');
+            addErrorMessage(field);
+        }
+    }
+
+    // Add error message
+    function addErrorMessage(field) {
+        removeErrorMessage(field); // Remove existing first
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'invalid-feedback';
+        errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> This field is required`;
+        
+        field.parentNode.appendChild(errorDiv);
+    }
+
+    // Remove error message
+    function removeErrorMessage(field) {
+        const existingError = field.parentNode.querySelector('.invalid-feedback');
+        if (existingError) {
+            existingError.remove();
+        }
+    }
+
+    // Add help text to specific fields
+    function addHelpText(modal) {
+        const helpTexts = {
+            'name': 'Choose a descriptive name for your attribute',
+            'type': 'Select the appropriate data type for your needs',
+            'size': 'Maximum length or precision (leave empty for default)',
+            'foreignKeyModel': 'Link to another model for relational data',
+            'defaults': 'Default value when creating new records',
+            'description': 'Help others understand what this attribute is used for'
+        };
+
+        Object.keys(helpTexts).forEach(fieldName => {
+            const field = modal.querySelector(`[name="${fieldName}"]`);
+            if (field && !field.parentNode.querySelector('.form-help')) {
+                const helpDiv = document.createElement('div');
+                helpDiv.className = 'form-help';
+                helpDiv.innerHTML = `<i class="fas fa-lightbulb"></i> ${helpTexts[fieldName]}`;
+                field.parentNode.appendChild(helpDiv);
+            }
+        });
+    }
+
+    // Enhance form submission
+    function enhanceFormSubmission(modal) {
+        const form = modal.querySelector('form');
+        const submitBtn = modal.querySelector('input[type="submit"], button[type="submit"]');
+        
+        if (form && submitBtn) {
+            // Store original submit handler
+            const originalSubmit = submitBtn.onclick;
+            
+            submitBtn.onclick = function(e) {
+                // Add loading state
+                addLoadingState(modal);
+                
+                // Validate all required fields before submission
+                const requiredFields = form.querySelectorAll('input[required], select[required]');
+                let isFormValid = true;
+                
+                requiredFields.forEach(field => {
+                    validateField(field);
+                    if (field.classList.contains('is-invalid')) {
+                        isFormValid = false;
+                    }
+                });
+
+                if (!isFormValid) {
+                    removeLoadingState(modal);
+                    e.preventDefault();
+                    showFormError(modal, 'Please fill in all required fields');
+                    return false;
+                }
+
+                // Call original submit handler if it exists
+                if (originalSubmit) {
+                    const result = originalSubmit.call(this, e);
+                    
+                    // Add success handling
+                    setTimeout(() => {
+                        removeLoadingState(modal);
+                        if (result !== false) {
+                            showFormSuccess(modal);
+                        }
+                    }, 1000);
+                    
+                    return result;
+                }
+            };
+        }
+    }
+
+    // Add loading state
+    function addLoadingState(modal) {
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent && !modalContent.classList.contains('form-loading')) {
+            modalContent.classList.add('form-loading');
+        }
+    }
+
+    // Remove loading state
+    function removeLoadingState(modal) {
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.classList.remove('form-loading');
+        }
+    }
+
+    // Show form error
+    function showFormError(modal, message) {
+        const errorMsgDiv = modal.querySelector('.error-msg');
+        if (errorMsgDiv) {
+            errorMsgDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+            errorMsgDiv.style.display = 'block';
+        }
+    }
+
+    // Show form success
+    function showFormSuccess(modal) {
+        // Create success message
+        const successDiv = document.createElement('div');
+        successDiv.className = 'alert alert-success';
+        successDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            animation: slideInRight 0.4s ease-out;
+        `;
+        successDiv.innerHTML = `
+            <i class="fas fa-check-circle me-2"></i>
+            Model attribute saved successfully!
+        `;
+        
+        document.body.appendChild(successDiv);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            successDiv.style.animation = 'slideOutRight 0.4s ease-out forwards';
+            setTimeout(() => successDiv.remove(), 400);
+        }, 3000);
+    }
+
+    // Add field-specific enhancements
+    function addFieldEnhancements(modal) {
+        // Type field enhancement - show relevant size field
+        const typeField = modal.querySelector('[name="type"]');
+        const sizeField = modal.querySelector('[name="size"]');
+        
+        if (typeField && sizeField) {
+            typeField.addEventListener('change', function() {
+                const sizeFormGroup = sizeField.closest('.form-group');
+                const typesNeedingSize = ['s', 'i', 'bi']; // String, Integer, BigInt
+                
+                if (typesNeedingSize.includes(this.value)) {
+                    sizeFormGroup.style.opacity = '1';
+                    sizeField.removeAttribute('disabled');
+                    
+                    // Add placeholder based on type
+                    if (this.value === 's') {
+                        sizeField.placeholder = 'e.g., 255';
+                    } else if (this.value === 'i') {
+                        sizeField.placeholder = 'e.g., 11';
+                    } else if (this.value === 'bi') {
+                        sizeField.placeholder = 'e.g., 20';
+                    }
+                } else {
+                    sizeFormGroup.style.opacity = '0.5';
+                    sizeField.setAttribute('disabled', 'disabled');
+                    sizeField.placeholder = 'Not applicable';
+                    sizeField.value = '';
+                }
+            });
+            
+            // Trigger on load
+            typeField.dispatchEvent(new Event('change'));
+        }
+
+        // Foreign key field enhancement
+        const fkField = modal.querySelector('[name="foreignKeyModel"]');
+        if (fkField) {
+            fkField.addEventListener('change', function() {
+                const nameField = modal.querySelector('[name="name"]');
+                if (this.value && nameField && !nameField.value.trim()) {
+                    const selectedOption = this.options[this.selectedIndex];
+                    if (selectedOption.text && selectedOption.text !== 'N/A') {
+                        nameField.value = selectedOption.text.toLowerCase() + '_id';
+                        nameField.dispatchEvent(new Event('input'));
+                    }
+                }
+            });
+        }
+    }
+
+    // Add animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        .form-loading::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            border-radius: 20px;
+        }
+        .form-loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 32px;
+            height: 32px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #ff6b35;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            transform: translate(-50%, -50%);
+            z-index: 1001;
+        }
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize the enhancement
+    enhanceKyteForm();
+});
+
+// Override KyteForm creation to add enhancements
+// This assumes KyteForm is a global object that can be extended
+if (typeof window.KyteForm !== 'undefined') {
+    const originalKyteFormInit = window.KyteForm.prototype.init;
+    
+    window.KyteForm.prototype.init = function() {
+        const result = originalKyteFormInit.apply(this, arguments);
+        
+        // Add enhancement after form is created
+        setTimeout(() => {
+            const modal = document.querySelector(`#${this.modalId}`);
+            if (modal) {
+                enhanceModalForm(modal);
+            }
+        }, 100);
+        
+        return result;
+    };
+}
