@@ -112,9 +112,13 @@ document.addEventListener('KyteInitialized', function(e) {
                 navbar.create();
 
                 // create link to model and update model name
-                obj = {'model': 'Model', 'idx':r.data[0].dataModel.id};
-                encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                $("#model-name").html(`<a href="/app/model/?request=${encoded}">${modelName}</a>`);
+                if (r.data[0].dataModel == 0 || !r.data[0].dataModel) {
+                    $("#model-name").html(`Virtual`);
+                } else {
+                    obj = {'model': 'Model', 'idx':r.data[0].dataModel.id};
+                    encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                    $("#model-name").html(`<a href="/app/model/?request=${encoded}">${modelName}</a>`);
+                }
             } else {
                 $("#controller-name").html("Undefined");
                 $("#model-name").html("Undefined");
