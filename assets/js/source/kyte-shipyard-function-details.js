@@ -196,7 +196,7 @@ class KyteFunctionList {
 
     createFunctionItem(func) {
         const icon = this.getFunctionIcon(func.type);
-        const displayName = func.type || 'function';
+        const displayName = func.name || 'function';
         
         const item = $(`
             <button class="function-item" data-function-id="${func.id}">
