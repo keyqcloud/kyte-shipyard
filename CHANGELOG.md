@@ -1,3 +1,7 @@
+## 1.6.3
+
+- Reorganize menu items
+
 ## 1.6.2
 
 - Reoganize menu items to conserve space

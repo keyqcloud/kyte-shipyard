@@ -11,7 +11,7 @@ function generateAppNav(encodedRequest) {
                 dropdown: true,
                 faicon:'fas fa-code',
                 class:'me-2 text-light',
-                label:'Development',
+                label:'API',
                 items: [
                     {
                         faicon:'fas fa-table',
@@ -24,12 +24,6 @@ function generateAppNav(encodedRequest) {
                         class:'me-2',
                         label:'Controllers',
                         href:'/app/controllers.html?request='+encodedRequest
-                    },
-                    {
-                        faicon:'fas fa-puzzle-piece',
-                        class:'me-2',
-                        label:'Web Components',
-                        href:'/app/components.html?request='+encodedRequest
                     }
                 ]
             },
@@ -40,10 +34,24 @@ function generateAppNav(encodedRequest) {
                 href:'/app/datastores.html?request='+encodedRequest
             },
             {
-                faicon:'fas fa-envelope',
+                dropdown: true,
+                faicon:'fas fa-cubes',
                 class:'me-2 text-light',
-                label:'Email Templates',
-                href:'/app/emails.html?request='+encodedRequest
+                label:'Components',
+                items: [
+                    {
+                        faicon:'fas fa-envelope',
+                        class:'me-2 text-light',
+                        label:'Email Templates',
+                        href:'/app/emails.html?request='+encodedRequest
+                    },
+                    {
+                        faicon:'fas fa-puzzle-piece',
+                        class:'me-2',
+                        label:'Web Components',
+                        href:'/app/components.html?request='+encodedRequest
+                    }
+                ]
             }
         ],
         [
