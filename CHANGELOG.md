@@ -8,6 +8,7 @@
 - Fix page global scripts and libraries tables missing column headers
 - Add missing include all option for scripts
 - Add feature to create new functions from the controller code editor
+- Add support for controller funciton version control
 
 ## 1.6.1
 

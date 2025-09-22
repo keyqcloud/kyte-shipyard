@@ -1,1 +1,1091 @@
-const a0_0x193b94=a0_0x57b4;(function(_0x3334d2,_0x238278){const _0x2e5347=a0_0x57b4,_0x5ac9ab=_0x3334d2();while(!![]){try{const _0x411811=-parseInt(_0x2e5347(0x102))/0x1*(-parseInt(_0x2e5347(0xbf))/0x2)+-parseInt(_0x2e5347(0x91))/0x3*(-parseInt(_0x2e5347(0x124))/0x4)+-parseInt(_0x2e5347(0xc2))/0x5*(parseInt(_0x2e5347(0xe5))/0x6)+parseInt(_0x2e5347(0x116))/0x7*(-parseInt(_0x2e5347(0x110))/0x8)+-parseInt(_0x2e5347(0xb3))/0x9+parseInt(_0x2e5347(0x106))/0xa+-parseInt(_0x2e5347(0x129))/0xb*(-parseInt(_0x2e5347(0x11d))/0xc);if(_0x411811===_0x238278)break;else _0x5ac9ab['push'](_0x5ac9ab['shift']());}catch(_0x2839f5){_0x5ac9ab['push'](_0x5ac9ab['shift']());}}}(a0_0x28bd,0x28bf7));import*as a0_0x6f8961 from'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/+esm';import{registerPHPSnippetLanguage}from'/assets/js/packages/php-snippet/registerPHPSnippetLanguage.js';let subnavFunction=[{'faicon':a0_0x193b94(0xf5),'label':a0_0x193b94(0x103),'selector':a0_0x193b94(0xd0)}];var editor,colorMode='vs';window[a0_0x193b94(0x125)]&&window[a0_0x193b94(0x125)](a0_0x193b94(0xdc))[a0_0x193b94(0x12d)]&&(colorMode='vs-dark');window['matchMedia']('(prefers-color-scheme:\x20dark)')[a0_0x193b94(0x126)](a0_0x193b94(0xf7),_0x2949af=>{const _0x4bf7dc=a0_0x193b94;colorMode=_0x2949af[_0x4bf7dc(0x12d)]?_0x4bf7dc(0x8f):'vs',editor&&editor['setTheme'](colorMode);}),document[a0_0x193b94(0x126)](a0_0x193b94(0xcb),function(_0xb94eb0){const _0x453b2b=a0_0x193b94;var _0x49b429=_0xb94eb0[_0x453b2b(0xef)]||_0xb94eb0['metaKey'],_0x2be8bc=_0xb94eb0[_0x453b2b(0xb7)]==='s';_0x49b429&&_0x2be8bc&&(_0xb94eb0[_0x453b2b(0xa9)](),window[_0x453b2b(0xfb)]?window[_0x453b2b(0xfb)][_0x453b2b(0xcf)]()[_0x453b2b(0x100)](()=>{})[_0x453b2b(0xee)](_0x2a5f5d=>{const _0x361584=_0x453b2b;alert('Error\x20saving:\x20'+_0x2a5f5d),console[_0x361584(0x11a)](_0x2a5f5d);}):$(_0x453b2b(0x90))[_0x453b2b(0x8d)]());}),registerPHPSnippetLanguage(a0_0x6f8961[a0_0x193b94(0xdb)]),window['onbeforeunload']=function(){const _0x5601dc=a0_0x193b94;if(window[_0x5601dc(0xfb)]&&window[_0x5601dc(0xfb)][_0x5601dc(0x98)]())return _0x5601dc(0x9d);};class KyteFunctionList{constructor(_0x50eb36){const _0x37d93c=a0_0x193b94;this[_0x37d93c(0xd4)]=_0x50eb36,this['controllerId']=null,this['functions']=[],this[_0x37d93c(0xd2)]=null,this[_0x37d93c(0x99)]=null,this[_0x37d93c(0x115)]=![],this[_0x37d93c(0xdf)](),this[_0x37d93c(0xa5)]();}[a0_0x193b94(0xdf)](){const _0x27fdc0=a0_0x193b94;try{const _0x35c0b2=this[_0x27fdc0(0x10d)]();_0x35c0b2?this[_0x27fdc0(0xe9)](_0x35c0b2):(console[_0x27fdc0(0x96)](_0x27fdc0(0x7d)),$(_0x27fdc0(0x7c))[_0x27fdc0(0xe4)](_0x27fdc0(0xc1)));}catch(_0x45170f){console[_0x27fdc0(0x11a)](_0x27fdc0(0x9c),_0x45170f),this[_0x27fdc0(0xf3)](_0x27fdc0(0xc6)),$(_0x27fdc0(0x7c))[_0x27fdc0(0xe4)](_0x27fdc0(0xc1));}}[a0_0x193b94(0xa5)](){const _0x56827e=a0_0x193b94;$('#addFunctionBtn,\x20#addFunctionFromHeader')['on'](_0x56827e(0x8d),()=>{this['showAddFunctionModal']();}),$(_0x56827e(0xd3))['on'](_0x56827e(0x8d),()=>{const _0x4c2c41=_0x56827e;this[_0x4c2c41(0xb4)]();}),$(_0x56827e(0x114))['on'](_0x56827e(0xbe),()=>{this['resetAddFunctionForm']();}),$(_0x56827e(0xc9))['on'](_0x56827e(0xf7),()=>{const _0x40c996=_0x56827e,_0xf3d345=$(_0x40c996(0xc9))[_0x40c996(0xcd)](),_0x1dcf07=$(_0x40c996(0xfc));if(!_0x1dcf07[_0x40c996(0xcd)]()[_0x40c996(0xb0)]()&&_0xf3d345){if(_0xf3d345[_0x40c996(0x12a)]('hook_')||['new',_0x40c996(0x9e),_0x40c996(0x12c),_0x40c996(0xbb)]['includes'](_0xf3d345))_0x1dcf07[_0x40c996(0xcd)](_0xf3d345);else _0xf3d345===_0x40c996(0xce)&&_0x1dcf07[_0x40c996(0xcd)](_0x40c996(0xbc));}});}['showAddFunctionModal'](){const _0x4292d4=a0_0x193b94;this[_0x4292d4(0x119)]();const _0x32b20c=new bootstrap['Modal'](document['getElementById']('addFunctionModal'));_0x32b20c[_0x4292d4(0x132)]();}[a0_0x193b94(0x119)](){const _0x1be344=a0_0x193b94;$(_0x1be344(0x93))[0x0][_0x1be344(0x11e)](),$(_0x1be344(0xfc))[_0x1be344(0xcd)](''),$(_0x1be344(0xc9))[_0x1be344(0xcd)](''),$(_0x1be344(0xa2))['val']('');}async[a0_0x193b94(0xb4)](){const _0x32582c=a0_0x193b94,_0x977426=$(_0x32582c(0xc9))[_0x32582c(0xcd)](),_0x1ecf6e=$(_0x32582c(0xfc))[_0x32582c(0xcd)]()[_0x32582c(0xb0)](),_0xa091df=$(_0x32582c(0xa2))['val']()[_0x32582c(0xb0)]();if(!_0x977426){alert(_0x32582c(0x107));return;}if(this[_0x32582c(0x115)]){const _0x49115a=await this[_0x32582c(0xc8)]();if(!_0x49115a)return;}const _0x45db9e={'controller':this[_0x32582c(0x101)],'type':_0x977426,'name':_0x1ecf6e||_0x977426,'description':_0xa091df||'','code':this[_0x32582c(0x12e)](_0x977426)};$('#pageLoaderModal')[_0x32582c(0xe4)]('show');try{await new Promise((_0x41f442,_0x298afc)=>{const _0x3236b8=_0x32582c;this[_0x3236b8(0xd4)]['post']('Function',_0x45db9e,null,[],_0x5da236=>{const _0xc8374f=_0x3236b8;_0x5da236[_0xc8374f(0x87)]&&_0x5da236['data'][0x0]?_0x41f442(_0x5da236[_0xc8374f(0x87)][0x0]):_0x298afc(_0xc8374f(0x117));},_0x60eb1=>{_0x298afc(_0x60eb1);});})[_0x32582c(0x100)](_0x493af5=>{const _0x553bbf=_0x32582c;$(_0x553bbf(0x7c))[_0x553bbf(0xe4)]('hide');const _0x1261d6=bootstrap[_0x553bbf(0x104)][_0x553bbf(0x10f)](document[_0x553bbf(0xe0)](_0x553bbf(0x7b)));_0x1261d6[_0x553bbf(0xc1)](),this[_0x553bbf(0xb5)][_0x553bbf(0xd7)](_0x493af5),this[_0x553bbf(0xf9)](),this['selectFunction'](_0x493af5['id']),this['loadFunctionCode'](_0x493af5['id']),this[_0x553bbf(0xc5)]('Function\x20\x22'+_0x493af5[_0x553bbf(0x111)]+_0x553bbf(0x94));})['catch'](_0x52870b=>{const _0x202965=_0x32582c;$(_0x202965(0x7c))['modal'](_0x202965(0xc1)),console[_0x202965(0x11a)]('Error\x20creating\x20function:',_0x52870b),this[_0x202965(0xf3)](_0x202965(0xe6)+_0x52870b);});}catch(_0xfa0ec5){$(_0x32582c(0x7c))['modal']('hide'),console['error'](_0x32582c(0x108),_0xfa0ec5),this[_0x32582c(0xf3)](_0x32582c(0xe6)+_0xfa0ec5);}}[a0_0x193b94(0x12e)](_0x4efb77){const _0x2635b3=a0_0x193b94,_0x2da7ef={'hook_init':_0x2635b3(0x113),'hook_auth':_0x2635b3(0xe1),'hook_prequery':'<?php\x0a//\x20Hook:\x20Pre-query\x0a//\x20Called\x20before\x20database\x20queries\x20are\x20executed\x0a//\x20Modify\x20or\x20validate\x20query\x20parameters\x20here\x0a\x0a//\x20Your\x20pre-query\x20code\x20here\x0a','hook_preprocess':_0x2635b3(0x10e),'hook_response_data':'<?php\x0a//\x20Hook:\x20Response\x20Data\x0a//\x20Called\x20to\x20modify\x20response\x20data\x20before\x20sending\x0a//\x20Modify\x20the\x20$data\x20variable\x20as\x20needed\x0a\x0a//\x20Your\x20response\x20data\x20processing\x20code\x20here\x0a','hook_process_get_response':_0x2635b3(0x81),'new':_0x2635b3(0xab),'update':'<?php\x0a//\x20Override:\x20Update\x20Operation\x0a//\x20Handle\x20PUT\x20requests\x20to\x20update\x20existing\x20records\x0a//\x20Return\x20the\x20updated\x20record\x20data\x0a\x0a//\x20Your\x20update\x20operation\x20code\x20here\x0a','get':_0x2635b3(0xed),'delete':'<?php\x0a//\x20Override:\x20Delete\x20Operation\x0a//\x20Handle\x20DELETE\x20requests\x20to\x20remove\x20records\x0a//\x20Return\x20success/failure\x20status\x0a\x0a//\x20Your\x20delete\x20operation\x20code\x20here\x0a','custom':_0x2635b3(0xb8)};return _0x2da7ef[_0x4efb77]||'<?php\x0a//\x20Function:\x20'+_0x4efb77+_0x2635b3(0x128);}[a0_0x193b94(0x10d)](){const _0x674506=a0_0x193b94;try{const _0x322fc5=this['_ks'][_0x674506(0xf2)]();if(_0x322fc5&&_0x322fc5[_0x674506(0xc4)])return _0x322fc5[_0x674506(0xc4)];}catch(_0x301ef1){console[_0x674506(0x96)](_0x674506(0xec),_0x301ef1);}try{const _0xa1b791=new URLSearchParams(window['location'][_0x674506(0xf1)]),_0x1bcf81=_0xa1b791[_0x674506(0x12c)](_0x674506(0xd9));if(_0x1bcf81){const _0x4d91cb=atob(decodeURIComponent(_0x1bcf81)),_0x2a86f9=JSON[_0x674506(0x92)](_0x4d91cb);if(_0x2a86f9[_0x674506(0x8a)]===_0x674506(0xe7)&&_0x2a86f9['idx'])return _0x2a86f9[_0x674506(0xc4)];}}catch(_0x41aaeb){console[_0x674506(0x11a)]('Error\x20parsing\x20URL\x20parameters\x20manually:',_0x41aaeb);}return null;}[a0_0x193b94(0xe9)](_0x454dec){const _0x104361=a0_0x193b94;this[_0x104361(0xd4)][_0x104361(0x12c)](_0x104361(0xe7),'id',_0x454dec,[],_0x15e51b=>{const _0x2f1afc=_0x104361;if(_0x15e51b['data']&&_0x15e51b[_0x2f1afc(0x87)][0x0]){const _0x5e1779=_0x15e51b[_0x2f1afc(0x87)][0x0];this['controllerId']=_0x5e1779['controller']['id'],$(_0x2f1afc(0xc3))[_0x2f1afc(0xc0)](_0x5e1779['controller'][_0x2f1afc(0x111)]),$('#function-type')['text']('Controller');const _0x142eef={'model':_0x2f1afc(0xb9),'idx':this[_0x2f1afc(0x101)]},_0x30d527=encodeURIComponent(btoa(JSON[_0x2f1afc(0xe3)](_0x142eef)));$(_0x2f1afc(0xd1))[_0x2f1afc(0x12b)](_0x2f1afc(0xd8),_0x2f1afc(0xaa)+_0x30d527),this[_0x2f1afc(0xdd)](this[_0x2f1afc(0x101)]),this[_0x2f1afc(0xd2)]=_0x454dec;}else this[_0x2f1afc(0xf3)](_0x2f1afc(0x83));},_0x2666a5=>{const _0x1d856c=_0x104361;console[_0x1d856c(0x11a)](_0x1d856c(0x105),_0x2666a5),this['showError'](_0x1d856c(0xb2)+_0x2666a5);});}['loadFunctions'](_0x1b9758){const _0x337f14=a0_0x193b94,_0x4b0f99=$(_0x337f14(0x9f));_0x4b0f99[_0x337f14(0x11f)](_0x337f14(0xa1)),this[_0x337f14(0xd4)][_0x337f14(0x12c)](_0x337f14(0xe7),_0x337f14(0x127),_0x1b9758,[],_0x1c297a=>{const _0x2097c6=_0x337f14;_0x1c297a['data']&&_0x1c297a[_0x2097c6(0x87)][_0x2097c6(0x121)]>0x0?(this['functions']=_0x1c297a[_0x2097c6(0x87)],this['renderFunctionList'](),this[_0x2097c6(0xd2)]&&this[_0x2097c6(0x9a)](this['currentFunctionId'])):_0x4b0f99['html'](_0x2097c6(0x85));},_0x390156=>{const _0x481af1=_0x337f14;console[_0x481af1(0x11a)](_0x481af1(0x112),_0x390156),_0x4b0f99[_0x481af1(0x11f)](_0x481af1(0xaf));});}[a0_0x193b94(0xf9)](){const _0x4aa893=a0_0x193b94,_0x244166=$('#functions-list');_0x244166[_0x4aa893(0xa3)](),this['functions'][_0x4aa893(0xf4)](_0x4bc754=>{const _0x405abc=_0x4aa893,_0x359b11=this['createFunctionItem'](_0x4bc754);_0x244166[_0x405abc(0xf0)](_0x359b11);}),this[_0x4aa893(0xd2)]&&this[_0x4aa893(0xc7)](this['currentFunctionId']);}[a0_0x193b94(0xfe)](_0x1fb490){const _0x29c665=a0_0x193b94,_0x572c8e=this['getFunctionIcon'](_0x1fb490[_0x29c665(0x135)]),_0x9669c0=_0x1fb490[_0x29c665(0x111)]||'function',_0x7394c5=$('\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22function-item\x22\x20data-function-id=\x22'+_0x1fb490['id']+'\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22function-icon\x20'+_0x572c8e+'\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22function-details\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22function-name\x22>'+_0x9669c0+'</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22function-type\x22>'+_0x1fb490[_0x29c665(0x135)]+'</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20');return _0x7394c5['on']('click',()=>{const _0x3848b4=_0x29c665;this[_0x3848b4(0xea)](_0x1fb490['id']);}),_0x7394c5;}[a0_0x193b94(0xe8)](_0x1ee9c5){const _0x532efd=a0_0x193b94,_0x102458={'get':'fas\x20fa-search','post':_0x532efd(0xd5),'put':_0x532efd(0xbd),'delete':'fas\x20fa-trash-alt','new':_0x532efd(0x11c),'hook_init':_0x532efd(0x7e),'hook_auth':'fas\x20fa-shield-alt','hook_prequery':'fas\x20fa-database','hook_preprocess':_0x532efd(0xa6),'hook_response_data':_0x532efd(0x10c),'hook_process_get_response':_0x532efd(0x82),'custom':_0x532efd(0xf5)};return _0x102458[_0x1ee9c5]||'fas\x20fa-code';}async[a0_0x193b94(0xea)](_0x22d9c7){const _0x30fb2e=a0_0x193b94;if(this['isDirty']){const _0x5ce926=await this[_0x30fb2e(0xc8)]();if(!_0x5ce926)return;}this['selectFunction'](_0x22d9c7),this['loadFunctionCode'](_0x22d9c7);}[a0_0x193b94(0xc7)](_0x5eabc6){const _0x5f5613=a0_0x193b94;$('.function-item')[_0x5f5613(0xba)](_0x5f5613(0x133)),$(_0x5f5613(0xcc)+_0x5eabc6+'\x22]')[_0x5f5613(0xf6)](_0x5f5613(0x133)),this[_0x5f5613(0xd2)]=_0x5eabc6;const _0x52da21=this[_0x5f5613(0xb5)][_0x5f5613(0x136)](_0x4f9ed8=>_0x4f9ed8['id']==_0x5eabc6);_0x52da21&&$('#current-function-name')['text'](_0x52da21['type']||_0x5f5613(0x8e));try{const _0x5f2c5e=new URL(window[_0x5f5613(0xf8)]),_0x32de22={'model':'Function','idx':_0x5eabc6},_0x367f09=encodeURIComponent(btoa(JSON[_0x5f5613(0xe3)](_0x32de22)));_0x5f2c5e[_0x5f5613(0x130)][_0x5f5613(0x7f)]('request',_0x367f09),window[_0x5f5613(0xa0)][_0x5f5613(0x89)]({},'',_0x5f2c5e);}catch(_0x287e24){console[_0x5f5613(0x96)](_0x5f5613(0xae),_0x287e24);}}[a0_0x193b94(0x9a)](_0x5b5f8c){const _0x2197af=a0_0x193b94;this[_0x2197af(0xd4)]['get'](_0x2197af(0xe7),'id',_0x5b5f8c,[],_0x515239=>{const _0x4dbbf2=_0x2197af;if(_0x515239[_0x4dbbf2(0x87)]&&_0x515239[_0x4dbbf2(0x87)][0x0]){const _0x271f9c=_0x515239[_0x4dbbf2(0x87)][0x0];this[_0x4dbbf2(0x122)](_0x271f9c),this[_0x4dbbf2(0x115)]=![];}else this[_0x4dbbf2(0xf3)]('Function\x20not\x20found');},_0x1923a9=>{const _0x4a134f=_0x2197af;console[_0x4a134f(0x11a)]('Error\x20loading\x20function\x20code:',_0x1923a9),this[_0x4a134f(0xf3)](_0x4a134f(0x123));});}['displayFunctionCode'](_0x23fd86){const _0x1fc3fd=a0_0x193b94,_0x42eab3=$(_0x1fc3fd(0xd0)),_0x5e0fe7=_0x42eab3[_0x1fc3fd(0x136)](_0x1fc3fd(0x9b)),_0x2b7e13=_0x42eab3[_0x1fc3fd(0x136)](_0x1fc3fd(0x80));_0x42eab3[_0x1fc3fd(0xba)](_0x1fc3fd(0xa8)),_0x5e0fe7[_0x1fc3fd(0xc1)](),_0x2b7e13['show'](),this['editor']?(this[_0x1fc3fd(0x99)]['setValue'](_0x23fd86[_0x1fc3fd(0x134)]||''),this[_0x1fc3fd(0x99)][_0x1fc3fd(0xeb)]({'readOnly':![]})):window[_0x1fc3fd(0xca)]=_0x23fd86['code']||'',$('#function-name')[_0x1fc3fd(0xc0)](_0x23fd86[_0x1fc3fd(0x127)][_0x1fc3fd(0x111)]),$(_0x1fc3fd(0xff))[_0x1fc3fd(0xc0)](_0x23fd86['type']),this['currentFunction']=_0x23fd86;}[a0_0x193b94(0xe2)](){const _0x21affc=a0_0x193b94;if(!this[_0x21affc(0xd2)]||!this[_0x21affc(0x99)])return Promise[_0x21affc(0x8c)](_0x21affc(0x84));return new Promise((_0x1f043d,_0x2a3efe)=>{const _0x3b34e7=_0x21affc;$(_0x3b34e7(0x7c))[_0x3b34e7(0xe4)](_0x3b34e7(0x132));const _0x541d08=this[_0x3b34e7(0x99)]['getValue']();this[_0x3b34e7(0xd4)][_0x3b34e7(0x88)](_0x3b34e7(0xe7),'id',this[_0x3b34e7(0xd2)],{'code':_0x541d08},null,[],_0x45e93b=>{const _0x1f8839=_0x3b34e7;$('#pageLoaderModal')[_0x1f8839(0xe4)]('hide'),this[_0x1f8839(0x115)]=![],this[_0x1f8839(0xc5)](_0x1f8839(0x8b)),_0x1f043d(_0x45e93b);},_0xe7e124=>{const _0x1a1685=_0x3b34e7;$(_0x1a1685(0x7c))[_0x1a1685(0xe4)](_0x1a1685(0xc1)),_0x2a3efe(_0xe7e124);});});}[a0_0x193b94(0x95)](_0x43ab8f){const _0x8cfe20=a0_0x193b94;this['editor']=_0x43ab8f,_0x43ab8f&&(_0x43ab8f[_0x8cfe20(0x12f)](()=>{const _0x4f5af3=_0x8cfe20;this[_0x4f5af3(0x115)]=!![];}),window['functionCodeToLoad']!==undefined&&(_0x43ab8f[_0x8cfe20(0x10b)](window[_0x8cfe20(0xca)]),_0x43ab8f[_0x8cfe20(0xeb)]({'readOnly':![]}),delete window[_0x8cfe20(0xca)]));}[a0_0x193b94(0xc8)](){return new Promise(_0x3881c5=>{const _0x104973=a0_0x57b4,_0x7260d8=confirm(_0x104973(0xb1));_0x3881c5(_0x7260d8);});}['showError'](_0x57de06){const _0x469886=a0_0x193b94;alert(_0x57de06),console[_0x469886(0x11a)](_0x57de06);}[a0_0x193b94(0xc5)](_0x1373ae){const _0x329356=a0_0x193b94;console[_0x329356(0xda)](_0x1373ae);}[a0_0x193b94(0x98)](){return this['isDirty'];}[a0_0x193b94(0xa4)](){const _0xdd1aca=a0_0x193b94;return this[_0xdd1aca(0xd2)];}[a0_0x193b94(0xcf)](){const _0x4438d1=a0_0x193b94;return this[_0x4438d1(0xe2)]();}}function a0_0x28bd(){const _0xb884cd=['rNvUy3rPB24','z2v0rNvUy3rPB25jy29U','Bg9HzenVBNrYB2XSzxjbBMrgDw5JDgLVBNm','B25gDw5JDgLVBKnSAwnR','DxbKyxrLt3b0Aw9UCW','rxjYB3iGz2v0DgLUzYbWywDLihjLCxvLC3qGzNjVBsblExrLihnLC3nPB24SihrYEwLUzYbTyw51ywWGCgfYC2LUzZO','pd9WAhaklY8Gt3zLCNjPzgu6ieDLDcbpCgvYyxrPB24klY8GsgfUzgXLieDfvcbYzxf1zxn0CYb0BYbYzxrYAwv2zsbYzwnVCMrZcI8VifjLDhvYBIb0AguGCMvXDwvZDgvKigrHDgekcI8VifLVDxiGz2v0ig9WzxjHDgLVBIbJB2rLigHLCMuk','y2f0y2G','y3rYBeTLEq','yxbWzw5K','C2vHCMnO','z2v0ugfNzvjLCxvLC3q','C2HVD0vYCM9Y','zM9YrwfJAa','zMfZigzHlwnVzgu','ywrKq2XHC3m','y2HHBMDL','Bg9JyxrPB24','CMvUzgvYrNvUy3rPB25mAxn0','i2nSB3nLu2LKzwjHCG','s3L0zuz1BMn0Aw9UtgLZDe1HBMfNzxi','i2z1BMn0Aw9UtMfTzq','zc1UB25L','y3jLyxrLrNvUy3rPB25jDgvT','i2z1BMn0Aw9Ulxr5Cgu','DgHLBG','y29UDhjVBgXLCKLK','ndCYy1LWtxbr','q29Kzq','tw9KywW','rxjYB3iGBg9HzgLUzYbMDw5JDgLVBJO','mJe3nte5mhPWvKLQBq','ugXLyxnLihnLBgvJDcbHigz1BMn0Aw9Uihr5Cgu','rxjYB3iGy3jLyxrPBMCGzNvUy3rPB246','zgv0ywLS','AxntzxnZAw9U','C2v0vMfSDwu','zMfZigzHlwv4y2HHBMDLlwfSDa','z2v0rNvUy3rPB25jzezYB21vCMW','pd9WAhaklY8Gsg9VAZOGuhjLlxbYB2nLC3nPBMCklY8Gq2fSBgvKigjLzM9YzsbKyxrHihbYB2nLC3nPBMCklY8Gtw9KAwz5ig9YihzHBgLKyxrLigLUChv0igrHDgeGAgvYzqOklY8Gww91CIbWCMuTChjVy2vZC2LUzYbJB2rLigHLCMuk','z2v0sw5ZDgfUy2u','ndu4nfb5yM1KEq','BMfTzq','rxjYB3iGBg9HzgLUzYbMDw5JDgLVBNm6','pd9WAhaklY8Gsg9VAZOGsw5PDgLHBgL6yxrPB24klY8Gq2fSBgvKihDOzw4GDgHLignVBNrYB2XSzxiGAxmGzMLYC3qGAw5PDgLHBgL6zwqklY8GvxnLihrOAxmGDg8GC2v0ihvWigfUEsbPBML0AwfSignVBMzPz3vYyxrPB24GB3iGC3rHDgukcI8VifLVDxiGAw5PDgLHBgL6yxrPB24Gy29KzsbOzxjLcG','i2fKzez1BMn0Aw9Utw9KywW','AxneAxj0Eq','mJC4nNzJwMnVtW','rMfPBgvKihrVignYzwf0zsbMDw5JDgLVBG','lZ9YzwrPCJ0','CMvZzxrbzgrgDw5JDgLVBKzVCM0','zxjYB3i','B25IzwzVCMv1BMXVywq','zMfZigzHlxbSDxmTC3f1yxjL','ndK3mJiZnKHfrLDnDG','CMvZzxq','AhrTBa','rxjYB3iGC2f2Aw5NoIa','BgvUz3rO','zgLZCgXHEuz1BMn0Aw9Uq29Kzq','rMfPBgvKihrVigXVywqGzNvUy3rPB24Gy29Kzq','mtz5A1zjDgC','Bwf0y2HnzwrPyq','ywrKrxzLBNrmAxn0zw5LCG','y29UDhjVBgXLCG','cI8ViefKzcb5B3vYignVzguGAgvYzqOk','mtfMzhbVugi','C3rHCNrZv2L0Aa','yxr0CG','z2v0','Bwf0y2HLCW','z2v0rgvMyxvSDenVzgvgB3juExbL','B25eAwrdAgfUz2vnB2rLBenVBNrLBNq','C2vHCMnOugfYyw1Z','s3L0zuLUAxrPywXPEMvK','C2HVDW','ywn0AxzL','y29Kzq','DhLWzq','zMLUza','ywrKrNvUy3rPB25nB2rHBa','i3bHz2vmB2fKzxjnB2rHBa','tM8GzNvUy3rPB24GsuqGzM91BMqGAw4Gvvjm','zMfZigzHlxbVD2vYlw9MzG','C2v0','i2nVBNrHAw5LCG','pd9WAhaklY8Gsg9VAZOGuhjVy2vZCYbhzxqGuMvZCg9UC2uklY8Gq2fSBgvKihrVihbYB2nLC3mGr0vuihjLCxvLC3qGCMvZCg9UC2vZcI8Vie1VzgLMEsbYzxnWB25ZzsbKyxrHigzVCIbhrvqGCMvXDwvZDhmkcI8VifLVDxiGr0vuihjLC3bVBNnLihbYB2nLC3nPBMCGy29KzsbOzxjLcG','zMfZigzHlwfYCM93lwnPCMnSzs1YAwDODa','rNvUy3rPB24GBM90igzVDw5K','tM8GzNvUy3rPB24GC2vSzwn0zwqGB3iGzwrPDg9Yig5VDcbYzwfKEq','pgrPDIbJBgfZCZ0IBM8TzNvUy3rPB25ZiJ5oBYbMDw5JDgLVBNmGzM91BMq8l2rPDJ4','zw5HyMXLrwrPDg9Y','zgf0yq','Chv0','CMvWBgfJzvn0yxrL','Bw9KzwW','rNvUy3rPB24GC2f2zwqGC3vJy2vZC2z1BgX5iq','CMvQzwn0','y2XPy2S','zNvUy3rPB24','DNmTzgfYAW','i3nHDMvdB2rL','mtqWmde2B0nZtevb','CgfYC2u','i2fKzez1BMn0Aw9UrM9YBq','iIbJCMvHDgvKihn1y2nLC3nMDwXSEse','C2v0rwrPDg9Y','D2fYBG','i3nPzgvUyxy','AxneAxj0EunOzwnR','zwrPDg9Y','Bg9Hzez1BMn0Aw9Uq29Kzq','lM5Vlwz1BMn0Aw9Ulw1LC3nHz2u','rxjYB3iGAw5PDgLHBgL6Aw5Nigz1BMn0Aw9UigXPC3q6','ww91igHHDMuGDw5ZyxzLzcbJAgfUz2vZlIbbCMuGEw91ihn1CMuGEw91ihDHBNqGDg8GBgvHDMu/','DxbKyxrL','i2z1BMn0Aw9UCY1SAxn0','AgLZDg9YEq','pgrPDIbJBgfZCZ0IBg9HzgLUzY1MDw5JDgLVBNmIpJXPignSyxnZpsjMyxmGzMeTC3bPBM5LCIbMys1ZCgLUig1LltiIpJWVAt5mB2fKAw5Nigz1BMn0Aw9UCY4UlJWVzgL2pG','i2z1BMn0Aw9UrgvZy3jPChrPB24','zw1WDhK','z2v0q3vYCMvUDez1BMn0Aw9Uswq','C2v0DxbbzgrgDw5JDgLVBK1VzgfS','zMfZigzHlwzPBhrLCG','y3jLyxrL','BM8TzNvUy3rPB24','ChjLDMvUDerLzMf1Bhq','l2fWCc9JB250CM9SBgvYlZ9Yzxf1zxn0pq','pd9WAhaklY8Gt3zLCNjPzgu6ienYzwf0zsbpCgvYyxrPB24klY8GsgfUzgXLifbpu1qGCMvXDwvZDhmGDg8Gy3jLyxrLig5LDYbYzwnVCMrZcI8VifjLDhvYBIb0AguGy3jLyxrLzcbYzwnVCMqGzgf0yqOklY8Gww91CIbJCMvHDguGB3bLCMf0Aw9UignVzguGAgvYzqO','i3nPzgvIyxjuB2DNBgu','Dg9Nz2XLq2XHC3m','q291BgqGBM90ihvWzgf0zsbvuKW6','pgrPDIbJBgfZCZ0IBM8TzNvUy3rPB25ZiJ5fCNjVCIbSB2fKAw5Nigz1BMn0Aw9UCZWVzgL2pG','DhjPBq','ww91igHHDMuGDw5ZyxzLzcbJAgfUz2vZlIbeBYb5B3uGD2fUDcb0BYbJB250Aw51zsb3AxrOB3v0ihnHDMLUzZ8','rMfPBgvKihrVigXVywqGzNvUy3rPB24Gzgf0ytOG','mJm2ntmZnujprenkDG','y3jLyxrLtMv3rNvUy3rPB24','zNvUy3rPB25Z','lY8Gu2vSzwn0igeGzNvUy3rPB24GzNjVBsb0AguGC2LKzwjHCIb0BYbZDgfYDcbLzgL0Aw5N','A2v5','pd9WAhaklY8Gq3vZDg9Tiez1BMn0Aw9UcI8VifLVDxiGy3vZDg9Tigz1BMn0Aw9UywXPDhKGz29LCYbOzxjLcGOVlYbzB3vYign1C3rVBsbJB2rLigHLCMuk','q29UDhjVBgXLCG','CMvTB3zLq2XHC3m','zgvSzxrL','y3vZDg9Tx2z1BMn0Aw9U','zMfZigzHlwvKAxq','AgLKzgvUlMjZlM1VzgfS','ndy0t3bwyu5v','Dgv4Da','AgLKzq','nJe0mZbpDxvYzNO','i2z1BMn0Aw9Ulw5HBwu','Awr4','C2HVD1n1y2nLC3nnzxnZywDL','rMfPBgvKihrVigLUAxrPywXPEMuGzNvUy3rPB24GzwrPDg9Y','C2vSzwn0rNvUy3rPB24','y29UzMLYBvvUC2f2zwrdAgfUz2vZ','i2z1BMn0Aw9UvhLWzq','zNvUy3rPB25dB2rLvg9mB2fK','A2v5zg93BG','lMz1BMn0Aw9UlwL0zw1Bzgf0ys1MDw5JDgLVBI1Pzd0I','DMfS','y3vZDg9T','C2f2zq','i0nVzgu','i2jHy2TuB0nVBNrYB2XSzxi','y3vYCMvUDez1BMn0Aw9Uswq','i2nYzwf0zuz1BMn0Aw9UqNrU','x2TZ','zMfZigzHlxbSDxmTy2LYy2XL','AgfZAa','ChvZAa','AhjLzG','CMvXDwvZDa','Bg9N','BgfUz3vHz2vZ','khbYzwzLCNmTy29SB3iTC2nOzw1LoIbKyxjRkq','Bg9Hzez1BMn0Aw9UCW','y29UDgfPBMvY','Aw5PDa','z2v0rwXLBwvUDej5swq','pd9WAhaklY8Gsg9VAZOGqxv0AgvUDgLJyxrPB24klY8Gq2fSBgvKihrVigHHBMrSzsbHDxrOzw50AwnHDgLVBIbSB2DPyWOVlYbszxr1CM4GDhj1zsb0BYbHBgXVDYbHy2nLC3mSigzHBhnLihrVigrLBNKkcI8VifLVDxiGyxv0AgvUDgLJyxrPB24Gy29KzsbOzxjLcNjLDhvYBIb0CNvLoWO','C2f2zun1CNjLBNrgDw5JDgLVBG','C3rYAw5NAwz5','Bw9KywW','mtmYDLDSzvvf','rMfPBgvKihrVignYzwf0zsbMDw5JDgLVBJOG'];a0_0x28bd=function(){return _0xb884cd;};return a0_0x28bd();}function a0_0x57b4(_0xd33189,_0x1b325e){const _0x28bdbe=a0_0x28bd();return a0_0x57b4=function(_0x57b475,_0x2183d9){_0x57b475=_0x57b475-0x7b;let _0x1f0b02=_0x28bdbe[_0x57b475];if(a0_0x57b4['ethKXl']===undefined){var _0x1daf72=function(_0x6f8961){const _0x2949af='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0xb94eb0='',_0x49b429='';for(let _0x2be8bc=0x0,_0x2a5f5d,_0x50eb36,_0x35c0b2=0x0;_0x50eb36=_0x6f8961['charAt'](_0x35c0b2++);~_0x50eb36&&(_0x2a5f5d=_0x2be8bc%0x4?_0x2a5f5d*0x40+_0x50eb36:_0x50eb36,_0x2be8bc++%0x4)?_0xb94eb0+=String['fromCharCode'](0xff&_0x2a5f5d>>(-0x2*_0x2be8bc&0x6)):0x0){_0x50eb36=_0x2949af['indexOf'](_0x50eb36);}for(let _0x45170f=0x0,_0xf3d345=_0xb94eb0['length'];_0x45170f<_0xf3d345;_0x45170f++){_0x49b429+='%'+('00'+_0xb94eb0['charCodeAt'](_0x45170f)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x49b429);};a0_0x57b4['SNMNzU']=_0x1daf72,_0xd33189=arguments,a0_0x57b4['ethKXl']=!![];}const _0x1b16c4=_0x28bdbe[0x0],_0x397603=_0x57b475+_0x1b16c4,_0x585b37=_0xd33189[_0x397603];return!_0x585b37?(_0x1f0b02=a0_0x57b4['SNMNzU'](_0x1f0b02),_0xd33189[_0x397603]=_0x1f0b02):_0x1f0b02=_0x585b37,_0x1f0b02;},a0_0x57b4(_0xd33189,_0x1b325e);}window[a0_0x193b94(0xfb)]=null,document[a0_0x193b94(0x126)](a0_0x193b94(0x131),function(_0x4ba9a8){const _0x45f56f=a0_0x193b94;let _0x1fbef9=_0x4ba9a8[_0x45f56f(0x109)][_0x45f56f(0xd4)],_0x2ae7c4=location[_0x45f56f(0xd6)];_0x2ae7c4=_0x2ae7c4==''?_0x45f56f(0xd0):_0x2ae7c4,$(_0x2ae7c4)[_0x45f56f(0xba)](_0x45f56f(0xfd)),$(_0x2ae7c4+'-nav-link')[_0x45f56f(0xf6)](_0x45f56f(0x133)),_0x1fbef9[_0x45f56f(0x10a)]()?(window[_0x45f56f(0xfb)]=new KyteFunctionList(_0x1fbef9),editor=a0_0x6f8961['editor'][_0x45f56f(0xa7)](document['getElementById'](_0x45f56f(0xde)),{'value':_0x45f56f(0xb6),'theme':colorMode,'language':'php-snippet','automaticLayout':!![],'wordWrap':!![],'wordWrapMinified':!![],'wrappingIndent':'indent','readOnly':!![]}),setTimeout(()=>{const _0x3a77f1=_0x45f56f;window[_0x3a77f1(0xfb)]&&(window[_0x3a77f1(0xfb)][_0x3a77f1(0x95)](editor),window['functionCodeToLoad']!==undefined&&editor['updateOptions']({'readOnly':![]}));},0x64),$(_0x45f56f(0x90))['click'](function(){const _0x2667bf=_0x45f56f;window[_0x2667bf(0xfb)]&&window[_0x2667bf(0xfb)][_0x2667bf(0xcf)]()[_0x2667bf(0x100)](()=>{})[_0x2667bf(0xee)](_0x25daac=>{const _0x4c7659=_0x2667bf;alert(_0x4c7659(0x120)+_0x25daac),console[_0x4c7659(0x11a)](_0x25daac);});}),$(_0x45f56f(0xac))['on']('click',function(){const _0xc178f6=_0x45f56f;$(_0xc178f6(0x97))[_0xc178f6(0xad)](_0xc178f6(0x132));}),$(_0x45f56f(0xfa))['on'](_0x45f56f(0x8d),function(){const _0x155ee0=_0x45f56f;$(_0x155ee0(0x97))[_0x155ee0(0xba)]('show');}),window[_0x45f56f(0x86)]=function(){const _0x502d6f=_0x45f56f;editor&&editor[_0x502d6f(0xeb)]({'readOnly':![]});},setTimeout(()=>{const _0x99aab=_0x45f56f;$(_0x99aab(0x7c))[_0x99aab(0xe4)]('hide');},0x1f4)):location[_0x45f56f(0xd8)]=_0x45f56f(0x118)+encodeURIComponent(window[_0x45f56f(0xf8)]);}),window[a0_0x193b94(0x11b)]=function(){const _0x489814=a0_0x193b94;if(window[_0x489814(0xfb)]&&window[_0x489814(0xfb)]['isDirtyCheck']())return'You\x20have\x20unsaved\x20changes.\x20Are\x20you\x20sure\x20you\x20want\x20to\x20leave?';};
+// Enhanced kyte-shipyard-function-details.js with Version Control
+import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/+esm';
+import {registerPHPSnippetLanguage} from '/assets/js/packages/php-snippet/registerPHPSnippetLanguage.js';
+
+var editor;
+var tblVersionHistory;
+
+// Global variables for change summary functionality
+let pendingActionCallback = null;
+
+var colorMode = 'vs';
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    colorMode = 'vs-dark';
+}
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+    colorMode = event.matches ? "vs-dark" : "vs";
+    if (editor) {
+        editor.setTheme(colorMode);
+    }
+});
+
+// Initialize change summary modal
+function initializeChangeSummaryModal() {
+    if (!document.getElementById('changeSummaryModal')) {
+        const modalHTML = `
+            <div class="modal fade" id="changeSummaryModal" tabindex="-1" data-bs-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content" style="background: #2d2d30; border: 1px solid #3e3e42; color: #d4d4d4;">
+                        <div class="modal-header" style="background: #252526; border-bottom: 1px solid #3e3e42;">
+                            <h5 class="modal-title" style="color: #ffffff; font-weight: 600;">
+                                <i class="fas fa-edit me-2"></i>
+                                Add Change Summary
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="actionTypeBadge" class="mb-3" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; background: linear-gradient(135deg, #fb8500, #e76f00); color: white;">
+                                <i class="fas fa-save"></i>
+                                <span>Saving Changes</span>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="changeSummaryInput" class="form-label" style="color: #cccccc; font-weight: 500;">
+                                    What changed in this function?
+                                </label>
+                                <textarea 
+                                    class="form-control" 
+                                    id="changeSummaryInput" 
+                                    rows="3" 
+                                    placeholder="Briefly describe your changes (optional)..."
+                                    maxlength="500"
+                                    style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; border-radius: 6px;"
+                                ></textarea>
+                                <div style="color: #969696; font-size: 0.85rem; margin-top: 0.5rem;">
+                                    Leave empty to use default summary. <code style="background: #252526; padding: 0.2rem 0.4rem; border-radius: 4px; color: #ff6b35;">Ctrl+Enter</code> to save quickly.
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="form-label" style="color: #cccccc; font-weight: 500;">Quick Options</label>
+                                <div class="quick-options" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                    <span class="quick-option" onclick="setSummary('Fixed function logic')">Fixed function logic</span>
+                                    <span class="quick-option" onclick="setSummary('Updated parameters')">Updated parameters</span>
+                                    <span class="quick-option" onclick="setSummary('Added error handling')">Added error handling</span>
+                                    <span class="quick-option" onclick="setSummary('Performance improvements')">Performance improvements</span>
+                                    <span class="quick-option" onclick="setSummary('Code refactoring')">Code refactoring</span>
+                                    <span class="quick-option" onclick="setSummary('Bug fixes')">Bug fixes</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="background: #2d2d30; border-top: 1px solid #3e3e42;">
+                            <button type="button" class="btn-editor btn-editor-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times"></i>
+                                Cancel
+                            </button>
+                            <button type="button" class="btn-editor btn-editor-secondary" onclick="window.proceedWithAction('')">
+                                <i class="fas fa-forward"></i>
+                                Skip Summary
+                            </button>
+                            <button type="button" id="confirmActionBtn" class="btn-editor btn-editor-primary" onclick="window.proceedWithAction()">
+                                <i class="fas fa-save"></i>
+                                Save with Summary
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        
+        // Add CSS for quick options
+        if (!document.getElementById('changeSummaryStyles')) {
+            const styles = document.createElement('style');
+            styles.id = 'changeSummaryStyles';
+            styles.textContent = `
+                .quick-option {
+                    background: #252526;
+                    border: 1px solid #3e3e42;
+                    color: #cccccc;
+                    padding: 0.4rem 0.8rem;
+                    border-radius: 16px;
+                    font-size: 0.8rem;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                .quick-option:hover {
+                    background: #ff6b35;
+                    border-color: #ff6b35;
+                    color: white;
+                }
+                #changeSummaryInput:focus {
+                    background: #404040 !important;
+                    border-color: #ff6b35 !important;
+                    box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.2) !important;
+                    color: #ffffff !important;
+                    outline: none !important;
+                }
+                #changeSummaryInput::placeholder {
+                    color: #969696 !important;
+                }
+            `;
+            document.head.appendChild(styles);
+        }
+    }
+}
+
+// Version preview function
+function previewVersion(versionData, _ks) {
+    const previewContent = `
+        <div class="modal fade" id="versionPreviewModal" tabindex="-1" data-bs-backdrop="static">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content" style="background: #1e1e1e; color: #d4d4d4; border: 1px solid #3e3e42;">
+                    <div class="modal-header" style="background: #2d2d30; border-bottom: 1px solid #3e3e42; padding: 1.5rem;">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="version-badge px-3 py-2 rounded" style="background: linear-gradient(135deg, #ff6b35, #f7931e); color: white; font-weight: 600; font-size: 0.9rem;">
+                                Version ${versionData.version_number}
+                            </div>
+                            <div>
+                                <h5 class="modal-title mb-1" style="color: #ffffff; font-weight: 600;">Function Version Preview</h5>
+                                <div class="text-muted" style="font-size: 0.85rem;">
+                                    ${new Date(versionData.date_created).toLocaleString()} • ${versionData.created_by?.name || 'Unknown'}
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-0" style="height: calc(100vh - 200px);">
+                        <div class="d-flex flex-column h-100">
+                            <div class="content-header p-3" style="background: #252526; border-bottom: 1px solid #3e3e42; flex-shrink: 0;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0" style="color: #ffffff; font-weight: 600;">PHP Code</h6>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm copy-content" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.375rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">
+                                            <i class="fas fa-copy me-1"></i>Copy
+                                        </button>
+                                    </div>
+                                </div>
+                                ${versionData.change_summary ? `
+                                <div class="mt-2 p-2 rounded" style="background: #2d2d30; border: 1px solid #3e3e42;">
+                                    <small style="color: #969696;">Change Summary:</small>
+                                    <div style="color: #d4d4d4; font-size: 0.9rem;">${versionData.change_summary}</div>
+                                </div>
+                                ` : ''}
+                            </div>
+                            <div class="code-container" style="flex: 1; overflow: auto; font-family: 'JetBrains Mono', monospace; background: #1e1e1e;">
+                                <pre style="margin: 0; padding: 2rem; color: #d4d4d4; line-height: 1.6; white-space: pre-wrap; word-break: break-word;"><code id="version-code-content" class="language-php">${escapeHtml(versionData.code || '')}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="background: #2d2d30; border-top: 1px solid #3e3e42; padding: 1.5rem; gap: 1rem;">
+                        <div class="d-flex w-100 justify-content-between align-items-center">
+                            <div class="version-info" style="color: #969696; font-size: 0.85rem;">
+                                <i class="fas fa-info-circle me-1"></i>
+                                ${versionData.can_revert ? 'This version can be restored' : 'This is the current version'}
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn" data-bs-dismiss="modal" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500;">
+                                    <i class="fas fa-times me-2"></i>Close
+                                </button>
+                                ${versionData.can_revert ? `
+                                <button type="button" id="restoreVersionBtn" class="btn" style="background: linear-gradient(135deg, #238636, #2ea043); border: none; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500;">
+                                    <i class="fas fa-undo me-2"></i>Restore This Version
+                                </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove existing modal if present
+    $('#versionPreviewModal').remove();
+    
+    // Add modal to body and show
+    $('body').append(previewContent);
+    
+    // Bind events
+    $('#versionPreviewModal .copy-content').on('click', function() {
+        const content = versionData.code || '';
+        navigator.clipboard.writeText(content).then(() => {
+            const btn = $(this);
+            const originalHtml = btn.html();
+            btn.html('<i class="fas fa-check me-1"></i>Copied!');
+            btn.css('background', '#238636');
+            
+            setTimeout(() => {
+                btn.html(originalHtml);
+                btn.css('background', '#3c3c3c');
+            }, 2000);
+        });
+    });
+    
+    // Restore functionality
+    $('#restoreVersionBtn').on('click', function() {
+        restoreVersion(versionData, _ks);
+        $('#versionPreviewModal').modal('hide');
+    });
+    
+    $('#versionPreviewModal').modal('show');
+}
+
+function restoreVersion(versionData, _ks) {
+    if (versionData.can_revert !== true) {
+        alert("This is already the current version.");
+        return;
+    }
+
+    if (!confirm("Are you sure you want to restore this version? Current unsaved changes will be lost.")) {
+        return;
+    }
+
+    $('#pageLoaderModal').modal('show');
+    
+    // Get version content
+    _ks.get("KyteFunctionVersionContent", "content_hash", versionData.content_hash, [], function(r) {
+        if (!r.data[0]) {
+            alert("Error: Could not retrieve version content.");
+            $('#pageLoaderModal').modal('hide');
+            return;
+        }
+        
+        const versionContent = r.data[0];
+        
+        // Update editor with restored content
+        if (editor) {
+            editor.setValue(versionContent.code || '');
+        }
+        
+        // Create restore summary
+        const changeSummary = `Restored to version ${versionData.version_number} (${versionData.change_summary || 'No summary'})`;
+        
+        // Save the restored function
+        saveFunctionWithSummary(changeSummary);
+        
+    }, function(err) {
+        alert("Error fetching version content: " + err);
+        console.error(err);
+        $('#pageLoaderModal').modal('hide');
+    });
+}
+
+function escapeHtml(text) {
+    if (typeof text !== 'string') {
+        return ''; // or throw an error, or convert to string
+    }
+    var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
+// Show change summary modal
+function showChangeSummaryModal(callback) {
+    pendingActionCallback = callback;
+    
+    // Clear previous input and show modal
+    document.getElementById('changeSummaryInput').value = '';
+    const modal = new bootstrap.Modal(document.getElementById('changeSummaryModal'));
+    modal.show();
+    
+    // Focus the textarea after modal is shown
+    $('#changeSummaryModal').on('shown.bs.modal', function() {
+        document.getElementById('changeSummaryInput').focus();
+    });
+}
+
+// Set summary from quick options
+function setSummary(text) {
+    document.getElementById('changeSummaryInput').value = text;
+}
+
+window.setSummary = setSummary;
+
+// Proceed with the action
+function proceedWithAction(customSummary = null) {
+    const summary = customSummary !== null ? customSummary : 
+                   document.getElementById('changeSummaryInput').value.trim();
+    
+    // Hide modal immediately
+    const modalElement = document.getElementById('changeSummaryModal');
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    if (modal) {
+        modal.hide();
+    }
+    
+    // Execute the callback with the summary
+    if (pendingActionCallback) {
+        const finalSummary = summary || 'Manual save';
+        pendingActionCallback(finalSummary);
+        pendingActionCallback = null;
+    }
+}
+
+window.proceedWithAction = proceedWithAction;
+
+// Save function that uses the modal
+function saveFunctionWithSummary(changeSummary) {
+    if (!window.KyteFunctionListManager || !window.KyteFunctionListManager.getCurrentFunctionId()) {
+        alert("No function selected");
+        return;
+    }
+    
+    $('#pageLoaderModal').modal('show');
+    
+    try {
+        const functionId = window.KyteFunctionListManager.getCurrentFunctionId();
+        const code = editor ? editor.getValue() : '';
+        
+        let payload = {
+            'change_summary': changeSummary,
+            'code': code
+        };
+        
+        window.KyteFunctionListManager._ks.put('Function', 'id', functionId, payload, null, [], function(r) {
+            $('#pageLoaderModal').modal('hide');
+            
+            window.KyteFunctionListManager.isDirty = false;
+            
+            // Refresh version history table if visible
+            if (tblVersionHistory && tblVersionHistory.table) {
+                tblVersionHistory.table.ajax.reload();
+            }
+            
+            // Show success notification
+            showNotification('success', 'Function saved successfully!', changeSummary);
+        }, function(err) {
+            alert(err);
+            console.error(err);
+            $('#pageLoaderModal').modal('hide');
+        });
+
+    } catch (error) {
+        alert("An error occurred: " + error.message);
+        console.error(error.message);
+        $('#pageLoaderModal').modal('hide');
+    }
+}
+
+// Show success notification
+function showNotification(type, message, summary) {
+    const toastHtml = `
+        <div class="toast align-items-center border-0 show" style="background: ${type === 'success' ? '#238636' : '#f85149'}; color: white; position: fixed; top: 2rem; right: 2rem; z-index: 9999;">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <strong>${message}</strong>
+                    ${summary ? `<br><small>${summary}</small>` : ''}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', toastHtml);
+    
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        const toasts = document.querySelectorAll('.toast');
+        if (toasts.length > 0) {
+            toasts[toasts.length - 1].remove();
+        }
+    }, 4000);
+}
+
+// Check for actual changes
+function hasActualChanges() {
+    if (!window.KyteFunctionListManager || !window.KyteFunctionListManager.currentFunction || !editor) {
+        return false;
+    }
+    
+    const currentCode = editor.getValue();
+    const originalCode = window.KyteFunctionListManager.currentFunction.code || '';
+    
+    return currentCode !== originalCode;
+}
+
+// key bindings for saving
+document.addEventListener("keydown", function(event) {
+    var isCtrlPressed = event.ctrlKey || event.metaKey;
+    var isSPressed = event.key === "s";
+
+    // Handle modal keyboard shortcuts
+    if (document.getElementById('changeSummaryModal') && 
+        document.getElementById('changeSummaryModal').classList.contains('show')) {
+        if (isCtrlPressed && event.key === 'Enter') {
+            event.preventDefault();
+            proceedWithAction();
+        }
+        return; // Don't process other shortcuts when modal is open
+    }
+
+    // Ctrl+S or Cmd+S to save
+    if (isCtrlPressed && isSPressed) {
+        event.preventDefault();
+        
+        // Check for changes first
+        if (hasActualChanges()) {
+            showChangeSummaryModal(saveFunctionWithSummary);
+        } else {
+            showNotification('info', 'No changes to save', 'Function is already up to date');
+        }
+    }
+});
+
+registerPHPSnippetLanguage(monaco.languages);
+
+// Enhanced KyteFunctionList class with version control
+class KyteFunctionList {
+    constructor(kyteSession) {
+        this._ks = kyteSession;
+        this.controllerId = null;
+        this.functions = [];
+        this.currentFunctionId = null;
+        this.currentFunction = null;
+        this.editor = null;
+        this.isDirty = false;
+        
+        this.init();
+        this.setupAddFunctionModal();
+    }
+
+    init() {
+        try {
+            const functionId = this.getFunctionIdFromUrl();
+            if (functionId) {
+                this.loadControllerAndFunctions(functionId);
+            } else {
+                console.warn("No function ID found in URL");
+                $('#pageLoaderModal').modal('hide');
+            }
+        } catch (error) {
+            console.error("Error initializing function list:", error);
+            this.showError("Failed to initialize function editor");
+            $('#pageLoaderModal').modal('hide');
+        }
+    }
+
+    setupAddFunctionModal() {
+        $('#addFunctionBtn, #addFunctionFromHeader').on('click', () => {
+            this.showAddFunctionModal();
+        });
+
+        $('#createFunctionBtn').on('click', () => {
+            this.createNewFunction();
+        });
+
+        $('#addFunctionModal').on('hidden.bs.modal', () => {
+            this.resetAddFunctionForm();
+        });
+
+        $('#functionType').on('change', () => {
+            const type = $('#functionType').val();
+            const nameField = $('#functionName');
+            
+            if (!nameField.val().trim() && type) {
+                if (type.startsWith('hook_') || ['new', 'update', 'get', 'delete'].includes(type)) {
+                    nameField.val(type);
+                } else if (type === 'custom') {
+                    nameField.val('custom_function');
+                }
+            }
+        });
+    }
+
+    showAddFunctionModal() {
+        this.resetAddFunctionForm();
+        const modal = new bootstrap.Modal(document.getElementById('addFunctionModal'));
+        modal.show();
+    }
+
+    resetAddFunctionForm() {
+        $('#addFunctionForm')[0].reset();
+        $('#functionName').val('');
+        $('#functionType').val('');
+        $('#functionDescription').val('');
+    }
+
+    async createNewFunction() {
+        const type = $('#functionType').val();
+        const name = $('#functionName').val().trim();
+        const description = $('#functionDescription').val().trim();
+
+        if (!type) {
+            alert('Please select a function type');
+            return;
+        }
+
+        if (this.isDirty) {
+            const confirm = await this.confirmUnsavedChanges();
+            if (!confirm) return;
+        }
+
+        const functionData = {
+            controller: this.controllerId,
+            type: type,
+            name: name || type,
+            description: description || '',
+            code: this.getDefaultCodeForType(type)
+        };
+
+        $('#pageLoaderModal').modal('show');
+
+        try {
+            await new Promise((resolve, reject) => {
+                this._ks.post('Function', functionData, null, [], 
+                    (response) => {
+                        if (response.data && response.data[0]) {
+                            resolve(response.data[0]);
+                        } else {
+                            reject('Failed to create function');
+                        }
+                    }, 
+                    (error) => {
+                        reject(error);
+                    }
+                );
+            }).then((newFunction) => {
+                $('#pageLoaderModal').modal('hide');
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addFunctionModal'));
+                modal.hide();
+
+                this.functions.push(newFunction);
+                this.renderFunctionList();
+                this.selectFunction(newFunction.id);
+                this.loadFunctionCode(newFunction.id);
+                
+                this.showSuccessMessage(`Function "${newFunction.name}" created successfully!`);
+                
+            }).catch((error) => {
+                $('#pageLoaderModal').modal('hide');
+                console.error('Error creating function:', error);
+                this.showError('Failed to create function: ' + error);
+            });
+
+        } catch (error) {
+            $('#pageLoaderModal').modal('hide');
+            console.error('Error creating function:', error);
+            this.showError('Failed to create function: ' + error);
+        }
+    }
+
+    getDefaultCodeForType(type) {
+        const codeTemplates = {
+            'hook_init': `<?php
+// Hook: Initialization
+// Called when the controller is first initialized
+
+// Your initialization code here
+`,
+            'hook_auth': `<?php
+// Hook: Authentication
+// Called to handle authentication logic
+// Return true to allow access, false to deny
+
+// Your authentication code here
+return true;
+`,
+            'hook_prequery': `<?php
+// Hook: Pre-query
+// Called before database queries are executed
+
+// Your pre-query code here
+`,
+            'hook_preprocess': `<?php
+// Hook: Pre-processing
+// Called before data processing
+
+// Your pre-processing code here
+`,
+            'hook_response_data': `<?php
+// Hook: Response Data
+// Called to modify response data before sending
+
+// Your response data processing code here
+`,
+            'hook_process_get_response': `<?php
+// Hook: Process Get Response
+// Called to process GET request responses
+
+// Your GET response processing code here
+`,
+            'new': `<?php
+// Override: Create Operation
+// Handle POST requests to create new records
+
+// Your create operation code here
+`,
+            'update': `<?php
+// Override: Update Operation
+// Handle PUT requests to update existing records
+
+// Your update operation code here
+`,
+            'get': `<?php
+// Override: Get Operation
+// Handle GET requests to retrieve records
+
+// Your get operation code here
+`,
+            'delete': `<?php
+// Override: Delete Operation
+// Handle DELETE requests to remove records
+
+// Your delete operation code here
+`,
+            'custom': `<?php
+// Custom Function
+// Your custom functionality goes here
+
+// Your custom code here
+`
+        };
+
+        return codeTemplates[type] || `<?php
+// Function: ${type}
+// Add your code here
+
+`;
+    }
+
+    getFunctionIdFromUrl() {
+        try {
+            const urlParams = this._ks.getPageRequest();
+            if (urlParams && urlParams.idx) {
+                return urlParams.idx;
+            }
+        } catch (error) {
+            console.warn("Error getting page request from Kyte session, trying manual parsing:", error);
+        }
+
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const requestParam = urlParams.get('request');
+            
+            if (requestParam) {
+                const decoded = atob(decodeURIComponent(requestParam));
+                const obj = JSON.parse(decoded);
+                
+                if (obj.model === 'Function' && obj.idx) {
+                    return obj.idx;
+                }
+            }
+        } catch (error) {
+            console.error("Error parsing URL parameters manually:", error);
+        }
+
+        return null;
+    }
+
+    loadControllerAndFunctions(functionId) {
+        this._ks.get("Function", "id", functionId, [], (response) => {
+            if (response.data && response.data[0]) {
+                const functionData = response.data[0];
+                this.controllerId = functionData.controller.id;
+                
+                $("#function-name").text(functionData.controller.name);
+                $("#function-type").text("Controller");
+                
+                const controllerObj = {
+                    'model': 'Controller',
+                    'idx': this.controllerId
+                };
+                const encoded = encodeURIComponent(btoa(JSON.stringify(controllerObj)));
+                $("#backToController").attr('href', '/app/controller/?request=' + encoded);
+                
+                this.loadFunctions(this.controllerId);
+                this.currentFunctionId = functionId;
+            } else {
+                this.showError("Function not found");
+            }
+        }, (error) => {
+            console.error("Error loading function:", error);
+            this.showError("Failed to load function data: " + error);
+        });
+    }
+
+    loadFunctions(controllerId) {
+        const functionsContainer = $("#functions-list");
+        functionsContainer.html('<div class="loading-functions"><i class="fas fa-spinner fa-spin me-2"></i>Loading functions...</div>');
+        
+        this._ks.get("Function", "controller", controllerId, [], (response) => {
+            if (response.data && response.data.length > 0) {
+                this.functions = response.data;
+                this.renderFunctionList();
+                
+                if (this.currentFunctionId) {
+                    this.loadFunctionCode(this.currentFunctionId);
+                }
+            } else {
+                functionsContainer.html('<div class="no-functions">No functions found</div>');
+            }
+        }, (error) => {
+            console.error("Error loading functions:", error);
+            functionsContainer.html('<div class="no-functions">Error loading functions</div>');
+        });
+    }
+
+    renderFunctionList() {
+        const functionsContainer = $("#functions-list");
+        functionsContainer.empty();
+        
+        this.functions.forEach(func => {
+            const functionItem = this.createFunctionItem(func);
+            functionsContainer.append(functionItem);
+        });
+        
+        if (this.currentFunctionId) {
+            this.selectFunction(this.currentFunctionId);
+        }
+    }
+
+    createFunctionItem(func) {
+        const icon = this.getFunctionIcon(func.type);
+        const displayName = func.name || 'function';
+        
+        const item = $(`
+            <button class="function-item" data-function-id="${func.id}">
+                <i class="function-icon ${icon}"></i>
+                <div class="function-details">
+                    <div class="function-name">${displayName}</div>
+                    <div class="function-type">${func.type}</div>
+                </div>
+            </button>
+        `);
+        
+        item.on('click', () => {
+            this.onFunctionClick(func.id);
+        });
+        
+        return item;
+    }
+
+    getFunctionIcon(type) {
+        const iconMap = {
+            'get': 'fas fa-search',
+            'post': 'fas fa-plus-circle',
+            'put': 'fas fa-edit',
+            'delete': 'fas fa-trash-alt',
+            'new': 'fas fa-plus-square',
+            'hook_init': 'fas fa-power-off',
+            'hook_auth': 'fas fa-shield-alt',
+            'hook_prequery': 'fas fa-database',
+            'hook_preprocess': 'fas fa-filter',
+            'hook_response_data': 'fas fa-exchange-alt',
+            'hook_process_get_response': 'fas fa-arrow-circle-right',
+            'custom': 'fas fa-code'
+        };
+        
+        return iconMap[type] || 'fas fa-code';
+    }
+
+    async onFunctionClick(functionId) {
+        if (this.isDirty) {
+            const confirm = await this.confirmUnsavedChanges();
+            if (!confirm) return;
+        }
+        
+        this.selectFunction(functionId);
+        this.loadFunctionCode(functionId);
+    }
+
+    selectFunction(functionId) {
+        $('.function-item').removeClass('active');
+        $(`.function-item[data-function-id="${functionId}"]`).addClass('active');
+        
+        this.currentFunctionId = functionId;
+        
+        const func = this.functions.find(f => f.id == functionId);
+        if (func) {
+            $('#current-function-name').text(func.type || 'function');
+            $('#function-type').text(func.type);
+        }
+        
+        try {
+            const newUrl = new URL(window.location);
+            const obj = {'model': 'Function', 'idx': functionId};
+            const encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+            newUrl.searchParams.set('request', encoded);
+            window.history.replaceState({}, '', newUrl);
+        } catch (error) {
+            console.warn("Could not update URL:", error);
+        }
+    }
+
+    loadFunctionCode(functionId) {
+        this._ks.get("Function", "id", functionId, [], (response) => {
+            if (response.data && response.data[0]) {
+                const func = response.data[0];
+                this.displayFunctionCode(func);
+                this.isDirty = false;
+            } else {
+                this.showError("Function not found");
+            }
+        }, (error) => {
+            console.error("Error loading function code:", error);
+            this.showError("Failed to load function code");
+        });
+    }
+
+    displayFunctionCode(func) {
+        const codeContainer = $('#Code');
+        const noFunctionMessage = codeContainer.find('.no-function-message');
+        const editorContainer = codeContainer.find('#container');
+        
+        codeContainer.removeClass('no-function');
+        noFunctionMessage.hide();
+        editorContainer.show();
+        
+        if (this.editor) {
+            this.editor.setValue(func.code || '');
+            this.editor.updateOptions({ readOnly: false });
+        } else {
+            window.functionCodeToLoad = func.code || '';
+        }
+        
+        $("#function-name").text(func.controller.name);
+        $("#function-type").text(func.type);
+        
+        this.currentFunction = func;
+        
+        // Load version history for this function
+        this.loadVersionHistory(func.id);
+    }
+
+    loadVersionHistory(functionId) {
+        if (!functionId) return;
+        
+        this.initializeVersionHistoryTable(functionId);
+    }
+
+    initializeVersionHistoryTable(functionId) {
+        const colDefVersionHistory = [
+            {'targets': 0, 'data': 'version_number', 'label': 'Version'},
+            {'targets': 1, 'data': 'date_created', 'label': 'Date'},
+            {'targets': 2, 'data': 'change_summary', 'label': 'Summary', 'render': function(data) {
+                return data || 'No summary provided';
+            }},
+            {'targets': 3, 'data': 'created_by.name', 'label': 'Author', 'render': function(data) { 
+                return data || 'Unknown'; 
+            }},
+            {'targets': 4, 'data': 'can_revert', 'label': 'Current Version', 'render': function(data) { 
+                return data === false ? '<i class="fas fa-check text-success"></i> Yes' : '<i class="fas fa-times text-danger"></i> No'; 
+            }},
+        ];
+
+        $("#version-history-table-wrapper").html('<table id="version-history-table" class="table table-striped w-100"></table>');
+
+        tblVersionHistory = new KyteTable(this._ks, $("#version-history-table"), 
+            {'name': "KyteFunctionVersion", 'field': "function", 'value': functionId}, 
+            colDefVersionHistory, 
+            true,
+            [1, "desc"], // sort by date descending
+            false,
+            false
+        );
+        
+        tblVersionHistory.customActionButton = [
+            {
+                'className':'previewVersion',
+                'label':'Preview',
+                'faicon': 'fas fa-eye',
+                'callback': (data, model, row) => {
+                    this.previewFunctionVersion(data);
+                }
+            },
+            {
+                'className':'restoreVersion',
+                'label':'Restore',
+                'faicon': 'fas fa-undo',
+                'callback': (data, model, row) => {
+                    this.restoreFunctionVersion(data);
+                }
+            }
+        ];
+        
+        tblVersionHistory.init();
+    }
+
+    previewFunctionVersion(versionData) {
+        // Get version content first
+        this._ks.get("KyteFunctionVersionContent", "content_hash", versionData['content_hash'], [], (r) => {
+            if (r.data[0]) {
+                const versionContent = r.data[0];
+                const combinedData = { ...versionData, code: versionContent.code };
+                previewVersion(combinedData, this._ks);
+            } else {
+                alert("Error: Could not retrieve version content.");
+            }
+        }, (err) => {
+            alert("Error fetching version content: " + err);
+            console.error(err);
+        });
+    }
+
+    restoreFunctionVersion(versionData) {
+        restoreVersion(versionData, this._ks);
+    }
+
+    setEditor(editor) {
+        this.editor = editor;
+        
+        if (editor) {
+            editor.onDidChangeModelContent(() => {
+                this.isDirty = true;
+            });
+            
+            if (window.functionCodeToLoad !== undefined) {
+                editor.setValue(window.functionCodeToLoad);
+                editor.updateOptions({ readOnly: false });
+                delete window.functionCodeToLoad;
+            }
+        }
+    }
+
+    saveCurrentFunction() {
+        if (!this.currentFunctionId || !this.editor) {
+            return Promise.reject("No function selected or editor not ready");
+        }
+        
+        return new Promise((resolve, reject) => {
+            const code = this.editor.getValue();
+            
+            this._ks.put('Function', 'id', this.currentFunctionId, {'code': code}, null, [], 
+                (response) => {
+                    this.isDirty = false;
+                    resolve(response);
+                }, 
+                (error) => {
+                    reject(error);
+                }
+            );
+        });
+    }
+
+    confirmUnsavedChanges() {
+        return new Promise((resolve) => {
+            const result = confirm("You have unsaved changes. Do you want to continue without saving?");
+            resolve(result);
+        });
+    }
+
+    showError(message) {
+        alert(message);
+        console.error(message);
+    }
+
+    showSuccessMessage(message) {
+        console.log(message);
+    }
+
+    isDirtyCheck() {
+        return this.isDirty;
+    }
+
+    getCurrentFunctionId() {
+        return this.currentFunctionId;
+    }
+
+    save() {
+        return this.saveCurrentFunction();
+    }
+}
+
+// Tab switching functionality
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.editor-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const target = this.dataset.target;
+            
+            // Update active tab
+            document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show corresponding content
+            document.querySelectorAll('.editor-container, .secondary-content').forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            document.getElementById(target).classList.add('active');
+            
+            // Load version history when switching to History tab
+            if (target === 'History' && window.KyteFunctionListManager) {
+                const functionId = window.KyteFunctionListManager.getCurrentFunctionId();
+                if (functionId) {
+                    window.KyteFunctionListManager.loadVersionHistory(functionId);
+                }
+            }
+        });
+    });
+});
+
+// Global instance
+window.KyteFunctionListManager = null;
+
+document.addEventListener('KyteInitialized', function(e) {
+    let _ks = e.detail._ks;
+
+    let hash = location.hash;
+    hash = hash == "" ? '#Code' : hash;
+    $(hash).removeClass('d-none');
+    $(hash+'-nav-link').addClass('active');
+    
+    if (_ks.isSession()) {
+        // Initialize change summary modal
+        initializeChangeSummaryModal();
+        
+        window.KyteFunctionListManager = new KyteFunctionList(_ks);
+
+        // Create the Monaco editor
+        editor = monaco.editor.create(document.getElementById('container'), {
+            value: '// Select a function from the sidebar to start editing',
+            theme: colorMode,
+            language: "php-snippet",
+            automaticLayout: true,
+            wordWrap: true,
+            wordWrapMinified: true,
+            wrappingIndent: 'indent',
+            readOnly: true
+        });
+
+        // Register editor with function list manager
+        setTimeout(() => {
+            if (window.KyteFunctionListManager) {
+                window.KyteFunctionListManager.setEditor(editor);
+                
+                if (window.functionCodeToLoad !== undefined) {
+                    editor.updateOptions({ readOnly: false });
+                }
+            }
+        }, 100);
+
+        // Set up save button click handler
+        $("#saveCode").click(function() {
+            if (hasActualChanges()) {
+                showChangeSummaryModal(saveFunctionWithSummary);
+            } else {
+                showNotification('info', 'No changes to save', 'Function is already up to date');
+            }
+        });
+
+        // Mobile sidebar toggle
+        $('#sidebarToggle').on('click', function() {
+            $('#sidenav').toggleClass('show');
+        });
+
+        $('#closeSidebar').on('click', function() {
+            $('#sidenav').removeClass('show');
+        });
+
+        setTimeout(() => {
+            $('#pageLoaderModal').modal('hide');
+        }, 500);
+    } else {
+        location.href="/?redir="+encodeURIComponent(window.location);
+    }
+});
+
+// Handle page unload
+window.onbeforeunload = function() {
+    if (window.KyteFunctionListManager && window.KyteFunctionListManager.isDirtyCheck()) {
+        return "You have unsaved changes. Are you sure you want to leave?";
+    }
+};

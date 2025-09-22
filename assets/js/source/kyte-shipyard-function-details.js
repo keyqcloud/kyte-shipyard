@@ -1,16 +1,12 @@
-// Enhanced kyte-shipyard-function-details.js with Add Function capability
+// Enhanced kyte-shipyard-function-details.js with Version Control
 import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/+esm';
 import {registerPHPSnippetLanguage} from '/assets/js/packages/php-snippet/registerPHPSnippetLanguage.js';
 
-let subnavFunction = [
-    {
-        faicon:'fas fa-code',
-        label:'Code',
-        selector:'#Code'
-    },
-];
-
 var editor;
+var tblVersionHistory;
+
+// Global variables for change summary functionality
+let pendingActionCallback = null;
 
 var colorMode = 'vs';
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -24,49 +20,425 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
     }
 });
 
+// Initialize change summary modal
+function initializeChangeSummaryModal() {
+    if (!document.getElementById('changeSummaryModal')) {
+        const modalHTML = `
+            <div class="modal fade" id="changeSummaryModal" tabindex="-1" data-bs-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content" style="background: #2d2d30; border: 1px solid #3e3e42; color: #d4d4d4;">
+                        <div class="modal-header" style="background: #252526; border-bottom: 1px solid #3e3e42;">
+                            <h5 class="modal-title" style="color: #ffffff; font-weight: 600;">
+                                <i class="fas fa-edit me-2"></i>
+                                Add Change Summary
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="actionTypeBadge" class="mb-3" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; background: linear-gradient(135deg, #fb8500, #e76f00); color: white;">
+                                <i class="fas fa-save"></i>
+                                <span>Saving Changes</span>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="changeSummaryInput" class="form-label" style="color: #cccccc; font-weight: 500;">
+                                    What changed in this function?
+                                </label>
+                                <textarea 
+                                    class="form-control" 
+                                    id="changeSummaryInput" 
+                                    rows="3" 
+                                    placeholder="Briefly describe your changes (optional)..."
+                                    maxlength="500"
+                                    style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; border-radius: 6px;"
+                                ></textarea>
+                                <div style="color: #969696; font-size: 0.85rem; margin-top: 0.5rem;">
+                                    Leave empty to use default summary. <code style="background: #252526; padding: 0.2rem 0.4rem; border-radius: 4px; color: #ff6b35;">Ctrl+Enter</code> to save quickly.
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="form-label" style="color: #cccccc; font-weight: 500;">Quick Options</label>
+                                <div class="quick-options" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                    <span class="quick-option" onclick="setSummary('Fixed function logic')">Fixed function logic</span>
+                                    <span class="quick-option" onclick="setSummary('Updated parameters')">Updated parameters</span>
+                                    <span class="quick-option" onclick="setSummary('Added error handling')">Added error handling</span>
+                                    <span class="quick-option" onclick="setSummary('Performance improvements')">Performance improvements</span>
+                                    <span class="quick-option" onclick="setSummary('Code refactoring')">Code refactoring</span>
+                                    <span class="quick-option" onclick="setSummary('Bug fixes')">Bug fixes</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="background: #2d2d30; border-top: 1px solid #3e3e42;">
+                            <button type="button" class="btn-editor btn-editor-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times"></i>
+                                Cancel
+                            </button>
+                            <button type="button" class="btn-editor btn-editor-secondary" onclick="window.proceedWithAction('')">
+                                <i class="fas fa-forward"></i>
+                                Skip Summary
+                            </button>
+                            <button type="button" id="confirmActionBtn" class="btn-editor btn-editor-primary" onclick="window.proceedWithAction()">
+                                <i class="fas fa-save"></i>
+                                Save with Summary
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        
+        // Add CSS for quick options
+        if (!document.getElementById('changeSummaryStyles')) {
+            const styles = document.createElement('style');
+            styles.id = 'changeSummaryStyles';
+            styles.textContent = `
+                .quick-option {
+                    background: #252526;
+                    border: 1px solid #3e3e42;
+                    color: #cccccc;
+                    padding: 0.4rem 0.8rem;
+                    border-radius: 16px;
+                    font-size: 0.8rem;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                .quick-option:hover {
+                    background: #ff6b35;
+                    border-color: #ff6b35;
+                    color: white;
+                }
+                #changeSummaryInput:focus {
+                    background: #404040 !important;
+                    border-color: #ff6b35 !important;
+                    box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.2) !important;
+                    color: #ffffff !important;
+                    outline: none !important;
+                }
+                #changeSummaryInput::placeholder {
+                    color: #969696 !important;
+                }
+            `;
+            document.head.appendChild(styles);
+        }
+    }
+}
+
+// Version preview function
+function previewVersion(versionData, _ks) {
+    const previewContent = `
+        <div class="modal fade" id="versionPreviewModal" tabindex="-1" data-bs-backdrop="static">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content" style="background: #1e1e1e; color: #d4d4d4; border: 1px solid #3e3e42;">
+                    <div class="modal-header" style="background: #2d2d30; border-bottom: 1px solid #3e3e42; padding: 1.5rem;">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="version-badge px-3 py-2 rounded" style="background: linear-gradient(135deg, #ff6b35, #f7931e); color: white; font-weight: 600; font-size: 0.9rem;">
+                                Version ${versionData.version_number}
+                            </div>
+                            <div>
+                                <h5 class="modal-title mb-1" style="color: #ffffff; font-weight: 600;">Function Version Preview</h5>
+                                <div class="text-muted" style="font-size: 0.85rem;">
+                                    ${new Date(versionData.date_created).toLocaleString()} • ${versionData.created_by?.name || 'Unknown'}
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-0" style="height: calc(100vh - 200px);">
+                        <div class="d-flex flex-column h-100">
+                            <div class="content-header p-3" style="background: #252526; border-bottom: 1px solid #3e3e42; flex-shrink: 0;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0" style="color: #ffffff; font-weight: 600;">PHP Code</h6>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm copy-content" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.375rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">
+                                            <i class="fas fa-copy me-1"></i>Copy
+                                        </button>
+                                    </div>
+                                </div>
+                                ${versionData.change_summary ? `
+                                <div class="mt-2 p-2 rounded" style="background: #2d2d30; border: 1px solid #3e3e42;">
+                                    <small style="color: #969696;">Change Summary:</small>
+                                    <div style="color: #d4d4d4; font-size: 0.9rem;">${versionData.change_summary}</div>
+                                </div>
+                                ` : ''}
+                            </div>
+                            <div class="code-container" style="flex: 1; overflow: auto; font-family: 'JetBrains Mono', monospace; background: #1e1e1e;">
+                                <pre style="margin: 0; padding: 2rem; color: #d4d4d4; line-height: 1.6; white-space: pre-wrap; word-break: break-word;"><code id="version-code-content" class="language-php">${escapeHtml(versionData.code || '')}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="background: #2d2d30; border-top: 1px solid #3e3e42; padding: 1.5rem; gap: 1rem;">
+                        <div class="d-flex w-100 justify-content-between align-items-center">
+                            <div class="version-info" style="color: #969696; font-size: 0.85rem;">
+                                <i class="fas fa-info-circle me-1"></i>
+                                ${versionData.can_revert ? 'This version can be restored' : 'This is the current version'}
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn" data-bs-dismiss="modal" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500;">
+                                    <i class="fas fa-times me-2"></i>Close
+                                </button>
+                                ${versionData.can_revert ? `
+                                <button type="button" id="restoreVersionBtn" class="btn" style="background: linear-gradient(135deg, #238636, #2ea043); border: none; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500;">
+                                    <i class="fas fa-undo me-2"></i>Restore This Version
+                                </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove existing modal if present
+    $('#versionPreviewModal').remove();
+    
+    // Add modal to body and show
+    $('body').append(previewContent);
+    
+    // Bind events
+    $('#versionPreviewModal .copy-content').on('click', function() {
+        const content = versionData.code || '';
+        navigator.clipboard.writeText(content).then(() => {
+            const btn = $(this);
+            const originalHtml = btn.html();
+            btn.html('<i class="fas fa-check me-1"></i>Copied!');
+            btn.css('background', '#238636');
+            
+            setTimeout(() => {
+                btn.html(originalHtml);
+                btn.css('background', '#3c3c3c');
+            }, 2000);
+        });
+    });
+    
+    // Restore functionality
+    $('#restoreVersionBtn').on('click', function() {
+        restoreVersion(versionData, _ks);
+        $('#versionPreviewModal').modal('hide');
+    });
+    
+    $('#versionPreviewModal').modal('show');
+}
+
+function restoreVersion(versionData, _ks) {
+    if (versionData.can_revert !== true) {
+        alert("This is already the current version.");
+        return;
+    }
+
+    if (!confirm("Are you sure you want to restore this version? Current unsaved changes will be lost.")) {
+        return;
+    }
+
+    $('#pageLoaderModal').modal('show');
+    
+    // Get version content
+    _ks.get("KyteFunctionVersionContent", "content_hash", versionData.content_hash, [], function(r) {
+        if (!r.data[0]) {
+            alert("Error: Could not retrieve version content.");
+            $('#pageLoaderModal').modal('hide');
+            return;
+        }
+        
+        const versionContent = r.data[0];
+        
+        // Update editor with restored content
+        if (editor) {
+            editor.setValue(versionContent.code || '');
+        }
+        
+        // Create restore summary
+        const changeSummary = `Restored to version ${versionData.version_number} (${versionData.change_summary || 'No summary'})`;
+        
+        // Save the restored function
+        saveFunctionWithSummary(changeSummary);
+        
+    }, function(err) {
+        alert("Error fetching version content: " + err);
+        console.error(err);
+        $('#pageLoaderModal').modal('hide');
+    });
+}
+
+function escapeHtml(text) {
+    if (typeof text !== 'string') {
+        return ''; // or throw an error, or convert to string
+    }
+    var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
+// Show change summary modal
+function showChangeSummaryModal(callback) {
+    pendingActionCallback = callback;
+    
+    // Clear previous input and show modal
+    document.getElementById('changeSummaryInput').value = '';
+    const modal = new bootstrap.Modal(document.getElementById('changeSummaryModal'));
+    modal.show();
+    
+    // Focus the textarea after modal is shown
+    $('#changeSummaryModal').on('shown.bs.modal', function() {
+        document.getElementById('changeSummaryInput').focus();
+    });
+}
+
+// Set summary from quick options
+function setSummary(text) {
+    document.getElementById('changeSummaryInput').value = text;
+}
+
+window.setSummary = setSummary;
+
+// Proceed with the action
+function proceedWithAction(customSummary = null) {
+    const summary = customSummary !== null ? customSummary : 
+                   document.getElementById('changeSummaryInput').value.trim();
+    
+    // Hide modal immediately
+    const modalElement = document.getElementById('changeSummaryModal');
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    if (modal) {
+        modal.hide();
+    }
+    
+    // Execute the callback with the summary
+    if (pendingActionCallback) {
+        const finalSummary = summary || 'Manual save';
+        pendingActionCallback(finalSummary);
+        pendingActionCallback = null;
+    }
+}
+
+window.proceedWithAction = proceedWithAction;
+
+// Save function that uses the modal
+function saveFunctionWithSummary(changeSummary) {
+    if (!window.KyteFunctionListManager || !window.KyteFunctionListManager.getCurrentFunctionId()) {
+        alert("No function selected");
+        return;
+    }
+    
+    $('#pageLoaderModal').modal('show');
+    
+    try {
+        const functionId = window.KyteFunctionListManager.getCurrentFunctionId();
+        const code = editor ? editor.getValue() : '';
+        
+        let payload = {
+            'change_summary': changeSummary,
+            'code': code
+        };
+        
+        window.KyteFunctionListManager._ks.put('Function', 'id', functionId, payload, null, [], function(r) {
+            $('#pageLoaderModal').modal('hide');
+            
+            window.KyteFunctionListManager.isDirty = false;
+            
+            // Refresh version history table if visible
+            if (tblVersionHistory && tblVersionHistory.table) {
+                tblVersionHistory.table.ajax.reload();
+            }
+            
+            // Show success notification
+            showNotification('success', 'Function saved successfully!', changeSummary);
+        }, function(err) {
+            alert(err);
+            console.error(err);
+            $('#pageLoaderModal').modal('hide');
+        });
+
+    } catch (error) {
+        alert("An error occurred: " + error.message);
+        console.error(error.message);
+        $('#pageLoaderModal').modal('hide');
+    }
+}
+
+// Show success notification
+function showNotification(type, message, summary) {
+    const toastHtml = `
+        <div class="toast align-items-center border-0 show" style="background: ${type === 'success' ? '#238636' : '#f85149'}; color: white; position: fixed; top: 2rem; right: 2rem; z-index: 9999;">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <strong>${message}</strong>
+                    ${summary ? `<br><small>${summary}</small>` : ''}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', toastHtml);
+    
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        const toasts = document.querySelectorAll('.toast');
+        if (toasts.length > 0) {
+            toasts[toasts.length - 1].remove();
+        }
+    }, 4000);
+}
+
+// Check for actual changes
+function hasActualChanges() {
+    if (!window.KyteFunctionListManager || !window.KyteFunctionListManager.currentFunction || !editor) {
+        return false;
+    }
+    
+    const currentCode = editor.getValue();
+    const originalCode = window.KyteFunctionListManager.currentFunction.code || '';
+    
+    return currentCode !== originalCode;
+}
+
 // key bindings for saving
 document.addEventListener("keydown", function(event) {
-    // Check if the Ctrl key (Windows) or the Command key (Mac) is pressed
     var isCtrlPressed = event.ctrlKey || event.metaKey;
-  
-    // Check if the S key is pressed
     var isSPressed = event.key === "s";
-  
-    // Check if both the Ctrl key and the S key are pressed
+
+    // Handle modal keyboard shortcuts
+    if (document.getElementById('changeSummaryModal') && 
+        document.getElementById('changeSummaryModal').classList.contains('show')) {
+        if (isCtrlPressed && event.key === 'Enter') {
+            event.preventDefault();
+            proceedWithAction();
+        }
+        return; // Don't process other shortcuts when modal is open
+    }
+
+    // Ctrl+S or Cmd+S to save
     if (isCtrlPressed && isSPressed) {
-        event.preventDefault(); // Prevent the default browser save action
+        event.preventDefault();
         
-        // Use the function list manager to save
-        if (window.KyteFunctionListManager) {
-            window.KyteFunctionListManager.save().then(() => {
-                // Success handled by function list manager
-            }).catch((error) => {
-                alert("Error saving: " + error);
-                console.error(error);
-            });
+        // Check for changes first
+        if (hasActualChanges()) {
+            showChangeSummaryModal(saveFunctionWithSummary);
         } else {
-            // Fallback to old method
-            $("#saveCode").click();
+            showNotification('info', 'No changes to save', 'Function is already up to date');
         }
     }
 });
 
 registerPHPSnippetLanguage(monaco.languages);
 
-// Override the onbeforeunload to use function list manager
-window.onbeforeunload = function() {
-    if (window.KyteFunctionListManager && window.KyteFunctionListManager.isDirtyCheck()) {
-        return "You have unsaved changes. Are you sure you want to leave?";
-    }
-};
-
-// Enhanced KyteFunctionList class with Add Function capability
+// Enhanced KyteFunctionList class with version control
 class KyteFunctionList {
     constructor(kyteSession) {
         this._ks = kyteSession;
         this.controllerId = null;
         this.functions = [];
         this.currentFunctionId = null;
+        this.currentFunction = null;
         this.editor = null;
         this.isDirty = false;
         
@@ -76,7 +448,6 @@ class KyteFunctionList {
 
     init() {
         try {
-            // Get function ID from URL params with better error handling
             const functionId = this.getFunctionIdFromUrl();
             if (functionId) {
                 this.loadControllerAndFunctions(functionId);
@@ -92,33 +463,26 @@ class KyteFunctionList {
     }
 
     setupAddFunctionModal() {
-        // Bind the add function buttons
         $('#addFunctionBtn, #addFunctionFromHeader').on('click', () => {
             this.showAddFunctionModal();
         });
 
-        // Bind the create function button
         $('#createFunctionBtn').on('click', () => {
             this.createNewFunction();
         });
 
-        // Reset form when modal is hidden
         $('#addFunctionModal').on('hidden.bs.modal', () => {
             this.resetAddFunctionForm();
         });
 
-        // Auto-fill name based on type selection
         $('#functionType').on('change', () => {
             const type = $('#functionType').val();
             const nameField = $('#functionName');
             
-            // Only auto-fill if the name field is empty
             if (!nameField.val().trim() && type) {
                 if (type.startsWith('hook_') || ['new', 'update', 'get', 'delete'].includes(type)) {
-                    // For hooks and standard overrides, use the type as the name
                     nameField.val(type);
                 } else if (type === 'custom') {
-                    // For custom functions, suggest a generic name
                     nameField.val('custom_function');
                 }
             }
@@ -126,10 +490,7 @@ class KyteFunctionList {
     }
 
     showAddFunctionModal() {
-        // Reset form
         this.resetAddFunctionForm();
-        
-        // Show the modal
         const modal = new bootstrap.Modal(document.getElementById('addFunctionModal'));
         modal.show();
     }
@@ -146,32 +507,27 @@ class KyteFunctionList {
         const name = $('#functionName').val().trim();
         const description = $('#functionDescription').val().trim();
 
-        // Validation
         if (!type) {
             alert('Please select a function type');
             return;
         }
 
-        // Check for unsaved changes before proceeding
         if (this.isDirty) {
             const confirm = await this.confirmUnsavedChanges();
             if (!confirm) return;
         }
 
-        // Prepare function data
         const functionData = {
             controller: this.controllerId,
             type: type,
-            name: name || type, // Use type as name if no name provided
+            name: name || type,
             description: description || '',
             code: this.getDefaultCodeForType(type)
         };
 
-        // Show loading
         $('#pageLoaderModal').modal('show');
 
         try {
-            // Create the function via Kyte API
             await new Promise((resolve, reject) => {
                 this._ks.post('Function', functionData, null, [], 
                     (response) => {
@@ -186,24 +542,16 @@ class KyteFunctionList {
                     }
                 );
             }).then((newFunction) => {
-                // Hide loading modal
                 $('#pageLoaderModal').modal('hide');
                 
-                // Hide add function modal
                 const modal = bootstrap.Modal.getInstance(document.getElementById('addFunctionModal'));
                 modal.hide();
 
-                // Add the new function to our local list
                 this.functions.push(newFunction);
-                
-                // Re-render the function list
                 this.renderFunctionList();
-                
-                // Automatically select and load the new function
                 this.selectFunction(newFunction.id);
                 this.loadFunctionCode(newFunction.id);
                 
-                // Show success message
                 this.showSuccessMessage(`Function "${newFunction.name}" created successfully!`);
                 
             }).catch((error) => {
@@ -224,7 +572,6 @@ class KyteFunctionList {
             'hook_init': `<?php
 // Hook: Initialization
 // Called when the controller is first initialized
-// Use this to set up any initial configuration or state
 
 // Your initialization code here
 `,
@@ -239,56 +586,48 @@ return true;
             'hook_prequery': `<?php
 // Hook: Pre-query
 // Called before database queries are executed
-// Modify or validate query parameters here
 
 // Your pre-query code here
 `,
             'hook_preprocess': `<?php
 // Hook: Pre-processing
 // Called before data processing
-// Modify or validate input data here
 
 // Your pre-processing code here
 `,
             'hook_response_data': `<?php
 // Hook: Response Data
 // Called to modify response data before sending
-// Modify the $data variable as needed
 
 // Your response data processing code here
 `,
             'hook_process_get_response': `<?php
 // Hook: Process Get Response
 // Called to process GET request responses
-// Modify response data for GET requests
 
 // Your GET response processing code here
 `,
             'new': `<?php
 // Override: Create Operation
 // Handle POST requests to create new records
-// Return the created record data
 
 // Your create operation code here
 `,
             'update': `<?php
 // Override: Update Operation
 // Handle PUT requests to update existing records
-// Return the updated record data
 
 // Your update operation code here
 `,
             'get': `<?php
 // Override: Get Operation
 // Handle GET requests to retrieve records
-// Return the requested data
 
 // Your get operation code here
 `,
             'delete': `<?php
 // Override: Delete Operation
 // Handle DELETE requests to remove records
-// Return success/failure status
 
 // Your delete operation code here
 `,
@@ -309,7 +648,6 @@ return true;
 
     getFunctionIdFromUrl() {
         try {
-            // First try using the Kyte session method
             const urlParams = this._ks.getPageRequest();
             if (urlParams && urlParams.idx) {
                 return urlParams.idx;
@@ -318,13 +656,11 @@ return true;
             console.warn("Error getting page request from Kyte session, trying manual parsing:", error);
         }
 
-        // Fallback: manually parse URL
         try {
             const urlParams = new URLSearchParams(window.location.search);
             const requestParam = urlParams.get('request');
             
             if (requestParam) {
-                // Decode the base64 encoded request parameter
                 const decoded = atob(decodeURIComponent(requestParam));
                 const obj = JSON.parse(decoded);
                 
@@ -340,17 +676,14 @@ return true;
     }
 
     loadControllerAndFunctions(functionId) {
-        // First, get the function to find the controller
         this._ks.get("Function", "id", functionId, [], (response) => {
             if (response.data && response.data[0]) {
                 const functionData = response.data[0];
                 this.controllerId = functionData.controller.id;
                 
-                // Update header with controller name
                 $("#function-name").text(functionData.controller.name);
                 $("#function-type").text("Controller");
                 
-                // Update exit link
                 const controllerObj = {
                     'model': 'Controller',
                     'idx': this.controllerId
@@ -358,10 +691,7 @@ return true;
                 const encoded = encodeURIComponent(btoa(JSON.stringify(controllerObj)));
                 $("#backToController").attr('href', '/app/controller/?request=' + encoded);
                 
-                // Load all functions for this controller
                 this.loadFunctions(this.controllerId);
-                
-                // Set current function and load it
                 this.currentFunctionId = functionId;
             } else {
                 this.showError("Function not found");
@@ -381,7 +711,6 @@ return true;
                 this.functions = response.data;
                 this.renderFunctionList();
                 
-                // Auto-load the current function if it was set during initialization
                 if (this.currentFunctionId) {
                     this.loadFunctionCode(this.currentFunctionId);
                 }
@@ -403,7 +732,6 @@ return true;
             functionsContainer.append(functionItem);
         });
         
-        // Auto-select current function if set
         if (this.currentFunctionId) {
             this.selectFunction(this.currentFunctionId);
         }
@@ -423,7 +751,6 @@ return true;
             </button>
         `);
         
-        // Add click handler
         item.on('click', () => {
             this.onFunctionClick(func.id);
         });
@@ -433,30 +760,24 @@ return true;
 
     getFunctionIcon(type) {
         const iconMap = {
-            // HTTP Methods - RESTful operations
-            'get': 'fas fa-search',           // Search/retrieve data
-            'post': 'fas fa-plus-circle',     // Create new resource
-            'put': 'fas fa-edit',             // Update existing resource
-            'delete': 'fas fa-trash-alt',     // Delete resource
-            'new': 'fas fa-plus-square',      // Alternative create method
-            
-            // Controller Hooks - Lifecycle events
-            'hook_init': 'fas fa-power-off',        // Initialization/startup
-            'hook_auth': 'fas fa-shield-alt',       // Authentication/security
-            'hook_prequery': 'fas fa-database',     // Database query preparation
-            'hook_preprocess': 'fas fa-filter',     // Data preprocessing
-            'hook_response_data': 'fas fa-exchange-alt', // Data transformation
-            'hook_process_get_response': 'fas fa-arrow-circle-right', // Response processing
-            
-            // Custom Functions
-            'custom': 'fas fa-code'           // Generic custom function
+            'get': 'fas fa-search',
+            'post': 'fas fa-plus-circle',
+            'put': 'fas fa-edit',
+            'delete': 'fas fa-trash-alt',
+            'new': 'fas fa-plus-square',
+            'hook_init': 'fas fa-power-off',
+            'hook_auth': 'fas fa-shield-alt',
+            'hook_prequery': 'fas fa-database',
+            'hook_preprocess': 'fas fa-filter',
+            'hook_response_data': 'fas fa-exchange-alt',
+            'hook_process_get_response': 'fas fa-arrow-circle-right',
+            'custom': 'fas fa-code'
         };
         
         return iconMap[type] || 'fas fa-code';
     }
 
     async onFunctionClick(functionId) {
-        // Check for unsaved changes
         if (this.isDirty) {
             const confirm = await this.confirmUnsavedChanges();
             if (!confirm) return;
@@ -467,20 +788,17 @@ return true;
     }
 
     selectFunction(functionId) {
-        // Update UI
         $('.function-item').removeClass('active');
         $(`.function-item[data-function-id="${functionId}"]`).addClass('active');
         
-        // Update current function
         this.currentFunctionId = functionId;
         
-        // Update tab name
         const func = this.functions.find(f => f.id == functionId);
         if (func) {
             $('#current-function-name').text(func.type || 'function');
+            $('#function-type').text(func.type);
         }
         
-        // Update URL without reload
         try {
             const newUrl = new URL(window.location);
             const obj = {'model': 'Function', 'idx': functionId};
@@ -508,7 +826,6 @@ return true;
     }
 
     displayFunctionCode(func) {
-        // Show editor container
         const codeContainer = $('#Code');
         const noFunctionMessage = codeContainer.find('.no-function-message');
         const editorContainer = codeContainer.find('#container');
@@ -517,22 +834,110 @@ return true;
         noFunctionMessage.hide();
         editorContainer.show();
         
-        // Create or update editor
         if (this.editor) {
             this.editor.setValue(func.code || '');
             this.editor.updateOptions({ readOnly: false });
         } else {
-            // Editor will be created by the main script
-            // Store the code for when editor is ready
             window.functionCodeToLoad = func.code || '';
         }
         
-        // Update header info
         $("#function-name").text(func.controller.name);
         $("#function-type").text(func.type);
         
-        // Store current function data
         this.currentFunction = func;
+        
+        // Load version history for this function
+        this.loadVersionHistory(func.id);
+    }
+
+    loadVersionHistory(functionId) {
+        if (!functionId) return;
+        
+        this.initializeVersionHistoryTable(functionId);
+    }
+
+    initializeVersionHistoryTable(functionId) {
+        const colDefVersionHistory = [
+            {'targets': 0, 'data': 'version_number', 'label': 'Version'},
+            {'targets': 1, 'data': 'date_created', 'label': 'Date'},
+            {'targets': 2, 'data': 'change_summary', 'label': 'Summary', 'render': function(data) {
+                return data || 'No summary provided';
+            }},
+            {'targets': 3, 'data': 'created_by.name', 'label': 'Author', 'render': function(data) { 
+                return data || 'Unknown'; 
+            }},
+            {'targets': 4, 'data': 'can_revert', 'label': 'Current Version', 'render': function(data) { 
+                return data === false ? '<i class="fas fa-check text-success"></i> Yes' : '<i class="fas fa-times text-danger"></i> No'; 
+            }},
+        ];
+
+        $("#version-history-table-wrapper").html('<table id="version-history-table" class="table table-striped w-100"></table>');
+
+        tblVersionHistory = new KyteTable(this._ks, $("#version-history-table"), 
+            {'name': "KyteFunctionVersion", 'field': "function", 'value': functionId}, 
+            colDefVersionHistory, 
+            true,
+            [1, "desc"], // sort by date descending
+            false,
+            false
+        );
+        
+        tblVersionHistory.customActionButton = [
+            {
+                'className':'previewVersion',
+                'label':'Preview',
+                'faicon': 'fas fa-eye',
+                'callback': (data, model, row) => {
+                    this.previewFunctionVersion(data);
+                }
+            },
+            {
+                'className':'restoreVersion',
+                'label':'Restore',
+                'faicon': 'fas fa-undo',
+                'callback': (data, model, row) => {
+                    this.restoreFunctionVersion(data);
+                }
+            }
+        ];
+        
+        tblVersionHistory.init();
+    }
+
+    previewFunctionVersion(versionData) {
+        // Get version content first
+        this._ks.get("KyteFunctionVersionContent", "content_hash", versionData['content_hash'], [], (r) => {
+            if (r.data[0]) {
+                const versionContent = r.data[0];
+                const combinedData = { ...versionData, code: versionContent.code };
+                previewVersion(combinedData, this._ks);
+            } else {
+                alert("Error: Could not retrieve version content.");
+            }
+        }, (err) => {
+            alert("Error fetching version content: " + err);
+            console.error(err);
+        });
+    }
+
+    restoreFunctionVersion(versionData) {
+        restoreVersion(versionData, this._ks);
+    }
+
+    setEditor(editor) {
+        this.editor = editor;
+        
+        if (editor) {
+            editor.onDidChangeModelContent(() => {
+                this.isDirty = true;
+            });
+            
+            if (window.functionCodeToLoad !== undefined) {
+                editor.setValue(window.functionCodeToLoad);
+                editor.updateOptions({ readOnly: false });
+                delete window.functionCodeToLoad;
+            }
+        }
     }
 
     saveCurrentFunction() {
@@ -541,41 +946,18 @@ return true;
         }
         
         return new Promise((resolve, reject) => {
-            $('#pageLoaderModal').modal('show');
-            
             const code = this.editor.getValue();
             
             this._ks.put('Function', 'id', this.currentFunctionId, {'code': code}, null, [], 
                 (response) => {
-                    $('#pageLoaderModal').modal('hide');
                     this.isDirty = false;
-                    this.showSuccessMessage('Function saved successfully!');
                     resolve(response);
                 }, 
                 (error) => {
-                    $('#pageLoaderModal').modal('hide');
                     reject(error);
                 }
             );
         });
-    }
-
-    setEditor(editor) {
-        this.editor = editor;
-        
-        // Set up change listener
-        if (editor) {
-            editor.onDidChangeModelContent(() => {
-                this.isDirty = true;
-            });
-            
-            // Load initial code if available
-            if (window.functionCodeToLoad !== undefined) {
-                editor.setValue(window.functionCodeToLoad);
-                editor.updateOptions({ readOnly: false });
-                delete window.functionCodeToLoad;
-            }
-        }
     }
 
     confirmUnsavedChanges() {
@@ -591,12 +973,9 @@ return true;
     }
 
     showSuccessMessage(message) {
-        // You could replace this with a toast notification or other UI element
         console.log(message);
-        // For now, we'll just log it, but you could add a toast system here
     }
 
-    // Public methods for external use
     isDirtyCheck() {
         return this.isDirty;
     }
@@ -610,6 +989,34 @@ return true;
     }
 }
 
+// Tab switching functionality
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.editor-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const target = this.dataset.target;
+            
+            // Update active tab
+            document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show corresponding content
+            document.querySelectorAll('.editor-container, .secondary-content').forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            document.getElementById(target).classList.add('active');
+            
+            // Load version history when switching to History tab
+            if (target === 'History' && window.KyteFunctionListManager) {
+                const functionId = window.KyteFunctionListManager.getCurrentFunctionId();
+                if (functionId) {
+                    window.KyteFunctionListManager.loadVersionHistory(functionId);
+                }
+            }
+        });
+    });
+});
+
 // Global instance
 window.KyteFunctionListManager = null;
 
@@ -622,6 +1029,9 @@ document.addEventListener('KyteInitialized', function(e) {
     $(hash+'-nav-link').addClass('active');
     
     if (_ks.isSession()) {
+        // Initialize change summary modal
+        initializeChangeSummaryModal();
+        
         window.KyteFunctionListManager = new KyteFunctionList(_ks);
 
         // Create the Monaco editor
@@ -641,7 +1051,6 @@ document.addEventListener('KyteInitialized', function(e) {
             if (window.KyteFunctionListManager) {
                 window.KyteFunctionListManager.setEditor(editor);
                 
-                // If there's code to load, make editor writable
                 if (window.functionCodeToLoad !== undefined) {
                     editor.updateOptions({ readOnly: false });
                 }
@@ -650,13 +1059,10 @@ document.addEventListener('KyteInitialized', function(e) {
 
         // Set up save button click handler
         $("#saveCode").click(function() {
-            if (window.KyteFunctionListManager) {
-                window.KyteFunctionListManager.save().then(() => {
-                    // Success message handled by function list manager
-                }).catch((error) => {
-                    alert("Error saving: " + error);
-                    console.error(error);
-                });
+            if (hasActualChanges()) {
+                showChangeSummaryModal(saveFunctionWithSummary);
+            } else {
+                showNotification('info', 'No changes to save', 'Function is already up to date');
             }
         });
 
@@ -669,14 +1075,6 @@ document.addEventListener('KyteInitialized', function(e) {
             $('#sidenav').removeClass('show');
         });
 
-        // Function to enable editor when function is selected
-        window.enableEditor = function() {
-            if (editor) {
-                editor.updateOptions({ readOnly: false });
-            }
-        };
-
-        // Close the loading modal after initialization
         setTimeout(() => {
             $('#pageLoaderModal').modal('hide');
         }, 500);
