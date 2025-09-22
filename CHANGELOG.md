@@ -1,4 +1,4 @@
-## 1.6.1 (pending)
+## 1.6.1
 
 - Add feature to allow for kyte_connect updates.
 - When kyte_connect changes, or kyte_connect obfuscation preference changes, forces a page republish
