@@ -6,6 +6,7 @@
 - Update form sytles to show hidden error message
 - Improve custom scripts UI
 - Fix page global scripts and libraries tables missing column headers
+- Add missing include all option for scripts
 
 ## 1.6.1
 

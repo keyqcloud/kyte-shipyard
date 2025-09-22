@@ -23,6 +23,7 @@ function hasActualChanges() {
     
     const currentContent = scriptEditor.getValue();
     const currentName = $("#setting-script-name").val();
+    const currentIncludeAll = $("#setting-include-all").val();
     const currentDescription = $("#setting-script-description").val();
     const currentObfuscate = parseInt($("#setting-obfuscatejs").val()) || 0;
     const currentModule = parseInt($("#setting-jsmodule").val()) || 0;
@@ -30,6 +31,7 @@ function hasActualChanges() {
     return (
         currentContent !== script.content ||
         currentName !== script.name ||
+        currentIncludeAll !== script.include_all ||
         currentDescription !== script.description ||
         currentObfuscate !== (script.obfuscate_js || 0) ||
         currentModule !== (script.is_js_module || 0)
@@ -173,6 +175,7 @@ function saveScript() {
             'content': scriptEditor.getValue(),
             'content_js_obfuscated': obfuscatedJS,
             'name': $("#setting-script-name").val(),
+            'include_all': $("#setting-include-all").val(),
             'description': $("#setting-script-description").val(),
             'obfuscate_js': $("#setting-obfuscatejs").val(),
             'is_js_module': $("#setting-jsmodule").val(),
@@ -185,6 +188,7 @@ function saveScript() {
             // Update the script object with current values
             script.content = scriptEditor.getValue();
             script.name = $("#setting-script-name").val();
+            script.include_all = $("#setting-include-all").val();
             script.description = $("#setting-script-description").val();
             script.obfuscate_js = parseInt($("#setting-obfuscatejs").val());
             script.is_js_module = parseInt($("#setting-jsmodule").val());
@@ -224,6 +228,7 @@ function publishScript() {
             'content': scriptEditor.getValue(),
             'content_js_obfuscated': obfuscatedJS,
             'name': $("#setting-script-name").val(),
+            'include_all': $("#setting-include-all").val(),
             'description': $("#setting-script-description").val(),
             'obfuscate_js': $("#setting-obfuscatejs").val(),
             'is_js_module': $("#setting-jsmodule").val(),
@@ -237,6 +242,7 @@ function publishScript() {
             // Update the script object with current values
             script.content = scriptEditor.getValue();
             script.name = $("#setting-script-name").val();
+            script.include_all = $("#setting-include-all").val();
             script.description = $("#setting-script-description").val();
             script.obfuscate_js = parseInt($("#setting-obfuscatejs").val());
             script.is_js_module = parseInt($("#setting-jsmodule").val());
@@ -277,6 +283,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 
                 // Set form values
                 $("#setting-script-name").val(script.name);
+                $("#setting-include-all").val(script.include_all);
                 $("#setting-script-description").val(script.description);
                 
                 if (script.script_type == 'js') {
@@ -394,7 +401,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 });
 
                 // Form change handlers to mark as dirty
-                $("#setting-script-name, #setting-script-description, #setting-obfuscatejs, #setting-jsmodule").on('change input', function() {
+                $("#setting-script-name, #setting-script-description, #setting-include-all, #setting-obfuscatejs, #setting-jsmodule").on('change input', function() {
                     isDirty = true;
                 });
 
