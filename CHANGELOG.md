@@ -1,3 +1,7 @@
+## 1.6.2
+
+- Reoganize menu items to conserve space
+
 ## 1.6.1
 
 - Add feature to allow for kyte_connect updates.

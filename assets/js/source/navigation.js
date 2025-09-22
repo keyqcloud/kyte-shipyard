@@ -8,57 +8,74 @@ function generateAppNav(encodedRequest) {
                 href:'/app/sites.html?request='+encodedRequest
             },
             {
+                dropdown: true,
+                faicon:'fas fa-code',
+                class:'me-2 text-light',
+                label:'Development',
+                items: [
+                    {
+                        faicon:'fas fa-table',
+                        class:'me-2',
+                        label:'Models',
+                        href:'/app/models.html?request='+encodedRequest
+                    },
+                    {
+                        faicon:'fas fa-layer-group',
+                        class:'me-2',
+                        label:'Controllers',
+                        href:'/app/controllers.html?request='+encodedRequest
+                    },
+                    {
+                        faicon:'fas fa-puzzle-piece',
+                        class:'me-2',
+                        label:'Web Components',
+                        href:'/app/components.html?request='+encodedRequest
+                    }
+                ]
+            },
+            {
                 faicon:'fas fa-hdd',
                 class:'me-2 text-light',
-                label:'Data Store',
+                label:'Storage',
                 href:'/app/datastores.html?request='+encodedRequest
             },
             {
                 faicon:'fas fa-envelope',
                 class:'me-2 text-light',
-                label:'Email',
+                label:'Email Templates',
                 href:'/app/emails.html?request='+encodedRequest
-            },
+            }
+        ],
+        [
             {
-                faicon:'fas fa-puzzle-piece',
+                dropdown: true,
+                faicon:'fas fa-tools',
                 class:'me-2 text-light',
-                label:'Web Components',
-                href:'/app/components.html?request='+encodedRequest
-            },
-            {
-                faicon:'fas fa-table',
-                class:'me-2 text-light',
-                label:'Models',
-                href:'/app/models.html?request='+encodedRequest
-            },
-            {
-                faicon:'fas fa-layer-group',
-                class:'me-2 text-light',
-                label:'Controllers',
-                href:'/app/controllers.html?request='+encodedRequest
-            },
-            {
-                faicon:'fas fa-key',
-                class:'me-2 text-light',
-                label:'Sessions',
-                href:'/app/sessions.html?request='+encodedRequest
-            },
-            {
-                faicon:'fas fa-bomb',
-                class:'me-2 text-light',
-                label:'Error Log',
-                href:'/app/log.html?request='+encodedRequest
-            },
-            {
-                faicon: 'fas fa-cog',
-                class:'me-2 text-light',
-                label:'Configuration',
-                href:'/app/configuration.html?request='+encodedRequest
+                label:'System',
+                items: [
+                    {
+                        faicon:'fas fa-key',
+                        class:'me-2',
+                        label:'Sessions',
+                        href:'/app/sessions.html?request='+encodedRequest
+                    },
+                    {
+                        faicon:'fas fa-bomb',
+                        class:'me-2',
+                        label:'Error Log',
+                        href:'/app/log.html?request='+encodedRequest
+                    },
+                    {
+                        faicon:'fas fa-cog',
+                        class:'me-2',
+                        label:'Configuration',
+                        href:'/app/configuration.html?request='+encodedRequest
+                    }
+                ]
             }
         ]
     ];
 }
-
 
 // menu array
 let rootnav = [
