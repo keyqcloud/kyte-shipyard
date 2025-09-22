@@ -1600,7 +1600,12 @@ document.addEventListener('KyteInitialized', function(e) {
                 frmScript.init();
                 tblScripts.bindEdit(frmScript);
                 // global scripts
-                var tblGlobalScripts = new KyteTable(_ks, $("#global-scripts-table"), {'name':"KyteScriptGlobalAssignment",'field':"page",'value':pageData.page.id}, colDefScripts, true, [0,"asc"], false, false);
+                let colDefScriptsGlobal = [
+                    {'targets':0,'data':'script.name','label':'Script'},
+                    {'targets':1,'data':'script.script_type','label':'Type', render: function(data, type, row, meta) { if (data == 'css') { return 'Stylesheet'; } else if (data == 'js') { return 'JavaScript'+(row.script.is_js_module ? ' (module)' : ''); } else { return 'Unknown'; } }},
+                    {'targets':2,'data':'script.s3key','label':'path'},
+                ];
+                var tblGlobalScripts = new KyteTable(_ks, $("#global-scripts-table"), {'name':"KyteScriptGlobalAssignment",'field':"page",'value':pageData.page.id}, colDefScriptsGlobal, true, [0,"asc"], false, false);
                 tblGlobalScripts.init();
 
                 // Custom library assignment table and form
@@ -1634,7 +1639,12 @@ document.addEventListener('KyteInitialized', function(e) {
                 frmLibrary.init();
                 tblLibraries.bindEdit(frmLibrary);
                 // global libraries
-                var tblGlobalLibraries = new KyteTable(_ks, $("#global-libraries-table"), {'name':"KyteLibraryGlobalAssignment",'field':"page",'value':pageData.page.id}, colDefLibraries, true, [0,"asc"], false, false);
+                let colDefLibrariesGlobal = [
+                    {'targets':0,'data':'library.name','label':'Script'},
+                    {'targets':1,'data':'library.script_type','label':'Type', render: function(data, type, row, meta) { if (data == 'css') { return 'Stylesheet'; } else if (data == 'js') { return 'JavaScript'; } else { return 'Unknown'; } }},
+                    {'targets':2,'data':'library.link','label':'path'},
+                ];
+                var tblGlobalLibraries = new KyteTable(_ks, $("#global-libraries-table"), {'name':"KyteLibraryGlobalAssignment",'field':"page",'value':pageData.page.id}, colDefLibrariesGlobal, true, [0,"asc"], false, false);
                 tblGlobalLibraries.init();
 
                 // web components assignment table and form
