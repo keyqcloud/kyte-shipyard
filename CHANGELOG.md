@@ -1,6 +1,10 @@
 ## 1.6.2
 
 - Reoganize menu items to conserve space
+- Fix add controller button not working in model details view
+- Update controller model link to handle virtual cases
+- Update form sytles to show hidden error message
+- Improve custom scripts UI
 
 ## 1.6.1
 
