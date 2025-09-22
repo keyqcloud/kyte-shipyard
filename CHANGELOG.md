@@ -5,6 +5,7 @@
 - Update controller model link to handle virtual cases
 - Update form sytles to show hidden error message
 - Improve custom scripts UI
+- Fix page global scripts and libraries tables missing column headers
 
 ## 1.6.1
 
