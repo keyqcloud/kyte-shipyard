@@ -202,23 +202,9 @@
 
 /* Error message styling */
 .modal-body .error-msg {
-    background: rgba(239, 68, 68, 0.1) !important;
-    border: 1px solid rgba(239, 68, 68, 0.2) !important;
-    color: var(--error-color) !important;
-    padding: 1rem !important;
-    border-radius: 12px !important;
-    margin-top: 1.5rem !important;
-    margin-bottom: 1.5rem !important;
-    display: none;
+    display: block;
     align-items: center !important;
     gap: 0.5rem !important;
-}
-
-.modal-body .error-msg::before {
-    content: '\f071';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: var(--error-color);
 }
 
 /* Validation states */
