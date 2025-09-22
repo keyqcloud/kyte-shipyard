@@ -9,6 +9,7 @@
 - Add missing include all option for scripts
 - Add feature to create new functions from the controller code editor
 - Add support for controller funciton version control
+- Add support for custom script version control
 
 ## 1.6.1
 
