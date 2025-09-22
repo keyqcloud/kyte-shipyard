@@ -634,15 +634,55 @@ document.addEventListener('KyteInitialized', function(e) {
                 var modalForm = new KyteForm(_ks, $("#modalForm"), 'ModelAttribute', hidden, elements, 'Model Attribute', tblAttributes, true, $("#newAttribute"));
                 modalForm.init();
                 tblAttributes.bindEdit(modalForm);
+
+                // controller table and form
+                let elementsController = [
+                [
+                    {
+                        'field':'name',
+                        'type':'text',
+                        'label':'Name',
+                        'required':true
+                    }
+                ],
+                [
+                    {
+                        'field':'description',
+                        'type':'textarea',
+                        'label':'Description',
+                        'required':false
+                    }
+                ]
+            ];
+
+            let hiddenElementsController = [
+                {
+                    'name': 'application',
+                    'value': r.data[0].application.id
+                },
+                {
+                    'name': 'dataModel',
+                    'value': modelIdx
+                }
+            ];
+            // controller table and form
+            var tblController = new KyteTable(_ks, $("#controllers-table"), {'name':"Controller",'field':"dataModel",'value':modelIdx}, colDefControllers, true, [0,"asc"], true, true, 'id', '/app/controller/');
+            tblController.init();
+            var modalFormController = new KyteForm(_ks, $("#modalFormController"), 'Controller', hiddenElementsController, elementsController, 'Controller', tblController, true, $("#newController"));
+            modalFormController.init();
+            modalFormController.success = function(r) {
+                if (r.data[0]) {
+                    let obj = {'model': 'Controller', 'idx':r.data[0].id};
+                    let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                    location.href="/app/controller/?request="+encoded;
+                }
+            }
+            tblController.bindEdit(modalFormController);
             } else {
                 $("#model-name").html("Undefined");
             }
             $('#pageLoaderModal').modal('hide');
         });
-
-        // controller table and form
-        var tblController = new KyteTable(_ks, $("#controllers-table"), {'name':"Controller",'field':"dataModel",'value':modelIdx}, colDefControllers, true, [0,"asc"], true, true, 'id', '/app/controller/');
-        tblController.init();
 
         $(".downloadCodeBtn").click(function(e) {
             e.preventDefault();
