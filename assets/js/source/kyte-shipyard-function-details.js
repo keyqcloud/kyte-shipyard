@@ -1,4 +1,4 @@
-// Updated kyte-shipyard-function-details.js
+// Enhanced kyte-shipyard-function-details.js with Add Function capability
 import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/+esm';
 import {registerPHPSnippetLanguage} from '/assets/js/packages/php-snippet/registerPHPSnippetLanguage.js';
 
@@ -60,9 +60,7 @@ window.onbeforeunload = function() {
     }
 };
 
-// kyte-function-list.js
-// Manages the dynamic function list in the sidebar
-
+// Enhanced KyteFunctionList class with Add Function capability
 class KyteFunctionList {
     constructor(kyteSession) {
         this._ks = kyteSession;
@@ -73,6 +71,7 @@ class KyteFunctionList {
         this.isDirty = false;
         
         this.init();
+        this.setupAddFunctionModal();
     }
 
     init() {
@@ -90,6 +89,222 @@ class KyteFunctionList {
             this.showError("Failed to initialize function editor");
             $('#pageLoaderModal').modal('hide');
         }
+    }
+
+    setupAddFunctionModal() {
+        // Bind the add function buttons
+        $('#addFunctionBtn, #addFunctionFromHeader').on('click', () => {
+            this.showAddFunctionModal();
+        });
+
+        // Bind the create function button
+        $('#createFunctionBtn').on('click', () => {
+            this.createNewFunction();
+        });
+
+        // Reset form when modal is hidden
+        $('#addFunctionModal').on('hidden.bs.modal', () => {
+            this.resetAddFunctionForm();
+        });
+
+        // Auto-fill name based on type selection
+        $('#functionType').on('change', () => {
+            const type = $('#functionType').val();
+            const nameField = $('#functionName');
+            
+            // Only auto-fill if the name field is empty
+            if (!nameField.val().trim() && type) {
+                if (type.startsWith('hook_') || ['new', 'update', 'get', 'delete'].includes(type)) {
+                    // For hooks and standard overrides, use the type as the name
+                    nameField.val(type);
+                } else if (type === 'custom') {
+                    // For custom functions, suggest a generic name
+                    nameField.val('custom_function');
+                }
+            }
+        });
+    }
+
+    showAddFunctionModal() {
+        // Reset form
+        this.resetAddFunctionForm();
+        
+        // Show the modal
+        const modal = new bootstrap.Modal(document.getElementById('addFunctionModal'));
+        modal.show();
+    }
+
+    resetAddFunctionForm() {
+        $('#addFunctionForm')[0].reset();
+        $('#functionName').val('');
+        $('#functionType').val('');
+        $('#functionDescription').val('');
+    }
+
+    async createNewFunction() {
+        const type = $('#functionType').val();
+        const name = $('#functionName').val().trim();
+        const description = $('#functionDescription').val().trim();
+
+        // Validation
+        if (!type) {
+            alert('Please select a function type');
+            return;
+        }
+
+        // Check for unsaved changes before proceeding
+        if (this.isDirty) {
+            const confirm = await this.confirmUnsavedChanges();
+            if (!confirm) return;
+        }
+
+        // Prepare function data
+        const functionData = {
+            controller: this.controllerId,
+            type: type,
+            name: name || type, // Use type as name if no name provided
+            description: description || '',
+            code: this.getDefaultCodeForType(type)
+        };
+
+        // Show loading
+        $('#pageLoaderModal').modal('show');
+
+        try {
+            // Create the function via Kyte API
+            await new Promise((resolve, reject) => {
+                this._ks.post('Function', functionData, null, [], 
+                    (response) => {
+                        if (response.data && response.data[0]) {
+                            resolve(response.data[0]);
+                        } else {
+                            reject('Failed to create function');
+                        }
+                    }, 
+                    (error) => {
+                        reject(error);
+                    }
+                );
+            }).then((newFunction) => {
+                // Hide loading modal
+                $('#pageLoaderModal').modal('hide');
+                
+                // Hide add function modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addFunctionModal'));
+                modal.hide();
+
+                // Add the new function to our local list
+                this.functions.push(newFunction);
+                
+                // Re-render the function list
+                this.renderFunctionList();
+                
+                // Automatically select and load the new function
+                this.selectFunction(newFunction.id);
+                this.loadFunctionCode(newFunction.id);
+                
+                // Show success message
+                this.showSuccessMessage(`Function "${newFunction.name}" created successfully!`);
+                
+            }).catch((error) => {
+                $('#pageLoaderModal').modal('hide');
+                console.error('Error creating function:', error);
+                this.showError('Failed to create function: ' + error);
+            });
+
+        } catch (error) {
+            $('#pageLoaderModal').modal('hide');
+            console.error('Error creating function:', error);
+            this.showError('Failed to create function: ' + error);
+        }
+    }
+
+    getDefaultCodeForType(type) {
+        const codeTemplates = {
+            'hook_init': `<?php
+// Hook: Initialization
+// Called when the controller is first initialized
+// Use this to set up any initial configuration or state
+
+// Your initialization code here
+`,
+            'hook_auth': `<?php
+// Hook: Authentication
+// Called to handle authentication logic
+// Return true to allow access, false to deny
+
+// Your authentication code here
+return true;
+`,
+            'hook_prequery': `<?php
+// Hook: Pre-query
+// Called before database queries are executed
+// Modify or validate query parameters here
+
+// Your pre-query code here
+`,
+            'hook_preprocess': `<?php
+// Hook: Pre-processing
+// Called before data processing
+// Modify or validate input data here
+
+// Your pre-processing code here
+`,
+            'hook_response_data': `<?php
+// Hook: Response Data
+// Called to modify response data before sending
+// Modify the $data variable as needed
+
+// Your response data processing code here
+`,
+            'hook_process_get_response': `<?php
+// Hook: Process Get Response
+// Called to process GET request responses
+// Modify response data for GET requests
+
+// Your GET response processing code here
+`,
+            'new': `<?php
+// Override: Create Operation
+// Handle POST requests to create new records
+// Return the created record data
+
+// Your create operation code here
+`,
+            'update': `<?php
+// Override: Update Operation
+// Handle PUT requests to update existing records
+// Return the updated record data
+
+// Your update operation code here
+`,
+            'get': `<?php
+// Override: Get Operation
+// Handle GET requests to retrieve records
+// Return the requested data
+
+// Your get operation code here
+`,
+            'delete': `<?php
+// Override: Delete Operation
+// Handle DELETE requests to remove records
+// Return success/failure status
+
+// Your delete operation code here
+`,
+            'custom': `<?php
+// Custom Function
+// Your custom functionality goes here
+
+// Your custom code here
+`
+        };
+
+        return codeTemplates[type] || `<?php
+// Function: ${type}
+// Add your code here
+
+`;
     }
 
     getFunctionIdFromUrl() {
@@ -278,7 +493,6 @@ class KyteFunctionList {
     }
 
     loadFunctionCode(functionId) {
-        
         this._ks.get("Function", "id", functionId, [], (response) => {
             if (response.data && response.data[0]) {
                 const func = response.data[0];
@@ -335,6 +549,7 @@ class KyteFunctionList {
                 (response) => {
                     $('#pageLoaderModal').modal('hide');
                     this.isDirty = false;
+                    this.showSuccessMessage('Function saved successfully!');
                     resolve(response);
                 }, 
                 (error) => {
@@ -373,6 +588,12 @@ class KyteFunctionList {
     showError(message) {
         alert(message);
         console.error(message);
+    }
+
+    showSuccessMessage(message) {
+        // You could replace this with a toast notification or other UI element
+        console.log(message);
+        // For now, we'll just log it, but you could add a toast system here
     }
 
     // Public methods for external use
@@ -431,12 +652,21 @@ document.addEventListener('KyteInitialized', function(e) {
         $("#saveCode").click(function() {
             if (window.KyteFunctionListManager) {
                 window.KyteFunctionListManager.save().then(() => {
-                    // Success message could be added here
+                    // Success message handled by function list manager
                 }).catch((error) => {
                     alert("Error saving: " + error);
                     console.error(error);
                 });
             }
+        });
+
+        // Mobile sidebar toggle
+        $('#sidebarToggle').on('click', function() {
+            $('#sidenav').toggleClass('show');
+        });
+
+        $('#closeSidebar').on('click', function() {
+            $('#sidenav').removeClass('show');
         });
 
         // Function to enable editor when function is selected

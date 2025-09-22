@@ -7,6 +7,7 @@
 - Improve custom scripts UI
 - Fix page global scripts and libraries tables missing column headers
 - Add missing include all option for scripts
+- Add feature to create new functions from the controller code editor
 
 ## 1.6.1
 
