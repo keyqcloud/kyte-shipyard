@@ -5,10 +5,6 @@ document.addEventListener('KyteInitialized', function(e) {
         return;
     }
 
-    // Get url param
-    let idx = _ks.getPageRequest();
-    idx = idx.idx;
-
     // Initialize date pickers
     $("#filter-start-date").datepicker({
         dateFormat: 'mm/dd/yy',
@@ -25,7 +21,7 @@ document.addEventListener('KyteInitialized', function(e) {
         maxDate: 0 // Today
     });
 
-    // Enhanced column definitions with log_level badge
+    // Enhanced column definitions for system logs
     let colDef = [
         {
             'targets': 0,
@@ -41,31 +37,38 @@ document.addEventListener('KyteInitialized', function(e) {
         },
         {
             'targets': 1,
-            'data': 'request',
-            'label': 'Request',
+            'data': 'account_id',
+            'label': 'Account',
             render: function(data, type, row, meta) {
-                let output = `<span style="display:block">${data || '-'}</span>`;
-
-                if (row.contentType && row.contentType.length > 0) {
-                    output += `<span style="display:block;font-size:0.85em;color:#718096;">${row.contentType}</span>`;
+                if (data) {
+                    return `<span class="account-badge">ACC-${data}</span>`;
                 }
-
-                let pathParts = [];
-                if (row.model && row.model.length > 0) pathParts.push(row.model);
-                if (row.field && row.field.length > 0) pathParts.push(row.field);
-                if (row.value && row.value.length > 0) pathParts.push(row.value);
-
-                if (pathParts.length > 0) {
-                    output += `<span style="font-style:italic;display:block;font-size:0.85em;color:#4a5568;">/${pathParts.join('/')}</span>`;
-                }
-
-                return output;
+                return '<span style="color:#cbd5e0;">N/A</span>';
             }
         },
         {
             'targets': 2,
+            'data': 'source',
+            'label': 'Source',
+            render: function(data, type, row, meta) {
+                if (!data) return '<span style="color:#cbd5e0;">unknown</span>';
+
+                const sourceColor = {
+                    'error_handler': '#3b82f6',
+                    'exception_handler': '#ef4444',
+                    'logger': '#10b981',
+                    'output_buffer': '#f59e0b'
+                };
+                const color = sourceColor[data] || '#6b7280';
+                const label = data.replace('_', ' ').toUpperCase();
+
+                return `<span style="display:inline-block;padding:4px 10px;background:${color};color:white;border-radius:6px;font-size:0.75rem;font-weight:600;">${label}</span>`;
+            }
+        },
+        {
+            'targets': 3,
             'data': 'message',
-            'label': 'Details',
+            'label': 'Message',
             render: function(data, type, row, meta) {
                 let output = '';
 
@@ -79,23 +82,16 @@ document.addEventListener('KyteInitialized', function(e) {
                 // Message
                 if (data && data.length > 0) {
                     // Truncate long messages
-                    const maxLength = 200;
+                    const maxLength = 150;
                     const message = data.length > maxLength ? data.substring(0, maxLength) + '...' : data;
                     output += `<span style="display:block;margin-top:4px;">${message}</span>`;
                 } else {
                     output += `<span style="display:block;margin-top:4px;color:#cbd5e0;">No message</span>`;
                 }
 
-                // Show source badge if available
-                if (row.source) {
-                    const sourceColor = {
-                        'error_handler': '#3b82f6',
-                        'exception_handler': '#ef4444',
-                        'logger': '#10b981',
-                        'output_buffer': '#f59e0b'
-                    };
-                    const color = sourceColor[row.source] || '#6b7280';
-                    output += `<span style="display:inline-block;margin-top:4px;padding:2px 8px;background:${color};color:white;border-radius:4px;font-size:0.75em;">${row.source}</span>`;
+                // Show request ID if available
+                if (row.request_id) {
+                    output += `<span style="display:block;margin-top:4px;font-size:0.75em;color:#718096;font-family:monospace;">Request: ${row.request_id}</span>`;
                 }
 
                 return output;
@@ -123,6 +119,15 @@ document.addEventListener('KyteInitialized', function(e) {
             }
         }
 
+        // Source filter
+        const selectedSource = $("#filter-source").val();
+        if (selectedSource && selectedSource.length > 0) {
+            conditions.push({
+                field: 'source',
+                value: selectedSource
+            });
+        }
+
         // Date range filters
         const startDate = $("#filter-start-date").val();
         if (startDate) {
@@ -145,10 +150,10 @@ document.addEventListener('KyteInitialized', function(e) {
             });
         }
 
-        // Application type (default)
+        // System type (required for system logs)
         conditions.push({
             field: 'log_type',
-            value: 'application'
+            value: 'system'
         });
 
         return conditions;
@@ -157,15 +162,16 @@ document.addEventListener('KyteInitialized', function(e) {
     // Function to initialize/refresh table with filters
     function initTable(conditions = []) {
         // Destroy existing table if it exists
-        if (window.tblErrorLog && window.tblErrorLog.destroy) {
-            window.tblErrorLog.destroy();
+        if (window.tblSystemLog && window.tblSystemLog.destroy) {
+            window.tblSystemLog.destroy();
         }
 
         // Build query object
+        // For system logs, we don't filter by app_idx, instead we query all system logs for the account
         let queryObj = {
             'name': 'KyteError',
-            'field': 'app_idx',
-            'value': idx
+            'field': null,
+            'value': null
         };
 
         // Add filter conditions as additional query params
@@ -176,9 +182,9 @@ document.addEventListener('KyteInitialized', function(e) {
         }
 
         // Create new table
-        window.tblErrorLog = new KyteTable(
+        window.tblSystemLog = new KyteTable(
             _ks,
-            $("#log-table"),
+            $("#system-log-table"),
             queryObj,
             colDef,
             true,
@@ -189,12 +195,12 @@ document.addEventListener('KyteInitialized', function(e) {
             '/app/log/'
         );
 
-        window.tblErrorLog.targetBlank = true;
-        window.tblErrorLog.initComplete = function() {
+        window.tblSystemLog.targetBlank = true;
+        window.tblSystemLog.initComplete = function() {
             $('#pageLoaderModal').modal('hide');
         };
 
-        window.tblErrorLog.init();
+        window.tblSystemLog.init();
     }
 
     // Apply filter button
@@ -208,6 +214,7 @@ document.addEventListener('KyteInitialized', function(e) {
     $("#btn-clear-filter").on('click', function() {
         // Reset form
         $("#filter-log-level").val(['error', 'critical']);
+        $("#filter-source").val('');
         $("#filter-start-date").val('');
         $("#filter-end-date").val('');
 

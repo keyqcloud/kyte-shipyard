@@ -22,11 +22,28 @@
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
     <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
-    <script src="/assets/js/kyte-shipyard.js"></script>
-    <script src="/assets/js/navigation.js"></script>
-    <script src="/assets/js/kyte-shipyard-tables.js"></script>
-    <script src="/assets/js/kyte-shipyard-log.js"></script>
-    <script src="/assets/js/kyte-shipyard-app-dashboard.js"></script>
+    <script>
+        // Auto-detect localhost and load non-obfuscated source files for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
+
+            const scripts = [
+                'kyte-shipyard.js',
+                'navigation.js',
+                'kyte-shipyard-tables.js',
+                'kyte-shipyard-log.js'
+            ];
+
+            scripts.forEach(function(script) {
+                document.write('<script src="' + jsPath + script + '"><\/script>');
+            });
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
+            }
+        })();
+    </script>
 
     <style>
         * {
@@ -442,6 +459,134 @@
                 transition-duration: 0.01ms !important;
             }
         }
+
+        /* Log Level Badges */
+        .log-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .log-badge.debug {
+            background: #6c757d;
+            color: white;
+        }
+
+        .log-badge.info {
+            background: #0dcaf0;
+            color: white;
+        }
+
+        .log-badge.warning {
+            background: #ffc107;
+            color: #2d3748;
+        }
+
+        .log-badge.error {
+            background: #dc3545;
+            color: white;
+        }
+
+        .log-badge.critical {
+            background: #6f42c1;
+            color: white;
+        }
+
+        /* Filter Panel */
+        .filter-panel {
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1.5rem 2rem;
+        }
+
+        .filter-panel h5 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            border-color: #ff6b35;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-filter {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
+        }
+
+        .btn-filter:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-clear {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-clear:hover {
+            border-color: #cbd5e0;
+            background: #f8fafc;
+        }
     </style>
 </head>
 
@@ -504,6 +649,39 @@
                         <h2 class="table-title">Error Log</h2>
                         <p class="table-description">View application level errors.</p>
                     </div>
+                    <!-- Filter Panel -->
+                    <div class="filter-panel">
+                        <h5><i class="fas fa-filter me-2"></i>Filter Logs</h5>
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label for="filter-log-level">Log Level</label>
+                                <select id="filter-log-level" multiple>
+                                    <option value="debug">Debug</option>
+                                    <option value="info">Info</option>
+                                    <option value="warning">Warning</option>
+                                    <option value="error" selected>Error</option>
+                                    <option value="critical" selected>Critical</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="filter-start-date">Start Date</label>
+                                <input type="text" id="filter-start-date" placeholder="Select start date" readonly>
+                            </div>
+                            <div class="filter-group">
+                                <label for="filter-end-date">End Date</label>
+                                <input type="text" id="filter-end-date" placeholder="Select end date" readonly>
+                            </div>
+                            <div class="filter-actions">
+                                <button id="btn-apply-filter" class="btn-filter">
+                                    <i class="fas fa-check me-1"></i> Apply
+                                </button>
+                                <button id="btn-clear-filter" class="btn-clear">
+                                    <i class="fas fa-times me-1"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Filter Panel -->
                     <div class="table-content">
                         <table id="log-table" class="table table-striped w-100"></table>
                     </div>

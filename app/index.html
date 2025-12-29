@@ -25,10 +25,28 @@
     <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
     <!-- Kyte -->
     <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
-    <script src="/assets/js/kyte-shipyard.js"></script>
-    <script src="/assets/js/navigation.js"></script>
-    <script src="/assets/js/kyte-shipyard-tables.js"></script>
-    <script src="/assets/js/kyte-shipyard-application.js"></script>
+    <script>
+        // Auto-detect localhost and load source (non-obfuscated) JS files for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
+
+            const scripts = [
+                'kyte-shipyard.js',
+                'navigation.js',
+                'kyte-shipyard-tables.js',
+                'kyte-shipyard-application.js'
+            ];
+
+            scripts.forEach(function(script) {
+                document.write('<script src="' + jsPath + script + '"><\/script>');
+            });
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
+            }
+        })();
+    </script>
 
     <style>
         * {
@@ -43,7 +61,7 @@
         }
 
         /* Modern Navigation */
-        #application-nav {
+        #mainnav {
             background: linear-gradient(135deg, #2d3748, #4a5568) !important;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -423,35 +441,8 @@
 
     <div id="wrapper">
         <!-- START APPLICATION NAV -->
-        <nav id="application-nav" class="navbar navbar-dark bg-dark navbar-expand-sm">
-            <a href="/app/" class="navbar-brand">
-                Kyte Shipyard<sup>™</sup>
-                <img src="/assets/images/kyte_shipyard_light.png" alt="Kyte Shipyard">
-            </a>
-            <button data-bs-toggle="collapse" class="navbar-toggler" type="button" data-bs-target="#application-navcol" aria-controls="#application-navcol" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="application-navcol">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link me-2 text-light" href="/app/">
-                            <i class="fas fa-rocket me-2"></i>Projects
-                        </a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle me-2 text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-2"></i>Account
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item me-2" href="/app/settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item me-2 logout" href="#"><i class="fas fa-power-off me-2"></i>Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+        <nav id="mainnav" class="navbar navbar-dark navbar-expand-lg">
+            <!-- Navigation will be populated by JavaScript -->
         </nav>
         <!-- END APPLICATION NAV -->
 

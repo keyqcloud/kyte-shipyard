@@ -22,6 +22,26 @@
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
     <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and use source files for debugging
+        (function() {
+            window.KYTE_DEV_MODE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            window.KYTE_JS_PATH = window.KYTE_DEV_MODE ? '/assets/js/source/' : '/assets/js/';
+            
+            // Override script loading
+            const originalWrite = document.write;
+            document.write = function(html) {
+                if (html.includes('<script') && html.includes('/assets/js/')) {
+                    html = html.replace(/\/assets\/js\//g, window.KYTE_JS_PATH);
+                }
+                return originalWrite.call(document, html);
+            };
+            
+            if (window.KYTE_DEV_MODE) {
+                console.log('%c[DEV MODE] Using non-obfuscated source files', 'color: #4CAF50; font-weight: bold;');
+            }
+        })();
+    </script>
     <script src="/assets/js/kyte-shipyard.js"></script>
     <script src="/assets/js/navigation.js"></script>
     <script src="/assets/js/kyte-shipyard-datastores.js"></script>

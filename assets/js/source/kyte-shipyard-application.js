@@ -51,7 +51,11 @@ let colDefApps = [
 
 document.addEventListener('KyteInitialized', function(e) {
     let _ks = e.detail._ks;
-    
+
+    // Initialize root navigation
+    let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">');
+    navbar.create();
+
     $('#pageLoaderModal').modal('show');
     if (_ks.isSession()) {
         var dataTable = new KyteTable(_ks, $("#models-table"), {'name':"Application",'field':null,'value':null}, colDefApps, true, [0,"asc"], true, true, 'id', '/app/dashboard/');

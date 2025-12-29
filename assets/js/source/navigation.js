@@ -105,6 +105,12 @@ let rootnav = [
             class:'me-2 text-light',
             label: 'API Keys',
             href: '/app/keys.html'
+        },
+        {
+            faicon:'fas fa-list-alt',
+            class:'me-2 text-light',
+            label: 'System Log',
+            href: '/app/system-log.html'
         }
     ],
     [
