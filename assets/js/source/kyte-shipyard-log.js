@@ -34,13 +34,19 @@ document.addEventListener('KyteInitialized', function(e) {
             render: function(data, type, row, meta) {
                 const levelClass = data || 'error';
                 const levelText = (data || 'error').toUpperCase();
-                const timestamp = row.date_created;
-
-                return `<span class="log-badge ${levelClass}">${levelText}</span><br><small style="color:#718096;">${timestamp}</small>`;
+                return `<span class="log-badge ${levelClass}">${levelText}</span>`;
             }
         },
         {
             'targets': 1,
+            'data': 'date_created',
+            'label': 'Date',
+            render: function(data, type, row, meta) {
+                return `<span style="color:#4a5568;">${data || '-'}</span>`;
+            }
+        },
+        {
+            'targets': 2,
             'data': 'request',
             'label': 'Request',
             render: function(data, type, row, meta) {
@@ -63,7 +69,7 @@ document.addEventListener('KyteInitialized', function(e) {
             }
         },
         {
-            'targets': 2,
+            'targets': 3,
             'data': 'message',
             'label': 'Details',
             render: function(data, type, row, meta) {
@@ -182,7 +188,7 @@ document.addEventListener('KyteInitialized', function(e) {
             queryObj,
             colDef,
             true,
-            [0, "desc"],
+            [1, "desc"],
             false,
             false,
             'id',
