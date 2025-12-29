@@ -23,8 +23,26 @@
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
     <!-- Kyte -->
     <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
-    <script src="/assets/js/kyte-shipyard.js"></script>
-    <script src="/assets/js/navigation.js"></script>
+    <script>
+        // Auto-detect localhost and load non-obfuscated source files for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
+
+            const scripts = [
+                'kyte-shipyard.js',
+                'navigation.js'
+            ];
+
+            scripts.forEach(function(script) {
+                document.write('<script src="' + jsPath + script + '"><\/script>');
+            });
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
+            }
+        })();
+    </script>
     <script type="module" src="/assets/js/kyte-shipyard-email-template-editor.js"></script>
 
     <style>

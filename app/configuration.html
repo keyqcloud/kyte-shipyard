@@ -25,10 +25,28 @@
     <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
     <!-- Kyte -->
     <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
-    <script src="/assets/js/kyte-shipyard.js"></script>
-    <script src="/assets/js/navigation.js"></script>
-    <script src="/assets/js/kyte-shipyard-tables.js"></script>
-    <script src="/assets/js/kyte-shipyard-application-configuration.js"></script>
+    <script>
+        // Auto-detect localhost and load non-obfuscated source files for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
+
+            const scripts = [
+                'kyte-shipyard.js',
+                'navigation.js',
+                'kyte-shipyard-tables.js',
+                'kyte-shipyard-application-configuration.js'
+            ];
+
+            scripts.forEach(function(script) {
+                document.write('<script src="' + jsPath + script + '"><\/script>');
+            });
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
+            }
+        })();
+    </script>
 
     <style>
         * {
