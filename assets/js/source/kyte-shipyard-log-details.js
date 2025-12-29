@@ -3,7 +3,7 @@ function populateLogDetails(kyteError) {
     const logLevel = kyteError.log_level || 'error';
     const logType = kyteError.log_type || 'application';
     const source = kyteError.source || 'error_handler';
-    const formattedDate = formatDate(kyteError.date_created);
+    const formattedDate = kyteError.date_created;
     const dataFormatted = formatJSON(kyteError.data);
     const responseFormatted = formatJSON(kyteError.response);
     const contextFormatted = formatJSON(kyteError.context);
@@ -270,23 +270,6 @@ function getLogLevelConfig(level) {
     };
 
     return configs[level] || configs['error'];
-}
-
-function formatDate(timestamp) {
-    if (!timestamp) return 'Unknown';
-
-    // Handle Unix timestamp (seconds)
-    const date = new Date(timestamp * 1000);
-
-    return date.toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        timeZoneName: 'short'
-    });
 }
 
 function formatJSON(data) {

@@ -30,7 +30,7 @@ document.addEventListener('KyteInitialized', function(e) {
             render: function(data, type, row, meta) {
                 const levelClass = data || 'error';
                 const levelText = (data || 'error').toUpperCase();
-                const timestamp = row.date_created_formatted || new Date(row.date_created * 1000).toLocaleString();
+                const timestamp = row.date_created;
 
                 return `<span class="log-badge ${levelClass}">${levelText}</span><br><small style="color:#718096;">${timestamp}</small>`;
             }
