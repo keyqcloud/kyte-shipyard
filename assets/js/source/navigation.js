@@ -41,7 +41,7 @@ function generateAppNav(encodedRequest) {
                 items: [
                     {
                         faicon:'fas fa-envelope',
-                        class:'me-2 text-light',
+                        class:'me-2',
                         label:'Email Templates',
                         href:'/app/emails.html?request='+encodedRequest
                     },
