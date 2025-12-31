@@ -183,6 +183,6 @@ Last updated: 2024
 
 ---
 
-© 2020-2025 KeyQ. All rights reserved.
+© 2020-2026 KeyQ. All rights reserved.
 
 **Ready to get started?** Begin with the [Getting Started Guide](01-getting-started.md)! 🚀
