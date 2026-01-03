@@ -494,6 +494,8 @@ document.addEventListener('KyteInitialized', function(e) {
                 model = r.data[0].name;
                 $("#model-name").html(model);
                 appId = r.data[0].application.id;
+                // Store application ID for navigation
+                localStorage.setItem('currentAppId', appId);
                 getData(_ks, modelIdx, model, r.data[0].application.id);
                 let obj = {'model': 'Application', 'idx':r.data[0].application.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));

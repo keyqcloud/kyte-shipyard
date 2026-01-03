@@ -50,33 +50,31 @@ let colDefCronJobs = [
         let now = new Date();
         let diff = Math.floor((date - now) / 1000);
 
-        if (diff < 0) {
-            return '<span style="color: #e53e3e;">Overdue</span>';
+        // Consider jobs overdue only if they're more than 5 minutes late
+        // This handles normal scheduling delays and frequent jobs gracefully
+        if (diff < -300) {
+            // More than 5 minutes overdue
+            let minutesLate = Math.abs(Math.floor(diff / 60));
+            return '<span style="color: #e53e3e;">Overdue (' + minutesLate + ' min)</span>';
+        } else if (diff < 0) {
+            // Less than 5 minutes overdue - likely running or about to run
+            return '<span style="color: #f6ad55;">Running soon</span>';
+        } else if (diff < 60) {
+            // Less than 1 minute away
+            return '<span style="color: #48bb78;">In ' + diff + ' sec</span>';
         } else if (diff < 3600) {
+            // Less than 1 hour away
             return '<span style="color: #48bb78;">In ' + Math.floor(diff / 60) + ' min</span>';
         } else {
+            // More than 1 hour away
             return date.toLocaleString();
         }
     }},
-    {'targets':5,'data':'id','label':'Actions', orderable: false, render: function(data, type, row, meta) {
-        let actions = '';
-
-        // Trigger button (only if enabled and not in DLQ)
-        if (row.enabled && !row.in_dead_letter_queue) {
-            actions += '<button class="action-btn btn-trigger btn-trigger-job" data-id="' + data + '" data-name="' + row.name + '" title="Trigger Now"><i class="fas fa-play"></i></button>';
-        }
-
-        // Recover button (only if in DLQ)
+    {'targets':5,'data':'id','label':'Actions', 'orderable': false, render: function(data, type, row, meta) {
+        // Recover button (only if in DLQ) - keep this since it's critical
         if (row.in_dead_letter_queue) {
-            actions += '<button class="action-btn btn-recover btn-recover-job" data-id="' + data + '" data-name="' + row.name + '" title="Recover from DLQ"><i class="fas fa-life-ring"></i></button>';
+            return '<button class="action-btn btn-recover btn-recover-job" data-id="' + data + '" data-name="' + row.name + '" title="Recover from DLQ"><i class="fas fa-life-ring"></i></button>';
         }
-
-        // View executions button
-        actions += '<button class="action-btn btn-view btn-view-executions" data-id="' + data + '" title="View Executions"><i class="fas fa-history"></i></button>';
-
-        // View versions button
-        actions += '<button class="action-btn btn-view btn-view-versions" data-id="' + data + '" title="Version History"><i class="fas fa-code-branch"></i></button>';
-
-        return actions;
+        return ''; // No actions - click row to view details
     }}
 ];

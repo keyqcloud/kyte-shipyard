@@ -31,10 +31,15 @@ let colDefComponents = [
 
 document.addEventListener('KyteInitialized', function(e) {
     let _ks = e.detail._ks;
-    
+
     $('#pageLoaderModal').modal('show');
 
     if (_ks.isSession()) {
+        // Initialize application sidebar navigation
+        if (typeof initAppSidebar === 'function') {
+            initAppSidebar();
+        }
+
         // get url param
         let idx = _ks.getPageRequest();
         idx = idx.idx;

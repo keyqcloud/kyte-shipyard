@@ -103,6 +103,8 @@ document.addEventListener('KyteInitialized', function(e) {
                 if (r.data[0].dataModel) {
                     modelName = r.data[0].dataModel.name;
                 }
+                // Store application ID for navigation
+                localStorage.setItem('currentAppId', r.data[0].application.id);
                 let obj = {'model': 'Application', 'idx':r.data[0].application.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
 

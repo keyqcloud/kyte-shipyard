@@ -1,3 +1,118 @@
+// Generate Application Sidebar Navigation (Phase 2)
+function generateAppSidebar(encodedRequest) {
+    return {
+        sections: [
+            {
+                title: 'Sites',
+                items: [
+                    {
+                        faicon: 'fas fa-globe',
+                        label: 'Sites',
+                        href: '/app/sites.html?request=' + encodedRequest
+                    }
+                ]
+            },
+            {
+                title: 'API',
+                items: [
+                    {
+                        faicon: 'fas fa-table',
+                        label: 'Models',
+                        href: '/app/models.html?request=' + encodedRequest
+                    },
+                    {
+                        faicon: 'fas fa-layer-group',
+                        label: 'Controllers',
+                        href: '/app/controllers.html?request=' + encodedRequest
+                    },
+                    {
+                        faicon: 'fas fa-clock',
+                        label: 'Cron Jobs',
+                        href: '/app/cron-jobs.html?request=' + encodedRequest
+                    }
+                ]
+            },
+            {
+                title: 'Storage',
+                items: [
+                    {
+                        faicon: 'fas fa-hdd',
+                        label: 'Datastores',
+                        href: '/app/datastores.html?request=' + encodedRequest
+                    }
+                ]
+            },
+            {
+                title: 'Components',
+                items: [
+                    {
+                        faicon: 'fas fa-envelope',
+                        label: 'Email Templates',
+                        href: '/app/emails.html?request=' + encodedRequest
+                    },
+                    {
+                        faicon: 'fas fa-puzzle-piece',
+                        label: 'Web Components',
+                        href: '/app/components.html?request=' + encodedRequest
+                    }
+                ]
+            },
+            {
+                title: 'System',
+                items: [
+                    {
+                        faicon: 'fas fa-key',
+                        label: 'Sessions',
+                        href: '/app/sessions.html?request=' + encodedRequest
+                    },
+                    {
+                        faicon: 'fas fa-bomb',
+                        label: 'Error Log',
+                        href: '/app/log.html?request=' + encodedRequest
+                    },
+                    {
+                        faicon: 'fas fa-cog',
+                        label: 'Configuration',
+                        href: '/app/configuration.html?request=' + encodedRequest
+                    }
+                ]
+            }
+        ]
+    };
+}
+
+// Render Application Sidebar (Phase 2)
+function renderAppSidebar(encodedRequest) {
+    const sidebarData = generateAppSidebar(encodedRequest);
+    const currentPath = window.location.pathname;
+
+    let sidebarHTML = '<nav class="sidebar-nav">';
+
+    sidebarData.sections.forEach(section => {
+        sidebarHTML += '<div class="nav-section">';
+        sidebarHTML += `<div class="nav-section-title">${section.title}</div>`;
+
+        section.items.forEach(item => {
+            const isActive = currentPath.includes(item.href.split('?')[0]);
+            const activeClass = isActive ? 'active' : '';
+
+            sidebarHTML += `
+                <a href="${item.href}" class="nav-link ${activeClass}">
+                    <i class="${item.faicon}"></i>
+                    ${item.label}
+                </a>
+            `;
+        });
+
+        sidebarHTML += '</div>';
+    });
+
+    sidebarHTML += '</nav>';
+
+    return sidebarHTML;
+}
+
+// Legacy function kept for backward compatibility (now deprecated)
 function generateAppNav(encodedRequest) {
     return [
         [
@@ -268,3 +383,148 @@ let subnavSite = [
         selector:'#Settings'
     },
 ];
+
+// Mobile Drawer Toggle Functionality (Phase 3)
+function initSidebarToggle() {
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupSidebarToggle);
+    } else {
+        setupSidebarToggle();
+    }
+}
+
+function setupSidebarToggle() {
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const appSidebar = document.getElementById('app-sidebar');
+    const sidenav = document.getElementById('sidenav');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+    if (!sidebarToggle) return;
+
+    // Toggle button click
+    sidebarToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Toggle both sidebars (only one will exist on any given page)
+        if (appSidebar) {
+            appSidebar.classList.toggle('active');
+        }
+        if (sidenav) {
+            sidenav.classList.toggle('active');
+        }
+        if (sidebarOverlay) {
+            sidebarOverlay.classList.toggle('active');
+        }
+    });
+
+    // Overlay click closes sidebar
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+            if (appSidebar) {
+                appSidebar.classList.remove('active');
+            }
+            if (sidenav) {
+                sidenav.classList.remove('active');
+            }
+            sidebarOverlay.classList.remove('active');
+        });
+    }
+
+    // Close sidebar when clicking links (mobile only)
+    function closeSidebarOnLinkClick() {
+        if (window.innerWidth <= 768) {
+            if (appSidebar) {
+                appSidebar.classList.remove('active');
+            }
+            if (sidenav) {
+                sidenav.classList.remove('active');
+            }
+            if (sidebarOverlay) {
+                sidebarOverlay.classList.remove('active');
+            }
+        }
+    }
+
+    // Add click handlers to all sidebar links
+    document.querySelectorAll('#app-sidebar a, #sidenav a').forEach(link => {
+        link.addEventListener('click', closeSidebarOnLinkClick);
+    });
+
+    // Close sidebar on window resize if desktop size
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            if (appSidebar) {
+                appSidebar.classList.remove('active');
+            }
+            if (sidenav) {
+                sidenav.classList.remove('active');
+            }
+            if (sidebarOverlay) {
+                sidebarOverlay.classList.remove('active');
+            }
+        }
+    });
+}
+
+// Initialize sidebar toggle
+initSidebarToggle();
+
+// Initialize Application Sidebar (Called from application pages)
+function initAppSidebar() {
+    // Wait for the page to fully load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadAppSidebar);
+    } else {
+        loadAppSidebar();
+    }
+}
+
+function loadAppSidebar() {
+    const sidebarElement = document.getElementById('app-sidebar');
+    if (!sidebarElement) return;
+
+    // Get the request parameter from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const request = urlParams.get('request');
+
+    if (!request) {
+        console.warn('No request parameter found in URL');
+        return;
+    }
+
+    // Render the sidebar
+    const sidebarHTML = renderAppSidebar(request);
+    sidebarElement.innerHTML = sidebarHTML;
+
+    // Try to get application name from the request
+    try {
+        const decoded = JSON.parse(atob(decodeURIComponent(request)));
+        if (decoded.idx) {
+            // Fetch application details to populate app selector
+            fetchApplicationName(decoded.idx);
+        }
+    } catch (e) {
+        console.warn('Could not decode request parameter:', e);
+    }
+
+    // Re-initialize sidebar toggle to bind to new elements
+    setupSidebarToggle();
+}
+
+// Fetch and display application name in top nav
+function fetchApplicationName(appId) {
+    const appSelectorElement = document.getElementById('app-selector');
+    const appNameElement = document.getElementById('app-name');
+
+    if (!appNameElement) return;
+
+    // Set static text to avoid unnecessary API calls
+    appNameElement.textContent = 'Application';
+
+    // Update the link to go back to project list
+    if (appSelectorElement) {
+        appSelectorElement.href = '/app/?request=' + encodeURIComponent(btoa(JSON.stringify({'model': 'Application', 'idx': appId})));
+    }
+}

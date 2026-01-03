@@ -20,6 +20,11 @@ document.addEventListener('KyteInitialized', function(e) {
         return;
     }
 
+    // Initialize application sidebar navigation
+    if (typeof initAppSidebar === 'function') {
+        initAppSidebar();
+    }
+
     // get url param
     let idx = _ks.getPageRequest();
     idx = idx.idx;

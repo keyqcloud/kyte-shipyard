@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Cron Job - Kyte Shipyard</title>
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/assets/css/kyte-form.css">
+    <link rel="stylesheet" href="/assets/css/kyte-shipyard-common.css?v=20251231">
+    <!--  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;500;700&display=swap" rel="stylesheet">
+    <!-- javascripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
+    <!-- Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+    <!-- Kyte -->
+    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and load non-obfuscated source files for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
+
+            const scripts = [
+                'kyte-shipyard.js',
+                'navigation.js',
+                'kyte-shipyard-cron-job-details.js'
+            ];
+
+            scripts.forEach(function(script) {
+                document.write('<script src="' + jsPath + script + '"><\/script>');
+            });
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
+            }
+        })();
+    </script>
+
+</head>
+
+<body>
+    <!-- Page loading modal.  Once session is validated, the loading modal will close. -->
+    <div id="pageLoaderModal" class="modal white" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-sm h-100 d-flex">
+            <div class="mx-auto align-self-center" style="width: 48px">
+                <div class="spinner-wrapper text-center fa-6x"><span class="fas fa-sync fa-spin"></span></div>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+
+    <div id="wrapper">
+        <!-- START UNIFIED TOP NAV -->
+        <nav id="application-nav" class="navbar navbar-dark navbar-expand-sm">
+            <div class="container-fluid">
+                <!-- Sidebar Toggle (Mobile) -->
+                <button id="sidebar-toggle" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Brand -->
+                <a href="/app/" class="navbar-brand">
+                    Kyte Shipyard<sup>™</sup>
+                    <img src="/assets/images/kyte_shipyard_light.png" alt="Kyte Shipyard">
+                </a>
+
+                <!-- Center: App Selector (clickable to dashboard) -->
+                <a href="#" id="app-selector" class="mx-auto">
+                    <i class="fas fa-rocket"></i>
+                    <span id="app-name">Application Dashboard</span>
+                </a>
+
+                <!-- Right: Account Dropdown -->
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-2"></i>Account
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- END UNIFIED TOP NAV -->
+
+        <main>
+            <!-- BEGIN SIDE NAVIGATION -->
+            <div class="detail-page-sidebar">
+                <!-- Back Button -->
+                <div class="sidebar-header">
+                    <a href="#" id="back-to-cron-jobs" class="sidebar-back-button">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Cron Jobs</span>
+                    </a>
+                </div>
+
+                <!-- Cron Job Header -->
+                <div class="sidebar-controller-header">
+                    <h3 id="cron-job-name" class="controller-title">
+                        <i class="fas fa-clock"></i>
+                        <span>Job Name</span>
+                    </h3>
+                    <div class="model-info">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="schedule-type">Schedule Type</span>
+                    </div>
+                </div>
+
+                <!-- Job Info Panel -->
+                <div class="sidebar-info-panel mt-3 px-3">
+                    <div class="info-item">
+                        <label>Status:</label>
+                        <span id="job-status" class="badge"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>Last Run:</label>
+                        <span id="last-run">Never</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Next Run:</label>
+                        <span id="next-run">Not scheduled</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Success Rate:</label>
+                        <span id="success-rate">N/A</span>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-actions mt-3 px-3">
+                    <button id="trigger-job" class="btn btn-sm btn-success w-100 mb-2">
+                        <i class="fas fa-play"></i> Trigger Now
+                    </button>
+                    <button id="edit-settings" class="btn btn-sm btn-outline-secondary w-100 mb-2">
+                        <i class="fas fa-cog"></i> Edit Settings
+                    </button>
+                    <button id="view-executions" class="btn btn-sm btn-outline-info w-100 mb-2">
+                        <i class="fas fa-history"></i> View Executions
+                    </button>
+                    <button id="view-versions" class="btn btn-sm btn-outline-primary w-100">
+                        <i class="fas fa-code-branch"></i> Version History
+                    </button>
+                </div>
+            </div>
+            <!-- END SIDE NAVIGATION -->
+
+            <div class="detail-page-content">
+                <!-- Code Editor Section -->
+                <div class="editor-container">
+                    <div class="editor-toolbar">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas fa-code"></i> Job Code
+                                <span id="version-badge" class="badge bg-secondary ms-2"></span>
+                            </h5>
+                            <div>
+                                <button id="toggle-help" class="btn btn-outline-info btn-sm me-2">
+                                    <i class="fas fa-question-circle"></i> Help
+                                </button>
+                                <button id="save-code" class="btn btn-primary btn-sm me-2">
+                                    <i class="fas fa-save"></i> Save <kbd>Ctrl+S</kbd>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Help Panel (collapsible) -->
+                    <div id="help-panel" class="alert alert-info" style="display: none; margin: 0; border-radius: 0;">
+                        <button type="button" class="btn-close float-end" id="close-help"></button>
+                        <h6><i class="fas fa-info-circle"></i> How to Write Cron Job Functions</h6>
+                        <p>Write only the <strong>method body</strong> for each function. The system wraps it in a secure class structure.</p>
+
+                        <strong>Function Bodies:</strong>
+                        <ul class="mb-2">
+                            <li><strong>execute()</strong> - Main method body (required) - your business logic goes here</li>
+                            <li><strong>setUp()</strong> - Initialization code (optional) - runs before execute()</li>
+                            <li><strong>tearDown()</strong> - Cleanup code (optional) - runs after execute(), even if it fails</li>
+                        </ul>
+
+                        <strong>Available Methods:</strong>
+                        <ul class="mb-2">
+                            <li><code>$this->log($message)</code> - Log messages (visible in execution output)</li>
+                            <li><code>$this->heartbeat()</code> - Extend execution lease for long-running jobs</li>
+                            <li><code>$this->getExecution()</code> - Get current execution metadata</li>
+                        </ul>
+
+                        <strong>Security:</strong>
+                        <ul class="mb-0">
+                            <li>✅ Only write method bodies (no class definitions allowed)</li>
+                            <li>✅ System generates secure class wrapper automatically</li>
+                            <li>✅ Per-function version control</li>
+                            <li>✅ PHP syntax validation before save</li>
+                        </ul>
+                    </div>
+
+                    <!-- Function Tabs -->
+                    <ul class="nav nav-tabs" id="function-tabs" style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-function="execute" href="#" style="font-weight: 500;">
+                                <i class="fas fa-play-circle"></i> execute() <span class="badge bg-danger">required</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-function="setUp" href="#" style="font-weight: 500;">
+                                <i class="fas fa-cog"></i> setUp() <span class="badge bg-secondary">optional</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-function="tearDown" href="#" style="font-weight: 500;">
+                                <i class="fas fa-broom"></i> tearDown() <span class="badge bg-secondary">optional</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Editors for each function -->
+                    <div id="code-editor-execute" class="code-editor-panel" style="height: calc(100vh - 240px); border: 1px solid #dee2e6;"></div>
+                    <div id="code-editor-setUp" class="code-editor-panel" style="height: calc(100vh - 240px); border: 1px solid #dee2e6; display: none;"></div>
+                    <div id="code-editor-tearDown" class="code-editor-panel" style="height: calc(100vh - 240px); border: 1px solid #dee2e6; display: none;"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="detail-page-footer">
+            <div class="footer-content d-flex justify-content-between align-items-center">
+                <div class="footer-versions">
+                    <div>Kyte Shipyard™ Version <span id="kyteShipyardVersion"></span></div>
+                    <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
+                </div>
+                <p class="footer-copyright mb-0">KeyQ © 2020-2026</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Job Settings Modal (Wizard Style) -->
+    <div class="modal fade" id="jobSettingsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-cog"></i> Edit Job Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="padding: 2rem;">
+                    <!-- Step 1: Basic Info -->
+                    <div class="mb-4">
+                        <label for="edit-job-name" class="form-label">Job Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-lg" id="edit-job-name">
+                    </div>
+                    <div class="mb-4">
+                        <label for="edit-job-description" class="form-label">Description (optional)</label>
+                        <textarea class="form-control" id="edit-job-description" rows="3"></textarea>
+                    </div>
+
+                    <!-- Step 2: Schedule -->
+                    <div class="mb-4">
+                        <label class="form-label">How often should this job run?</label>
+                        <div class="schedule-options">
+                            <div class="schedule-option" data-schedule="interval">
+                                <input type="radio" name="edit-schedule-type" id="edit-schedule-interval" value="interval">
+                                <label for="edit-schedule-interval">
+                                    <i class="fas fa-clock"></i>
+                                    <strong>Run on Interval</strong>
+                                    <small>Best for most jobs - run every X seconds/minutes/hours</small>
+                                </label>
+                            </div>
+                            <div class="schedule-option" data-schedule="daily">
+                                <input type="radio" name="edit-schedule-type" id="edit-schedule-daily" value="daily">
+                                <label for="edit-schedule-daily">
+                                    <i class="fas fa-calendar-day"></i>
+                                    <strong>Daily</strong>
+                                    <small>Run once every day at a specific time</small>
+                                </label>
+                            </div>
+                            <div class="schedule-option" data-schedule="weekly">
+                                <input type="radio" name="edit-schedule-type" id="edit-schedule-weekly" value="weekly">
+                                <label for="edit-schedule-weekly">
+                                    <i class="fas fa-calendar-week"></i>
+                                    <strong>Weekly</strong>
+                                    <small>Run once per week on a specific day and time</small>
+                                </label>
+                            </div>
+                            <div class="schedule-option" data-schedule="monthly">
+                                <input type="radio" name="edit-schedule-type" id="edit-schedule-monthly" value="monthly">
+                                <label for="edit-schedule-monthly">
+                                    <i class="fas fa-calendar"></i>
+                                    <strong>Monthly</strong>
+                                    <small>Run once per month on a specific day</small>
+                                </label>
+                            </div>
+                            <div class="schedule-option" data-schedule="cron">
+                                <input type="radio" name="edit-schedule-type" id="edit-schedule-cron" value="cron">
+                                <label for="edit-schedule-cron">
+                                    <i class="fas fa-code"></i>
+                                    <strong>Cron Expression</strong>
+                                    <small>Advanced - use custom cron syntax</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Schedule-specific fields -->
+                    <div class="schedule-fields mb-4">
+                        <!-- Interval -->
+                        <div class="edit-schedule-config" data-schedule="interval">
+                            <label for="edit-interval-value" class="form-label">Run every</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="number" class="form-control" id="edit-interval-value" value="1" min="1">
+                                </div>
+                                <div class="col-6">
+                                    <select class="form-select" id="edit-interval-unit">
+                                        <option value="60">Minutes</option>
+                                        <option value="3600">Hours</option>
+                                        <option value="86400">Days</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <small class="text-muted">Job will run every <span id="edit-interval-preview">1 hour</span></small>
+                        </div>
+
+                        <!-- Daily -->
+                        <div class="edit-schedule-config d-none" data-schedule="daily">
+                            <div class="mb-3">
+                                <label for="edit-daily-time" class="form-label">Time of Day</label>
+                                <input type="time" class="form-control" id="edit-daily-time">
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-daily-timezone" class="form-label">Timezone</label>
+                                <input type="text" class="form-control" id="edit-daily-timezone" placeholder="UTC">
+                                <small class="text-muted">Examples: UTC, America/New_York, Europe/London</small>
+                            </div>
+                        </div>
+
+                        <!-- Weekly -->
+                        <div class="edit-schedule-config d-none" data-schedule="weekly">
+                            <div class="mb-3">
+                                <label for="edit-weekly-day" class="form-label">Day of Week</label>
+                                <select class="form-select" id="edit-weekly-day">
+                                    <option value="1">Monday</option>
+                                    <option value="2">Tuesday</option>
+                                    <option value="3">Wednesday</option>
+                                    <option value="4">Thursday</option>
+                                    <option value="5">Friday</option>
+                                    <option value="6">Saturday</option>
+                                    <option value="0">Sunday</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-weekly-time" class="form-label">Time of Day</label>
+                                <input type="time" class="form-control" id="edit-weekly-time">
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-weekly-timezone" class="form-label">Timezone</label>
+                                <input type="text" class="form-control" id="edit-weekly-timezone" placeholder="UTC">
+                            </div>
+                        </div>
+
+                        <!-- Monthly -->
+                        <div class="edit-schedule-config d-none" data-schedule="monthly">
+                            <div class="mb-3">
+                                <label for="edit-monthly-day" class="form-label">Day of Month</label>
+                                <input type="number" class="form-control" id="edit-monthly-day" min="1" max="31">
+                                <small class="text-muted">Day 1-31 (if day doesn't exist in month, last day will be used)</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-monthly-time" class="form-label">Time of Day</label>
+                                <input type="time" class="form-control" id="edit-monthly-time">
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-monthly-timezone" class="form-label">Timezone</label>
+                                <input type="text" class="form-control" id="edit-monthly-timezone" placeholder="UTC">
+                            </div>
+                        </div>
+
+                        <!-- Cron -->
+                        <div class="edit-schedule-config d-none" data-schedule="cron">
+                            <div class="mb-3">
+                                <label for="edit-cron-expression" class="form-label">Cron Expression</label>
+                                <input type="text" class="form-control" id="edit-cron-expression" placeholder="0 2 * * *">
+                                <small class="text-muted">Example: 0 2 * * * (runs at 2:00 AM daily)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Settings -->
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="edit-job-timeout" class="form-label">Timeout (seconds)</label>
+                                <input type="number" class="form-control" id="edit-job-timeout" min="30" max="1800">
+                                <small class="text-muted">Maximum execution time before timeout</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="edit-job-enabled" class="form-label">Status</label>
+                                <select class="form-select" id="edit-job-enabled">
+                                    <option value="1">Enabled (will run on schedule)</option>
+                                    <option value="0">Disabled (paused)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="save-settings">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Execution History Modal -->
+    <div class="modal fade" id="executionHistoryModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-history"></i> Execution History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="execution-stats" class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-value" id="stat-total">0</div>
+                                <div class="stat-label">Total Executions</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card success">
+                                <div class="stat-value" id="stat-success">0</div>
+                                <div class="stat-label">Successful</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card danger">
+                                <div class="stat-value" id="stat-failed">0</div>
+                                <div class="stat-label">Failed</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card warning">
+                                <div class="stat-value" id="stat-timeout">0</div>
+                                <div class="stat-label">Timeouts</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="executions-table" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Scheduled</th>
+                                <th>Started</th>
+                                <th>Completed</th>
+                                <th>Duration</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="executions-tbody">
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Execution Detail Modal -->
+    <div class="modal fade" id="executionDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-info-circle"></i> Execution Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="execution-detail-content">
+                        <!-- Content populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Version History Modal -->
+    <div class="modal fade" id="versionHistoryModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-code-branch"></i> Version History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <table id="versions-table" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Version</th>
+                                <th>Date</th>
+                                <th>Author</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="versions-tbody">
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Diff Modal -->
+    <div class="modal fade" id="codeDiffModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-code"></i> Code Comparison</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="code-diff-container" style="height: 600px; border: 1px solid #dee2e6;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .stat-card {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .stat-card.success {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        .stat-card.danger {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+        .stat-card.warning {
+            border-color: #ffc107;
+            background: #fff3cd;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        .stat-label {
+            font-size: 0.875rem;
+            color: #718096;
+            margin-top: 0.5rem;
+        }
+
+        /* Make modal close buttons more visible */
+        .modal-header .btn-close {
+            opacity: 1;
+            width: 1.5rem;
+            height: 1.5rem;
+            background-size: 1.5rem;
+            filter: invert(0.3);
+            transition: all 0.3s ease;
+        }
+        .modal-header .btn-close:hover {
+            transform: scale(1.1);
+            filter: invert(0);
+        }
+        .modal-header .btn-close:focus {
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.25);
+            outline: none;
+        }
+
+        /* Schedule Options Styling - Match wizard exactly */
+        .schedule-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .schedule-option {
+            position: relative;
+        }
+
+        .schedule-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .schedule-option label {
+            display: block;
+            padding: 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .schedule-option label:hover {
+            border-color: #ff6b35;
+            background: #fff5f0;
+        }
+
+        .schedule-option input[type="radio"]:checked + label {
+            border-color: #ff6b35;
+            background: #fff5f0;
+        }
+
+        .schedule-option label i {
+            color: #ff6b35;
+            margin-right: 8px;
+            width: 20px;
+        }
+
+        .schedule-option label strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .schedule-option label small {
+            display: block;
+            color: #6c757d;
+        }
+
+        /* Prevent double asterisk from global CSS */
+        #jobSettingsModal label[for="edit-job-name"]::after {
+            content: '' !important;
+        }
+    </style>
+
+    <script>
+        // Navigation handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the application ID from localStorage
+            function getDashboardUrl() {
+                const appId = localStorage.getItem('currentAppId');
+                if (appId) {
+                    const dashboardRequest = btoa(JSON.stringify({'model': 'Application', 'idx': parseInt(appId)}));
+                    return '/app/dashboard/?request=' + encodeURIComponent(dashboardRequest);
+                }
+                return '/app/';
+            }
+
+            function getCronJobsListUrl() {
+                const appId = localStorage.getItem('currentAppId');
+                if (appId) {
+                    const listRequest = btoa(JSON.stringify({'model': 'Application', 'idx': parseInt(appId)}));
+                    return '/app/cron-jobs.html?request=' + encodeURIComponent(listRequest);
+                }
+                return '/app/cron-jobs.html';
+            }
+
+            // Back button handler
+            const backBtn = document.getElementById('back-to-cron-jobs');
+            if (backBtn) {
+                backBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = getCronJobsListUrl();
+                });
+            }
+
+            // App selector (dashboard link)
+            const appSelector = document.getElementById('app-selector');
+            if (appSelector) {
+                appSelector.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = getDashboardUrl();
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

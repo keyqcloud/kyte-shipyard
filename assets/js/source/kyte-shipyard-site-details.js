@@ -269,6 +269,8 @@ document.addEventListener('KyteInitialized', function(e) {
         _ks.get("KyteSite", "id", idx, [], function(r) {
             if (r.data[0]) {
                 app = r.data[0].application;
+                // Store application ID for navigation
+                localStorage.setItem('currentAppId', app.id);
                 currentSiteData = r.data[0];
                 // if site is not active display a message
                 if (currentSiteData.status != 'active') {

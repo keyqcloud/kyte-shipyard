@@ -61,34 +61,62 @@
     <!--  -->
 
     <div id="wrapper">
-        <!-- START APPLICATION NAV -->
-        <nav id="application-nav" class="navbar navbar-dark bg-dark navbar-expand-sm">
-            <a href="/app/" class="navbar-brand">Kyte Shipyard<sup>™</sup><img src="/assets/images/kyte_shipyard_light.png"></a>
-            <button data-bs-toggle="collapse" class="navbar-toggler" type="button" data-bs-target="#application-navcol" aria-controls="#application-navcol" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="application-navcol">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link me-2 text-light" href="/app/"><span>Projects</span></a></li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle me-2 text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"><span>Account</span></a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item me-2" href="/app/settings.html"><i class="fas fa-cog me-2"></i><span>Settings</span></a></li>
-                            <li><a class="dropdown-item me-2 logout" href="#"><i class="fas fa-power-off me-2"></i><span>Logout</span></a></li>
-                        </ul>
-                    </li>
-                </ul>
+        <!-- START ACCOUNT NAV -->
+        <nav id="application-nav" class="navbar navbar-dark navbar-expand-sm">
+            <div class="container-fluid">
+                <!-- Brand -->
+                <a href="/app/" class="navbar-brand">
+                    Kyte Shipyard<sup>™</sup>
+                    <img src="/assets/images/kyte_shipyard_light.png" alt="Kyte Shipyard">
+                </a>
+
+                <button data-bs-toggle="collapse" class="navbar-toggler" type="button" data-bs-target="#application-navcol" aria-controls="#application-navcol" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="application-navcol">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link me-2 text-light" href="/app/">
+                                <i class="fas fa-rocket me-2"></i>Projects
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link me-2 text-light" href="/app/aws.html">
+                                <i class="fab fa-aws me-2"></i>AWS Keys
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link me-2 text-light" href="/app/keys.html">
+                                <i class="fas fa-key me-2"></i>API Keys
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link me-2 text-light" href="/app/system-log.html">
+                                <i class="fas fa-list-alt me-2"></i>System Log
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle me-2 text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-2"></i>Account
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i>Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
-        <!-- END APPLICATION NAV -->
-        
-        <!-- START NAV -->
-        <nav id="mainnav" class="navbar navbar-dark bg-dark navbar-expand-lg"></nav>
-        <!-- END NAV -->
+        <!-- END ACCOUNT NAV -->
 
-        <div class="container container-flex px-5">
+        <!-- Main Content -->
+        <div class="main-content">
+                <div class="container container-flex px-5">
             <div class="d-flex justify-content-between mt-4">
                 <h2 class="section-heading">Third Party API Credentials</h2>
                 <div>
@@ -100,7 +128,7 @@
                 <div class="mt-2">
                     <table id="aws-table" class="table table-striped w-100"></table>
                 </div>
-            </div>
+                </div>
         </div>
     </div>
 
@@ -113,7 +141,7 @@
                 <div>Kyte Shipyard&trade; Version <span id="kyteShipyardVersion"></span></div>
                 <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
             </div>
-            <p class="text-light" style="font-weight: 100;">KeyQ © 2020-2025</p>
+            <p class="text-light" style="font-weight: 100;">KeyQ © 2020-2026</p>
         </div>
     </footer>
 </body>

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/assets/css/kyte-form.css">
+    <link rel="stylesheet" href="/assets/css/kyte-shipyard-common.css?v=20251231">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;500;700&display=swap" rel="stylesheet">
@@ -45,306 +46,83 @@
         })();
     </script>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        /* Primary Navigation (Application Level) */
-        #application-nav {
-            background: linear-gradient(135deg, #2d3748, #4a5568) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 0.75rem 0;
-            z-index: 1030;
-        }
-
-        .navbar-brand {
-            font-weight: 700 !important;
-            font-size: 1.4rem !important;
-            color: white !important;
-            text-decoration: none !important;
-            display: flex !important;
-            align-items: center !important;
-            margin-left: 0.5em;
-        }
-
-        .navbar-brand img {
-            height: 24px;
-            margin-left: 0.5rem;
-        }
-
-        #application-nav .nav-link {
-            font-weight: 500 !important;
-            transition: all 0.3s ease !important;
-            border-radius: 8px !important;
-            margin: 0 4px !important;
-            padding: 8px 16px !important;
-        }
-
-        #application-nav .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1) !important;
-            transform: translateY(-1px);
-        }
-
-        /* Secondary Navigation (Project Level) */
-        #mainnav {
-            background: linear-gradient(135deg, #4a5568, #718096) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            min-height: 60px;
-            z-index: 1020;
-        }
-
-        #mainnav .nav-link {
-            color: rgba(255, 255, 255, 0.9) !important;
-            font-weight: 500 !important;
-            padding: 12px 20px !important;
-            margin: 0 4px !important;
-            border-radius: 8px !important;
-            transition: all 0.3s ease !important;
-            display: flex !important;
-            align-items: center !important;
-            gap: 8px !important;
-        }
-
-        #mainnav .nav-link:hover {
-            background: rgba(255, 255, 255, 0.15) !important;
-            color: white !important;
-            transform: translateY(-1px);
-        }
-
-        #mainnav .nav-link.active {
-            background: rgba(255, 255, 255, 0.2) !important;
-            color: white !important;
-            font-weight: 600 !important;
-        }
-
-        /* Main Content Area */
-        #wrapper {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .page-header {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .page-header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin: 0;
-        }
-
-        .page-header p {
-            color: #718096;
-            margin: 0.5rem 0 0 0;
-        }
-
-        .table-card {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Status Badges */
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-enabled {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-disabled {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .status-dlq {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        /* Schedule Type Badges */
-        .schedule-badge {
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            background: #e2e8f0;
-            color: #4a5568;
-        }
-
-        /* Action Buttons */
-        .action-btn {
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin: 0 2px;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-trigger {
-            background: #4299e1;
-            color: white;
-        }
-
-        .btn-trigger:hover {
-            background: #3182ce;
-        }
-
-        .btn-recover {
-            background: #48bb78;
-            color: white;
-        }
-
-        .btn-recover:hover {
-            background: #38a169;
-        }
-
-        .btn-view {
-            background: #718096;
-            color: white;
-        }
-
-        .btn-view:hover {
-            background: #4a5568;
-        }
-
-        /* DataTables Styling */
-        .dataTables_wrapper .dataTables_filter input {
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            padding: 8px 12px;
-        }
-
-        .dataTables_wrapper .dataTables_length select {
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            padding: 4px 8px;
-        }
-
-        table.dataTable {
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        table.dataTable thead th {
-            background: #f7fafc;
-            color: #2d3748;
-            font-weight: 600;
-            border-bottom: 2px solid #e2e8f0;
-            padding: 12px;
-        }
-
-        table.dataTable tbody tr:hover {
-            background: #f7fafc;
-        }
-
-        table.dataTable tbody td {
-            padding: 12px;
-            vertical-align: middle;
-        }
-
-        /* Modal Styling */
-        .modal-header {
-            background: linear-gradient(135deg, #4a5568, #718096);
-            color: white;
-            border-radius: 16px 16px 0 0;
-        }
-
-        .modal-header .btn-close {
-            filter: brightness(0) invert(1);
-        }
-
-        .modal-content {
-            border-radius: 16px;
-            border: none;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-body {
-            padding: 2rem;
-        }
-
-        /* Code Editor Styling */
-        .code-editor {
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 13px;
-            line-height: 1.5;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            min-height: 300px;
-            padding: 12px;
-            background: #f7fafc;
-        }
-
-        /* Success Rate Colors */
-        .success-high { color: #38a169; font-weight: 600; }
-        .success-medium { color: #d69e2e; font-weight: 600; }
-        .success-low { color: #e53e3e; font-weight: 600; }
-    </style>
 </head>
 
 <body>
+    <!-- Page loading modal.  Once session is validated, the loading modal will close. -->
+    <div id="pageLoaderModal" class="modal white" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-sm h-100 d-flex">
+            <div class="mx-auto align-self-center" style="width: 48px">
+                <div class="spinner-wrapper text-center fa-6x"><span class="fas fa-sync fa-spin"></span></div>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+
     <div id="wrapper">
-        <!-- Application Navigation -->
-        <nav id="application-nav" class="navbar navbar-dark navbar-expand-md sticky-top">
+        <!-- START UNIFIED TOP NAV -->
+        <nav id="application-nav" class="navbar navbar-dark navbar-expand-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/">KYTE<img alt="KeyQ" src="/assets/img/keyq%20cloud.png"></a>
-                <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-                <div id="navcol-1" class="collapse navbar-collapse">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="/app/">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
-                        <li class="nav-item"><a class="nav-link" id="logoutLink">Logout</a></li>
-                    </ul>
-                </div>
+                <!-- Sidebar Toggle (Mobile) -->
+                <button id="sidebar-toggle" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Brand -->
+                <a href="/app/" class="navbar-brand">
+                    Kyte Shipyard<sup>™</sup>
+                    <img src="/assets/images/kyte_shipyard_light.png" alt="Kyte Shipyard">
+                </a>
+
+                <!-- Center: App Selector (clickable to dashboard) -->
+                <a href="#" id="app-selector" class="mx-auto">
+                    <i class="fas fa-rocket"></i>
+                    <span id="app-name">Application Dashboard</span>
+                </a>
+
+                <!-- Right: Account Dropdown -->
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-2"></i>Account
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </nav>
+        <!-- END UNIFIED TOP NAV -->
 
-        <!-- Project Navigation -->
-        <nav id="mainnav" class="navbar navbar-dark navbar-expand-md sticky-top"></nav>
+        <main>
+            <!-- BEGIN SIDE NAVIGATION -->
+            <div class="detail-page-sidebar">
+                <!-- Back Button -->
+                <div class="sidebar-header">
+                    <a href="#" id="back-to-dashboard" class="sidebar-back-button">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Dashboard</span>
+                    </a>
+                </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
+                <!-- Page Header -->
+                <div class="sidebar-model-header">
+                    <h3 class="model-title">
+                        <i class="fas fa-clock"></i>
+                        <span>Cron Jobs</span>
+                    </h3>
+                    <div class="model-info">
+                        <i class="fas fa-tasks"></i>
+                        <span>Scheduled Background Jobs</span>
+                    </div>
+                </div>
+            </div>
+            <!-- END SIDE NAVIGATION -->
+
+            <div class="detail-page-content">
             <div class="page-header">
                 <h1><i class="fas fa-clock"></i> Cron Jobs</h1>
                 <p>Manage scheduled background jobs with automatic retry, version control, and monitoring</p>
@@ -358,55 +136,408 @@
                     </button>
                 </div>
 
-                <table id="cronJobs-table" class="display" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Schedule</th>
-                            <th>Status</th>
-                            <th>Success Rate</th>
-                            <th>Next Run</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <table id="cronJobs-table" class="display" style="width:100%"></table>
             </div>
-        </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="detail-page-footer">
+            <div class="footer-content d-flex justify-content-between align-items-center">
+                <div class="footer-versions">
+                    <div>Kyte Shipyard™ Version <span id="kyteShipyardVersion"></span></div>
+                    <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
+                </div>
+                <p class="footer-copyright mb-0">KeyQ © 2020-2026</p>
+            </div>
+        </footer>
     </div>
 
-    <!-- Create/Edit Modal -->
-    <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
+    <!-- Cron Job Wizard Modal -->
+    <div class="modal fade" id="cronJobWizard" tabindex="-1" aria-labelledby="cronJobWizardLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalFormLabel">Cron Job</h5>
+                    <h5 class="modal-title" id="cronJobWizardLabel">Create Cron Job</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <!-- Form will be generated by KyteForm -->
+                <div class="modal-body" style="padding: 2rem;">
+                    <!-- Progress Steps -->
+                    <div class="wizard-steps mb-5">
+                        <div class="step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Basic Info</div>
+                        </div>
+                        <div class="step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Schedule</div>
+                        </div>
+                        <div class="step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Settings</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Basic Info -->
+                    <div class="wizard-step-content" data-step="1">
+                        <div class="mb-4">
+                            <label for="job-name" class="form-label">Job Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-lg" id="job-name" placeholder="Daily Report Generator">
+                        </div>
+                        <div class="mb-4">
+                            <label for="job-description" class="form-label">Description (optional)</label>
+                            <textarea class="form-control" id="job-description" rows="4" placeholder="Brief description of what this job does"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Schedule -->
+                    <div class="wizard-step-content d-none" data-step="2">
+                        <div class="mb-4">
+                            <label class="form-label">How often should this job run?</label>
+                            <div class="schedule-options">
+                                <div class="schedule-option" data-schedule="interval">
+                                    <input type="radio" name="schedule-type" id="schedule-interval" value="interval" checked>
+                                    <label for="schedule-interval">
+                                        <i class="fas fa-clock"></i>
+                                        <strong>Run on Interval</strong>
+                                        <small>Best for most jobs - run every X seconds/minutes/hours</small>
+                                    </label>
+                                </div>
+                                <div class="schedule-option" data-schedule="daily">
+                                    <input type="radio" name="schedule-type" id="schedule-daily" value="daily">
+                                    <label for="schedule-daily">
+                                        <i class="fas fa-calendar-day"></i>
+                                        <strong>Daily</strong>
+                                        <small>Run once every day at a specific time</small>
+                                    </label>
+                                </div>
+                                <div class="schedule-option" data-schedule="weekly">
+                                    <input type="radio" name="schedule-type" id="schedule-weekly" value="weekly">
+                                    <label for="schedule-weekly">
+                                        <i class="fas fa-calendar-week"></i>
+                                        <strong>Weekly</strong>
+                                        <small>Run once per week on a specific day and time</small>
+                                    </label>
+                                </div>
+                                <div class="schedule-option" data-schedule="monthly">
+                                    <input type="radio" name="schedule-type" id="schedule-monthly" value="monthly">
+                                    <label for="schedule-monthly">
+                                        <i class="fas fa-calendar"></i>
+                                        <strong>Monthly</strong>
+                                        <small>Run once per month on a specific day</small>
+                                    </label>
+                                </div>
+                                <div class="schedule-option" data-schedule="cron">
+                                    <input type="radio" name="schedule-type" id="schedule-cron" value="cron">
+                                    <label for="schedule-cron">
+                                        <i class="fas fa-code"></i>
+                                        <strong>Cron Expression</strong>
+                                        <small>Advanced - use custom cron syntax</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Schedule-specific fields -->
+                        <div class="schedule-fields">
+                            <!-- Interval -->
+                            <div class="schedule-config" data-schedule="interval">
+                                <label for="interval-value" class="form-label">Run every</label>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="number" class="form-control" id="interval-value" value="1" min="1">
+                                    </div>
+                                    <div class="col-6">
+                                        <select class="form-select" id="interval-unit">
+                                            <option value="60">Minutes</option>
+                                            <option value="3600" selected>Hours</option>
+                                            <option value="86400">Days</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <small class="text-muted">Job will run every <span id="interval-preview">1 hour</span></small>
+                            </div>
+
+                            <!-- Daily -->
+                            <div class="schedule-config d-none" data-schedule="daily">
+                                <div class="mb-3">
+                                    <label for="daily-time" class="form-label">Time of Day</label>
+                                    <input type="time" class="form-control" id="daily-time" value="02:00">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="daily-timezone" class="form-label">Timezone</label>
+                                    <input type="text" class="form-control" id="daily-timezone" value="UTC" placeholder="UTC">
+                                    <small class="text-muted">Examples: UTC, America/New_York, Europe/London</small>
+                                </div>
+                            </div>
+
+                            <!-- Weekly -->
+                            <div class="schedule-config d-none" data-schedule="weekly">
+                                <div class="mb-3">
+                                    <label for="weekly-day" class="form-label">Day of Week</label>
+                                    <select class="form-select" id="weekly-day">
+                                        <option value="1">Monday</option>
+                                        <option value="2">Tuesday</option>
+                                        <option value="3">Wednesday</option>
+                                        <option value="4">Thursday</option>
+                                        <option value="5">Friday</option>
+                                        <option value="6">Saturday</option>
+                                        <option value="0">Sunday</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="weekly-time" class="form-label">Time of Day</label>
+                                    <input type="time" class="form-control" id="weekly-time" value="02:00">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="weekly-timezone" class="form-label">Timezone</label>
+                                    <input type="text" class="form-control" id="weekly-timezone" value="UTC" placeholder="UTC">
+                                </div>
+                            </div>
+
+                            <!-- Monthly -->
+                            <div class="schedule-config d-none" data-schedule="monthly">
+                                <div class="mb-3">
+                                    <label for="monthly-day" class="form-label">Day of Month</label>
+                                    <input type="number" class="form-control" id="monthly-day" value="1" min="1" max="31">
+                                    <small class="text-muted">Day 1-31 (if day doesn't exist in month, last day will be used)</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="monthly-time" class="form-label">Time of Day</label>
+                                    <input type="time" class="form-control" id="monthly-time" value="02:00">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="monthly-timezone" class="form-label">Timezone</label>
+                                    <input type="text" class="form-control" id="monthly-timezone" value="UTC" placeholder="UTC">
+                                </div>
+                            </div>
+
+                            <!-- Cron -->
+                            <div class="schedule-config d-none" data-schedule="cron">
+                                <div class="mb-3">
+                                    <label for="cron-expression" class="form-label">Cron Expression</label>
+                                    <input type="text" class="form-control" id="cron-expression" placeholder="0 2 * * *">
+                                    <small class="text-muted">Example: 0 2 * * * (runs at 2:00 AM daily)</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Settings -->
+                    <div class="wizard-step-content d-none" data-step="3">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="job-timeout" class="form-label">Timeout (seconds)</label>
+                                    <input type="number" class="form-control" id="job-timeout" value="300" min="1">
+                                    <small class="text-muted">Maximum execution time before timeout</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="job-enabled" class="form-label">Initial Status</label>
+                                    <select class="form-select" id="job-enabled">
+                                        <option value="1" selected>Enabled (will run on schedule)</option>
+                                        <option value="0">Disabled (paused)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Summary -->
+                        <div class="alert alert-info mt-3">
+                            <h6><i class="fas fa-info-circle"></i> Summary</h6>
+                            <p class="mb-1"><strong>Job:</strong> <span id="summary-name">-</span></p>
+                            <p class="mb-0"><strong>Schedule:</strong> <span id="summary-schedule">-</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding: 1rem 2rem;">
+                    <button type="button" class="btn btn-secondary" id="wizard-prev">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button type="button" class="btn btn-primary" id="wizard-next">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button type="button" class="btn btn-success d-none" id="wizard-create">
+                        <i class="fas fa-check"></i> Create Job
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Page Loader Modal -->
-    <div class="modal fade" id="pageLoaderModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg">
-                <div class="modal-body text-center py-5">
-                    <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <h5>Loading Cron Jobs...</h5>
-                </div>
-            </div>
-        </div>
-    </div>
+    <style>
+        #cronJobWizard .modal-dialog {
+            max-width: 800px;
+        }
+
+        /* Override kyte-form.css automatic asterisk for wizard modal */
+        #cronJobWizard label::after {
+            content: none !important;
+        }
+
+        .wizard-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding: 0 2rem;
+        }
+
+        .wizard-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: #dee2e6;
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #dee2e6;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .step.active .step-number {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #28a745;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .step.active .step-label {
+            color: #ff6b35;
+            font-weight: 600;
+        }
+
+        .schedule-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .schedule-option {
+            position: relative;
+        }
+
+        .schedule-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .schedule-option label {
+            display: block;
+            padding: 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .schedule-option label:hover {
+            border-color: #ff6b35;
+            background: #fff5f0;
+        }
+
+        .schedule-option input[type="radio"]:checked + label {
+            border-color: #ff6b35;
+            background: #fff5f0;
+        }
+
+        .schedule-option label i {
+            color: #ff6b35;
+            margin-right: 8px;
+            width: 20px;
+        }
+
+        .schedule-option label strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .schedule-option label small {
+            display: block;
+            color: #6c757d;
+        }
+
+        .schedule-config {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .wizard-step-content {
+            min-height: 300px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control-lg {
+            font-size: 1.1rem;
+        }
+    </style>
 
     <script>
-        $(document).ready(function() {
-            $('#pageLoaderModal').modal('show');
+        // Navigation handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the application ID from localStorage
+            function getDashboardUrl() {
+                const appId = localStorage.getItem('currentAppId');
+                if (appId) {
+                    const dashboardRequest = btoa(JSON.stringify({'model': 'Application', 'idx': parseInt(appId)}));
+                    return '/app/dashboard/?request=' + encodeURIComponent(dashboardRequest);
+                }
+                return '/app/';
+            }
+
+            // Back button handler
+            const backBtn = document.getElementById('back-to-dashboard');
+            if (backBtn) {
+                backBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = getDashboardUrl();
+                });
+            }
+
+            // App selector (dashboard link)
+            const appSelector = document.getElementById('app-selector');
+            if (appSelector) {
+                appSelector.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = getDashboardUrl();
+                });
+            }
         });
     </script>
 </body>

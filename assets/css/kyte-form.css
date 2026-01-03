@@ -61,20 +61,21 @@
 }
 
 .close, .btn-close {
-    background: none !important;
     border: none !important;
-    color: white !important;
     font-size: 1.5rem !important;
-    opacity: 0.8 !important;
+    opacity: 1 !important;
     transition: all 0.3s ease !important;
     position: relative !important;
     z-index: 1 !important;
+    width: 1.5em !important;
+    height: 1.5em !important;
+    /* Bootstrap 5 btn-close uses background-image, so we need to filter it to white */
+    filter: brightness(0) invert(1) !important;
 }
 
 .close:hover, .btn-close:hover {
-    opacity: 1 !important;
-    transform: rotate(90deg) !important;
-    color: white !important;
+    opacity: 0.75 !important;
+    transform: rotate(90deg) scale(1.1) !important;
 }
 
 /* Form container styling */

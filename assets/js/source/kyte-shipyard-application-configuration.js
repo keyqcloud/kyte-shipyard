@@ -18,12 +18,20 @@ document.addEventListener('KyteInitialized', function(e) {
 
     // Store _ks globally so it can be accessed from modal onclick handlers
     globalKyteSession = _ks;
-    
+
     $('#pageLoaderModal').modal('show');
-    
+
     if (_ks.isSession()) {
+        // Initialize application sidebar navigation
+        if (typeof initAppSidebar === 'function') {
+            initAppSidebar();
+        }
+
         let idx = _ks.getPageRequest();
         idx = idx.idx;
+
+        // Store application ID for navigation
+        localStorage.setItem('currentAppId', idx);
 
         // Environment Variables form fields
         let fldsEnvVars = [
