@@ -151,8 +151,19 @@ function getData(_ks, idx, model, appId) {
         var tblData = new KyteTable(_ks, $("#data-table"), {'name':"AppModelWrapper",'field':null,'value':null}, modelColDef, true, [0,"asc"], true, true);
         tblData.httpHeaders = [{'name':'x-kyte-app-id','value':appId},{'name':'x-kyte-app-model','value':model}];
         tblData.init();
+
+        // Update records count in sidebar
+        $('#data-table').on('draw.dt', function() {
+            var info = $(this).DataTable().page.info();
+            $('#records-count').text(info.recordsTotal);
+        });
+
         // init form
-        var modelDataForm = new KyteForm(_ks, $("#modalDataForm"), 'AppModelWrapper', null, modelFormDef, model, tblData, true, $("#newData"));
+        const dataModalTitle = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.data_title') : 'Model Data';
+        const submitText = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.submit') : 'Submit';
+
+        var modelDataForm = new KyteForm(_ks, $("#modalDataForm"), 'AppModelWrapper', null, modelFormDef, dataModalTitle, tblData, true, $("#newData"));
+        modelDataForm.submitButton = submitText;
         modelDataForm.httpHeaders = [{'name':'x-kyte-app-id','value':appId},{'name':'x-kyte-app-model','value':model}];
         modelDataForm.init();
         tblData.bindEdit(modelDataForm);
@@ -395,7 +406,12 @@ function download_code(model, code, ext) {
 
 function download_data(_ks, format) {
     $('#pageLoaderModal').modal('show');
-    _ks.get('AppModelWrapper', appId, model, [], function(r) {
+    // Use httpHeaders to pass app context instead of URL parameters
+    const headers = [
+        {'name':'x-kyte-app-id','value':appId},
+        {'name':'x-kyte-app-model','value':model}
+    ];
+    _ks.get('AppModelWrapper', null, null, headers, function(r) {
         if(r.data.length > 0) {
 
             if (format == 'json') {
@@ -466,17 +482,22 @@ function download_data(_ks, format) {
 
 document.addEventListener('KyteInitialized', function(e) {
     let _ks = e.detail._ks;
-    let sidenav = new KyteSidenav("#sidenav", subnavModel, "#Attributes");
-    sidenav.create();
-    sidenav.bind();
+
+    // Wait for i18n to be ready before creating sidebar
+    function waitForI18n(callback) {
+        if (window.kyteI18n && window.kyteI18n.initialized) {
+            callback();
+        } else {
+            setTimeout(() => waitForI18n(callback), 50);
+        }
+    }
+
+    // NOTE: Sidebar navigation removed - now using Bootstrap tabs in HTML
+    // Bootstrap tabs handle show/hide automatically via data-bs-toggle="tab" attributes
+    // Translations are handled in HTML via data-i18n attributes
 
     $('#pageLoaderModal').modal('show');
 
-    let hash = location.hash;
-    hash = hash == "" ? '#Attributes' : hash;
-    $(hash).removeClass('d-none');
-    $(hash+'-nav-link').addClass('active');
-    
     if (_ks.isSession()) {
         // get url param
         let idx = _ks.getPageRequest();
@@ -492,7 +513,7 @@ document.addEventListener('KyteInitialized', function(e) {
         _ks.get("DataModel", "id", modelIdx, [], function(r) {
             if (r.data[0]) {
                 model = r.data[0].name;
-                $("#model-name").html(model);
+                $("#model-name span").text(model);
                 appId = r.data[0].application.id;
                 // Store application ID for navigation
                 localStorage.setItem('currentAppId', appId);
@@ -505,56 +526,60 @@ document.addEventListener('KyteInitialized', function(e) {
                 let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${r.data[0].application.name}`);
                 navbar.create();
 
+                // Get i18n instance for translations
+                const i18n = window.kyteI18n;
+                const t = (key, fallback) => i18n ? i18n.t(key) : fallback;
+
                 elements = [
                     [
                         {
                             'field':'name',
                             'type':'text',
-                            'label':'Name',
+                            'label': t('ui.model_detail.form.name', 'Name'),
                             'required':true
                         },
                         {
                             'field':'type',
                             'type':'select',
-                            'label':'Type',
+                            'label': t('ui.model_detail.form.type', 'Type'),
                             'required':true,
                             'option': {
                                 'ajax': false,
                                 'data': {
-                                    's': 'String',
-                                    't': 'Text',
-                                    'tt': 'TinyText',
-                                    'mt': 'MediumText',
-                                    'lt': 'LongText',
-                                    'b': 'Blob',
-                                    'tb': 'TinyBlob',
-                                    'mb': 'MediumBlob',
-                                    'lb': 'LongBlob',
-                                    'date': 'Date',
-                                    'i': 'Integer',
-                                    'bi': 'BigInt',
+                                    's': t('ui.model_detail.form.type_string', 'String'),
+                                    't': t('ui.model_detail.form.type_text', 'Text'),
+                                    'tt': t('ui.model_detail.form.type_tinytext', 'TinyText'),
+                                    'mt': t('ui.model_detail.form.type_mediumtext', 'MediumText'),
+                                    'lt': t('ui.model_detail.form.type_longtext', 'LongText'),
+                                    'b': t('ui.model_detail.form.type_blob', 'Blob'),
+                                    'tb': t('ui.model_detail.form.type_tinyblob', 'TinyBlob'),
+                                    'mb': t('ui.model_detail.form.type_mediumblob', 'MediumBlob'),
+                                    'lb': t('ui.model_detail.form.type_longblob', 'LongBlob'),
+                                    'date': t('ui.model_detail.form.type_date', 'Date'),
+                                    'i': t('ui.model_detail.form.type_integer', 'Integer'),
+                                    'bi': t('ui.model_detail.form.type_bigint', 'BigInt'),
                                 }
                             }
                         },
                         {
                             'field':'required',
                             'type':'select',
-                            'label':'Required',
+                            'label': t('ui.model_detail.form.required', 'Required'),
                             'required':true,
                             'option': {
                                 'ajax': false,
                                 'data': {
-                                    1: 'Yes',
-                                    0: 'No'
+                                    1: t('ui.model_detail.form.yes', 'Yes'),
+                                    0: t('ui.model_detail.form.no', 'No')
                                 }
                             }
                         },
                         {
                             'field': 'foreignKeyModel',
                             'type': 'select',
-                            'label': 'FK Model',
+                            'label': t('ui.model_detail.form.fk_model', 'FK Model'),
                             'required': false,
-                            'placeholder': 'N/A',
+                            'placeholder': t('ui.model_detail.form.na', 'N/A'),
                             'option': {
                                 'ajax': true,
                                 'data_model_name': 'DataModel',
@@ -562,7 +587,6 @@ document.addEventListener('KyteInitialized', function(e) {
                                 'data_model_value': r.data[0].application.id,
                                 'data_model_attributes': ['name'],
                                 'data_model_default_field': 'id',
-                                // 'data_model_default_value': 1,
                             }
                         }
                     ],
@@ -570,53 +594,53 @@ document.addEventListener('KyteInitialized', function(e) {
                         {
                             'field':'size',
                             'type':'text',
-                            'label':'Size',
+                            'label': t('ui.model_detail.form.size', 'Size'),
                             'required':false,
                         },
                         {
                             'field':'unsigned',
                             'type':'select',
-                            'label':'Unsigned',
+                            'label': t('ui.model_detail.form.unsigned', 'Unsigned'),
                             'required':false,
                             'option': {
                                 'ajax': false,
                                 'data': {
-                                    "":"n/a",
-                                    1: 'Yes',
-                                    0: 'No'
+                                    "": t('ui.model_detail.form.na', 'n/a'),
+                                    1: t('ui.model_detail.form.yes', 'Yes'),
+                                    0: t('ui.model_detail.form.no', 'No')
                                 }
                             }
                         },
                         {
                             'field':'protected',
                             'type':'select',
-                            'label':'Protected',
+                            'label': t('ui.model_detail.form.protected', 'Protected'),
                             'required':false,
                             'option': {
                                 'ajax': false,
                                 'data': {
-                                    0: 'No',
-                                    1: 'Yes'
+                                    0: t('ui.model_detail.form.no', 'No'),
+                                    1: t('ui.model_detail.form.yes', 'Yes')
                                 }
                             }
                         },
                         {
                             'field':'password',
                             'type':'select',
-                            'label':'Password',
+                            'label': t('ui.model_detail.form.password', 'Password'),
                             'required':false,
                             'option': {
                                 'ajax': false,
                                 'data': {
-                                    0: 'No',
-                                    1: 'Yes'
+                                    0: t('ui.model_detail.form.no', 'No'),
+                                    1: t('ui.model_detail.form.yes', 'Yes')
                                 }
                             }
                         },
                         {
                             'field':'defaults',
                             'type':'text',
-                            'label':'Default',
+                            'label': t('ui.model_detail.form.default', 'Default'),
                             'required':false
                         }
                     ],
@@ -624,7 +648,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         {
                             'field':'description',
                             'type':'text',
-                            'label':'Description',
+                            'label': t('ui.model_detail.form.description', 'Description'),
                             'required':false
                         }
                     ]
@@ -633,7 +657,19 @@ document.addEventListener('KyteInitialized', function(e) {
                 // attribute table and form
                 var tblAttributes = new KyteTable(_ks, $("#attributes-table"), {'name':"ModelAttribute",'field':'dataModel','value':modelIdx}, colDefAttributes, true, [0,"asc"], true, true);
                 tblAttributes.init();
-                var modalForm = new KyteForm(_ks, $("#modalForm"), 'ModelAttribute', hidden, elements, 'Model Attribute', tblAttributes, true, $("#newAttribute"));
+
+                // Update attributes count in sidebar
+                $('#attributes-table').on('draw.dt', function() {
+                    var info = $(this).DataTable().page.info();
+                    $('#attributes-count').text(info.recordsTotal);
+                });
+
+                // Get translated modal title
+                const attributeModalTitle = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.attribute_title') : 'Model Attribute';
+                const submitText = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.submit') : 'Submit';
+
+                var modalForm = new KyteForm(_ks, $("#modalForm"), 'ModelAttribute', hidden, elements, attributeModalTitle, tblAttributes, true, $("#newAttribute"));
+                modalForm.submitButton = submitText;
                 modalForm.init();
                 tblAttributes.bindEdit(modalForm);
 
@@ -643,7 +679,7 @@ document.addEventListener('KyteInitialized', function(e) {
                     {
                         'field':'name',
                         'type':'text',
-                        'label':'Name',
+                        'label': t('ui.model_detail.form.name', 'Name'),
                         'required':true
                     }
                 ],
@@ -651,7 +687,7 @@ document.addEventListener('KyteInitialized', function(e) {
                     {
                         'field':'description',
                         'type':'textarea',
-                        'label':'Description',
+                        'label': t('ui.model_detail.form.description', 'Description'),
                         'required':false
                     }
                 ]
@@ -670,7 +706,19 @@ document.addEventListener('KyteInitialized', function(e) {
             // controller table and form
             var tblController = new KyteTable(_ks, $("#controllers-table"), {'name':"Controller",'field':"dataModel",'value':modelIdx}, colDefControllers, true, [0,"asc"], true, true, 'id', '/app/controller/');
             tblController.init();
-            var modalFormController = new KyteForm(_ks, $("#modalFormController"), 'Controller', hiddenElementsController, elementsController, 'Controller', tblController, true, $("#newController"));
+
+            // Update controllers count in sidebar
+            $('#controllers-table').on('draw.dt', function() {
+                var info = $(this).DataTable().page.info();
+                $('#controllers-count').text(info.recordsTotal);
+            });
+
+            // Get translated modal title
+            const controllerModalTitle = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.controller_title') : 'Controller';
+            const controllerSubmitText = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.submit') : 'Submit';
+
+            var modalFormController = new KyteForm(_ks, $("#modalFormController"), 'Controller', hiddenElementsController, elementsController, controllerModalTitle, tblController, true, $("#newController"));
+            modalFormController.submitButton = controllerSubmitText;
             modalFormController.init();
             modalFormController.success = function(r) {
                 if (r.data[0]) {
@@ -681,7 +729,7 @@ document.addEventListener('KyteInitialized', function(e) {
             }
             tblController.bindEdit(modalFormController);
             } else {
-                $("#model-name").html("Undefined");
+                $("#model-name span").text("Undefined");
             }
             $('#pageLoaderModal').modal('hide');
         });

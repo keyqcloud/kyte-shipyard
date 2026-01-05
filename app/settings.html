@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/assets/css/kyte-form.css">
     <link rel="stylesheet" href="/assets/css/kyte-shipyard-common.css">
+    <link rel="stylesheet" href="/assets/css/kyte-language-selector.css">
     <!--  -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +23,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
-    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
     <script>
         // Auto-detect localhost and load non-obfuscated source files for development
         (function() {
@@ -32,7 +46,9 @@
             const scripts = [
                 'kyte-shipyard.js',
                 'navigation.js',
-                'kyte-shipyard-tables.js'
+                'kyte-shipyard-tables.js',
+                'kyte-i18n.js',
+                'kyte-language-selector.js'
             ];
 
             scripts.forEach(function(script) {
@@ -42,9 +58,12 @@
             if (isLocalhost) {
                 console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
             }
+
+            // Load settings.js from appropriate directory
+            const settingsPath = isLocalhost ? '/assets/js/source/kyte-shipyard-settings.js' : '/assets/js/kyte-shipyard-settings.js';
+            document.write('<script src="' + settingsPath + '" type="module"><\/script>');
         })();
     </script>
-    <script src="/assets/js/kyte-shipyard-settings.js" type="module"></script>
 
 </head>
 
@@ -96,39 +115,47 @@
             <!-- Sidebar -->
             <div id="sidenav" class="d-flex flex-column flex-shrink-0">
                 <div class="sidebar-header">
-                    <h6 class="mb-0 text-white">Account Settings</h6>
+                    <h6 class="mb-0 text-white" data-i18n="ui.settings.title">Account Settings</h6>
                 </div>
-                
+
                 <div class="sidebar-nav">
                     <div class="nav-section">
-                        <div class="nav-section-title">Personal</div>
+                        <div class="nav-section-title" data-i18n="ui.settings.nav.personal">Personal</div>
                         <button class="nav-link active" data-section="Profile">
                             <i class="fas fa-user"></i>
-                            My Profile
+                            <span data-i18n="ui.settings.nav.my_profile">My Profile</span>
                         </button>
                         <button class="nav-link" data-section="Administrators">
                             <i class="fas fa-user-shield"></i>
-                            Administrators
+                            <span data-i18n="ui.settings.nav.administrators">Administrators</span>
                         </button>
                     </div>
-                    
+
                     <div class="nav-section">
-                        <div class="nav-section-title">Developer</div>
+                        <div class="nav-section-title" data-i18n="ui.settings.nav.account">Account</div>
+                        <button class="nav-link" data-section="AccountSettings">
+                            <i class="fas fa-building"></i>
+                            <span data-i18n="ui.settings.nav.account_settings">Account Settings</span>
+                        </button>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-section-title" data-i18n="ui.settings.nav.developer">Developer</div>
                         <button class="nav-link" data-section="API">
                             <i class="fas fa-server"></i>
-                            API Access
+                            <span data-i18n="ui.settings.nav.api_access">API Access</span>
                         </button>
                     </div>
-                    
+
                     <div class="nav-section">
-                        <div class="nav-section-title">System</div>
+                        <div class="nav-section-title" data-i18n="ui.settings.nav.system">System</div>
                         <button class="nav-link" data-section="KyteShipyard">
                             <i class="fas fa-rocket"></i>
-                            Kyte Shipyard™
+                            <span data-i18n="ui.settings.nav.kyte_shipyard">Kyte Shipyard™</span>
                         </button>
                         <button class="nav-link" data-section="KyteAPI">
                             <i class="fas fa-code-branch"></i>
-                            Kyte API™
+                            <span data-i18n="ui.settings.nav.kyte_api">Kyte API™</span>
                         </button>
                     </div>
                 </div>
@@ -139,27 +166,42 @@
                 <!-- Profile Section -->
                 <div id="Profile" class="content-section active">
                     <div class="section-header">
-                        <h4>My Profile</h4>
-                        <p>Manage your personal account settings and security preferences</p>
+                        <h4 data-i18n="ui.settings.profile.title">My Profile</h4>
+                        <p data-i18n="ui.settings.profile.subtitle">Manage your personal account settings and security preferences</p>
                     </div>
 
                     <div class="settings-grid">
                         <!-- Email Settings -->
                         <div class="setting-card">
                             <div class="setting-card-header">
-                                <h5><i class="fas fa-envelope"></i>Email Address</h5>
+                                <h5><i class="fas fa-envelope"></i><span data-i18n="ui.settings.profile.email.title">Email Address</span></h5>
                             </div>
                             <div class="setting-card-body">
                                 <div class="input-group-modern">
                                     <div>
-                                        <label class="form-label" for="profile_email">Email Address</label>
-                                        <input type="email" id="profile_email" class="form-control" placeholder="Enter your email address">
+                                        <label class="form-label" for="profile_email" data-i18n="ui.settings.profile.email.label">Email Address</label>
+                                        <input type="email" id="profile_email" class="form-control" data-i18n-placeholder="ui.settings.profile.email.placeholder" placeholder="Enter your email address">
                                     </div>
                                     <div>
                                         <button class="btn btn-modern btn-modern-primary" id="updateEmail">
-                                            <i class="fas fa-save"></i>Update Email
+                                            <i class="fas fa-save"></i><span data-i18n="ui.settings.profile.email.update">Update Email</span>
                                         </button>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Language Preference -->
+                        <div class="setting-card">
+                            <div class="setting-card-header">
+                                <h5><i class="fas fa-language"></i><span data-i18n="ui.settings.profile.language.title">Language Preference</span></h5>
+                            </div>
+                            <div class="setting-card-body">
+                                <p class="text-muted mb-3" data-i18n="ui.settings.profile.language.description">Choose your preferred language for the Kyte platform interface. This setting will be saved to your account.</p>
+                                <div id="language-selector-container"></div>
+                                <div class="alert alert-info mt-3" style="font-size: 0.9rem;">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong data-i18n="ui.settings.profile.language.supported">Supported Languages:</strong> English, Japanese (日本語), Spanish (Español), Korean (한국어)
                                 </div>
                             </div>
                         </div>
@@ -167,21 +209,21 @@
                         <!-- Password Settings -->
                         <div class="setting-card">
                             <div class="setting-card-header">
-                                <h5><i class="fas fa-lock"></i>Password Security</h5>
+                                <h5><i class="fas fa-lock"></i><span data-i18n="ui.settings.profile.password.title">Password Security</span></h5>
                             </div>
                             <div class="setting-card-body">
                                 <div class="password-grid">
                                     <div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="new_password">New Password</label>
-                                            <input type="password" id="new_password" class="form-control" placeholder="Enter new password">
+                                            <label class="form-label" for="new_password" data-i18n="ui.settings.profile.password.new">New Password</label>
+                                            <input type="password" id="new_password" class="form-control" data-i18n-placeholder="ui.settings.profile.password.new_placeholder" placeholder="Enter new password">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="confirm_password">Confirm Password</label>
-                                            <input type="password" id="confirm_password" class="form-control" placeholder="Confirm new password">
+                                            <label class="form-label" for="confirm_password" data-i18n="ui.settings.profile.password.confirm">Confirm Password</label>
+                                            <input type="password" id="confirm_password" class="form-control" data-i18n-placeholder="ui.settings.profile.password.confirm_placeholder" placeholder="Confirm new password">
                                         </div>
                                         <button class="btn btn-modern btn-modern-primary" id="updatePassword">
-                                            <i class="fas fa-shield-alt"></i>Update Password
+                                            <i class="fas fa-shield-alt"></i><span data-i18n="ui.settings.profile.password.update">Update Password</span>
                                         </button>
                                     </div>
                                     <div>
@@ -196,14 +238,14 @@
                 <!-- Administrators Section -->
                 <div id="Administrators" class="content-section">
                     <div class="section-header">
-                        <h4>Administrators</h4>
-                        <p>Manage user access and administrative privileges</p>
+                        <h4 data-i18n="ui.settings.administrators.title">Administrators</h4>
+                        <p data-i18n="ui.settings.administrators.subtitle">Manage user access and administrative privileges</p>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div></div>
                         <button class="btn btn-modern btn-modern-success" id="newAdmin">
-                            <i class="fas fa-plus"></i>Add Administrator
+                            <i class="fas fa-plus"></i><span data-i18n="ui.settings.administrators.add">Add Administrator</span>
                         </button>
                     </div>
 
@@ -214,21 +256,46 @@
                     </div>
                 </div>
 
+                <!-- Account Settings Section -->
+                <div id="AccountSettings" class="content-section">
+                    <div class="section-header">
+                        <h4 data-i18n="ui.settings.account.title">Account Settings</h4>
+                        <p data-i18n="ui.settings.account.subtitle">Manage account-wide preferences that apply to all users</p>
+                    </div>
+
+                    <div class="settings-grid">
+                        <!-- Account Default Language -->
+                        <div class="setting-card">
+                            <div class="setting-card-header">
+                                <h5><i class="fas fa-globe"></i><span data-i18n="ui.settings.account.language.title">Default Language</span></h5>
+                            </div>
+                            <div class="setting-card-body">
+                                <p class="text-muted mb-3" data-i18n="ui.settings.account.language.description">Set the default language for your account. This will be used for all users who haven't set their own language preference.</p>
+                                <div id="account-language-selector-container"></div>
+                                <div class="alert alert-info mt-3" style="font-size: 0.9rem;">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong data-i18n="ui.settings.account.language.note">Note:</strong> <span data-i18n="ui.settings.account.language.note_text">Individual users can override this setting in their personal profile settings.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- API Section -->
                 <div id="API" class="content-section">
                     <div class="section-header">
-                        <h4>API Access</h4>
-                        <p>Manage your API keys and access credentials</p>
+                        <h4 data-i18n="ui.settings.api.title">API Access</h4>
+                        <p data-i18n="ui.settings.api.subtitle">Manage your API keys and access credentials</p>
                     </div>
 
                     <div class="account-info">
-                        <label>Account Number</label>
+                        <label data-i18n="ui.settings.api.account_number">Account Number</label>
                         <div class="value" id="accountNumber">Loading...</div>
                     </div>
 
                     <div class="setting-card">
                         <div class="setting-card-header">
-                            <h5><i class="fas fa-key"></i>API Keys</h5>
+                            <h5><i class="fas fa-key"></i><span data-i18n="ui.settings.api.keys.title">API Keys</span></h5>
                         </div>
                         <div class="setting-card-body">
                             <table id="api-table" class="table table-striped w-100"></table>

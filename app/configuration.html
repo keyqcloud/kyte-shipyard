@@ -25,7 +25,20 @@
     <!-- JavaScript obfuscator -->
     <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
     <!-- Kyte -->
-    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
     <script>
         // Auto-detect localhost and load non-obfuscated source files for development
         (function() {
@@ -33,6 +46,7 @@
             const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
 
             const scripts = [
+                'kyte-i18n.js',
                 'kyte-shipyard.js',
                 'navigation.js',
                 'kyte-shipyard-tables.js',
@@ -47,6 +61,27 @@
                 console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
             }
         })();
+    </script>
+
+    <!-- Initialize i18n for authenticated pages -->
+    <script>
+        document.addEventListener('KyteInitialized', function(e) {
+            const kyteI18n = new KyteI18n('en', '/assets/i18n/');
+
+            // Make kyteI18n globally available for sidebar translation
+            window.kyteI18n = kyteI18n;
+
+            // Get user language from localStorage (stored during login)
+            const cachedLanguage = localStorage.getItem('kyte_user_language');
+
+            // Initialize with cached language or browser detection
+            kyteI18n.init(cachedLanguage).then(() => {
+                console.log('[i18n] Page initialized with language:', kyteI18n.getCurrentLanguage());
+                kyteI18n.translateDOM();
+            }).catch(error => {
+                console.error('[i18n] Failed to initialize:', error);
+            });
+        });
     </script>
 
 </head>
@@ -116,26 +151,26 @@
                 <div class="sidebar-header">
                     <a href="#" id="back-to-app" class="sidebar-back-button mb-3">
                         <i class="fas fa-arrow-left"></i>
-                        <span>Back to Application</span>
+                        <span data-i18n="ui.config.back_to_app">Back to Application</span>
                     </a>
-                    <h3 id="app-name" class="mb-2">Application Configuration</h3>
-                    <div class="app-subtitle">Manage your application settings</div>
+                    <h3 id="app-name" class="mb-2" data-i18n="ui.config.title">Application Configuration</h3>
+                    <div class="app-subtitle" data-i18n="ui.config.subtitle">Manage your application settings</div>
                 </div>
-                
+
                 <div class="sidebar-nav">
                     <div class="nav-section">
-                        <div class="nav-section-title">Configuration</div>
+                        <div class="nav-section-title" data-i18n="ui.config.sidebar.title">Configuration</div>
                         <button class="nav-link active" data-section="App">
                             <i class="fas fa-cog"></i>
-                            App Settings
+                            <span data-i18n="ui.config.sidebar.app_settings">App Settings</span>
                         </button>
                         <button class="nav-link" data-section="EnvironmentVars">
                             <i class="fas fa-code"></i>
-                            Environment Variables
+                            <span data-i18n="ui.config.sidebar.env_vars">Environment Variables</span>
                         </button>
                         <button class="nav-link" data-section="KyteConnect">
                             <i class="fas fa-rocket"></i>
-                            Kyte Connect
+                            <span data-i18n="ui.config.sidebar.kyte_connect">Kyte Connect</span>
                         </button>
                     </div>
                 </div>
@@ -152,30 +187,65 @@
                                 <i class="fas fa-users"></i>
                             </div>
                             <div>
-                                <h3 class="config-card-title">User Table Configuration</h3>
+                                <h3 class="config-card-title" data-i18n="ui.config.user_table.title">User Table Configuration</h3>
                             </div>
                         </div>
-                        <p class="config-card-description">
+                        <p class="config-card-description" data-i18n="ui.config.user_table.description">
                             Customize the user table for your web app. Specify the fields and attributes that define your users, such as name, email, and password. This allows you to tailor the user management system to fit your specific requirements.
                         </p>
                         <div class="form-grid-3">
                             <div class="form-group">
-                                <label class="form-label">User Model</label>
+                                <label class="form-label" data-i18n="ui.config.user_table.user_model">User Model</label>
                                 <select id="user_model" class="form-select">
-                                    <option value="0">Kyte Framework User (Default)</option>
+                                    <option value="0" data-i18n="ui.config.user_table.user_model_default">Kyte Framework User (Default)</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Login Username Field</label>
+                                <label class="form-label" data-i18n="ui.config.user_table.username_field">Login Username Field</label>
                                 <select id="username_colname" class="form-select" disabled>
-                                    <option value="">Loading...</option>
+                                    <option value="" data-i18n="ui.config.user_table.loading">Loading...</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Login Password Field</label>
+                                <label class="form-label" data-i18n="ui.config.user_table.password_field">Login Password Field</label>
                                 <select id="password_colname" class="form-select" disabled>
-                                    <option value="">Loading...</option>
+                                    <option value="" data-i18n="ui.config.user_table.loading">Loading...</option>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Application Language Configuration -->
+                    <div class="config-card">
+                        <div class="config-card-header">
+                            <div class="config-card-icon">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <div>
+                                <h3 class="config-card-title" data-i18n="ui.config.language.title">Application Language</h3>
+                            </div>
+                        </div>
+                        <p class="config-card-description" data-i18n="ui.config.language.description">
+                            Set the default language for your application. This language will be used for all users who haven't set their own language preference.
+                        </p>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="ui.config.language.label">Default Language</label>
+                            <select id="app_default_language" class="form-select">
+                                <option value="en">English</option>
+                                <option value="ja">日本語 (Japanese)</option>
+                                <option value="ko">한국어 (Korean)</option>
+                                <option value="es">Español (Spanish)</option>
+                            </select>
+                            <div class="form-text mt-2">
+                                <i class="fas fa-info-circle me-1"></i>
+                                <span data-i18n="ui.config.language.supported">Supported Languages:</span> English, 日本語 (Japanese), 한국어 (Korean), Español (Spanish)
+                            </div>
+                        </div>
+                        <div class="alert alert-info d-flex align-items-start mt-3" role="alert">
+                            <i class="fas fa-info-circle me-2 mt-1"></i>
+                            <div>
+                                <strong data-i18n="ui.config.language.note">Note:</strong>
+                                <span data-i18n="ui.config.language.note_text">Individual users can override this setting in their personal profile settings.</span>
                             </div>
                         </div>
                     </div>
@@ -187,23 +257,23 @@
                                 <i class="fas fa-building"></i>
                             </div>
                             <div>
-                                <h3 class="config-card-title">Organization Table Configuration</h3>
+                                <h3 class="config-card-title" data-i18n="ui.config.org_table.title">Organization Table Configuration</h3>
                             </div>
                         </div>
-                        <p class="config-card-description">
+                        <p class="config-card-description" data-i18n="ui.config.org_table.description">
                             Set up an organization table to manage users within specific groups or organizations. Define fields like organization name, description, and membership attributes to organize users and facilitate collaboration within your web app.
                         </p>
                         <div class="form-grid">
                             <div class="form-group">
-                                <label class="form-label">Organization Model</label>
+                                <label class="form-label" data-i18n="ui.config.org_table.org_model">Organization Model</label>
                                 <select id="org_model" class="form-select" disabled>
-                                    <option value="0" id="default_org_model">Kyte Framework Account (Default)</option>
+                                    <option value="0" id="default_org_model" data-i18n="ui.config.org_table.org_model_default">Kyte Framework Account (Default)</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">User Foreign Key to Organization</label>
+                                <label class="form-label" data-i18n="ui.config.org_table.user_fk">User Foreign Key to Organization</label>
                                 <select id="userorg_colname" class="form-select" disabled>
-                                    <option value="">Loading...</option>
+                                    <option value="" data-i18n="ui.config.user_table.loading">Loading...</option>
                                 </select>
                             </div>
                         </div>
@@ -216,33 +286,33 @@
                                 <i class="fab fa-aws"></i>
                             </div>
                             <div>
-                                <h3 class="config-card-title">AWS Credentials</h3>
+                                <h3 class="config-card-title" data-i18n="ui.config.aws.title">AWS Credentials</h3>
                             </div>
                         </div>
-                        <p class="config-card-description">
+                        <p class="config-card-description" data-i18n="ui.config.aws.description">
                             AWS credentials configured for this application. These credentials are used for accessing AWS services required by your application.
                         </p>
                         <div class="aws-credentials-grid">
                             <div class="aws-field">
-                                <label class="form-label">Username</label>
+                                <label class="form-label" data-i18n="ui.config.aws.username">Username</label>
                                 <input type="text" id="aws_username" class="form-control" readonly>
                             </div>
                             <div class="aws-field">
-                                <label class="form-label">Public Key</label>
+                                <label class="form-label" data-i18n="ui.config.aws.public_key">Public Key</label>
                                 <input type="text" id="aws_public_key" class="form-control" readonly>
                             </div>
                             <div class="aws-field">
-                                <label class="form-label">Secret Key</label>
+                                <label class="form-label" data-i18n="ui.config.aws.secret_key">Secret Key</label>
                                 <div class="aws-secret-notice">
                                     <i class="fas fa-eye-slash"></i>
-                                    <span>Secret key is not displayed for security</span>
+                                    <span data-i18n="ui.config.aws.secret_hidden">Secret key is not displayed for security</span>
                                 </div>
                             </div>
                         </div>
                         <div class="security-notice">
                             <i class="fas fa-info-circle"></i>
                             <div>
-                                <strong>Note:</strong> Currently, changing AWS credentials for your application is not supported. If you need to change AWS credentials, please contact support.
+                                <strong data-i18n="ui.config.aws.note">Note:</strong> <span data-i18n="ui.config.aws.note_text">Currently, changing AWS credentials for your application is not supported. If you need to change AWS credentials, please contact support.</span>
                             </div>
                         </div>
                     </div>
@@ -251,7 +321,7 @@
                     <div class="d-flex justify-content-end pb-3 pe-3">
                         <button id="saveAppSettings" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>
-                            Save App Configuration
+                            <span data-i18n="ui.config.save_button">Save App Configuration</span>
                         </button>
                     </div>
                 </div>
@@ -259,16 +329,16 @@
                 <!-- Environment Variables Section -->
                 <div id="EnvironmentVars" class="content-section">
                     <div class="section-header">
-                        <h2 class="section-title">Environment Variables</h2>
+                        <h2 class="section-title" data-i18n="ui.config.env_vars.title">Environment Variables</h2>
                         <button class="btn-new" id="newEnvVar">
                             <i class="fas fa-plus"></i>
-                            Add Variable
+                            <span data-i18n="ui.config.env_vars.add_button">Add Variable</span>
                         </button>
                     </div>
                     <div class="section-content">
                         <div class="mb-4">
-                            <p class="text-muted">
-                                Manage your application's environment variables here. Add new variables, edit existing ones, or remove them as needed. 
+                            <p class="text-muted" data-i18n="ui.config.env_vars.description">
+                                Manage your application's environment variables here. Add new variables, edit existing ones, or remove them as needed.
                                 Ensure to follow the correct format and understand the impact of changes on your application's behavior.
                             </p>
                         </div>
@@ -285,26 +355,28 @@
                                 <i class="fas fa-shield-alt"></i>
                             </div>
                             <div>
-                                <h3 class="config-card-title">Kyte Connect Obfuscation</h3>
+                                <h3 class="config-card-title" data-i18n="ui.config.kyte_connect.obfuscation.title">Kyte Connect Obfuscation</h3>
                             </div>
                         </div>
-                        <p class="config-card-description">
+                        <p class="config-card-description" data-i18n="ui.config.kyte_connect.obfuscation.description">
                             Control whether JavaScript for connecting to the Kyte API endpoint is obfuscated. Obfuscation is recommended for security, but if organizational policies (such as firewall requirements) prevent obfuscated code, you can disable it here.
-                            <br><br>
-                            <strong>Important:</strong> Changing this setting will automatically regenerate the Kyte Connect code and update all published pages with the new version. You can review the updated code in the "Kyte Connect Code Comparison" section below before it's applied.
+                        </p>
+                        <p class="config-card-description">
+                            <br>
+                            <strong data-i18n="ui.config.kyte_connect.obfuscation.important">Important:</strong> <span data-i18n="ui.config.kyte_connect.obfuscation.important_text">Changing this setting will automatically regenerate the Kyte Connect code and update all published pages with the new version. You can review the updated code in the "Kyte Connect Code Comparison" section below before it's applied.</span>
                         </p>
                         <div class="form-group">
-                            <label class="form-label">Obfuscation Setting</label>
+                            <label class="form-label" data-i18n="ui.config.kyte_connect.obfuscation.setting">Obfuscation Setting</label>
                             <select id="obfuscate_kyte_connect" class="form-select">
-                                <option value="1">Obfuscate (Recommended)</option>
-                                <option value="0">Do Not Obfuscate (Not Recommended)</option>
+                                <option value="1" data-i18n="ui.config.kyte_connect.obfuscation.enabled">Obfuscate (Recommended)</option>
+                                <option value="0" data-i18n="ui.config.kyte_connect.obfuscation.disabled">Do Not Obfuscate (Not Recommended)</option>
                             </select>
                         </div>
                         <!-- Save Button -->
                         <div class="d-flex justify-content-end">
                             <button id="saveObfuscationSettings" class="btn btn-primary">
                                 <i class="fas fa-save me-2"></i>
-                                Save Obfuscation Settings
+                                <span data-i18n="ui.config.kyte_connect.obfuscation.save_button">Save Obfuscation Settings</span>
                             </button>
                         </div>
                     </div>
@@ -316,18 +388,18 @@
                                 <i class="fas fa-rocket"></i>
                             </div>
                             <div>
-                                <h3 class="config-card-title">Kyte Connect Code Comparison</h3>
+                                <h3 class="config-card-title" data-i18n="ui.config.kyte_connect.comparison.title">Kyte Connect Code Comparison</h3>
                             </div>
                         </div>
-                        <p class="config-card-description">
+                        <p class="config-card-description" data-i18n="ui.config.kyte_connect.comparison.description">
                             Compare your current Kyte Connect JavaScript with the latest system version. Update your application to use the latest code when API endpoints or configurations change.
                         </p>
-                        
+
                         <!-- Version Status Banner -->
                         <div id="version-status-banner" class="version-status-banner">
                             <div class="status-indicator">
                                 <i class="fas fa-sync-alt status-icon"></i>
-                                <span class="status-text">Checking versions...</span>
+                                <span class="status-text" data-i18n="ui.config.kyte_connect.comparison.checking">Checking versions...</span>
                             </div>
                         </div>
 
@@ -338,7 +410,7 @@
                                 <div class="code-panel-header">
                                     <h4 class="code-panel-title">
                                         <i class="fas fa-file-code me-2"></i>
-                                        Current Application Version
+                                        <span data-i18n="ui.config.kyte_connect.comparison.current_version">Current Application Version</span>
                                     </h4>
                                     <div class="code-panel-info">
                                         <span class="version-badge current">
@@ -349,7 +421,7 @@
                                 </div>
                                 <div class="code-panel-content">
                                     <div class="code-wrapper">
-                                        <pre id="current-kyte-code" class="code-block"><code>Loading current version...</code></pre>
+                                        <pre id="current-kyte-code" class="code-block"><code data-i18n="ui.config.kyte_connect.comparison.loading_current">Loading current version...</code></pre>
                                     </div>
                                 </div>
                             </div>
@@ -359,7 +431,7 @@
                                 <div class="code-panel-header">
                                     <h4 class="code-panel-title">
                                         <i class="fas fa-cloud me-2"></i>
-                                        Latest System Version
+                                        <span data-i18n="ui.config.kyte_connect.comparison.system_version">Latest System Version</span>
                                     </h4>
                                     <div class="code-panel-info">
                                         <span class="version-badge system">
@@ -370,7 +442,7 @@
                                 </div>
                                 <div class="code-panel-content">
                                     <div class="code-wrapper">
-                                        <pre id="system-kyte-code" class="code-block"><code>Loading system version...</code></pre>
+                                        <pre id="system-kyte-code" class="code-block"><code data-i18n="ui.config.kyte_connect.comparison.loading_system">Loading system version...</code></pre>
                                     </div>
                                 </div>
                             </div>
@@ -380,15 +452,15 @@
                         <div class="code-actions">
                             <button id="refresh-comparison" class="btn btn-secondary">
                                 <i class="fas fa-sync-alt me-2"></i>
-                                Refresh Comparison
+                                <span data-i18n="ui.config.kyte_connect.comparison.refresh">Refresh Comparison</span>
                             </button>
                             <button id="update-to-system" class="btn btn-primary" disabled>
                                 <i class="fas fa-upload me-2"></i>
-                                Update to System Version
+                                <span data-i18n="ui.config.kyte_connect.comparison.update">Update to System Version</span>
                             </button>
                             <button id="view-diff" class="btn btn-outline-info">
                                 <i class="fas fa-search me-2"></i>
-                                View Detailed Diff
+                                <span data-i18n="ui.config.kyte_connect.comparison.view_diff">View Detailed Diff</span>
                             </button>
                         </div>
 
@@ -397,15 +469,15 @@
                             <div class="diff-stats">
                                 <span class="diff-stat additions">
                                     <i class="fas fa-plus-circle"></i>
-                                    <span id="additions-count">0</span> additions
+                                    <span id="additions-count">0</span> <span data-i18n="ui.config.kyte_connect.comparison.additions">additions</span>
                                 </span>
                                 <span class="diff-stat deletions">
                                     <i class="fas fa-minus-circle"></i>
-                                    <span id="deletions-count">0</span> deletions
+                                    <span id="deletions-count">0</span> <span data-i18n="ui.config.kyte_connect.comparison.deletions">deletions</span>
                                 </span>
                                 <span class="diff-stat modifications">
                                     <i class="fas fa-edit"></i>
-                                    <span id="modifications-count">0</span> changes
+                                    <span id="modifications-count">0</span> <span data-i18n="ui.config.kyte_connect.comparison.modifications">modifications</span>
                                 </span>
                             </div>
                         </div>

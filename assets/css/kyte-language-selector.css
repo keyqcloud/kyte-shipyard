@@ -1,0 +1,185 @@
+/**
+ * Kyte Language Selector Styles
+ *
+ * Styles for the language selector component
+ * Compatible with Bootstrap 5.x
+ *
+ * @package Kyte
+ * @version 4.0.0
+ */
+
+/* Base language selector styles */
+.kyte-language-selector {
+    display: inline-block;
+}
+
+/* Dropdown style */
+.kyte-lang-dropdown {
+    max-width: 300px;
+}
+
+.kyte-lang-dropdown .form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #495057;
+}
+
+.kyte-lang-dropdown .kyte-lang-select {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+.kyte-lang-dropdown .kyte-lang-select:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Button style */
+.kyte-lang-buttons {
+    max-width: 500px;
+}
+
+.kyte-lang-buttons .form-label {
+    font-weight: 500;
+    color: #495057;
+}
+
+.kyte-lang-buttons .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.kyte-lang-buttons .kyte-lang-btn {
+    flex: 1 1 auto;
+    min-width: 100px;
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+.kyte-lang-buttons .kyte-lang-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.kyte-lang-buttons .kyte-lang-btn.active {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+/* Compact style (for navbar) */
+.kyte-lang-compact {
+    display: inline-block;
+}
+
+.kyte-lang-compact .btn-link {
+    color: #6c757d;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+}
+
+.kyte-lang-compact .btn-link:hover {
+    color: #0d6efd;
+}
+
+.kyte-lang-compact .btn-link:focus {
+    box-shadow: none;
+}
+
+.kyte-lang-compact .dropdown-menu {
+    min-width: 180px;
+    padding: 0.5rem 0;
+}
+
+.kyte-lang-compact .dropdown-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+}
+
+.kyte-lang-compact .dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.kyte-lang-compact .dropdown-item.active {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Flag emoji spacing */
+.kyte-language-selector option,
+.kyte-language-selector .kyte-lang-btn,
+.kyte-language-selector .dropdown-item {
+    display: flex;
+    align-items: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .kyte-lang-buttons .btn-group {
+        flex-direction: column;
+    }
+
+    .kyte-lang-buttons .kyte-lang-btn {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .kyte-lang-dropdown {
+        max-width: 100%;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .kyte-lang-dropdown .form-label,
+    .kyte-lang-buttons .form-label {
+        color: #e9ecef;
+    }
+
+    .kyte-lang-compact .btn-link {
+        color: #adb5bd;
+    }
+
+    .kyte-lang-compact .btn-link:hover {
+        color: #0d6efd;
+    }
+
+    .kyte-lang-compact .dropdown-menu {
+        background-color: #212529;
+        border-color: #495057;
+    }
+
+    .kyte-lang-compact .dropdown-item {
+        color: #e9ecef;
+    }
+
+    .kyte-lang-compact .dropdown-item:hover {
+        background-color: #343a40;
+        color: #fff;
+    }
+}
+
+/* Animation for language change */
+@keyframes langFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.kyte-language-selector {
+    animation: langFadeIn 0.3s ease;
+}

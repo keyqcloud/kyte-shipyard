@@ -377,6 +377,13 @@ body {
     opacity: 1;
 }
 
+/* Site Detail Page Wrapper - Flex Container */
+#site-detail-page-wrapper {
+    display: flex;
+    width: 100%;
+    min-height: calc(100vh - 60px);
+}
+
 /* Main Content Area */
 .main-content {
     flex: 1;
@@ -384,6 +391,18 @@ body {
     margin-left: 260px;
     min-height: calc(100vh - 60px);
     width: calc(100% - 260px);
+    max-width: calc(100% - 260px);
+    box-sizing: border-box;
+}
+
+/* Content Area (for settings and other pages with sidebar) */
+.content-area {
+    flex: 1;
+    padding: 2rem;
+    margin-left: 260px;
+    min-height: calc(100vh - 60px);
+    width: calc(100% - 260px);
+    box-sizing: border-box;
 }
 
 /* Site Header */
@@ -440,27 +459,85 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    max-width: 100%;
+    position: relative;
 }
 
 .site-domain a {
     color: #ff6b35;
     text-decoration: none;
     font-weight: 500;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 180px;
+    transition: all 0.2s ease;
 }
 
 .site-domain a:hover {
     text-decoration: underline;
+    max-width: none;
+    white-space: normal;
+    word-break: break-all;
+}
+
+.site-domain .copy-url-btn {
+    background: transparent;
+    border: none;
+    color: #718096;
+    cursor: pointer;
+    padding: 0.25rem;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+}
+
+.site-domain .copy-url-btn:hover {
+    opacity: 1;
+    color: #ff6b35;
+}
+
+.site-domain .copy-url-btn:active {
+    transform: scale(0.9);
+}
+
+.site-domain .copy-tooltip {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2d3748;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.site-domain .copy-tooltip.show {
+    opacity: 1;
 }
 
 /* Content Sections */
 .content-section {
+    display: none;
+    width: 100%;
     background: white;
     border-radius: 16px;
     margin-bottom: 2rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.8);
     overflow: hidden;
+    box-sizing: border-box;
+}
+
+.content-section.active {
+    display: block;
 }
 
 /* Table Container */
@@ -612,12 +689,14 @@ body {
 }
 
 .section-header {
+    width: 100%;
     padding: 2rem 2rem 1.5rem;
     border-bottom: 1px solid #e2e8f0;
     background: #f8fafc;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .section-title {
@@ -628,7 +707,9 @@ body {
 }
 
 .section-content {
+    width: 100%;
     padding: 2rem;
+    box-sizing: border-box;
 }
 
 /* Enhanced Buttons */
@@ -731,7 +812,13 @@ body {
 
 /* DataTable Enhancements */
 .dataTables_wrapper {
+    width: 100%;
     padding: 2rem 0 0 0;
+    box-sizing: border-box;
+}
+
+.dataTables_wrapper table {
+    width: 100% !important;
 }
 
 .dataTables_length,
@@ -866,7 +953,8 @@ footer {
         width: 220px;
     }
 
-    .main-content {
+    .main-content,
+    .content-area {
         margin-left: 220px;
         width: calc(100% - 220px);
         max-width: calc(100vw - 220px);
@@ -915,15 +1003,21 @@ footer {
         transform: translateX(0);
     }
 
-    #page-container {
+    #page-container,
+    #site-detail-page-wrapper {
         flex-direction: column;
     }
 
-    .main-content {
+    .main-content,
+    .content-area {
         margin-left: 0;
         width: 100%;
         max-width: 100%;
         padding: 1.5rem 1rem;
+    }
+
+    .site-domain a {
+        max-width: 160px;
     }
 
     footer {
@@ -1016,6 +1110,16 @@ footer {
 
     .site-header {
         padding: 1rem;
+    }
+
+    .site-domain a {
+        max-width: 140px;
+        font-size: 0.85rem;
+    }
+
+    .site-domain .copy-url-btn {
+        font-size: 0.8rem;
+        padding: 0.2rem;
     }
 
     .section-heading,

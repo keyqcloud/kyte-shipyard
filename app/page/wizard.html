@@ -22,7 +22,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
-    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
     <script>
         // Auto-detect localhost and load non-obfuscated source files for development
         (function() {
@@ -44,6 +57,25 @@
                 console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
             }
         })();
+    </script>
+    <script src="/assets/js/source/kyte-i18n.js"></script>
+    <script>
+        document.addEventListener('KyteInitialized', function(e) {
+            // Initialize i18n
+            const kyteI18n = new KyteI18n('en', '/assets/i18n/');
+            window.kyteI18n = kyteI18n;
+
+            // Check for cached language preference
+            const cachedLanguage = localStorage.getItem('kyte_user_language');
+
+            // Initialize and translate
+            kyteI18n.init(cachedLanguage).then(() => {
+                kyteI18n.translateDOM();
+                console.log('[Page Wizard] Translations loaded for:', kyteI18n.getCurrentLanguage());
+            }).catch(error => {
+                console.error('[Page Wizard] Failed to load translations:', error);
+            });
+        });
     </script>
 
     <style>
@@ -685,7 +717,7 @@
         <!-- END PROJECT NAV -->
 
         <div class="container container-flex">
-            <h2 class="section-heading">Create a New Page</h2>
+            <h2 class="section-heading" data-i18n="ui.page_wizard.heading">Create a New Page</h2>
 
             <!-- Modern Progress Indicator -->
             <div class="wizard-progress">
@@ -693,20 +725,20 @@
                     <div class="progress-line">
                         <div class="progress-line-fill" id="progressFill"></div>
                     </div>
-                    
+
                     <div class="step-indicator active" id="step-indicator-1">
                         <div class="step-circle">1</div>
-                        <div class="step-title">Page Info</div>
+                        <div class="step-title" data-i18n="ui.page_wizard.step_1_title">Page Info</div>
                     </div>
-                    
+
                     <div class="step-indicator" id="step-indicator-2">
                         <div class="step-circle">2</div>
-                        <div class="step-title">Configuration</div>
+                        <div class="step-title" data-i18n="ui.page_wizard.step_2_title">Configuration</div>
                     </div>
-                    
+
                     <div class="step-indicator" id="step-indicator-3">
                         <div class="step-circle">3</div>
-                        <div class="step-title">Customization</div>
+                        <div class="step-title" data-i18n="ui.page_wizard.step_3_title">Customization</div>
                     </div>
                 </div>
             </div>
@@ -717,34 +749,34 @@
                 <div id="wizard-1" class="wizard-step active">
                     <div class="wizard-step-content">
                         <div class="wizard-left-panel">
-                            <h3 class="wizard-welcome">Let's get started!</h3>
-                            
+                            <h3 class="wizard-welcome" data-i18n="ui.page_wizard.step_1.welcome">Let's get started!</h3>
+
                             <div class="wizard-section">
-                                <h5>What kind of page are you creating?</h5>
+                                <h5 data-i18n="ui.page_wizard.step_1.page_type_label">What kind of page are you creating?</h5>
                                 <select class="form-select form-select-lg" id="page-type">
-                                    <option selected disabled>Please select one</option>
-                                    <option value="block">Block editor</option>
-                                    <option value="custom">Advanced code editor</option>
-                                    <option value="login">Login</option>
-                                    <option value="table">Table only</option>
-                                    <option value="form">Table with modal form (add/edit)</option>
+                                    <option selected disabled data-i18n="ui.page_wizard.step_1.select_placeholder">Please select one</option>
+                                    <option value="block" data-i18n="ui.page_wizard.step_1.type_block">Block editor</option>
+                                    <option value="custom" data-i18n="ui.page_wizard.step_1.type_custom">Advanced code editor</option>
+                                    <option value="login" data-i18n="ui.page_wizard.step_1.type_login">Login</option>
+                                    <option value="table" data-i18n="ui.page_wizard.step_1.type_table">Table only</option>
+                                    <option value="form" data-i18n="ui.page_wizard.step_1.type_form">Table with modal form (add/edit)</option>
                                 </select>
-                                <small>Further customization is available even after selection.</small>
+                                <small data-i18n="ui.page_wizard.step_1.customization_note">Further customization is available even after selection.</small>
                             </div>
                         </div>
-                        
+
                         <div class="wizard-right-panel">
                             <img src="/assets/images/woman-paints-in-an-art-workshop.png" alt="Getting Started" class="wizard-illustration">
                         </div>
                     </div>
-                    
+
                     <div class="wizard-navigation">
                         <a class="btn-wizard btn-wizard-danger backToSite" href="#">
                             <i class="fas fa-times"></i>
-                            Cancel
+                            <span data-i18n="ui.page_wizard.button_cancel">Cancel</span>
                         </a>
                         <a id="wizard-1-next" class="btn-wizard btn-wizard-primary" href="#">
-                            Next
+                            <span data-i18n="ui.page_wizard.button_next">Next</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -755,50 +787,50 @@
                     <div class="wizard-step-content">
                         <div class="wizard-left-panel">
                             <div class="wizard-section">
-                                <h5>What is the path to your page?</h5>
-                                <p>This will be what you see in the URL.</p>
-                                <input type="text" class="form-control" id="page-path" placeholder="my-awesome-page">
+                                <h5 data-i18n="ui.page_wizard.step_2.path_label">What is the path to your page?</h5>
+                                <p data-i18n="ui.page_wizard.step_2.path_description">This will be what you see in the URL.</p>
+                                <input type="text" class="form-control" id="page-path" data-i18n-placeholder="ui.page_wizard.step_2.path_placeholder" placeholder="my-awesome-page">
                                 <div id="path-preview">https://example.com/</div>
                             </div>
-                            
+
                             <div class="wizard-section">
-                                <h5>Does your page require users to be logged in to view it?</h5>
+                                <h5 data-i18n="ui.page_wizard.step_2.requires_login_label">Does your page require users to be logged in to view it?</h5>
                                 <select class="form-select form-select-lg" id="page-requires-session">
-                                    <option value="1">Yes</option>
-                                    <option value="0">No</option>
+                                    <option value="1" data-i18n="ui.page_wizard.option_yes">Yes</option>
+                                    <option value="0" data-i18n="ui.page_wizard.option_no">No</option>
                                 </select>
                             </div>
 
                             <div id="sitemap-settings-wrapper" class="wizard-section" style="display: none;">
-                                <h5>Would you like to include this page in the sitemap for crawlers to index?</h5>
-                                <small>Recommended if SEO and site visibility is important.</small>
+                                <h5 data-i18n="ui.page_wizard.step_2.sitemap_label">Would you like to include this page in the sitemap for crawlers to index?</h5>
+                                <small data-i18n="ui.page_wizard.step_2.sitemap_note">Recommended if SEO and site visibility is important.</small>
                                 <select class="form-select" id="sitemap-include">
-                                    <option value="1">Yes</option>
-                                    <option value="0">No</option>
+                                    <option value="1" data-i18n="ui.page_wizard.option_yes">Yes</option>
+                                    <option value="0" data-i18n="ui.page_wizard.option_no">No</option>
                                 </select>
                             </div>
 
                             <div class="wizard-section">
-                                <h5>Does your page require a main navigation bar?</h5>
+                                <h5 data-i18n="ui.page_wizard.step_2.navigation_label">Does your page require a main navigation bar?</h5>
                                 <select class="form-select form-select-lg" id="page-main-navigation">
-                                    <option value="0">No</option>
+                                    <option value="0" data-i18n="ui.page_wizard.option_no">No</option>
                                     <!-- Options will be populated by JavaScript -->
                                 </select>
                             </div>
                         </div>
-                        
+
                         <div class="wizard-right-panel">
                             <img src="/assets/images/woman-paints-in-an-art-workshop.png" alt="Configuration" class="wizard-illustration">
                         </div>
                     </div>
-                    
+
                     <div class="wizard-navigation">
                         <a id="wizard-2-back" class="btn-wizard btn-wizard-secondary" href="#">
                             <i class="fas fa-arrow-left"></i>
-                            Back
+                            <span data-i18n="ui.page_wizard.button_back">Back</span>
                         </a>
                         <a id="wizard-2-next" class="btn-wizard btn-wizard-primary" href="#">
-                            Next
+                            <span data-i18n="ui.page_wizard.button_next">Next</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -809,30 +841,30 @@
                     <div class="wizard-step-content">
                         <div class="wizard-left-panel">
                             <div class="wizard-section">
-                                <h5>Pick a user and search engine friendly title</h5>
-                                <input type="text" class="form-control" id="page-title" placeholder="My Awesome Page">
-                            </div>
-                            
-                            <div class="wizard-section">
-                                <h5>Write a short description of what this page is about <small>(optional)</small></h5>
-                                <textarea class="form-control" id="page-description" placeholder="This page helps users manage their account settings and preferences..."></textarea>
+                                <h5 data-i18n="ui.page_wizard.step_3.title_label">Pick a user and search engine friendly title</h5>
+                                <input type="text" class="form-control" id="page-title" data-i18n-placeholder="ui.page_wizard.step_3.title_placeholder" placeholder="My Awesome Page">
                             </div>
 
-                            <p class="text-muted">You can skip the description if you require your users to login to view the page you are about to create.</p>
+                            <div class="wizard-section">
+                                <h5><span data-i18n="ui.page_wizard.step_3.description_label">Write a short description of what this page is about</span> <small data-i18n="ui.page_wizard.step_3.optional">(optional)</small></h5>
+                                <textarea class="form-control" id="page-description" data-i18n-placeholder="ui.page_wizard.step_3.description_placeholder" placeholder="This page helps users manage their account settings and preferences..."></textarea>
+                            </div>
+
+                            <p class="text-muted" data-i18n="ui.page_wizard.step_3.description_note">You can skip the description if you require your users to login to view the page you are about to create.</p>
                         </div>
-                        
+
                         <div class="wizard-right-panel">
                             <img src="/assets/images/woman-paints-in-an-art-workshop.png" alt="Page Details" class="wizard-illustration">
                         </div>
                     </div>
-                    
+
                     <div class="wizard-navigation">
                         <a id="wizard-3-back" class="btn-wizard btn-wizard-secondary" href="#">
                             <i class="fas fa-arrow-left"></i>
-                            Back
+                            <span data-i18n="ui.page_wizard.button_back">Back</span>
                         </a>
                         <a id="wizard-3-next" class="btn-wizard btn-wizard-primary" href="#">
-                            Next
+                            <span data-i18n="ui.page_wizard.button_next">Next</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -842,28 +874,28 @@
                 <div id="wizard-4" class="wizard-step">
                     <div class="wizard-step-content">
                         <div class="wizard-left-panel">
-                            <h3 class="wizard-welcome">Let's customize your <span id="label-page-type">page</span>!</h3>
+                            <h3 class="wizard-welcome"><span data-i18n="ui.page_wizard.step_4.customize_heading">Let's customize your</span> <span id="label-page-type">page</span>!</h3>
 
                             <!-- Login Page Customization -->
                             <div id="customization-login" class="customization-section">
                                 <div class="wizard-section">
-                                    <h5>Give your login page a heading</h5>
-                                    <p>For example: "Welcome to my App!"</p>
-                                    <input type="text" class="form-control" id="page-login-heading" placeholder="Welcome to MyApp!">
+                                    <h5 data-i18n="ui.page_wizard.step_4.login.heading_label">Give your login page a heading</h5>
+                                    <p data-i18n="ui.page_wizard.step_4.login.heading_example">For example: "Welcome to my App!"</p>
+                                    <input type="text" class="form-control" id="page-login-heading" data-i18n-placeholder="ui.page_wizard.step_4.login.heading_placeholder" placeholder="Welcome to MyApp!">
                                 </div>
-                                
+
                                 <div class="wizard-section">
-                                    <h5>What will your users use to login?</h5>
+                                    <h5 data-i18n="ui.page_wizard.step_4.login.field_label">What will your users use to login?</h5>
                                     <select class="form-select form-select-lg" id="page-login-field-name">
-                                        <option value="email">Email + Password</option>
-                                        <option value="username">Username + Password</option>
+                                        <option value="email" data-i18n="ui.page_wizard.step_4.login.field_email">Email + Password</option>
+                                        <option value="username" data-i18n="ui.page_wizard.step_4.login.field_username">Username + Password</option>
                                     </select>
                                 </div>
-                                
+
                                 <div class="wizard-section">
-                                    <h5>After login, where should your users be directed to?</h5>
+                                    <h5 data-i18n="ui.page_wizard.step_4.login.redirect_label">After login, where should your users be directed to?</h5>
                                     <select class="form-select form-select-lg" id="page-login-success-target">
-                                        <option selected disabled>Please select one</option>
+                                        <option selected disabled data-i18n="ui.page_wizard.step_1.select_placeholder">Please select one</option>
                                         <!-- Options will be populated by JavaScript -->
                                     </select>
                                 </div>
@@ -872,51 +904,51 @@
                             <!-- Table Page Customization -->
                             <div id="customization-table" class="customization-section">
                                 <div class="wizard-section">
-                                    <h5>Which data model are we using?</h5>
+                                    <h5 data-i18n="ui.page_wizard.step_4.table.model_label">Which data model are we using?</h5>
                                     <select class="form-select form-select-lg" id="page-model">
-                                        <option selected disabled>Please select one</option>
+                                        <option selected disabled data-i18n="ui.page_wizard.step_1.select_placeholder">Please select one</option>
                                         <!-- Options will be populated by JavaScript -->
                                     </select>
                                 </div>
-                                
+
                                 <div class="wizard-section" id="customize-page-form-title" style="display: none;">
-                                    <h5>Give your form a heading</h5>
-                                    <input type="text" class="form-control" id="page-form-title" placeholder="Add New Item">
+                                    <h5 data-i18n="ui.page_wizard.step_4.table.form_heading_label">Give your form a heading</h5>
+                                    <input type="text" class="form-control" id="page-form-title" data-i18n-placeholder="ui.page_wizard.step_4.table.form_heading_placeholder" placeholder="Add New Item">
                                 </div>
-                                
+
                                 <div class="wizard-section">
-                                    <h5>Give your table a heading</h5>
-                                    <input type="text" class="form-control" id="page-table-title" placeholder="My Data Table">
+                                    <h5 data-i18n="ui.page_wizard.step_4.table.table_heading_label">Give your table a heading</h5>
+                                    <input type="text" class="form-control" id="page-table-title" data-i18n-placeholder="ui.page_wizard.step_4.table.table_heading_placeholder" placeholder="My Data Table">
                                 </div>
-                                
+
                                 <div class="wizard-section" id="customize-page-table-add" style="display: none;">
-                                    <h5>Will users be able to add a new row?</h5>
+                                    <h5 data-i18n="ui.page_wizard.step_4.table.add_row_label">Will users be able to add a new row?</h5>
                                     <select class="form-select form-select-lg" id="page-table-add">
-                                        <option value="1">Yes</option>
-                                        <option value="0">No</option>
+                                        <option value="1" data-i18n="ui.page_wizard.option_yes">Yes</option>
+                                        <option value="0" data-i18n="ui.page_wizard.option_no">No</option>
                                     </select>
                                 </div>
-                                
+
                                 <div class="wizard-section" id="customize-page-table-edit" style="display: none;">
-                                    <h5>Will users be able to edit rows?</h5>
+                                    <h5 data-i18n="ui.page_wizard.step_4.table.edit_row_label">Will users be able to edit rows?</h5>
                                     <select class="form-select form-select-lg" id="page-table-edit">
-                                        <option value="1">Yes</option>
-                                        <option value="0">No</option>
+                                        <option value="1" data-i18n="ui.page_wizard.option_yes">Yes</option>
+                                        <option value="0" data-i18n="ui.page_wizard.option_no">No</option>
                                     </select>
                                 </div>
-                                
+
                                 <div class="wizard-section">
-                                    <h5>Will users be able to delete rows?</h5>
+                                    <h5 data-i18n="ui.page_wizard.step_4.table.delete_row_label">Will users be able to delete rows?</h5>
                                     <select class="form-select form-select-lg" id="page-table-delete">
-                                        <option value="1">Yes</option>
-                                        <option value="0">No</option>
+                                        <option value="1" data-i18n="ui.page_wizard.option_yes">Yes</option>
+                                        <option value="0" data-i18n="ui.page_wizard.option_no">No</option>
                                     </select>
                                 </div>
-                                
+
                                 <div class="wizard-section">
-                                    <h5>Where should users be directed when they click a row?</h5>
+                                    <h5 data-i18n="ui.page_wizard.step_4.table.row_click_label">Where should users be directed when they click a row?</h5>
                                     <select class="form-select form-select-lg" id="page-table-click">
-                                        <option value="0">None</option>
+                                        <option value="0" data-i18n="ui.page_wizard.step_4.table.row_click_none">None</option>
                                         <!-- Options will be populated by JavaScript -->
                                     </select>
                                 </div>
@@ -925,70 +957,70 @@
                             <!-- Custom Page Customization -->
                             <div id="customization-custom" class="customization-section">
                                 <div class="wizard-section">
-                                    <h5>Does your page have a side navigation?</h5>
+                                    <h5 data-i18n="ui.page_wizard.step_4.custom.sidenav_label">Does your page have a side navigation?</h5>
                                     <select class="form-select form-select-lg" id="page-side-navigation">
-                                        <option value="0">No</option>
+                                        <option value="0" data-i18n="ui.page_wizard.option_no">No</option>
                                         <!-- Options will be populated by JavaScript -->
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="wizard-right-panel">
                             <img src="/assets/images/woman-paints-in-an-art-workshop.png" alt="Customization" class="wizard-illustration" id="image-placeholder">
-                            
+
                             <!-- Table Columns Configuration -->
                             <div id="customization-table-columns" class="configuration-card" style="display: none;">
-                                <h4>Table Columns</h4>
-                                <p>All columns are included by default. To exclude any from your table, drag them over to the exclude area.</p>
+                                <h4 data-i18n="ui.page_wizard.step_4.table.columns_heading">Table Columns</h4>
+                                <p data-i18n="ui.page_wizard.step_4.table.columns_description">All columns are included by default. To exclude any from your table, drag them over to the exclude area.</p>
                                 <div id="data-model-columns-wrapper">
                                     <div class="row">
                                         <div class="col-6">
-                                            <h6>Included Columns</h6>
+                                            <h6 data-i18n="ui.page_wizard.step_4.table.columns_included">Included Columns</h6>
                                             <ul id="data-model-columns"></ul>
                                         </div>
                                         <div class="col-6">
-                                            <h6>Excluded Columns</h6>
+                                            <h6 data-i18n="ui.page_wizard.step_4.table.columns_excluded">Excluded Columns</h6>
                                             <ul id="data-model-columns-exclude"></ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Form Fields Configuration -->
                             <div id="customization-form-fields" class="configuration-card mt-3" style="display: none;">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
                                     <div>
-                                        <h4>Form Fields</h4>
-                                        <p>Drag fields to their desired location. Fields will expand to fill the width if less than four columns are used.</p>
+                                        <h4 data-i18n="ui.page_wizard.step_4.table.fields_heading">Form Fields</h4>
+                                        <p data-i18n="ui.page_wizard.step_4.table.fields_description">Drag fields to their desired location. Fields will expand to fill the width if less than four columns are used.</p>
                                     </div>
                                     <div>
                                         <div class="dropdown d-inline-block me-2">
-                                            <button class="btn btn-wizard btn-wizard-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn btn-wizard btn-wizard-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-i18n="ui.page_wizard.step_4.table.fields_available">
                                                 Available Fields
                                             </button>
                                             <ul id="form-fields-available" class="dropdown-menu"></ul>
                                         </div>
-                                        <a href="#" id="addBlankFieldCard" class="btn-wizard btn-wizard-warning">Add Spacer</a>
+                                        <a href="#" id="addBlankFieldCard" class="btn-wizard btn-wizard-warning" data-i18n="ui.page_wizard.step_4.table.add_spacer">Add Spacer</a>
                                     </div>
                                 </div>
-                                
+
                                 <div id="data-model-form-fields-wrapper">
                                     <div class="row">
                                         <div class="col-3">
-                                            <h6>Column 1</h6>
+                                            <h6 data-i18n="ui.page_wizard.step_4.table.column_1">Column 1</h6>
                                             <ul id="data-model-fields-1"></ul>
                                         </div>
                                         <div class="col-3">
-                                            <h6>Column 2</h6>
+                                            <h6 data-i18n="ui.page_wizard.step_4.table.column_2">Column 2</h6>
                                             <ul id="data-model-fields-2"></ul>
                                         </div>
                                         <div class="col-3">
-                                            <h6>Column 3</h6>
+                                            <h6 data-i18n="ui.page_wizard.step_4.table.column_3">Column 3</h6>
                                             <ul id="data-model-fields-3"></ul>
                                         </div>
                                         <div class="col-3">
-                                            <h6>Column 4</h6>
+                                            <h6 data-i18n="ui.page_wizard.step_4.table.column_4">Column 4</h6>
                                             <ul id="data-model-fields-4"></ul>
                                         </div>
                                     </div>
@@ -996,15 +1028,15 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="wizard-navigation">
                         <a id="wizard-4-back" class="btn-wizard btn-wizard-secondary" href="#">
                             <i class="fas fa-arrow-left"></i>
-                            Back
+                            <span data-i18n="ui.page_wizard.button_back">Back</span>
                         </a>
                         <a id="wizard-4-next" class="btn-wizard btn-wizard-warning" href="#">
                             <i class="fas fa-magic"></i>
-                            Save &amp; Generate
+                            <span data-i18n="ui.page_wizard.button_save_generate">Save & Generate</span>
                         </a>
                     </div>
                 </div>
@@ -1015,20 +1047,26 @@
                         <div class="success-icon">
                             <i class="fas fa-check"></i>
                         </div>
-                        
-                        <h3>Your page has been created!</h3>
-                        
+
+                        <h3 data-i18n="ui.page_wizard.final.success_heading">Your page has been created!</h3>
+
                         <p class="mb-4">
-                            Take a peek at your new page: 
+                            <span data-i18n="ui.page_wizard.final.view_page_text">Take a peek at your new page:</span>
                             <a id="newPageUrl" href="#" target="_blank" class="fw-bold text-decoration-none" style="color: #ff6b35;">
-                                View Page <i class="fas fa-external-link-alt ms-1"></i>
+                                <span data-i18n="ui.page_wizard.final.view_page_link">View Page</span> <i class="fas fa-external-link-alt ms-1"></i>
                             </a>
                         </p>
 
-                        <a class="btn-wizard btn-wizard-primary backToSite" href="#">
-                            <i class="fas fa-check"></i>
-                            Done
-                        </a>
+                        <div class="d-flex gap-3 justify-content-center">
+                            <a id="openInEditor" class="btn-wizard btn-wizard-warning" href="#" style="display: none;">
+                                <i class="fas fa-code"></i>
+                                <span data-i18n="ui.page_wizard.final.open_editor">Open in Editor</span>
+                            </a>
+                            <a class="btn-wizard btn-wizard-primary backToSite" href="#">
+                                <i class="fas fa-check"></i>
+                                <span data-i18n="ui.page_wizard.final.done">Done</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

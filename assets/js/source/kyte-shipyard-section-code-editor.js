@@ -61,16 +61,32 @@ document.addEventListener("keydown", function(event) {
 
 document.addEventListener('KyteInitialized', function(e) {
     let _ks = e.detail._ks;
-    let sidenav = new KyteSidenav("#sidenav", subnavSection, "#Section");
-    sidenav.create();
-    sidenav.bind();
+
+    // Manual tab switching for new navigation design
+    $('.nav-link').click(function(e) {
+        e.preventDefault();
+
+        // Update active state
+        $('.nav-link').removeClass('active');
+        $(this).addClass('active');
+
+        // Get target section
+        let target = $(this).data('target');
+
+        // Hide all sections
+        $('.editor-container, .secondary-content').removeClass('active').addClass('d-none');
+
+        // Show target section
+        $('#' + target).addClass('active').removeClass('d-none');
+
+        // Update hash
+        window.location.hash = target;
+    });
 
     $('#pageLoaderModal').modal('show');
 
-    let hash = location.hash;
-    hash = hash == "" ? '#Section' : hash;
-    $(hash).removeClass('d-none');
-    $(hash+'-nav-link').addClass('active');
+    let hash = location.hash.replace('#', '');
+    hash = hash == "" ? 'Section' : hash;
     
     if (_ks.isSession()) {
         // get url param
@@ -144,17 +160,13 @@ document.addEventListener('KyteInitialized', function(e) {
                 cssEditor.onDidChangeModelContent(function(e) {
                     isDirty = true;
                 });
-                
-                // hide after editor generation
-                if (hash != '#Section') {
-                    $("#Section").addClass('d-none');
-                }
-                if (hash != '#JavaScript') {
-                    $("#JavaScript").addClass('d-none');
-                }
-                if (hash != '#Stylesheet') {
-                    $("#Stylesheet").addClass('d-none');
-                }
+
+                // Hide all sections except the active one and activate correct nav link
+                $('.editor-container, .secondary-content').addClass('d-none').removeClass('active');
+                $('#' + hash).removeClass('d-none').addClass('active');
+
+                $('.nav-link').removeClass('active');
+                $('.nav-link[data-target="' + hash + '"]').addClass('active');
 
                 let obj = {'model': 'KyteSite', 'idx':section.site.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));

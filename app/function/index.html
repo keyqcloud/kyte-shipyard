@@ -23,7 +23,20 @@
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
     <!-- Kyte -->
-    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
     <script>
         // Auto-detect localhost and load non-obfuscated source files for development
         (function() {
@@ -44,6 +57,25 @@
                 console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
             }
         })();
+    </script>
+    <script src="/assets/js/source/kyte-i18n.js"></script>
+    <script>
+        document.addEventListener('KyteInitialized', function(e) {
+            // Initialize i18n
+            const kyteI18n = new KyteI18n('en', '/assets/i18n/');
+            window.kyteI18n = kyteI18n;
+
+            // Check for cached language preference
+            const cachedLanguage = localStorage.getItem('kyte_user_language');
+
+            // Initialize and translate
+            kyteI18n.init(cachedLanguage).then(() => {
+                kyteI18n.translateDOM();
+                console.log('[Function Editor] Translations loaded for:', kyteI18n.getCurrentLanguage());
+            }).catch(error => {
+                console.error('[Function Editor] Failed to load translations:', error);
+            });
+        });
     </script>
     <script type="module" src="/assets/js/kyte-shipyard-function-details.js"></script>
 
@@ -678,50 +710,50 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addFunctionModalLabel">
-                        <i class="fas fa-plus me-2"></i>Add New Function
+                        <i class="fas fa-plus me-2"></i><span data-i18n="ui.function_editor.modal.add_title">Add New Function</span>
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="addFunctionForm">
                         <div class="mb-3">
-                            <label for="functionName" class="form-label">Function Name</label>
-                            <input type="text" class="form-control" id="functionName" placeholder="Enter function name (optional)">
-                            <div class="form-text text-muted">Leave empty for auto-generated name based on type</div>
+                            <label for="functionName" class="form-label" data-i18n="ui.function_editor.modal.name_label">Function Name</label>
+                            <input type="text" class="form-control" id="functionName" data-i18n-placeholder="ui.function_editor.modal.name_placeholder" placeholder="Enter function name (optional)">
+                            <div class="form-text text-muted" data-i18n="ui.function_editor.modal.name_hint">Leave empty for auto-generated name based on type</div>
                         </div>
                         <div class="mb-3">
-                            <label for="functionType" class="form-label">Function Type <span class="text-danger">*</span></label>
+                            <label for="functionType" class="form-label"><span data-i18n="ui.function_editor.modal.type_label">Function Type</span> <span class="text-danger">*</span></label>
                             <select class="form-select" id="functionType" required>
-                                <option value="">Select function type...</option>
-                                <optgroup label="Hooks">
-                                    <option value="hook_init">hook_init - Initialization</option>
-                                    <option value="hook_auth">hook_auth - Authentication</option>
-                                    <option value="hook_prequery">hook_prequery - Pre-query processing</option>
-                                    <option value="hook_preprocess">hook_preprocess - Pre-processing</option>
-                                    <option value="hook_response_data">hook_response_data - Response data processing</option>
-                                    <option value="hook_process_get_response">hook_process_get_response - Get response processing</option>
+                                <option value="" data-i18n="ui.function_editor.modal.type_placeholder">Select function type...</option>
+                                <optgroup data-i18n="ui.function_editor.modal.group_hooks" label="Hooks">
+                                    <option value="hook_init" data-i18n="ui.function_editor.modal.hook_init">hook_init - Initialization</option>
+                                    <option value="hook_auth" data-i18n="ui.function_editor.modal.hook_auth">hook_auth - Authentication</option>
+                                    <option value="hook_prequery" data-i18n="ui.function_editor.modal.hook_prequery">hook_prequery - Pre-query processing</option>
+                                    <option value="hook_preprocess" data-i18n="ui.function_editor.modal.hook_preprocess">hook_preprocess - Pre-processing</option>
+                                    <option value="hook_response_data" data-i18n="ui.function_editor.modal.hook_response_data">hook_response_data - Response data processing</option>
+                                    <option value="hook_process_get_response" data-i18n="ui.function_editor.modal.hook_process_get_response">hook_process_get_response - Get response processing</option>
                                 </optgroup>
-                                <optgroup label="Overrides">
-                                    <option value="new">new - Create operation override</option>
-                                    <option value="update">update - Update operation override</option>
-                                    <option value="get">get - Get operation override</option>
-                                    <option value="delete">delete - Delete operation override</option>
+                                <optgroup data-i18n="ui.function_editor.modal.group_overrides" label="Overrides">
+                                    <option value="new" data-i18n="ui.function_editor.modal.override_new">new - Create operation override</option>
+                                    <option value="update" data-i18n="ui.function_editor.modal.override_update">update - Update operation override</option>
+                                    <option value="get" data-i18n="ui.function_editor.modal.override_get">get - Get operation override</option>
+                                    <option value="delete" data-i18n="ui.function_editor.modal.override_delete">delete - Delete operation override</option>
                                 </optgroup>
-                                <optgroup label="Custom">
-                                    <option value="custom">custom - Custom function</option>
+                                <optgroup data-i18n="ui.function_editor.modal.group_custom" label="Custom">
+                                    <option value="custom" data-i18n="ui.function_editor.modal.custom">custom - Custom function</option>
                                 </optgroup>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="functionDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="functionDescription" rows="3" placeholder="Describe what this function does (optional)"></textarea>
+                            <label for="functionDescription" class="form-label" data-i18n="ui.function_editor.modal.description_label">Description</label>
+                            <textarea class="form-control" id="functionDescription" rows="3" data-i18n-placeholder="ui.function_editor.modal.description_placeholder" placeholder="Describe what this function does (optional)"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="ui.function_editor.button_cancel">Cancel</button>
                     <button type="button" class="btn btn-primary" id="createFunctionBtn">
-                        <i class="fas fa-plus me-2"></i>Create Function
+                        <i class="fas fa-plus me-2"></i><span data-i18n="ui.function_editor.modal.create_button">Create Function</span>
                     </button>
                 </div>
             </div>
@@ -735,56 +767,57 @@
                 <div class="modal-header">
                     <h5 class="modal-title" style="color: #ffffff; font-weight: 600;">
                         <i class="fas fa-edit me-2"></i>
-                        Add Change Summary
+                        <span data-i18n="ui.function_editor.change_modal.title">Add Change Summary</span>
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div id="actionTypeBadge" class="action-type-save mb-3">
                         <i class="fas fa-save"></i>
-                        <span>Saving Changes</span>
+                        <span data-i18n="ui.function_editor.change_modal.saving">Saving Changes</span>
                     </div>
-                    
+
                     <div class="mb-3">
-                        <label for="changeSummaryInput" class="form-label">
+                        <label for="changeSummaryInput" class="form-label" data-i18n="ui.function_editor.change_modal.summary_label">
                             What changed in this version?
                         </label>
-                        <textarea 
-                            class="form-control" 
-                            id="changeSummaryInput" 
-                            rows="3" 
+                        <textarea
+                            class="form-control"
+                            id="changeSummaryInput"
+                            rows="3"
+                            data-i18n-placeholder="ui.function_editor.change_modal.summary_placeholder"
                             placeholder="Briefly describe your changes (optional)..."
                             maxlength="500"
                         ></textarea>
                         <div style="color: #969696; font-size: 0.85rem; margin-top: 0.5rem;">
-                            Leave empty to use default summary. <code style="background: #252526; padding: 0.2rem 0.4rem; border-radius: 4px; color: #ff6b35;">Ctrl+Enter</code> to save quickly.
+                            <span data-i18n="ui.function_editor.change_modal.summary_hint">Leave empty to use default summary.</span> <code style="background: #252526; padding: 0.2rem 0.4rem; border-radius: 4px; color: #ff6b35;">Ctrl+Enter</code> <span data-i18n="ui.function_editor.change_modal.summary_shortcut">to save quickly.</span>
                         </div>
                     </div>
-                    
+
                     <div>
-                        <label class="form-label">Quick Options</label>
+                        <label class="form-label" data-i18n="ui.function_editor.change_modal.quick_options">Quick Options</label>
                         <div class="quick-options" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
-                            <span class="quick-option" onclick="setSummary('Fixed function logic')">Fixed function logic</span>
-                            <span class="quick-option" onclick="setSummary('Updated parameters')">Updated parameters</span>
-                            <span class="quick-option" onclick="setSummary('Added error handling')">Added error handling</span>
-                            <span class="quick-option" onclick="setSummary('Performance improvements')">Performance improvements</span>
-                            <span class="quick-option" onclick="setSummary('Code refactoring')">Code refactoring</span>
-                            <span class="quick-option" onclick="setSummary('Bug fixes')">Bug fixes</span>
+                            <span class="quick-option" onclick="setSummary(window.kyteI18n ? window.kyteI18n.t('ui.function_editor.change_modal.option_fixed') : 'Fixed function logic')" data-i18n="ui.function_editor.change_modal.option_fixed">Fixed function logic</span>
+                            <span class="quick-option" onclick="setSummary(window.kyteI18n ? window.kyteI18n.t('ui.function_editor.change_modal.option_params') : 'Updated parameters')" data-i18n="ui.function_editor.change_modal.option_params">Updated parameters</span>
+                            <span class="quick-option" onclick="setSummary(window.kyteI18n ? window.kyteI18n.t('ui.function_editor.change_modal.option_error') : 'Added error handling')" data-i18n="ui.function_editor.change_modal.option_error">Added error handling</span>
+                            <span class="quick-option" onclick="setSummary(window.kyteI18n ? window.kyteI18n.t('ui.function_editor.change_modal.option_performance') : 'Performance improvements')" data-i18n="ui.function_editor.change_modal.option_performance">Performance improvements</span>
+                            <span class="quick-option" onclick="setSummary(window.kyteI18n ? window.kyteI18n.t('ui.function_editor.change_modal.option_refactor') : 'Code refactoring')" data-i18n="ui.function_editor.change_modal.option_refactor">Code refactoring</span>
+                            <span class="quick-option" onclick="setSummary(window.kyteI18n ? window.kyteI18n.t('ui.function_editor.change_modal.option_bugfix') : 'Bug fixes')" data-i18n="ui.function_editor.change_modal.option_bugfix">Bug fixes</span>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times"></i>
-                        Cancel
+                        <span data-i18n="ui.function_editor.button_cancel">Cancel</span>
                     </button>
                     <button type="button" class="btn btn-secondary" onclick="proceedWithAction('')">
                         <i class="fas fa-forward"></i>
-                        Skip Summary
+                        <span data-i18n="ui.function_editor.change_modal.skip_button">Skip Summary</span>
                     </button>
                     <button type="button" id="confirmActionBtn" class="btn btn-primary" onclick="proceedWithAction()">
                         <i class="fas fa-save"></i>
-                        Save with Summary
+                        <span data-i18n="ui.function_editor.change_modal.save_button">Save with Summary</span>
                     </button>
                 </div>
             </div>
@@ -798,10 +831,10 @@
                 <div class="modal-header" style="background: #2d2d30; border-bottom: 1px solid #3e3e42; padding: 1.5rem;">
                     <div class="d-flex align-items-center gap-3">
                         <div class="version-badge px-3 py-2 rounded" style="background: linear-gradient(135deg, #ff6b35, #f7931e); color: white; font-weight: 600; font-size: 0.9rem;">
-                            Version <span id="preview-version-number">1</span>
+                            <span data-i18n="ui.function_editor.version_modal.version_label">Version</span> <span id="preview-version-number">1</span>
                         </div>
                         <div>
-                            <h5 class="modal-title mb-1" style="color: #ffffff; font-weight: 600;">Function Version Preview</h5>
+                            <h5 class="modal-title mb-1" style="color: #ffffff; font-weight: 600;" data-i18n="ui.function_editor.version_modal.title">Function Version Preview</h5>
                             <div class="text-muted" style="font-size: 0.85rem;">
                                 <span id="preview-version-date">2025-01-01 12:00:00</span> • <span id="preview-version-author">Developer</span>
                             </div>
@@ -814,10 +847,10 @@
                         <!-- Code Preview -->
                         <div class="content-header p-3" style="background: #252526; border-bottom: 1px solid #3e3e42; flex-shrink: 0;">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="mb-0" style="color: #ffffff; font-weight: 600;">PHP Code</h6>
+                                <h6 class="mb-0" style="color: #ffffff; font-weight: 600;" data-i18n="ui.function_editor.version_modal.php_code">PHP Code</h6>
                                 <div class="d-flex gap-2">
                                     <button class="btn btn-sm" id="copyVersionCode" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.375rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">
-                                        <i class="fas fa-copy me-1"></i>Copy
+                                        <i class="fas fa-copy me-1"></i><span data-i18n="ui.function_editor.version_modal.copy_button">Copy</span>
                                     </button>
                                 </div>
                             </div>
@@ -831,14 +864,14 @@
                     <div class="d-flex w-100 justify-content-between align-items-center">
                         <div class="version-info" style="color: #969696; font-size: 0.85rem;">
                             <i class="fas fa-info-circle me-1"></i>
-                            <span id="version-status">This version can be restored</span>
+                            <span id="version-status" data-i18n="ui.function_editor.version_modal.can_restore">This version can be restored</span>
                         </div>
                         <div class="d-flex gap-2">
                             <button type="button" class="btn" data-bs-dismiss="modal" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500;">
-                                <i class="fas fa-times me-2"></i>Close
+                                <i class="fas fa-times me-2"></i><span data-i18n="ui.function_editor.version_modal.close_button">Close</span>
                             </button>
                             <button type="button" id="restoreVersionBtn" class="btn" style="background: linear-gradient(135deg, #238636, #2ea043); border: none; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500;">
-                                <i class="fas fa-undo me-2"></i>Restore This Version
+                                <i class="fas fa-undo me-2"></i><span data-i18n="ui.function_editor.version_modal.restore_button">Restore This Version</span>
                             </button>
                         </div>
                     </div>
@@ -853,18 +886,18 @@
             <div id="sidenav" class="d-flex flex-column flex-shrink-0">
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0 text-white">Function Editor</h6>
+                        <h6 class="mb-0 text-white" data-i18n="ui.function_editor.sidebar_title">Function Editor</h6>
                         <button class="btn btn-sm text-white d-md-none" id="closeSidebar">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="sidebar-nav">
                     <div class="nav-section">
                         <div class="nav-section-title">
-                            Functions
-                            <button class="add-function-btn" id="addFunctionBtn" title="Add new function">
+                            <span data-i18n="ui.function_editor.functions_title">Functions</span>
+                            <button class="add-function-btn" id="addFunctionBtn" data-i18n-title="ui.function_editor.add_function_tooltip" title="Add new function">
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
@@ -883,47 +916,54 @@
                         <div>
                             <a class="btn-editor btn-editor-danger" id="backToController" href="#">
                                 <i class="fas fa-arrow-left"></i>
-                                Exit
+                                <span data-i18n="ui.function_editor.button_exit">Exit</span>
                             </a>
                         </div>
-                        
+
                         <div class="function-info">
-                            <h2 class="function-title" id="function-name">Select a Function</h2>
-                            <h3 class="function-type" id="function-type">Choose from the sidebar</h3>
+                            <h2 class="function-title" id="function-name" data-i18n="ui.function_editor.select_function">Select a Function</h2>
+                            <h3 class="function-type" id="function-type" data-i18n="ui.function_editor.choose_sidebar">Choose from the sidebar</h3>
                         </div>
-                        
+
                         <div class="d-flex gap-2">
                             <button class="btn-editor btn-editor-primary" id="addFunctionFromHeader">
                                 <i class="fas fa-plus"></i>
-                                Add Function
+                                <span data-i18n="ui.function_editor.button_add_function">Add Function</span>
                             </button>
                             <button class="btn-editor btn-editor-warning" id="saveCode">
                                 <i class="fas fa-save"></i>
-                                Save
+                                <span data-i18n="ui.function_editor.button_save">Save</span>
                             </button>
                         </div>
                     </div>
-                    
+
                     <!-- Editor Tabs -->
                     <div class="editor-tabs">
                         <button class="editor-tab active" data-target="Code">
                             <i class="fab fa-php"></i>
-                            <span id="current-function-name">PHP Code</span>
+                            <span id="current-function-name" data-i18n="ui.function_editor.tab_php_code">PHP Code</span>
                         </button>
                         <button class="editor-tab" data-target="History">
                             <i class="fas fa-history"></i>
-                            Version History
+                            <span data-i18n="ui.function_editor.tab_version_history">Version History</span>
+                        </button>
+                        <button class="editor-tab" data-target="Documentation">
+                            <i class="fas fa-book"></i>
+                            <span data-i18n="ui.function_editor.tab_documentation">Documentation</span>
+                        </button>
+                        <button class="editor-tab" id="openDocsInWindow" data-i18n-title="ui.function_editor.open_docs_tooltip" title="Open documentation in new window">
+                            <i class="fas fa-external-link-alt"></i>
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- Editor Content -->
                 <div class="editor-box-content">
                     <!-- PHP Code Editor -->
                     <div id="Code" class="editor-container active no-function">
                         <div class="no-function-message">
-                            <h3>Loading functions...</h3>
-                            <p>Select a function from the sidebar to start editing PHP code.</p>
+                            <h3 data-i18n="ui.function_editor.loading_functions">Loading functions...</h3>
+                            <p data-i18n="ui.function_editor.select_to_edit">Select a function from the sidebar to start editing PHP code.</p>
                         </div>
                         <div id="container" style="width: 100%; height: 100%; display: none;"></div>
                     </div>
@@ -931,11 +971,629 @@
                     <!-- Version History Section -->
                     <div id="History" class="secondary-content">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4>Function Version History</h4>
+                            <h4 data-i18n="ui.function_editor.history_title">Function Version History</h4>
                             <div></div>
                         </div>
-                        <p>Track changes made to this function over time. Each version is automatically saved, allowing you to compare edits and revert to previous states when needed.</p>
+                        <p data-i18n="ui.function_editor.history_description">Track changes made to this function over time. Each version is automatically saved, allowing you to compare edits and revert to previous states when needed.</p>
                         <div class="mt-3" id="version-history-table-wrapper"></div>
+                    </div>
+
+                    <!-- Documentation Section -->
+                    <div id="Documentation" class="secondary-content" style="max-width: 1200px; margin: 0 auto;">
+                        <h4 class="mb-4">Controller Function Types Guide</h4>
+                        <p class="mb-4">Understand the different types of functions you can create in Kyte controllers and how to use them effectively.</p>
+
+                        <!-- Hooks Section -->
+                        <div class="mb-5">
+                            <h5 class="text-primary mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-link me-2"></i>Hooks - Extend Default Behavior
+                            </h5>
+                            <p class="text-muted mb-3">Hooks are lifecycle methods that allow you to inject custom logic at specific points in the request/response cycle without completely overriding the default CRUD operations.</p>
+
+                            <div class="mb-4">
+                                <h6 class="mb-2" style="color: #ff6b35; font-family: 'JetBrains Mono', monospace;">hook_init</h6>
+                                <p class="small mb-2">Runs when the controller is initialized, before any action is executed. Use this to set up initial state, load configuration, or perform authentication checks.</p>
+                                <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                                    <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5;"><code>protected function hook_init() {
+    // Example: Load application-specific settings
+    $settings = new Model(AppSettings);
+    $config = $settings->retrieve('app_id', $this->api->app->id);
+    $this->appConfig = $config->getObjects()[0] ?? null;
+
+    // Example: Set custom timezone
+    date_default_timezone_set('America/New_York');
+}</code></pre>
+                                </div>
+                                <div class="alert" style="background: #2d3748; border-left: 3px solid #4299e1; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>💡 Use Case:</strong> Initialize shared resources, load configuration, set timezone, or establish database connections that will be used across multiple actions.
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="mb-2" style="color: #ff6b35; font-family: 'JetBrains Mono', monospace;">hook_auth</h6>
+                                <p class="small mb-2">Additional authentication logic that runs AFTER the default session validation passes. Use this to add extra authentication checks or load additional user context.</p>
+                                <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                                    <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5;"><code>protected function hook_auth() {
+    // Example: Check if user has specific permission
+    if (!$this->user->hasPermission('access_controller')) {
+        throw new \Exception('User does not have required permission');
+    }
+
+    // Example: Load additional user context
+    $profile = new ModelObject(UserProfile);
+    if ($profile->retrieve('user_id', $this->user->id)) {
+        $this->userProfile = $profile;
+    }
+
+    // Example: Check IP whitelist for sensitive operations
+    $allowedIPs = ['192.168.1.100', '10.0.0.50'];
+    $clientIP = $_SERVER['REMOTE_ADDR'] ?? '';
+
+    if (!in_array($clientIP, $allowedIPs)) {
+        throw new \Exception('Access denied from this IP address');
+    }
+
+    // Example: Verify two-factor authentication
+    if ($this->user->requires_2fa && !$this->verify2FA()) {
+        throw new \Exception('Two-factor authentication required');
+    }
+}</code></pre>
+                                </div>
+                                <div class="alert" style="background: #2d3748; border-left: 3px solid #4299e1; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>💡 Use Case:</strong> Add role-based access control, check additional permissions, verify IP whitelists, enforce two-factor authentication, or load user-specific configuration that will be used throughout the request.
+                                </div>
+                                <div class="alert" style="background: #744210; border-left: 3px solid #f6ad55; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>ℹ️ Note:</strong> This hook runs AFTER default authentication. The user session has already been validated. Throw an exception to deny access.
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="mb-2" style="color: #ff6b35; font-family: 'JetBrains Mono', monospace;">hook_prequery</h6>
+                                <p class="small mb-2">Modify database query conditions before data is retrieved in GET, UPDATE, and DELETE operations. Add filters, joins, or custom conditions.</p>
+                                <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                                    <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5;"><code>protected function hook_prequery($conditions) {
+    // Example: Filter by user's organization
+    if ($this->user && $this->user->organization) {
+        $conditions[] = [
+            'field' => 'organization',
+            'value' => $this->user->organization,
+            'operator' => '='
+        ];
+    }
+
+    // Example: Only show active records
+    $conditions[] = [
+        'field' => 'status',
+        'value' => 'active',
+        'operator' => '='
+    ];
+
+    // Example: Add date range filter
+    $conditions[] = [
+        'field' => 'date_created',
+        'value' => strtotime('-30 days'),
+        'operator' => '>='
+    ];
+
+    return $conditions;
+}</code></pre>
+                                </div>
+                                <div class="alert" style="background: #2d3748; border-left: 3px solid #4299e1; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>💡 Use Case:</strong> Implement row-level security, filter by tenant/organization, add soft delete conditions, or restrict data access based on user roles.
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="mb-2" style="color: #ff6b35; font-family: 'JetBrains Mono', monospace;">hook_preprocess</h6>
+                                <p class="small mb-2">Transform and validate request data before it's saved to the database (called during CREATE and UPDATE operations). Perfect for data sanitization, validation, and computed fields.</p>
+                                <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                                    <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5;"><code>protected function hook_preprocess($data) {
+    // Example: Generate slug from title
+    if (isset($data['title']) && empty($data['slug'])) {
+        $data['slug'] = strtolower(str_replace(' ', '-', $data['title']));
+        $data['slug'] = preg_replace('/[^a-z0-9-]/', '', $data['slug']);
+    }
+
+    // Example: Validate email format
+    if (isset($data['email'])) {
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $this->error('Invalid email format');
+        }
+    }
+
+    // Example: Calculate total from line items
+    if (isset($data['quantity']) && isset($data['price'])) {
+        $data['total'] = $data['quantity'] * $data['price'];
+    }
+
+    // Example: Set default values
+    if (!isset($data['status'])) {
+        $data['status'] = 'pending';
+    }
+
+    // Example: Auto-assign to current user
+    if (!isset($data['assigned_to'])) {
+        $data['assigned_to'] = $this->user->id;
+    }
+
+    return $data;
+}</code></pre>
+                                </div>
+                                <div class="alert" style="background: #2d3748; border-left: 3px solid #4299e1; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>💡 Use Case:</strong> Auto-generate slugs, validate input data, calculate computed fields, set default values, normalize data formats, or sanitize user input.
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="mb-2" style="color: #ff6b35; font-family: 'JetBrains Mono', monospace;">hook_response_data</h6>
+                                <p class="small mb-2">Transform response data before sending it to the client. Add computed properties, format dates, hide sensitive fields, or enrich data with related records.</p>
+                                <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                                    <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5;"><code>protected function hook_response_data($data) {
+    // Example: Add computed property
+    $data['full_name'] = trim($data['first_name'] . ' ' . $data['last_name']);
+
+    // Example: Format timestamps
+    if (isset($data['date_created'])) {
+        $data['created_formatted'] = date('Y-m-d H:i:s', $data['date_created']);
+        $data['created_relative'] = $this->timeAgo($data['date_created']);
+    }
+
+    // Example: Add status badge
+    $statusColors = [
+        'active' => 'success',
+        'pending' => 'warning',
+        'inactive' => 'danger'
+    ];
+    $data['status_badge'] = $statusColors[$data['status']] ?? 'secondary';
+
+    // Example: Load related data
+    if (isset($data['author'])) {
+        $author = new ModelObject(User);
+        if ($author->retrieve('id', $data['author'])) {
+            $data['author_details'] = [
+                'name' => $author->name,
+                'avatar' => $author->avatar_url
+            ];
+        }
+    }
+
+    return $data;
+}</code></pre>
+                                </div>
+                                <div class="alert" style="background: #2d3748; border-left: 3px solid #4299e1; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>💡 Use Case:</strong> Add computed fields, format dates for display, calculate aggregates, load related data not in the model definition, or transform data structure for frontend consumption.
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="mb-2" style="color: #ff6b35; font-family: 'JetBrains Mono', monospace;">hook_process_get_response</h6>
+                                <p class="small mb-2">Process GET request responses specifically. Similar to hook_response_data but only runs for GET operations. Useful for adding view-specific data.</p>
+                                <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                                    <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5;"><code>protected function hook_process_get_response($data) {
+    // Example: Add permissions for current user
+    $data['can_edit'] = $this->userCanEdit($data['id']);
+    $data['can_delete'] = $this->userCanDelete($data['id']);
+
+    // Example: Add view count
+    $views = new Model(PageView);
+    $viewCount = $views->count([
+        ['field' => 'page_id', 'value' => $data['id']]
+    ]);
+    $data['view_count'] = $viewCount;
+
+    // Example: Calculate time-sensitive data
+    $data['is_expired'] = $data['expiry_date'] < time();
+    $data['days_remaining'] = ceil(($data['expiry_date'] - time()) / 86400);
+
+    return $data;
+}</code></pre>
+                                </div>
+                                <div class="alert" style="background: #2d3748; border-left: 3px solid #4299e1; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>💡 Use Case:</strong> Add user-specific permissions, calculate view counts, add time-sensitive computed fields, or enrich GET responses with contextual data.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Overrides Section -->
+                        <div class="mb-5">
+                            <h5 class="text-success mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-edit me-2"></i>Overrides - Replace Default Operations
+                            </h5>
+                            <p class="text-muted mb-3">Overrides completely replace the default CRUD operations. Use these when you need full control over the entire operation logic, not just pre/post processing.</p>
+
+                            <div class="mb-4">
+                                <h6 class="mb-2" style="color: #48bb78; font-family: 'JetBrains Mono', monospace;">new</h6>
+                                <p class="small mb-2">Override the default CREATE operation (POST requests). When this function exists, Kyte skips the default create logic entirely.</p>
+                                <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                                    <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5;"><code>protected function new($data) {
+    // Example: Custom validation
+    if (empty($data['email']) || empty($data['password'])) {
+        $this->error('Email and password are required');
+    }
+
+    // Example: Check for duplicates
+    $existing = new ModelObject($this->modelName);
+    if ($existing->retrieve('email', $data['email'])) {
+        $this->error('User with this email already exists');
+    }
+
+    // Example: Hash password
+    $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+
+    // Example: Generate verification token
+    $data['verification_token'] = bin2hex(random_bytes(32));
+    $data['is_verified'] = 0;
+
+    // Create the record
+    $obj = new ModelObject($this->modelName);
+    $obj->create($data, $this->user);
+
+    // Example: Send welcome email
+    $this->sendWelcomeEmail($obj->email, $obj->verification_token);
+
+    // Example: Create related records
+    $profile = new ModelObject(UserProfile);
+    $profile->create([
+        'user_id' => $obj->id,
+        'theme' => 'default'
+    ], $this->user);
+
+    return $this->success([$obj->getAllParams()]);
+}</code></pre>
+                                </div>
+                                <div class="alert" style="background: #2d3748; border-left: 3px solid #4299e1; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>💡 Use Case:</strong> Complex validation, creating multiple related records atomically, triggering external APIs, sending notifications, or implementing custom business logic during creation.
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="mb-2" style="color: #48bb78; font-family: 'JetBrains Mono', monospace;">update</h6>
+                                <p class="small mb-2">Override the default UPDATE operation (PUT requests). Complete control over how records are updated.</p>
+                                <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                                    <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5;"><code>protected function update($data) {
+    // Get the record to update
+    $obj = new ModelObject($this->modelName);
+    if (!$obj->retrieve($this->api->field, $this->api->value)) {
+        $this->error('Record not found');
+    }
+
+    // Example: Permission check
+    if ($obj->user_id !== $this->user->id && !$this->user->is_admin) {
+        $this->error('You do not have permission to update this record');
+    }
+
+    // Example: Track changes for audit
+    $changes = [];
+    foreach ($data as $field => $newValue) {
+        if ($obj->$field !== $newValue) {
+            $changes[$field] = [
+                'old' => $obj->$field,
+                'new' => $newValue
+            ];
+        }
+    }
+
+    // Example: Prevent certain field updates
+    unset($data['user_id']); // Don't allow changing owner
+    unset($data['date_created']); // Don't allow changing creation date
+
+    // Update the record
+    $obj->save($data, $this->user);
+
+    // Example: Log changes
+    if (!empty($changes)) {
+        $this->logAudit('update', $obj->id, $changes);
+    }
+
+    // Example: Invalidate cache
+    $this->clearCache('user_' . $obj->id);
+
+    return $this->success([$obj->getAllParams()]);
+}</code></pre>
+                                </div>
+                                <div class="alert" style="background: #2d3748; border-left: 3px solid #4299e1; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>💡 Use Case:</strong> Permission checking, audit logging, preventing updates to certain fields, validating state transitions, or triggering workflows on specific changes.
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="mb-2" style="color: #48bb78; font-family: 'JetBrains Mono', monospace;">get</h6>
+                                <p class="small mb-2">Override the default READ operation (GET requests). Complete control over data retrieval and response format.</p>
+                                <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                                    <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5;"><code>protected function get() {
+    // Example: Custom query with joins
+    $sql = "SELECT u.*, p.bio, p.avatar_url, COUNT(o.id) as order_count
+            FROM User u
+            LEFT JOIN UserProfile p ON p.user_id = u.id
+            LEFT JOIN Order o ON o.user_id = u.id
+            WHERE u.deleted = 0";
+
+    if ($this->api->field && $this->api->value) {
+        $sql .= " AND u." . DBI::escape_string($this->api->field) . " = '" . DBI::escape_string($this->api->value) . "'";
+    }
+
+    $sql .= " GROUP BY u.id ORDER BY u.date_created DESC";
+
+    $result = DBI::query($sql);
+    $data = [];
+
+    while ($row = $result->fetch_assoc()) {
+        // Example: Transform data
+        $row['is_vip'] = $row['order_count'] >= 10;
+        $row['member_since'] = date('Y-m-d', $row['date_created']);
+
+        // Example: Add computed fields
+        $row['full_name'] = $row['first_name'] . ' ' . $row['last_name'];
+
+        $data[] = $row;
+    }
+
+    return $this->success($data, count($data));
+}</code></pre>
+                                </div>
+                                <div class="alert" style="background: #2d3748; border-left: 3px solid #4299e1; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>💡 Use Case:</strong> Complex joins across multiple tables, custom SQL with aggregations, non-standard query logic, or returning data in a completely different structure.
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="mb-2" style="color: #48bb78; font-family: 'JetBrains Mono', monospace;">delete</h6>
+                                <p class="small mb-2">Override the default DELETE operation. Control deletion logic, implement hard deletes, or cascade deletions.</p>
+                                <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                                    <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5;"><code>protected function delete() {
+    // Get the record
+    $obj = new ModelObject($this->modelName);
+    if (!$obj->retrieve($this->api->field, $this->api->value)) {
+        $this->error('Record not found');
+    }
+
+    // Example: Permission check
+    if ($obj->user_id !== $this->user->id && !$this->user->is_admin) {
+        $this->error('You do not have permission to delete this record');
+    }
+
+    // Example: Prevent deletion based on status
+    if ($obj->status === 'active' || $obj->has_children) {
+        $this->error('Cannot delete active records or records with dependencies');
+    }
+
+    // Example: Cascade delete related records
+    $comments = new Model(Comment);
+    $comments->deleteObjects([
+        ['field' => 'post_id', 'value' => $obj->id]
+    ]);
+
+    // Example: Archive instead of delete
+    $archive = new ModelObject(ArchivedPost);
+    $archive->create($obj->getAllParams(), $this->user);
+
+    // Example: Hard delete (not soft delete)
+    $obj->purge($this->api->field, $this->api->value);
+
+    // Example: Trigger cleanup
+    $this->deleteAssociatedFiles($obj->id);
+    $this->clearCache('post_' . $obj->id);
+
+    return $this->success(['deleted' => true, 'id' => $obj->id]);
+}</code></pre>
+                                </div>
+                                <div class="alert" style="background: #742a2a; border-left: 3px solid #fc8181; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>⚠️ Warning:</strong> By default, Kyte performs soft deletes (sets deleted=1). Override this function only if you need hard deletes or custom deletion logic.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Custom Functions Section -->
+                        <div class="mb-5">
+                            <h5 class="text-warning mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-code me-2"></i>Custom - Create Your Own Methods
+                            </h5>
+                            <p class="text-muted mb-3">Custom functions allow you to create endpoints for operations that don't fit the standard CRUD pattern. Perfect for business logic, workflows, calculations, and integrations.</p>
+
+                            <div class="mb-4">
+                                <h6 class="mb-2" style="color: #ecc94b; font-family: 'JetBrains Mono', monospace;">custom (any method name)</h6>
+                                <p class="small mb-2">Create any public method with any name. These are called via custom API endpoints and can perform any operation you need.</p>
+                                <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                                    <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5;"><code>// Example: Send email notification
+public function sendEmail($data) {
+    $to = $data['to'] ?? '';
+    $subject = $data['subject'] ?? '';
+    $body = $data['body'] ?? '';
+
+    if (empty($to) || empty($subject)) {
+        $this->error('Email address and subject are required');
+    }
+
+    // Use Kyte's SES integration
+    $ses = new \Kyte\Aws\SES($this->api->aws_key_id, $this->api->aws_secret);
+    $result = $ses->sendEmail($to, $subject, $body);
+
+    return $this->success(['sent' => true, 'message_id' => $result]);
+}
+
+// Example: Process payment
+public function processPayment($data) {
+    $amount = $data['amount'] ?? 0;
+    $token = $data['stripe_token'] ?? '';
+
+    // Validate
+    if ($amount <= 0) {
+        $this->error('Invalid amount');
+    }
+
+    // Process with Stripe
+    $stripe = new \Stripe\StripeClient(KYTE_APP_ENV['STRIPE_SECRET_KEY']);
+    $charge = $stripe->charges->create([
+        'amount' => $amount * 100,
+        'currency' => 'usd',
+        'source' => $token,
+    ]);
+
+    // Record transaction
+    $transaction = new ModelObject(Transaction);
+    $transaction->create([
+        'user_id' => $this->user->id,
+        'amount' => $amount,
+        'stripe_charge_id' => $charge->id,
+        'status' => $charge->status
+    ], $this->user);
+
+    return $this->success(['transaction_id' => $transaction->id]);
+}
+
+// Example: Generate report
+public function generateReport($data) {
+    $startDate = $data['start_date'] ?? strtotime('-30 days');
+    $endDate = $data['end_date'] ?? time();
+
+    // Query data
+    $orders = new Model(Order);
+    $results = $orders->from('date_created', $startDate, $endDate, false, true);
+
+    // Calculate metrics
+    $total_revenue = 0;
+    $total_orders = count($results);
+
+    foreach ($results as $order) {
+        $total_revenue += $order['total'];
+    }
+
+    $report = [
+        'period' => [
+            'start' => date('Y-m-d', $startDate),
+            'end' => date('Y-m-d', $endDate)
+        ],
+        'metrics' => [
+            'total_orders' => $total_orders,
+            'total_revenue' => $total_revenue,
+            'average_order_value' => $total_orders > 0 ? $total_revenue / $total_orders : 0
+        ],
+        'orders' => $results
+    ];
+
+    return $this->success($report);
+}
+
+// Example: Import data from CSV
+public function importCSV($data) {
+    $file = $_FILES['csv_file'] ?? null;
+
+    if (!$file) {
+        $this->error('No file uploaded');
+    }
+
+    $csv = array_map('str_getcsv', file($file['tmp_name']));
+    $headers = array_shift($csv);
+
+    $imported = 0;
+    $errors = [];
+
+    foreach ($csv as $index => $row) {
+        $rowData = array_combine($headers, $row);
+
+        try {
+            $obj = new ModelObject($this->modelName);
+            $obj->create($rowData, $this->user);
+            $imported++;
+        } catch (Exception $e) {
+            $errors[] = "Row " . ($index + 2) . ": " . $e->getMessage();
+        }
+    }
+
+    return $this->success([
+        'imported' => $imported,
+        'total' => count($csv),
+        'errors' => $errors
+    ]);
+}</code></pre>
+                                </div>
+                                <div class="alert" style="background: #2d3748; border-left: 3px solid #4299e1; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>💡 Use Case:</strong> Send emails, process payments, generate reports, import/export data, trigger workflows, call external APIs, run batch operations, or any custom business logic.
+                                </div>
+                                <div class="alert" style="background: #2d3748; border-left: 3px solid #ecc94b; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                                    <strong>📡 API Endpoint:</strong> Custom functions are accessible via <code>POST /api/{ControllerName}/{functionName}</code>. Example: <code>POST /api/Order/processPayment</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Best Practices -->
+                        <div class="mb-5">
+                            <h5 class="mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-star me-2" style="color: #ff6b35;"></i>Best Practices
+                            </h5>
+                            <ul style="line-height: 2; color: #d4d4d4;">
+                                <li><strong>Use hooks when possible:</strong> Hooks are less intrusive and easier to maintain than overrides.</li>
+                                <li><strong>Return modified data:</strong> Hooks like hook_preprocess and hook_response_data must return the data array.</li>
+                                <li><strong>Error handling:</strong> Use <code>$this->error('message')</code> to return error responses properly.</li>
+                                <li><strong>Success responses:</strong> Use <code>$this->success($data, $count)</code> for consistent API responses.</li>
+                                <li><strong>Access control:</strong> Always check <code>$this->user</code> permissions before sensitive operations.</li>
+                                <li><strong>Use ModelObject for single records:</strong> <code>new ModelObject(ModelName)</code></li>
+                                <li><strong>Use Model for collections:</strong> <code>new Model(ModelName)</code></li>
+                                <li><strong>Test thoroughly:</strong> Functions run in production - test all edge cases.</li>
+                                <li><strong>Document your code:</strong> Add comments explaining complex logic for future maintainers.</li>
+                                <li><strong>Keep functions focused:</strong> Each function should do one thing well.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Common Patterns -->
+                        <div class="mb-4">
+                            <h5 class="mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-lightbulb me-2" style="color: #ff6b35;"></i>Common Patterns
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem;">
+                                        <h6 style="color: #ffffff; margin-bottom: 0.5rem;">Getting Request Data</h6>
+                                        <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;"><code>// In hooks/overrides
+$data // Passed as parameter
+
+// In custom functions
+$data // Passed as parameter
+$_POST // Raw POST data
+$_GET // Query parameters
+$_FILES // Uploaded files</code></pre>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem;">
+                                        <h6 style="color: #ffffff; margin-bottom: 0.5rem;">Accessing Current User</h6>
+                                        <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;"><code>$this->user->id
+$this->user->email
+$this->user->role
+$this->user->kyte_account</code></pre>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem;">
+                                        <h6 style="color: #ffffff; margin-bottom: 0.5rem;">Accessing API Context</h6>
+                                        <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;"><code>$this->api->app // Application object
+$this->api->account // Account object
+$this->api->field // URL field param
+$this->api->value // URL value param</code></pre>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div style="background: #252526; border: 1px solid #3e3e42; border-radius: 4px; padding: 1rem;">
+                                        <h6 style="color: #ffffff; margin-bottom: 0.5rem;">Environment Variables</h6>
+                                        <pre style="margin: 0; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;"><code>KYTE_APP_ENV['STRIPE_KEY']
+KYTE_APP_ENV['SMTP_HOST']
+KYTE_APP_ENV['API_SECRET']</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Resources -->
+                        <div class="alert" style="background: #252526; border: 1px solid #3e3e42; padding: 1.5rem; margin-top: 2rem; margin-bottom: 8rem;">
+                            <h6 style="color: #ffffff; margin-bottom: 1rem;"><i class="fas fa-book-open me-2" style="color: #ff6b35;"></i>Additional Documentation</h6>
+                            <p style="font-size: 0.9rem; margin-bottom: 0;">
+                                For comprehensive documentation on the Kyte PHP framework, visit the official documentation:
+                                <a href="https://github.com/keyqcloud/kyte-php/tree/master/docs" target="_blank" rel="noopener noreferrer" style="color: #ff6b35; text-decoration: none; font-weight: 600;">
+                                    <i class="fab fa-github me-1"></i>Kyte PHP Documentation on GitHub
+                                    <i class="fas fa-external-link-alt ms-1" style="font-size: 0.75em;"></i>
+                                </a>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

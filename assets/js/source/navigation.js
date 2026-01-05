@@ -3,76 +3,103 @@ function generateAppSidebar(encodedRequest) {
     return {
         sections: [
             {
+                title: 'Overview',
+                titleKey: 'sidebar.overview',
+                items: [
+                    {
+                        faicon: 'fas fa-tachometer-alt',
+                        label: 'Dashboard',
+                        labelKey: 'sidebar.dashboard',
+                        href: '/app/dashboard/?request=' + encodedRequest
+                    }
+                ]
+            },
+            {
                 title: 'Sites',
+                titleKey: 'sidebar.sites',
                 items: [
                     {
                         faicon: 'fas fa-globe',
                         label: 'Sites',
+                        labelKey: 'sidebar.sites',
                         href: '/app/sites.html?request=' + encodedRequest
                     }
                 ]
             },
             {
                 title: 'API',
+                titleKey: 'sidebar.api',
                 items: [
                     {
                         faicon: 'fas fa-table',
                         label: 'Models',
+                        labelKey: 'sidebar.models',
                         href: '/app/models.html?request=' + encodedRequest
                     },
                     {
                         faicon: 'fas fa-layer-group',
                         label: 'Controllers',
+                        labelKey: 'sidebar.controllers',
                         href: '/app/controllers.html?request=' + encodedRequest
                     },
                     {
                         faicon: 'fas fa-clock',
                         label: 'Cron Jobs',
+                        labelKey: 'sidebar.cron_jobs',
                         href: '/app/cron-jobs.html?request=' + encodedRequest
                     }
                 ]
             },
             {
                 title: 'Storage',
+                titleKey: 'sidebar.storage',
                 items: [
                     {
                         faicon: 'fas fa-hdd',
                         label: 'Datastores',
+                        labelKey: 'sidebar.datastores',
                         href: '/app/datastores.html?request=' + encodedRequest
                     }
                 ]
             },
             {
                 title: 'Components',
+                titleKey: 'sidebar.components',
                 items: [
                     {
                         faicon: 'fas fa-envelope',
                         label: 'Email Templates',
+                        labelKey: 'sidebar.email_templates',
                         href: '/app/emails.html?request=' + encodedRequest
                     },
                     {
                         faicon: 'fas fa-puzzle-piece',
                         label: 'Web Components',
+                        labelKey: 'sidebar.web_components',
                         href: '/app/components.html?request=' + encodedRequest
                     }
                 ]
             },
             {
                 title: 'System',
+                titleKey: 'sidebar.system',
                 items: [
                     {
                         faicon: 'fas fa-key',
                         label: 'Sessions',
+                        labelKey: 'sidebar.sessions',
                         href: '/app/sessions.html?request=' + encodedRequest
                     },
                     {
                         faicon: 'fas fa-bomb',
                         label: 'Error Log',
+                        labelKey: 'sidebar.error_log',
                         href: '/app/log.html?request=' + encodedRequest
                     },
                     {
                         faicon: 'fas fa-cog',
                         label: 'Configuration',
+                        labelKey: 'sidebar.configuration',
                         href: '/app/configuration.html?request=' + encodedRequest
                     }
                 ]
@@ -90,7 +117,7 @@ function renderAppSidebar(encodedRequest) {
 
     sidebarData.sections.forEach(section => {
         sidebarHTML += '<div class="nav-section">';
-        sidebarHTML += `<div class="nav-section-title">${section.title}</div>`;
+        sidebarHTML += `<div class="nav-section-title" data-i18n="${section.titleKey}">${section.title}</div>`;
 
         section.items.forEach(item => {
             const isActive = currentPath.includes(item.href.split('?')[0]);
@@ -99,7 +126,7 @@ function renderAppSidebar(encodedRequest) {
             sidebarHTML += `
                 <a href="${item.href}" class="nav-link ${activeClass}">
                     <i class="${item.faicon}"></i>
-                    ${item.label}
+                    <span data-i18n="${item.labelKey}">${item.label}</span>
                 </a>
             `;
         });
@@ -497,6 +524,11 @@ function loadAppSidebar() {
     // Render the sidebar
     const sidebarHTML = renderAppSidebar(request);
     sidebarElement.innerHTML = sidebarHTML;
+
+    // Translate sidebar content if KyteI18n is available
+    if (window.kyteI18n) {
+        window.kyteI18n.translateDOM();
+    }
 
     // Try to get application name from the request
     try {

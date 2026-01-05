@@ -1,6 +1,7 @@
 // Enhanced kyte-shipyard-function-details.js with Version Control
 import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/+esm';
 import {registerPHPSnippetLanguage} from '/assets/js/packages/php-snippet/registerPHPSnippetLanguage.js';
+import {registerKytePhpIntelliSense} from '/assets/js/source/kyte-php-intellisense.js';
 
 var editor;
 var tblVersionHistory;
@@ -128,6 +129,9 @@ function initializeChangeSummaryModal() {
 
 // Version preview function
 function previewVersion(versionData, _ks) {
+    // Get i18n helper
+    const t = (key, fallback) => window.kyteI18n ? window.kyteI18n.t(key) : fallback;
+
     const previewContent = `
         <div class="modal fade" id="versionPreviewModal" tabindex="-1" data-bs-backdrop="static">
             <div class="modal-dialog modal-fullscreen">
@@ -135,10 +139,10 @@ function previewVersion(versionData, _ks) {
                     <div class="modal-header" style="background: #2d2d30; border-bottom: 1px solid #3e3e42; padding: 1.5rem;">
                         <div class="d-flex align-items-center gap-3">
                             <div class="version-badge px-3 py-2 rounded" style="background: linear-gradient(135deg, #ff6b35, #f7931e); color: white; font-weight: 600; font-size: 0.9rem;">
-                                Version ${versionData.version_number}
+                                <span data-i18n="ui.function_editor.version_modal.version_label">${t('ui.function_editor.version_modal.version_label', 'Version')}</span> ${versionData.version_number}
                             </div>
                             <div>
-                                <h5 class="modal-title mb-1" style="color: #ffffff; font-weight: 600;">Function Version Preview</h5>
+                                <h5 class="modal-title mb-1" style="color: #ffffff; font-weight: 600;" data-i18n="ui.function_editor.version_modal.title">${t('ui.function_editor.version_modal.title', 'Function Version Preview')}</h5>
                                 <div class="text-muted" style="font-size: 0.85rem;">
                                     ${new Date(versionData.date_created).toLocaleString()} • ${versionData.created_by?.name || 'Unknown'}
                                 </div>
@@ -150,16 +154,16 @@ function previewVersion(versionData, _ks) {
                         <div class="d-flex flex-column h-100">
                             <div class="content-header p-3" style="background: #252526; border-bottom: 1px solid #3e3e42; flex-shrink: 0;">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="mb-0" style="color: #ffffff; font-weight: 600;">PHP Code</h6>
+                                    <h6 class="mb-0" style="color: #ffffff; font-weight: 600;" data-i18n="ui.function_editor.version_modal.php_code">${t('ui.function_editor.version_modal.php_code', 'PHP Code')}</h6>
                                     <div class="d-flex gap-2">
                                         <button class="btn btn-sm copy-content" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.375rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">
-                                            <i class="fas fa-copy me-1"></i>Copy
+                                            <i class="fas fa-copy me-1"></i><span data-i18n="ui.function_editor.version_modal.copy_button">${t('ui.function_editor.version_modal.copy_button', 'Copy')}</span>
                                         </button>
                                     </div>
                                 </div>
                                 ${versionData.change_summary ? `
                                 <div class="mt-2 p-2 rounded" style="background: #2d2d30; border: 1px solid #3e3e42;">
-                                    <small style="color: #969696;">Change Summary:</small>
+                                    <small style="color: #969696;" data-i18n="ui.function_editor.version_modal.change_summary">${t('ui.function_editor.version_modal.change_summary', 'Change Summary:')}</small>
                                     <div style="color: #d4d4d4; font-size: 0.9rem;">${versionData.change_summary}</div>
                                 </div>
                                 ` : ''}
@@ -173,15 +177,15 @@ function previewVersion(versionData, _ks) {
                         <div class="d-flex w-100 justify-content-between align-items-center">
                             <div class="version-info" style="color: #969696; font-size: 0.85rem;">
                                 <i class="fas fa-info-circle me-1"></i>
-                                ${versionData.can_revert ? 'This version can be restored' : 'This is the current version'}
+                                <span data-i18n="${versionData.can_revert ? 'ui.function_editor.version_modal.can_restore' : 'ui.function_editor.version_modal.current_version'}">${versionData.can_revert ? t('ui.function_editor.version_modal.can_restore', 'This version can be restored') : t('ui.function_editor.version_modal.current_version', 'This is the current version')}</span>
                             </div>
                             <div class="d-flex gap-2">
                                 <button type="button" class="btn" data-bs-dismiss="modal" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500;">
-                                    <i class="fas fa-times me-2"></i>Close
+                                    <i class="fas fa-times me-2"></i><span data-i18n="ui.function_editor.version_modal.close_button">${t('ui.function_editor.version_modal.close_button', 'Close')}</span>
                                 </button>
                                 ${versionData.can_revert ? `
                                 <button type="button" id="restoreVersionBtn" class="btn" style="background: linear-gradient(135deg, #238636, #2ea043); border: none; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500;">
-                                    <i class="fas fa-undo me-2"></i>Restore This Version
+                                    <i class="fas fa-undo me-2"></i><span data-i18n="ui.function_editor.version_modal.restore_button">${t('ui.function_editor.version_modal.restore_button', 'Restore This Version')}</span>
                                 </button>
                                 ` : ''}
                             </div>
@@ -191,35 +195,40 @@ function previewVersion(versionData, _ks) {
             </div>
         </div>
     `;
-    
+
     // Remove existing modal if present
     $('#versionPreviewModal').remove();
-    
+
     // Add modal to body and show
     $('body').append(previewContent);
-    
+
+    // Translate the modal content
+    if (window.kyteI18n) {
+        window.kyteI18n.translateDOM(document.getElementById('versionPreviewModal'));
+    }
+
     // Bind events
     $('#versionPreviewModal .copy-content').on('click', function() {
         const content = versionData.code || '';
         navigator.clipboard.writeText(content).then(() => {
             const btn = $(this);
             const originalHtml = btn.html();
-            btn.html('<i class="fas fa-check me-1"></i>Copied!');
+            btn.html('<i class="fas fa-check me-1"></i>' + (window.kyteI18n ? window.kyteI18n.t('ui.function_editor.version_modal.copied', 'Copied!') : 'Copied!'));
             btn.css('background', '#238636');
-            
+
             setTimeout(() => {
                 btn.html(originalHtml);
                 btn.css('background', '#3c3c3c');
             }, 2000);
         });
     });
-    
+
     // Restore functionality
     $('#restoreVersionBtn').on('click', function() {
         restoreVersion(versionData, _ks);
         $('#versionPreviewModal').modal('hide');
     });
-    
+
     $('#versionPreviewModal').modal('show');
 }
 
@@ -885,7 +894,7 @@ return true;
         tblVersionHistory.customActionButton = [
             {
                 'className':'previewVersion',
-                'label':'Preview',
+                'label': window.kyteI18n ? window.kyteI18n.t('ui.function_editor.version_modal.preview_button', 'Preview') : 'Preview',
                 'faicon': 'fas fa-eye',
                 'callback': (data, model, row) => {
                     this.previewFunctionVersion(data);
@@ -893,7 +902,7 @@ return true;
             },
             {
                 'className':'restoreVersion',
-                'label':'Restore',
+                'label': window.kyteI18n ? window.kyteI18n.t('ui.function_editor.version_modal.restore_action', 'Restore') : 'Restore',
                 'faicon': 'fas fa-undo',
                 'callback': (data, model, row) => {
                     this.restoreFunctionVersion(data);
@@ -994,18 +1003,21 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.editor-tab').forEach(tab => {
         tab.addEventListener('click', function() {
             const target = this.dataset.target;
-            
+
+            // Skip if no target (e.g., the popup button)
+            if (!target) return;
+
             // Update active tab
             document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
             this.classList.add('active');
-            
+
             // Show corresponding content
             document.querySelectorAll('.editor-container, .secondary-content').forEach(container => {
                 container.classList.remove('active');
             });
-            
+
             document.getElementById(target).classList.add('active');
-            
+
             // Load version history when switching to History tab
             if (target === 'History' && window.KyteFunctionListManager) {
                 const functionId = window.KyteFunctionListManager.getCurrentFunctionId();
@@ -1015,6 +1027,103 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Open documentation in popup window
+    const openDocsBtn = document.getElementById('openDocsInWindow');
+    if (openDocsBtn) {
+        openDocsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Get the documentation content
+            const docContent = document.getElementById('Documentation');
+            if (!docContent) return;
+
+            // Create a new window with appropriate size
+            const width = 1200;
+            const height = 800;
+            const left = (screen.width - width) / 2;
+            const top = (screen.height - height) / 2;
+
+            const popupWindow = window.open(
+                '',
+                'KyteFunctionDocs',
+                `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`
+            );
+
+            if (popupWindow) {
+                // Build the popup HTML with all necessary styles
+                popupWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="utf-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Kyte Function Types Documentation</title>
+                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+                        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+                        <link rel="preconnect" href="https://fonts.googleapis.com">
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+                        <style>
+                            body {
+                                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                                background: #1e1e1e;
+                                color: #d4d4d4;
+                                margin: 0;
+                                padding: 2rem;
+                                line-height: 1.6;
+                            }
+                            h4, h5, h6 {
+                                color: #ffffff;
+                            }
+                            .text-muted {
+                                color: #969696 !important;
+                            }
+                            .text-primary {
+                                color: #4299e1 !important;
+                            }
+                            .text-success {
+                                color: #48bb78 !important;
+                            }
+                            .text-warning {
+                                color: #ecc94b !important;
+                            }
+                            code {
+                                background: #252526;
+                                padding: 0.2rem 0.4rem;
+                                border-radius: 4px;
+                                color: #ff6b35;
+                                font-family: 'JetBrains Mono', monospace;
+                            }
+                            pre {
+                                background: #252526;
+                                border: 1px solid #3e3e42;
+                                border-radius: 4px;
+                                padding: 1rem;
+                                overflow-x: auto;
+                            }
+                            pre code {
+                                background: transparent;
+                                padding: 0;
+                                color: #d4d4d4;
+                            }
+                            .alert {
+                                padding: 0.75rem 1rem;
+                                border-radius: 4px;
+                                margin-bottom: 1rem;
+                                font-size: 0.85rem;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${docContent.innerHTML}
+                    </body>
+                    </html>
+                `);
+                popupWindow.document.close();
+            }
+        });
+    }
 });
 
 // Global instance
@@ -1033,6 +1142,9 @@ document.addEventListener('KyteInitialized', function(e) {
         initializeChangeSummaryModal();
         
         window.KyteFunctionListManager = new KyteFunctionList(_ks);
+
+        // Register Kyte PHP IntelliSense
+        registerKytePhpIntelliSense(monaco);
 
         // Create the Monaco editor
         editor = monaco.editor.create(document.getElementById('container'), {

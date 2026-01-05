@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Kyte - Shipyard</title>
+    <title>Data Model - Kyte Shipyard</title>
     <!-- Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
@@ -22,7 +22,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
-    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <!-- Kyte -->
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
     <script>
         // Auto-detect localhost and load non-obfuscated source files for development
         (function() {
@@ -30,6 +44,7 @@
             const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
 
             const scripts = [
+                'kyte-i18n.js',
                 'kyte-shipyard.js',
                 'navigation.js',
                 'kyte-shipyard-tables.js',
@@ -44,6 +59,27 @@
                 console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
             }
         })();
+    </script>
+
+    <!-- Initialize i18n for authenticated pages -->
+    <script>
+        document.addEventListener('KyteInitialized', function(e) {
+            const kyteI18n = new KyteI18n('en', '/assets/i18n/');
+
+            // Make kyteI18n globally available
+            window.kyteI18n = kyteI18n;
+
+            // Get user language from localStorage (stored during login)
+            const cachedLanguage = localStorage.getItem('kyte_user_language');
+
+            // Initialize with cached language or browser detection
+            kyteI18n.init(cachedLanguage).then(() => {
+                console.log('[i18n] Page initialized with language:', kyteI18n.getCurrentLanguage());
+                kyteI18n.translateDOM();
+            }).catch(error => {
+                console.error('[i18n] Failed to initialize:', error);
+            });
+        });
     </script>
 
 </head>
@@ -84,12 +120,12 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-2"></i>Account
+                            <i class="fas fa-user-circle me-2"></i><span data-i18n="nav.account">Account</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i><span data-i18n="nav.settings">Settings</span></a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i>Logout</a></li>
+                            <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i><span data-i18n="nav.logout">Logout</span></a></li>
                         </ul>
                     </li>
                 </ul>
@@ -98,128 +134,205 @@
         <!-- END UNIFIED TOP NAV -->
 
         <main>
-            <!-- BEGIN SIDE NAVIGATION - Compatible with KyteSidenav -->
+            <!-- BEGIN SIDE NAVIGATION -->
             <div class="detail-page-sidebar">
                 <!-- Back Button -->
                 <div class="sidebar-header">
                     <a href="#" id="back-to-models" class="sidebar-back-button">
                         <i class="fas fa-arrow-left"></i>
-                        <span>Back to Models</span>
+                        <span data-i18n="ui.model_detail.back_to_models">Back to Models</span>
                     </a>
                 </div>
 
                 <!-- Model Header -->
-                <div class="sidebar-model-header">
-                    <h3 id="model-name" class="model-title">
+                <div class="sidebar-controller-header">
+                    <h3 id="model-name" class="controller-title">
                         <i class="fas fa-database"></i>
                         <span>Model Name</span>
                     </h3>
                     <div class="model-info">
                         <i class="fas fa-table"></i>
-                        <span>Data Model</span>
+                        <span data-i18n="ui.model_detail.data_model">Data Model</span>
                     </div>
                 </div>
 
-                <!-- KyteSidenav will populate this div -->
-                <div id="sidenav"></div>
+                <!-- Model Info Panel -->
+                <div class="sidebar-info-panel mt-3 px-3">
+                    <div class="info-item">
+                        <label data-i18n="ui.model_detail.attributes_count">Attributes:</label>
+                        <span id="attributes-count">0</span>
+                    </div>
+                    <div class="info-item">
+                        <label data-i18n="ui.model_detail.records_count">Records:</label>
+                        <span id="records-count">0</span>
+                    </div>
+                    <div class="info-item">
+                        <label data-i18n="ui.model_detail.controllers_count">Controllers:</label>
+                        <span id="controllers-count">0</span>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-actions mt-3 px-3">
+                    <button id="quick-add-attribute" class="btn btn-sm btn-success w-100 mb-2">
+                        <i class="fas fa-plus"></i> <span data-i18n="ui.model_detail.add_attribute">Add Attribute</span>
+                    </button>
+                    <button id="quick-add-record" class="btn btn-sm btn-outline-secondary w-100 mb-2">
+                        <i class="fas fa-database"></i> <span data-i18n="ui.model_detail.add_record">Add Record</span>
+                    </button>
+                    <button id="quick-create-controller" class="btn btn-sm btn-outline-info w-100 mb-2">
+                        <i class="fas fa-layer-group"></i> <span data-i18n="ui.model_detail.create_controller">Create Controller</span>
+                    </button>
+                    <button id="quick-export-data" class="btn btn-sm btn-outline-primary w-100">
+                        <i class="fas fa-file-export"></i> <span data-i18n="ui.model_detail.export_data">Export Data</span>
+                    </button>
+                </div>
             </div>
             <!-- END SIDE NAVIGATION -->
 
             <div class="detail-page-content">
-                <div id="Attributes" class="content-section mt-2 d-none">
-                    <div class="section-header">
-                        <h2 class="section-title"><i class="fas fa-file-import me-2"></i> Model Attributes</h2>
-                        <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="newAttribute">
-                            <i class="fas fa-plus me-2"></i>Add Attribute
+                <!-- Section Tabs -->
+                <ul class="nav nav-tabs" id="model-tabs" style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#attributes-tab" style="font-weight: 500;">
+                            <i class="fas fa-file-import"></i> <span data-i18n="ui.model_detail.sidebar.attributes">Attributes</span>
                         </a>
-                    </div>
-                    <div class="section-content">
-                        <table id="attributes-table" class="table table-striped w-100"></table>
-                    </div>
-                </div>
-
-                <div id="Data" class="content-section mt-2 d-none">
-                    <div class="section-header">
-                        <h2 class="section-title"><i class="fas fa-database me-2"></i> Model Data</h2>
-                        <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="newData">
-                            <i class="fas fa-plus me-2"></i>Add Record
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#data-tab" style="font-weight: 500;">
+                            <i class="fas fa-database"></i> <span data-i18n="ui.model_detail.sidebar.data">Data</span>
                         </a>
-                    </div>
-
-                    <div class="section-container">
-                        <table id="data-table" class="table table-striped w-100"></table>
-                    </div>
-                </div>
-
-                <div id="Controllers" class="content-section mt-2 d-none">
-                    <div class="section-header">
-                        <h2 class="section-title"><i class="fas fa-layer-group"></i> API Controllers</h2>
-                        <a class="btn d-inline-block btn-md btn-outline-secondary" href="#" id="newController">
-                            <i class="fas fa-plus me-2"></i>Create Controller
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#controllers-tab" style="font-weight: 500;">
+                            <i class="fas fa-layer-group"></i> <span data-i18n="ui.model_detail.sidebar.controllers">Controllers</span>
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#export-tab" style="font-weight: 500;">
+                            <i class="fas fa-file-export"></i> <span data-i18n="ui.model_detail.sidebar.export">Export</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#import-tab" style="font-weight: 500;">
+                            <i class="fas fa-file-import"></i> <span data-i18n="ui.model_detail.sidebar.import">Import</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="model-tab-content">
+                    <!-- Attributes Tab -->
+                    <div class="tab-pane fade show active p-3" id="attributes-tab">
+                        <div class="section-header mb-3">
+                            <h2 class="section-title">
+                                <i class="fas fa-file-import me-2"></i>
+                                <span data-i18n="ui.model_detail.attributes_title">Model Attributes</span>
+                            </h2>
+                            <a class="btn btn-md btn-outline-secondary" href="#" id="newAttribute">
+                                <i class="fas fa-plus me-2"></i><span data-i18n="ui.model_detail.add_attribute">Add Attribute</span>
+                            </a>
+                        </div>
+                        <div class="section-content">
+                            <table id="attributes-table" class="table table-striped w-100"></table>
+                        </div>
                     </div>
 
-                    <div class="section-container">
-                        <table id="controllers-table" class="table table-striped w-100"></table>
+                    <!-- Data Tab -->
+                    <div class="tab-pane fade p-3" id="data-tab">
+                        <div class="section-header mb-3">
+                            <h2 class="section-title">
+                                <i class="fas fa-database me-2"></i>
+                                <span data-i18n="ui.model_detail.data_title">Model Data</span>
+                            </h2>
+                            <a class="btn btn-md btn-outline-secondary" href="#" id="newData">
+                                <i class="fas fa-plus me-2"></i><span data-i18n="ui.model_detail.add_record">Add Record</span>
+                            </a>
+                        </div>
+                        <div class="section-content">
+                            <table id="data-table" class="table table-striped w-100"></table>
+                        </div>
                     </div>
-                </div>
 
-                <div id="Export" class="content-section mt-2 d-none">
-                    <div class="section-header">
-                        <h2 class="section-title"><i class="fas fa-file-code"></i> Export Model Definition</h2>
+                    <!-- Controllers Tab -->
+                    <div class="tab-pane fade p-3" id="controllers-tab">
+                        <div class="section-header mb-3">
+                            <h2 class="section-title">
+                                <i class="fas fa-layer-group me-2"></i>
+                                <span data-i18n="ui.model_detail.controllers_title">API Controllers</span>
+                            </h2>
+                            <a class="btn btn-md btn-outline-secondary" href="#" id="newController">
+                                <i class="fas fa-plus me-2"></i><span data-i18n="ui.model_detail.create_controller">Create Controller</span>
+                            </a>
+                        </div>
+                        <div class="section-content">
+                            <table id="controllers-table" class="table table-striped w-100"></table>
+                        </div>
                     </div>
 
-                    <div class="section-container p-2">
-                        <div class="row">
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <i class="card-img-top fas fa-6x fa-file-csv"></i>
-                                        <h5 class="card-title">CSV</h5>
-                                        <p class="mb-3 text-muted">Export data as comma-separated values</p>
-                                        <button class="btn btn-primary downloadDataBtn" data-download-format="csv">
-                                            Export Data <i class="fas fa-download ms-2"></i>
-                                        </button>
+                    <!-- Export Tab -->
+                    <div class="tab-pane fade p-3" id="export-tab">
+                        <div class="section-header mb-3">
+                            <h2 class="section-title">
+                                <i class="fas fa-file-code me-2"></i>
+                                <span data-i18n="ui.model_detail.export_title">Export Model Definition</span>
+                            </h2>
+                        </div>
+                        <div class="section-content">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="card-img-top fas fa-6x fa-file-csv"></i>
+                                            <h5 class="card-title">CSV</h5>
+                                            <p class="mb-3 text-muted" data-i18n="ui.model_detail.export_csv_desc">Export data as comma-separated values</p>
+                                            <button class="btn btn-primary downloadDataBtn" data-download-format="csv">
+                                                <span data-i18n="ui.model_detail.export_data">Export Data</span> <i class="fas fa-download ms-2"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <i class="card-img-top fas fa-6x fa-file-alt"></i>
-                                        <h5 class="card-title">JSON</h5>
-                                        <p class="mb-3 text-muted">Export data as JSON format</p>
-                                        <button class="btn btn-primary downloadDataBtn" data-download-format="json">
-                                            Export Data <i class="fas fa-download ms-2"></i>
-                                        </button>
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="card-img-top fas fa-6x fa-file-alt"></i>
+                                            <h5 class="card-title">JSON</h5>
+                                            <p class="mb-3 text-muted" data-i18n="ui.model_detail.export_json_desc">Export data as JSON format</p>
+                                            <button class="btn btn-primary downloadDataBtn" data-download-format="json">
+                                                <span data-i18n="ui.model_detail.export_data">Export Data</span> <i class="fas fa-download ms-2"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <i class="card-img-top fas fa-6x fa-file-alt"></i>
-                                        <h5 class="card-title">Text</h5>
-                                        <p class="mb-3 text-muted">Export data as tab-delimited text</p>
-                                        <button class="btn btn-primary downloadDataBtn" data-download-format="txt">
-                                            Export Data <i class="fas fa-download ms-2"></i>
-                                        </button>
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="card-img-top fas fa-6x fa-file-alt"></i>
+                                            <h5 class="card-title" data-i18n="ui.model_detail.export_text">Text</h5>
+                                            <p class="mb-3 text-muted" data-i18n="ui.model_detail.export_text_desc">Export data as tab-delimited text</p>
+                                            <button class="btn btn-primary downloadDataBtn" data-download-format="txt">
+                                                <span data-i18n="ui.model_detail.export_data">Export Data</span> <i class="fas fa-download ms-2"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div id="Import" class="content-section mt-2 d-none">
-                    <div class="section-header">
-                        <h2 class="section-title"><i class="fas fa-file-import"></i> Import Data</h2>
-                    </div>
-
-                    <div class="section-container p-2">
-                        <div class="alert alert-info text-center" role="alert">
-                            <i class="fas fa-info-circle me-2"></i>
-                            This feature is coming soon! You'll be able to import data from various file formats.
+                    <!-- Import Tab -->
+                    <div class="tab-pane fade p-3" id="import-tab">
+                        <div class="section-header mb-3">
+                            <h2 class="section-title">
+                                <i class="fas fa-file-import me-2"></i>
+                                <span data-i18n="ui.model_detail.import_title">Import Data</span>
+                            </h2>
+                        </div>
+                        <div class="section-content">
+                            <div class="alert alert-info text-center" role="alert">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <span data-i18n="ui.model_detail.import_coming_soon">This feature is coming soon! You'll be able to import data from various file formats.</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -228,13 +341,13 @@
 
         <!-- Footer -->
         <footer class="detail-page-footer">
-        <div class="footer-content d-flex justify-content-between align-items-center">
-            <div class="footer-versions">
-                <div>Kyte Shipyard™ Version <span id="kyteShipyardVersion"></span></div>
-                <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
+            <div class="footer-content d-flex justify-content-between align-items-center">
+                <div class="footer-versions">
+                    <div><span data-i18n="footer.shipyard_version">Kyte Shipyard™ Version</span> <span id="kyteShipyardVersion"></span></div>
+                    <div><span data-i18n="footer.kyte_js_version">Kyte JS Version</span> <span id="kyteJSVersion"></span></div>
+                </div>
+                <p class="footer-copyright mb-0">KeyQ © 2020-2026</p>
             </div>
-            <p class="footer-copyright mb-0">KeyQ © 2020-2026</p>
-        </div>
         </footer>
     </div>
 
@@ -282,7 +395,30 @@
                     window.location.href = getDashboardUrl();
                 });
             }
+
+            // Quick action buttons
+            $('#quick-add-attribute').click(function(e) {
+                e.preventDefault();
+                $('#newAttribute').click();
+            });
+
+            $('#quick-add-record').click(function(e) {
+                e.preventDefault();
+                $('#newData').click();
+            });
+
+            $('#quick-create-controller').click(function(e) {
+                e.preventDefault();
+                $('#newController').click();
+            });
+
+            $('#quick-export-data').click(function(e) {
+                e.preventDefault();
+                // Switch to export tab
+                $('#model-tabs a[href="#export-tab"]').tab('show');
+            });
         });
     </script>
 </body>
+
 </html>

@@ -22,6 +22,370 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
     }
 });
 
+// Setup Kyte JS IntelliSense for Monaco Editor
+function setupKyteJSIntelliSense(monaco) {
+    // Add keybinding to manually trigger suggestions (Cmd+I or Ctrl+I)
+    scriptEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyI, () => {
+        scriptEditor.trigger('keyboard', 'editor.action.triggerSuggest', {});
+    });
+
+    // Also add Ctrl+Space as alternative
+    scriptEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Space, () => {
+        scriptEditor.trigger('keyboard', 'editor.action.triggerSuggest', {});
+    });
+
+    // Register completion provider for JavaScript
+    monaco.languages.registerCompletionItemProvider('javascript', {
+        triggerCharacters: ['.'],
+        provideCompletionItems: (model, position) => {
+            const textUntilPosition = model.getValueInRange({
+                startLineNumber: position.lineNumber,
+                startColumn: 1,
+                endLineNumber: position.lineNumber,
+                endColumn: position.column
+            });
+
+            // Check if we're after "k."
+            const match = textUntilPosition.match(/k\.(\w*)$/);
+            if (!match) {
+                return { suggestions: [] };
+            }
+
+            const word = model.getWordUntilPosition(position);
+            const range = {
+                startLineNumber: position.lineNumber,
+                endLineNumber: position.lineNumber,
+                startColumn: word.startColumn,
+                endColumn: word.endColumn
+            };
+
+            const suggestions = [];
+
+            // k object methods (main Kyte SDK)
+            if (textUntilPosition.match(/k\.\w*$/)) {
+                suggestions.push(
+                    {
+                        label: 'get',
+                        kind: monaco.languages.CompletionItemKind.Method,
+                        insertText: 'get(${1:model}, ${2:field}, ${3:value}, [], ${4:(response) => {\n\t$0\n}}, ${5:(error) => {\n\tconsole.error(error);\n}})',
+                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        documentation: 'Retrieve records from the backend\n\nExample:\nk.get("User", "email", "user@example.com", [],\n  (response) => { console.log(response); },\n  (error) => { console.error(error); }\n);',
+                        range: range
+                    },
+                    {
+                        label: 'post',
+                        kind: monaco.languages.CompletionItemKind.Method,
+                        insertText: 'post(${1:model}, ${2:data}, null, [], ${3:(response) => {\n\t$0\n}}, ${4:(error) => {\n\tconsole.error(error);\n}})',
+                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        documentation: 'Create new records in the backend\n\nExample:\nk.post("User", { name: "John", email: "john@example.com" }, null, [],\n  (response) => { console.log(response); },\n  (error) => { console.error(error); }\n);',
+                        range: range
+                    },
+                    {
+                        label: 'put',
+                        kind: monaco.languages.CompletionItemKind.Method,
+                        insertText: 'put(${1:model}, ${2:field}, ${3:value}, ${4:data}, null, [], ${5:(response) => {\n\t$0\n}}, ${6:(error) => {\n\tconsole.error(error);\n}})',
+                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        documentation: 'Update existing records in the backend\n\nExample:\nk.put("User", "id", "123", { name: "Jane" }, null, [],\n  (response) => { console.log(response); },\n  (error) => { console.error(error); }\n);',
+                        range: range
+                    },
+                    {
+                        label: 'delete',
+                        kind: monaco.languages.CompletionItemKind.Method,
+                        insertText: 'delete(${1:model}, ${2:field}, ${3:value}, ${4:(response) => {\n\t$0\n}}, ${5:(error) => {\n\tconsole.error(error);\n}})',
+                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        documentation: 'Delete records (soft delete)\n\nExample:\nk.delete("User", "id", "123",\n  (response) => { console.log(response); },\n  (error) => { console.error(error); }\n);',
+                        range: range
+                    },
+                    {
+                        label: 'sign',
+                        kind: monaco.languages.CompletionItemKind.Method,
+                        insertText: 'sign(${1:(signature) => {\n\t$0\n}}, ${2:(error) => {\n\tconsole.error(error);\n}})',
+                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        documentation: 'Get HMAC signature for authenticated requests',
+                        range: range
+                    },
+                    {
+                        label: 'sessionCreate',
+                        kind: monaco.languages.CompletionItemKind.Method,
+                        insertText: 'sessionCreate(${1:identity}, ${2:(response) => {\n\t$0\n}}, ${3:(error) => {\n\tconsole.error(error);\n}})',
+                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        documentation: 'Create user session (login)',
+                        range: range
+                    },
+                    {
+                        label: 'sessionDestroy',
+                        kind: monaco.languages.CompletionItemKind.Method,
+                        insertText: 'sessionDestroy(${1:(error) => {\n\tconsole.error(error);\n}})',
+                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        documentation: 'Destroy user session (logout)',
+                        range: range
+                    },
+                    {
+                        label: 'isSession',
+                        kind: monaco.languages.CompletionItemKind.Method,
+                        insertText: 'isSession(${1:false}, ${2:false})',
+                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        documentation: 'Check if user has active session',
+                        range: range
+                    },
+                    {
+                        label: 'setCookie',
+                        kind: monaco.languages.CompletionItemKind.Method,
+                        insertText: 'setCookie(${1:name}, ${2:value}, ${3:hours})',
+                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        documentation: 'Store value in browser cookie',
+                        range: range
+                    },
+                    {
+                        label: 'getCookie',
+                        kind: monaco.languages.CompletionItemKind.Method,
+                        insertText: 'getCookie(${1:name})',
+                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        documentation: 'Retrieve value from browser cookie',
+                        range: range
+                    },
+                    {
+                        label: 'alert',
+                        kind: monaco.languages.CompletionItemKind.Method,
+                        insertText: 'alert(${1:title}, ${2:message})',
+                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        documentation: 'Display alert dialog',
+                        range: range
+                    },
+                    {
+                        label: 'confirm',
+                        kind: monaco.languages.CompletionItemKind.Method,
+                        insertText: 'confirm(${1:title}, ${2:message}, ${3:(confirmed) => {\n\t$0\n}})',
+                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        documentation: 'Display confirmation dialog',
+                        range: range
+                    }
+                );
+            }
+
+            // KyteTable constructor
+            if (textUntilPosition.match(/new\s+KyteTable\(/)) {
+                suggestions.push({
+                    label: 'KyteTable constructor',
+                    kind: monaco.languages.CompletionItemKind.Constructor,
+                    insertText: '_ks, ${1:selector}, ${2:model}, ${3:columnDefs}, ${4:sortable}, ${5:orderBy}, ${6:editable}, ${7:clickable}, ${8:idField}, ${9:detailUrl})',
+                    insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                    detail: 'Create DataTable',
+                    documentation: 'Parameters: kyte, selector, model, columnDefs, sortable, orderBy, editable, clickable, idField, detailUrl'
+                });
+            }
+
+            // KyteForm constructor
+            if (textUntilPosition.match(/new\s+KyteForm\(/)) {
+                suggestions.push({
+                    label: 'KyteForm constructor',
+                    kind: monaco.languages.CompletionItemKind.Constructor,
+                    insertText: '_ks, ${1:selector}, ${2:model}, ${3:hiddenFields}, ${4:elements}, ${5:title}, ${6:table}, ${7:modal}, ${8:trigger})',
+                    insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                    detail: 'Create form',
+                    documentation: 'Parameters: kyte, selector, model, hiddenFields, elements, title, table, modal, trigger'
+                });
+            }
+
+            // KyteNav constructor
+            if (textUntilPosition.match(/new\s+KyteNav\(/)) {
+                suggestions.push({
+                    label: 'KyteNav constructor',
+                    kind: monaco.languages.CompletionItemKind.Constructor,
+                    insertText: '${1:selector}, ${2:menuArray}, ${3:logoutCallback}, ${4:brandHTML})',
+                    insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                    detail: 'Create navigation',
+                    documentation: 'Parameters: selector, menuArray, logoutCallback, brandHTML'
+                });
+            }
+
+            // KyteSidenav constructor
+            if (textUntilPosition.match(/new\s+KyteSidenav\(/)) {
+                suggestions.push({
+                    label: 'KyteSidenav constructor',
+                    kind: monaco.languages.CompletionItemKind.Constructor,
+                    insertText: '${1:selector}, ${2:menuArray}, ${3:callback})',
+                    insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                    detail: 'Create sidebar navigation',
+                    documentation: 'Parameters: selector, menuArray, callback'
+                });
+            }
+
+            // KyteCalendar constructor
+            if (textUntilPosition.match(/new\s+KyteCalendar\(/)) {
+                suggestions.push({
+                    label: 'KyteCalendar constructor',
+                    kind: monaco.languages.CompletionItemKind.Constructor,
+                    insertText: '${1:selector}, ${2:rows}, ${3:cols}, ${4:onChange})',
+                    insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                    detail: 'Create calendar',
+                    documentation: 'Parameters: selector, rows, cols, onChange'
+                });
+            }
+
+            return { suggestions };
+        }
+    });
+
+    // Register signature help provider for parameter hints
+    monaco.languages.registerSignatureHelpProvider('javascript', {
+        signatureHelpTriggerCharacters: ['(', ','],
+        provideSignatureHelp: function (model, position) {
+            const textUntilPosition = model.getValueInRange({
+                startLineNumber: 1,
+                startColumn: 1,
+                endLineNumber: position.lineNumber,
+                endColumn: position.column
+            });
+
+            // Define signatures for Kyte methods
+            const signatures = {
+                'k.get': {
+                    label: 'k.get(model, field, value, headers, callback, error)',
+                    documentation: 'Retrieve records from the backend',
+                    parameters: [
+                        { label: 'model', documentation: 'Model name (e.g., "User")' },
+                        { label: 'field', documentation: 'Field to match (e.g., "email")' },
+                        { label: 'value', documentation: 'Value to match (e.g., "user@example.com")' },
+                        { label: 'headers', documentation: 'Additional headers array (usually [])' },
+                        { label: 'callback', documentation: 'Success callback function(response) {}' },
+                        { label: 'error', documentation: 'Error callback function(error) {}' }
+                    ]
+                },
+                'k.post': {
+                    label: 'k.post(model, data, formdata, headers, callback, error)',
+                    documentation: 'Create new records in the backend',
+                    parameters: [
+                        { label: 'model', documentation: 'Model name' },
+                        { label: 'data', documentation: 'Object with field values { name: "John", email: "john@example.com" }' },
+                        { label: 'formdata', documentation: 'FormData object (for file uploads) or null' },
+                        { label: 'headers', documentation: 'Additional headers array (usually [])' },
+                        { label: 'callback', documentation: 'Success callback function(response) {}' },
+                        { label: 'error', documentation: 'Error callback function(error) {}' }
+                    ]
+                },
+                'k.put': {
+                    label: 'k.put(model, field, value, data, formdata, headers, callback, error)',
+                    documentation: 'Update existing records in the backend',
+                    parameters: [
+                        { label: 'model', documentation: 'Model name' },
+                        { label: 'field', documentation: 'Field to match (e.g., "id")' },
+                        { label: 'value', documentation: 'Value to match (e.g., "123")' },
+                        { label: 'data', documentation: 'Object with fields to update { name: "Jane" }' },
+                        { label: 'formdata', documentation: 'FormData object or null' },
+                        { label: 'headers', documentation: 'Additional headers array (usually [])' },
+                        { label: 'callback', documentation: 'Success callback function(response) {}' },
+                        { label: 'error', documentation: 'Error callback function(error) {}' }
+                    ]
+                },
+                'k.delete': {
+                    label: 'k.delete(model, field, value, callback, error)',
+                    documentation: 'Delete records from the backend (soft delete)',
+                    parameters: [
+                        { label: 'model', documentation: 'Model name' },
+                        { label: 'field', documentation: 'Field to match (e.g., "id")' },
+                        { label: 'value', documentation: 'Value to match (e.g., "123")' },
+                        { label: 'callback', documentation: 'Success callback function(response) {}' },
+                        { label: 'error', documentation: 'Error callback function(error) {}' }
+                    ]
+                },
+                'k.sessionCreate': {
+                    label: 'k.sessionCreate(identity, callback, error, sessionController)',
+                    documentation: 'Create a new user session (login)',
+                    parameters: [
+                        { label: 'identity', documentation: 'Login credentials { username: "user@example.com", password: "password" }' },
+                        { label: 'callback', documentation: 'Success callback function(response) {}' },
+                        { label: 'error', documentation: 'Error callback function(error) {}' },
+                        { label: 'sessionController', documentation: 'Optional custom session controller name' }
+                    ]
+                },
+                'k.sessionDestroy': {
+                    label: 'k.sessionDestroy(error)',
+                    documentation: 'Destroy the current session (logout)',
+                    parameters: [
+                        { label: 'error', documentation: 'Error callback function(error) {}' }
+                    ]
+                },
+                'k.isSession': {
+                    label: 'k.isSession(periodic, redir, interval)',
+                    documentation: 'Check if a valid session exists',
+                    parameters: [
+                        { label: 'periodic', documentation: 'Enable periodic checking (default: false)' },
+                        { label: 'redir', documentation: 'Redirect to login if no session (default: false)' },
+                        { label: 'interval', documentation: 'Check interval in milliseconds (default: 30000)' }
+                    ]
+                },
+                'k.setCookie': {
+                    label: 'k.setCookie(name, value, minutes, crossDomain)',
+                    documentation: 'Set a browser cookie',
+                    parameters: [
+                        { label: 'name', documentation: 'Cookie name' },
+                        { label: 'value', documentation: 'Cookie value' },
+                        { label: 'minutes', documentation: 'Expiration time in minutes (default: 60)' },
+                        { label: 'crossDomain', documentation: 'Allow cross-domain cookies (default: false)' }
+                    ]
+                },
+                'k.alert': {
+                    label: 'k.alert(title, message, callback, dismiss)',
+                    documentation: 'Display a SweetAlert2 alert dialog',
+                    parameters: [
+                        { label: 'title', documentation: 'Alert title' },
+                        { label: 'message', documentation: 'Alert message' },
+                        { label: 'callback', documentation: 'Callback when dismissed function() {}' },
+                        { label: 'dismiss', documentation: 'Allow dismissing (default: true)' }
+                    ]
+                },
+                'k.confirm': {
+                    label: 'k.confirm(title, message, callback, cancel)',
+                    documentation: 'Display a SweetAlert2 confirmation dialog',
+                    parameters: [
+                        { label: 'title', documentation: 'Confirmation title' },
+                        { label: 'message', documentation: 'Confirmation message' },
+                        { label: 'callback', documentation: 'Callback when confirmed function() {}' },
+                        { label: 'cancel', documentation: 'Callback when cancelled function() {}' }
+                    ]
+                }
+            };
+
+            // Find which Kyte method is being called
+            let matchedMethod = null;
+            let parameterIndex = 0;
+
+            for (const method in signatures) {
+                const regex = new RegExp(method.replace('.', '\\.') + '\\s*\\(([^)]*)$');
+                const match = textUntilPosition.match(regex);
+                if (match) {
+                    matchedMethod = method;
+                    // Count commas to determine which parameter we're on
+                    parameterIndex = (match[1].match(/,/g) || []).length;
+                    break;
+                }
+            }
+
+            if (!matchedMethod) {
+                return null;
+            }
+
+            const sig = signatures[matchedMethod];
+            return {
+                value: {
+                    signatures: [{
+                        label: sig.label,
+                        documentation: sig.documentation,
+                        parameters: sig.parameters
+                    }],
+                    activeSignature: 0,
+                    activeParameter: parameterIndex
+                },
+                dispose: () => {}
+            };
+        }
+    });
+
+    console.log('✓ Kyte JS IntelliSense registered for script editor');
+    console.log('✓ Signature help provider registered for parameter hints');
+}
+
 // Check if there are actual changes
 function hasActualChanges() {
     if (!script || !scriptEditor) return false;
@@ -294,7 +658,10 @@ window.proceedWithAction = proceedWithAction;
 // Version history preview function
 function previewVersion(versionData, _ks) {
     console.log(versionData);
-    
+
+    // Get i18n helper
+    const t = (key, fallback) => window.kyteI18n ? window.kyteI18n.t(key) : fallback;
+
     // Create modal with loading state immediately
     let previewContent = `
         <div class="modal fade" id="versionPreviewModal" tabindex="-1" data-bs-backdrop="static">
@@ -303,10 +670,10 @@ function previewVersion(versionData, _ks) {
                     <div class="modal-header" style="background: #2d2d30; border-bottom: 1px solid #3e3e42; padding: 1.5rem;">
                         <div class="d-flex align-items-center gap-3">
                             <div class="version-badge px-3 py-2 rounded" style="background: linear-gradient(135deg, #ff6b35, #f7931e); color: white; font-weight: 600; font-size: 0.9rem;">
-                                Version ${versionData.version_number}
+                                <span data-i18n="ui.script_editor.version_modal.version_label">${t('ui.script_editor.version_modal.version_label', 'Version')}</span> ${versionData.version_number}
                             </div>
                             <div>
-                                <h5 class="modal-title mb-1" style="color: #ffffff; font-weight: 600;">Script Version Preview</h5>
+                                <h5 class="modal-title mb-1" style="color: #ffffff; font-weight: 600;" data-i18n="ui.script_editor.version_modal.title">${t('ui.script_editor.version_modal.title', 'Script Version Preview')}</h5>
                                 <div class="text-muted" style="font-size: 0.85rem;">
                                     ${new Date(versionData.date_created).toLocaleString()} • ${versionData.created_by?.name || 'Unknown'}
                                 </div>
@@ -315,7 +682,7 @@ function previewVersion(versionData, _ks) {
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: invert(1);"></button>
                     </div>
                     <div class="modal-body p-0" style="height: calc(100vh - 200px); position: relative;">
-                        
+
                         <!-- Loading State -->
                         <div id="versionLoadingState" class="loading-overlay" style="
                             position: absolute;
@@ -339,10 +706,10 @@ function previewVersion(versionData, _ks) {
                                 animation: spin 1s linear infinite;
                                 margin-bottom: 2rem;
                             "></div>
-                            <h6 style="color: #ffffff; font-weight: 600; margin-bottom: 0.5rem;">Loading Version Content</h6>
-                            <div style="color: #969696; font-size: 0.9rem;">Fetching version ${versionData.version_number} details...</div>
+                            <h6 style="color: #ffffff; font-weight: 600; margin-bottom: 0.5rem;" data-i18n="ui.script_editor.version_modal.loading_title">${t('ui.script_editor.version_modal.loading_title', 'Loading Version Content')}</h6>
+                            <div style="color: #969696; font-size: 0.9rem;"><span data-i18n="ui.script_editor.version_modal.loading_text">${t('ui.script_editor.version_modal.loading_text', 'Fetching version')}</span> ${versionData.version_number} <span data-i18n="ui.script_editor.version_modal.loading_details">${t('ui.script_editor.version_modal.loading_details', 'details...')}</span></div>
                         </div>
-                        
+
                         <!-- Main Content (initially hidden) -->
                         <div id="versionMainContent" style="height: 100%; display: none;">
                             <!-- Tab Navigation -->
@@ -351,10 +718,10 @@ function previewVersion(versionData, _ks) {
                                     <i class="${script.script_type === 'js' ? 'fab fa-js' : 'fab fa-css3-alt'} me-2" style="color: ${script.script_type === 'js' ? '#f7df1e' : '#1572b6'};"></i>${script.script_type === 'js' ? 'JavaScript' : 'CSS'}
                                 </button>
                                 <button class="preview-tab" data-preview-target="changes" style="padding: 1rem 2rem; background: none; border: none; color: #969696; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s ease; font-weight: 500;">
-                                    <i class="fas fa-code-branch me-2" style="color: #ff6b35;"></i>Changes
+                                    <i class="fas fa-code-branch me-2" style="color: #ff6b35;"></i><span data-i18n="ui.script_editor.version_modal.changes_tab">${t('ui.script_editor.version_modal.changes_tab', 'Changes')}</span>
                                 </button>
                             </div>
-                            
+
                             <!-- Tab Content Container -->
                             <div id="tabContentContainer" style="height: calc(100% - 60px); overflow: hidden;">
                                 <!-- Content will be populated after loading -->
@@ -365,15 +732,15 @@ function previewVersion(versionData, _ks) {
                         <div class="d-flex w-100 justify-content-between align-items-center">
                             <div class="version-info" style="color: #969696; font-size: 0.85rem;">
                                 <i class="fas fa-info-circle me-1"></i>
-                                ${versionData.can_revert ? 'This version can be restored' : 'This is the current version'}
+                                <span data-i18n="${versionData.can_revert ? 'ui.script_editor.version_modal.can_restore' : 'ui.script_editor.version_modal.current_version'}">${versionData.can_revert ? t('ui.script_editor.version_modal.can_restore', 'This version can be restored') : t('ui.script_editor.version_modal.current_version', 'This is the current version')}</span>
                             </div>
                             <div class="d-flex gap-2">
                                 <button type="button" class="btn" data-bs-dismiss="modal" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500; transition: all 0.2s ease;">
-                                    <i class="fas fa-times me-2"></i>Close
+                                    <i class="fas fa-times me-2"></i><span data-i18n="ui.script_editor.version_modal.close_button">${t('ui.script_editor.version_modal.close_button', 'Close')}</span>
                                 </button>
                                 ${versionData.can_revert ? `
                                 <button type="button" id="restoreVersionBtn" class="btn" style="background: linear-gradient(135deg, #238636, #2ea043); border: none; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500; transition: all 0.2s ease;">
-                                    <i class="fas fa-undo me-2"></i>Restore This Version
+                                    <i class="fas fa-undo me-2"></i><span data-i18n="ui.script_editor.version_modal.restore_button">${t('ui.script_editor.version_modal.restore_button', 'Restore This Version')}</span>
                                 </button>
                                 ` : ''}
                             </div>
@@ -383,12 +750,18 @@ function previewVersion(versionData, _ks) {
             </div>
         </div>
     `;
-    
+
     // Remove existing modal if present
     $('#versionPreviewModal').remove();
-    
+
     // Add modal to body and show immediately
     $('body').append(previewContent);
+
+    // Translate the modal content
+    if (window.kyteI18n) {
+        window.kyteI18n.translateDOM(document.getElementById('versionPreviewModal'));
+    }
+
     $('#versionPreviewModal').modal('show');
     
     // Start the actual API call
@@ -854,6 +1227,11 @@ document.addEventListener('KyteInitialized', function(e) {
                     wrappingIndent: 'indent'
                 });
 
+                // Add IntelliSense for Kyte JS if this is a JavaScript file
+                if (script.script_type == 'js') {
+                    setupKyteJSIntelliSense(monaco);
+                }
+
                 scriptEditor.onDidChangeModelContent(function(e) {
                     isDirty = true;
                 });
@@ -880,7 +1258,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         {
                             'field': 'page',
                             'type': 'select',
-                            'label': 'Page',
+                            'label': window.kyteI18n ? window.kyteI18n.t('ui.script_editor.add_page_modal.page_label', 'Page') : 'Page',
                             'required': false,
                             'option': {
                                 'ajax': true,
@@ -893,19 +1271,19 @@ document.addEventListener('KyteInitialized', function(e) {
                         },
                     ],
                 ];
-                
+
                 let colDefPages = [
-                    {'targets': 0, 'data': 'page.title', 'label': 'Page'},
-                    {'targets': 1, 'data': 'page.s3key', 'label': 'Path'},
+                    {'targets': 0, 'data': 'page.title', 'label': window.kyteI18n ? window.kyteI18n.t('ui.script_editor.add_page_modal.table_page', 'Page') : 'Page'},
+                    {'targets': 1, 'data': 'page.s3key', 'label': window.kyteI18n ? window.kyteI18n.t('ui.script_editor.add_page_modal.table_path', 'Path') : 'Path'},
                 ];
-                
-                var tblPages = new KyteTable(_ks, $("#pages-table"), 
-                    {'name': "KyteScriptAssignment", 'field': "script", 'value': idx}, 
+
+                var tblPages = new KyteTable(_ks, $("#pages-table"),
+                    {'name': "KyteScriptAssignment", 'field': "script", 'value': idx},
                     colDefPages, true, [0, "asc"], false, true);
                 tblPages.init();
-                
-                var frmPages = new KyteForm(_ks, $("#modalFormPages"), 'KyteScriptAssignment', 
-                    hiddenScriptAssignment, fldsPages, 'Script Assignment', tblPages, true, $("#addPage"));
+
+                var frmPages = new KyteForm(_ks, $("#modalFormPages"), 'KyteScriptAssignment',
+                    hiddenScriptAssignment, fldsPages, window.kyteI18n ? window.kyteI18n.t('ui.script_editor.add_page_modal.title', 'Script Assignment') : 'Script Assignment', tblPages, true, $("#addPage"));
                 frmPages.init();
                 tblPages.bindEdit(frmPages);
 
@@ -929,7 +1307,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 tblVersionHistory.customActionButton = [
                     {
                         'className':'previewVersion',
-                        'label':'Preview',
+                        'label': window.kyteI18n ? window.kyteI18n.t('ui.script_editor.version_modal.preview_button', 'Preview') : 'Preview',
                         'faicon': 'fas fa-eye',
                         'callback': function(data, model, row) {
                             previewVersion(data, _ks);
@@ -937,7 +1315,7 @@ document.addEventListener('KyteInitialized', function(e) {
                     },
                     {
                         'className':'restoreVersion',
-                        'label':'Restore',
+                        'label': window.kyteI18n ? window.kyteI18n.t('ui.script_editor.version_modal.restore_action', 'Restore') : 'Restore',
                         'faicon': 'fas fa-undo',
                         'callback': function(data, model, row) {
                             restoreVersion(data, _ks);

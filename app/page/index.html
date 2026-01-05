@@ -31,7 +31,20 @@
     <!-- JavaScript obfuscator -->
     <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
     <!-- Kyte -->
-    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
     <script>
         // Auto-detect localhost and load non-obfuscated source files for development
         (function() {
@@ -39,6 +52,7 @@
             const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
 
             const scripts = [
+                'kyte-i18n.js',
                 'kyte-shipyard.js',
                 'navigation.js',
                 'kyte-shipyard-tables.js'
@@ -497,6 +511,63 @@
             color: #ff6b35;
         }
 
+        /* Modal Styling - Fix contrast issue */
+        .modal-content {
+            background-color: #2d2d30;
+            color: #d4d4d4;
+            border: 1px solid #3e3e42;
+        }
+
+        .modal-header {
+            background-color: #252526;
+            color: #ffffff;
+            border-bottom: 1px solid #3e3e42;
+        }
+
+        .modal-title {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .modal-body {
+            background-color: #2d2d30;
+            color: #d4d4d4;
+        }
+
+        .modal-footer {
+            background-color: #252526;
+            border-top: 1px solid #3e3e42;
+        }
+
+        .modal-body label,
+        .modal-body .form-label {
+            color: #cccccc;
+            font-weight: 500;
+        }
+
+        .modal-body .form-control,
+        .modal-body .form-select {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            border: 1px solid #3e3e42;
+        }
+
+        .modal-body .form-control:focus,
+        .modal-body .form-select:focus {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+        }
+
+        .modal-body .form-control::placeholder {
+            color: #858585;
+        }
+
+        .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
             #sidenav {
@@ -781,45 +852,45 @@
             <div id="sidenav" class="d-flex flex-column flex-shrink-0">
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0 text-white">Page Editor</h6>
+                        <h6 class="mb-0 text-white" data-i18n="ui.page_editor.sidebar_title">Page Editor</h6>
                         <button class="btn btn-sm text-white d-md-none" id="closeSidebar">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                 </div>
-                
-                <div class="sidebar-nav">                    
+
+                <div class="sidebar-nav">
                     <div class="nav-section">
-                        <div class="nav-section-title">Resources</div>
-                        <button class="nav-link" data-target="GlobalScripts">
+                        <div class="nav-section-title" data-i18n="ui.page_editor.nav_section_scripts">Resources</div>
+                        <button class="nav-link" data-target="GlobalScripts" data-i18n="ui.page_editor.nav_global_scripts">
                             <i class="fas fa-share-alt"></i>
                             Global Scripts
                         </button>
-                        <button class="nav-link" data-target="Scripts">
+                        <button class="nav-link" data-target="Scripts" data-i18n="ui.page_editor.nav_custom_scripts">
                             <i class="fas fa-file"></i>
                             Page Scripts
                         </button>
-                        <button class="nav-link" data-target="GlobalLibraries">
+                        <button class="nav-link" data-target="GlobalLibraries" data-i18n="ui.page_editor.nav_global_libraries">
                             <i class="fas fa-broadcast-tower"></i>
                             Global Libraries
                         </button>
-                        <button class="nav-link" data-target="Libraries">
+                        <button class="nav-link" data-target="Libraries" data-i18n="ui.page_editor.nav_page_libraries">
                             <i class="fas fa-book"></i>
                             Page Libraries
                         </button>
                     </div>
 
                     <div class="nav-section">
-                        <div class="nav-section-title">Version Control</div>
-                        <button class="nav-link" data-target="History">
+                        <div class="nav-section-title" data-i18n="ui.page_editor.nav_section_version">Version Control</div>
+                        <button class="nav-link" data-target="History" data-i18n="ui.page_editor.nav_history">
                             <i class="fas fa-history"></i>
                             Page History
                         </button>
                     </div>
-                    
+
                     <div class="nav-section">
-                        <div class="nav-section-title">Configuration</div>
-                        <button class="nav-link" data-target="Settings">
+                        <div class="nav-section-title" data-i18n="ui.page_editor.nav_section_config">Configuration</div>
+                        <button class="nav-link" data-target="Settings" data-i18n="ui.page_editor.nav_settings">
                             <i class="fas fa-cog"></i>
                             Page Settings
                         </button>
@@ -833,20 +904,20 @@
                 <div class="editor-box-header">
                     <div class="editor-header-controls">
                         <div>
-                            <a class="btn-editor btn-editor-danger" id="backToSite">
+                            <a class="btn-editor btn-editor-danger" id="backToSite" data-i18n="ui.page_editor.button_exit">
                                 <i class="fas fa-arrow-left"></i>
                                 Exit
                             </a>
                         </div>
-                        
+
                         <div class="page-info">
                             <h2 class="page-title" id="page-title">Page Title</h2>
                             <h3 class="page-path" id="page-path">/path/to/page.html</h3>
                         </div>
-                        
+
                         <div class="d-flex gap-2">
                             <div class="btn-group">
-                                <a class="btn-editor btn-editor-success viewPage" target="_blank">
+                                <a class="btn-editor btn-editor-success viewPage" target="_blank" data-i18n="ui.page_editor.button_view_page">
                                     <i class="fas fa-eye"></i>
                                     View Page
                                 </a>
@@ -855,40 +926,47 @@
                                     <span class="visually-hidden">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-dark">
-                                    <li><a class="dropdown-item viewPage" href="#" target="_blank">
+                                    <li><a class="dropdown-item viewPage" href="#" target="_blank" data-i18n="ui.page_editor.button_view_page">
                                         <i class="fas fa-eye me-2"></i>View Page</a></li>
-                                    <li><a class="dropdown-item" href="#" id="downloadPage">
+                                    <li><a class="dropdown-item" href="#" id="downloadPage" data-i18n="ui.page_editor.button_download_page">
                                         <i class="fas fa-file-download me-2"></i>Download Page</a></li>
                                 </ul>
                             </div>
-                            <button class="btn-editor btn-editor-primary" id="publishPage">
+                            <button class="btn-editor btn-editor-primary" id="publishPage" data-i18n="ui.page_editor.button_publish">
                                 <i class="fas fa-upload"></i>
                                 Publish
                             </button>
-                            <button class="btn-editor btn-editor-warning" id="saveCode">
+                            <button class="btn-editor btn-editor-warning" id="saveCode" data-i18n="ui.page_editor.button_save">
                                 <i class="fas fa-save"></i>
                                 Save
                             </button>
                         </div>
                     </div>
-                    
+
                     <!-- Editor Tabs -->
                     <div class="editor-tabs">
-                        <button class="editor-tab active" data-target="Page">
+                        <button class="editor-tab active" data-target="Page" data-i18n="ui.page_editor.tab_html">
                             <i class="fab fa-html5"></i>
                             HTML
                         </button>
-                        <button class="editor-tab" data-target="JavaScript">
+                        <button class="editor-tab" data-target="JavaScript" data-i18n="ui.page_editor.tab_javascript">
                             <i class="fab fa-js"></i>
                             JavaScript
                         </button>
-                        <button class="editor-tab" data-target="Stylesheet">
+                        <button class="editor-tab" data-target="Stylesheet" data-i18n="ui.page_editor.tab_css">
                             <i class="fab fa-css3-alt"></i>
                             CSS
                         </button>
-                        <button class="editor-tab" data-target="Preview">
+                        <button class="editor-tab" data-target="Preview" data-i18n="ui.page_editor.tab_preview">
                             <i class="fas fa-eye"></i>
                             Preview
+                        </button>
+                        <button class="editor-tab" data-target="Documentation" data-i18n="ui.page_editor.tab_documentation">
+                            <i class="fas fa-book"></i>
+                            Kyte API Docs
+                        </button>
+                        <button class="editor-tab" id="openDocsInWindow" data-i18n-title="ui.page_editor.open_docs_tooltip" title="Open documentation in new window">
+                            <i class="fas fa-external-link-alt"></i>
                         </button>
                     </div>
                 </div>
@@ -918,23 +996,23 @@
                     <!-- Scripts Section -->
                     <div id="GlobalScripts" class="secondary-content">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4>Global Scripts</h4>
+                            <h4 data-i18n="ui.page_editor.global_scripts_title">Global Scripts</h4>
                             <div></div>
                         </div>
-                        <p>Global JavaScripts and Stylesheets for this page.</p>
+                        <p data-i18n="ui.page_editor.global_scripts_description">Global JavaScripts and Stylesheets for this page.</p>
                         <div class="mt-3">
                             <table id="global-scripts-table" class="table table-striped w-100"></table>
                         </div>
                     </div>
                     <div id="Scripts" class="secondary-content">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4>Custom Scripts</h4>
-                            <button class="btn-editor btn-editor-success" id="addScript">
+                            <h4 data-i18n="ui.page_editor.custom_scripts_title">Custom Scripts</h4>
+                            <button class="btn-editor btn-editor-success" id="addScript" data-i18n="ui.page_editor.button_add_script">
                                 <i class="fas fa-plus"></i>
                                 Add Script
                             </button>
                         </div>
-                        <p>Include custom JavaScripts and Stylesheets for this page.</p>
+                        <p data-i18n="ui.page_editor.custom_scripts_description">Include custom JavaScripts and Stylesheets for this page.</p>
                         <div class="mt-3">
                             <table id="scripts-table" class="table table-striped w-100"></table>
                         </div>
@@ -943,23 +1021,23 @@
                     <!-- Libraries Section -->
                      <div id="GlobalLibraries" class="secondary-content">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4>Global Libraries</h4>
+                            <h4 data-i18n="ui.page_editor.global_libraries_title">Global Libraries</h4>
                             <div></div>
                         </div>
-                        <p>Global external 3rd party JavaScripts and Stylesheets for this page.</p>
+                        <p data-i18n="ui.page_editor.global_libraries_description">Global external 3rd party JavaScripts and Stylesheets for this page.</p>
                         <div class="mt-3">
                             <table id="global-libraries-table" class="table table-striped w-100"></table>
                         </div>
                     </div>
                     <div id="Libraries" class="secondary-content">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4>Libraries</h4>
-                            <button class="btn-editor btn-editor-success" id="addLibrary">
+                            <h4 data-i18n="ui.page_editor.page_libraries_title">Libraries</h4>
+                            <button class="btn-editor btn-editor-success" id="addLibrary" data-i18n="ui.page_editor.button_add_library">
                                 <i class="fas fa-plus"></i>
                                 Add Library
                             </button>
                         </div>
-                        <p>Include external 3rd party JavaScripts and Stylesheets for this page.</p>
+                        <p data-i18n="ui.page_editor.page_libraries_description">Include external 3rd party JavaScripts and Stylesheets for this page.</p>
                         <div class="mt-3">
                             <table id="libraries-table" class="table table-striped w-100"></table>
                         </div>
@@ -968,13 +1046,13 @@
                     <!-- Components Section -->
                     <div id="Components" class="secondary-content">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4>Web Components</h4>
+                            <h4 data-i18n="ui.page_editor.components_title">Web Components</h4>
                             <button class="btn-editor btn-editor-success" id="addComponent">
                                 <i class="fas fa-plus"></i>
                                 Add Web Component
                             </button>
                         </div>
-                        <p>Include Kyte Web Components you would like to use on this page.</p>
+                        <p data-i18n="ui.page_editor.components_description">Include Kyte Web Components you would like to use on this page.</p>
                         <div class="mt-3">
                             <table id="components-table" class="table table-striped w-100"></table>
                         </div>
@@ -983,10 +1061,10 @@
                     <!-- Version History Section -->
                     <div id="History" class="secondary-content">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4>Page History</h4>
+                            <h4 data-i18n="ui.page_editor.history_title">Page History</h4>
                             <div></div>
                         </div>
-                        <p>Track changes made to this page over time. Each version is automatically saved, allowing you to compare edits and revert to previous states when needed.</p>
+                        <p data-i18n="ui.page_editor.history_description">Track changes made to this page over time. Each version is automatically saved, allowing you to compare edits and revert to previous states when needed.</p>
                         <div class="mt-3">
                             <table id="version-history-table" class="table table-striped w-100"></table>
                         </div>
@@ -994,42 +1072,43 @@
 
                     <!-- Settings Section -->
                     <div id="Settings" class="secondary-content">
-                        <h4 class="mb-4">Page Settings</h4>
+                        <h4 class="mb-4" data-i18n="ui.page_editor.settings_title">Page Settings</h4>
                         <div class="settings-grid">
                             <!-- Page Title -->
                             <div class="setting-card">
-                                <div class="setting-card-header">Page Title</div>
+                                <div class="setting-card-header" data-i18n="ui.page_editor.setting_title">Page Title</div>
                                 <div class="setting-card-body">
-                                    <input type="text" class="form-control" id="setting-page-title" placeholder="Enter page title" />
+                                    <input type="text" class="form-control" id="setting-page-title" data-i18n-placeholder="ui.page_editor.setting_title_placeholder" placeholder="Enter page title" />
                                 </div>
                             </div>
-                            
+
                             <!-- Page Description -->
                             <div class="setting-card">
-                                <div class="setting-card-header">Page Description</div>
+                                <div class="setting-card-header" data-i18n="ui.page_editor.setting_description">Page Description</div>
                                 <div class="setting-card-body">
-                                    <textarea class="form-control" id="setting-page-description" placeholder="Enter page description for SEO"></textarea>
+                                    <textarea class="form-control" id="setting-page-description" data-i18n-placeholder="ui.page_editor.setting_description_placeholder" placeholder="Enter page description for SEO"></textarea>
                                 </div>
                             </div>
-                            
+
                             <!-- Page Access -->
                             <div class="setting-card">
-                                <div class="setting-card-header">Page Access</div>
+                                <div class="setting-card-header" data-i18n="ui.page_editor.setting_require_login">Page Access</div>
                                 <div class="setting-card-body">
+                                    <p data-i18n="ui.page_editor.setting_require_login_help">Redirect unauthenticated users to login page</p>
                                     <select class="form-select" id="setting-protected">
-                                        <option value="1">Protected - Login Required</option>
-                                        <option value="0">Public - No Login Required</option>
+                                        <option value="1" data-i18n="ui.page_editor.setting_page_access_protected">Protected - Login Required</option>
+                                        <option value="0" data-i18n="ui.page_editor.setting_page_access_public">Public - No Login Required</option>
                                     </select>
                                 </div>
                             </div>
                             
                             <!-- Page Language -->
                             <div class="setting-card">
-                                <div class="setting-card-header">Page Language</div>
+                                <div class="setting-card-header" data-i18n="ui.page_editor.setting_page_language">Page Language</div>
                                 <div class="setting-card-body">
-                                    <p>Override the site-level language for this specific page.</p>
+                                    <p data-i18n="ui.page_editor.setting_page_language_help">Override the site-level language for this specific page.</p>
                                     <select class="form-select" id="lang">
-                                        <option value="default">Use Site Default</option>
+                                        <option value="default" data-i18n="ui.page_editor.setting_page_language_default">Use Site Default</option>
                                         <option value="en">English</option>
                                         <option value="es">Spanish</option>
                                         <option value="fr">French</option>
@@ -1046,54 +1125,57 @@
                             
                             <!-- JavaScript Options -->
                             <div class="setting-card">
-                                <div class="setting-card-header">JavaScript Configuration</div>
+                                <div class="setting-card-header" data-i18n="ui.page_editor.setting_js_config">JavaScript Configuration</div>
                                 <div class="setting-card-body">
                                     <div class="mb-3">
-                                        <label class="form-label">Obfuscate JavaScript</label>
+                                        <label class="form-label" data-i18n="ui.page_editor.setting_obfuscate_js">Obfuscate JavaScript</label>
+                                        <p class="small text-muted" data-i18n="ui.page_editor.setting_obfuscate_js_help">Obfuscate JavaScript code on publish</p>
                                         <select class="form-select" id="setting-obfuscatejs">
-                                            <option value="0">No</option>
-                                            <option value="1">Yes</option>
+                                            <option value="0" data-i18n="ui.page_editor.setting_obfuscate_no">No</option>
+                                            <option value="1" data-i18n="ui.page_editor.setting_obfuscate_yes">Yes</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="form-label">JavaScript Type</label>
+                                        <label class="form-label" data-i18n="ui.page_editor.setting_is_js_module">JavaScript as Module</label>
+                                        <p class="small text-muted" data-i18n="ui.page_editor.setting_is_js_module_help">Load JavaScript as ES6 module</p>
                                         <select class="form-select" id="setting-is_js_module">
-                                            <option value="0">Standard Script</option>
-                                            <option value="1">ES6 Module</option>
+                                            <option value="0" data-i18n="ui.page_editor.setting_js_standard">Standard Script</option>
+                                            <option value="1" data-i18n="ui.page_editor.setting_js_module">ES6 Module</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Layout Options -->
                             <div class="setting-card">
-                                <div class="setting-card-header">Layout Options</div>
+                                <div class="setting-card-header" data-i18n="ui.page_editor.setting_layout">Layout Options</div>
                                 <div class="setting-card-body">
                                     <div class="mb-3">
-                                        <label class="form-label">Container Wrapper</label>
+                                        <label class="form-label" data-i18n="ui.page_editor.setting_use_container">Container Wrapper</label>
+                                        <p class="small text-muted" data-i18n="ui.page_editor.setting_use_container_help">Wrap page content in Bootstrap container</p>
                                         <select class="form-select" id="setting-use_container">
-                                            <option value="1">Wrap in Container Div</option>
-                                            <option value="0">Do NOT Wrap in Container Div</option>
+                                            <option value="1" data-i18n="ui.page_editor.setting_container_wrap">Wrap in Container Div</option>
+                                            <option value="0" data-i18n="ui.page_editor.setting_container_no_wrap">Do NOT Wrap in Container Div</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Main Navigation</label>
+                                        <label class="form-label" data-i18n="ui.page_editor.setting_main_nav">Main Navigation</label>
                                         <select class="form-select" id="setting-main-navigation">
-                                            <option value="0">None</option>
+                                            <option value="0" data-i18n="ui.page_editor.setting_none">None</option>
                                             <!-- Navigation options will be populated by JavaScript -->
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Side Navigation</label>
+                                        <label class="form-label" data-i18n="ui.page_editor.setting_side_nav">Side Navigation</label>
                                         <select class="form-select" id="setting-side-navigation">
-                                            <option value="0">None</option>
-                                            <!-- Side navigation options will be populated by JavaScript -->
+                                            <option value="0" data-i18n="ui.page_editor.setting_none">None</option>
+                                            <!-- Side navigation will be populated by JavaScript -->
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="form-label">Footer</label>
+                                        <label class="form-label" data-i18n="ui.page_editor.setting_footer">Footer</label>
                                         <select class="form-select" id="setting-footer">
-                                            <option value="0">None</option>
+                                            <option value="0" data-i18n="ui.page_editor.setting_none">None</option>
                                             <!-- Footer options will be populated by JavaScript -->
                                         </select>
                                     </div>
@@ -1102,26 +1184,593 @@
                             
                             <!-- SEO Options -->
                             <div class="setting-card">
-                                <div class="setting-card-header">SEO Configuration</div>
+                                <div class="setting-card-header" data-i18n="ui.page_editor.setting_seo">SEO Configuration</div>
                                 <div class="setting-card-body">
                                     <div>
-                                        <label class="form-label">Include in Sitemap</label>
+                                        <label class="form-label" data-i18n="ui.page_editor.setting_sitemap">Include in Sitemap</label>
                                         <select class="form-select" id="setting-sitemap-include">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" data-i18n="ui.page_editor.setting_yes">Yes</option>
+                                            <option value="0" data-i18n="ui.page_editor.setting_no">No</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             
                             <!-- Web Components -->
-                            <div class="setting-card">
-                                <div class="setting-card-header">Web Components Configuration</div>
+                            <div class="setting-card" style="margin-bottom: 8rem;">
+                                <div class="setting-card-header" data-i18n="ui.page_editor.setting_webcomponents">Web Components Configuration</div>
                                 <div class="setting-card-body">
-                                    <label class="form-label">Variable Name for Web Components</label>
-                                    <input type="text" class="form-control" id="webcomponent_obj_name" placeholder="e.g., myComponents" />
-                                    <small class="text-muted">JavaScript variable name to access web components</small>
+                                    <label class="form-label" data-i18n="ui.page_editor.setting_webcomponent_var">Variable Name for Web Components</label>
+                                    <input type="text" class="form-control" id="webcomponent_obj_name" data-i18n-placeholder="ui.page_editor.setting_webcomponent_placeholder" placeholder="e.g., myComponents" />
+                                    <small class="text-muted" data-i18n="ui.page_editor.setting_webcomponent_help">JavaScript variable name to access web components</small>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Documentation Section -->
+                    <div id="Documentation" class="secondary-content" style="max-width: 1200px; margin: 0 auto;">
+                        <h4 class="mb-4">Kyte API JS Documentation</h4>
+                        <p class="mb-4">Complete reference for the Kyte JavaScript SDK (v1.2.24). This documentation covers all available classes and methods for building Kyte applications.</p>
+
+                        <!-- Kyte Class -->
+                        <div class="mb-5">
+                            <h5 class="text-primary mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-cube me-2"></i>Kyte Class - Main API Client
+                            </h5>
+
+                            <!-- Constructor -->
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-cog me-2"></i>Constructor</h6>
+                                <p><strong>Note:</strong> In published pages, the Kyte instance is automatically created as <code>k</code> (not <code>kyte</code>).</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>// This is done automatically in published pages:
+var k = new Kyte(endpoint, public_key, identifier, account_number, app_identifier);
+k.init();</code></pre>
+                                <p><strong>Parameters:</strong></p>
+                                <ul>
+                                    <li><code>endpoint</code> - Backend API endpoint URL</li>
+                                    <li><code>public_key</code> - API public key</li>
+                                    <li><code>identifier</code> - API identifier</li>
+                                    <li><code>account_number</code> - Account number</li>
+                                    <li><code>app_identifier</code> - Application identifier</li>
+                                </ul>
+                            </div>
+
+                            <!-- init() -->
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-play me-2"></i>init()</h6>
+                                <p>Initialize Kyte instance by loading credentials from cookies. <em>(Called automatically in published pages)</em></p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>k.init();</code></pre>
+                            </div>
+
+                            <!-- sign() -->
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-key me-2"></i>sign(callback, error)</h6>
+                                <p>Generate HMAC signature for authenticated requests.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>k.sign(
+    (signature) => {
+        console.log('Signature:', signature);
+    },
+    (error) => {
+        console.error('Sign error:', error);
+    }
+);</code></pre>
+                            </div>
+
+                            <!-- CRUD Methods -->
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-database me-2"></i>CRUD Operations</h6>
+
+                                <p class="mt-3"><strong>get(model, field, value, headers, callback, error)</strong></p>
+                                <p>Retrieve records from the backend.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>k.get('User', 'email', 'user@example.com', [],
+    (response) => {
+        console.log('User data:', response);
+    },
+    (error) => {
+        console.error('Error:', error);
+    }
+);</code></pre>
+
+                                <p class="mt-3"><strong>post(model, data, formdata, headers, callback, error)</strong></p>
+                                <p>Create new records in the backend.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>k.post('User',
+    { name: 'John Doe', email: 'john@example.com' },
+    null, [],
+    (response) => {
+        console.log('Created user:', response);
+    },
+    (error) => {
+        console.error('Error:', error);
+    }
+);</code></pre>
+
+                                <p class="mt-3"><strong>put(model, field, value, data, formdata, headers, callback, error)</strong></p>
+                                <p>Update existing records in the backend.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>k.put('User', 'id', '123',
+    { name: 'Jane Doe' },
+    null, [],
+    (response) => {
+        console.log('Updated user:', response);
+    },
+    (error) => {
+        console.error('Error:', error);
+    }
+);</code></pre>
+
+                                <p class="mt-3"><strong>delete(model, field, value, callback, error)</strong></p>
+                                <p>Delete records from the backend (soft delete).</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>k.delete('User', 'id', '123',
+    (response) => {
+        console.log('Deleted user:', response);
+    },
+    (error) => {
+        console.error('Error:', error);
+    }
+);</code></pre>
+                            </div>
+
+                            <!-- Session Management -->
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-user-lock me-2"></i>Session Management</h6>
+
+                                <p class="mt-3"><strong>sessionCreate(identity, callback, error, sessionController)</strong></p>
+                                <p>Create a new user session (login).</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>k.sessionCreate(
+    { username: 'user@example.com', password: 'password123' },
+    (response) => {
+        console.log('Login successful:', response);
+    },
+    (error) => {
+        console.error('Login failed:', error);
+    }
+);</code></pre>
+
+                                <p class="mt-3"><strong>sessionDestroy(error)</strong></p>
+                                <p>Destroy the current session (logout).</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>k.sessionDestroy((error) => {
+    if (error) {
+        console.error('Logout error:', error);
+    } else {
+        window.location.href = '/login.html';
+    }
+});</code></pre>
+
+                                <p class="mt-3"><strong>isSession(periodic, redir, interval)</strong></p>
+                                <p>Check if a valid session exists. Optionally enable periodic checking.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>// Simple check
+if (k.isSession(false, false)) {
+    console.log('User is logged in');
+}
+
+// Periodic check with auto-redirect
+k.isSession(true, true, 30000); // Check every 30 seconds</code></pre>
+
+                                <p class="mt-3"><strong>checkSession()</strong></p>
+                                <p>Check if session exists in cookies.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>if (k.checkSession()) {
+    console.log('Session cookie exists');
+}</code></pre>
+                            </div>
+
+                            <!-- Utility Methods -->
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-tools me-2"></i>Utility Methods</h6>
+
+                                <p class="mt-3"><strong>setCookie(name, value, minutes, crossDomain)</strong></p>
+                                <p>Set a browser cookie.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>k.setCookie('userPreference', 'darkMode', 60); // Expires in 60 minutes</code></pre>
+
+                                <p class="mt-3"><strong>getCookie(name)</strong></p>
+                                <p>Get a browser cookie value.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>const preference = k.getCookie('userPreference');</code></pre>
+
+                                <p class="mt-3"><strong>getUrlParameter(name)</strong></p>
+                                <p>Get URL query parameter value.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>// For URL: page.html?id=123
+const id = k.getUrlParameter('id'); // Returns '123'</code></pre>
+
+                                <p class="mt-3"><strong>getPageRequest()</strong></p>
+                                <p>Get decoded page request object from URL.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>// For URL: page.html?request=eyJtb2RlbCI6IlVzZXIiLCJpZHgiOjEyM30=
+const request = k.getPageRequest();
+// Returns: {model: "User", idx: 123}</code></pre>
+
+                                <p class="mt-3"><strong>setPageRequest(model, value)</strong></p>
+                                <p>Create encoded page request URL.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>const url = k.setPageRequest('User', 123);
+// Returns: ?request=eyJtb2RlbCI6IlVzZXIiLCJpZHgiOjEyM30=</code></pre>
+
+                                <p class="mt-3"><strong>alert(title, message, callback, dismiss)</strong></p>
+                                <p>Display a SweetAlert2 alert dialog.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>k.alert('Success', 'Your changes have been saved!', () => {
+    console.log('Alert dismissed');
+});</code></pre>
+
+                                <p class="mt-3"><strong>confirm(title, message, callback, cancel)</strong></p>
+                                <p>Display a SweetAlert2 confirmation dialog.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>k.confirm(
+    'Delete User',
+    'Are you sure you want to delete this user?',
+    () => {
+        console.log('User confirmed');
+    },
+    () => {
+        console.log('User cancelled');
+    }
+);</code></pre>
+
+                                <p class="mt-3"><strong>validateForm(form)</strong></p>
+                                <p>Validate a form element (checks required fields).</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>const formElement = document.getElementById('myForm');
+if (k.validateForm(formElement)) {
+    console.log('Form is valid');
+}</code></pre>
+
+                                <p class="mt-3"><strong>getNestedValue(obj, path)</strong></p>
+                                <p>Get nested object property using dot notation.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>const user = { profile: { name: 'John' } };
+const name = k.getNestedValue(user, 'profile.name'); // Returns 'John'</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- KyteTable Class -->
+                        <div class="mb-5">
+                            <h5 class="text-primary mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-table me-2"></i>KyteTable Class - DataTables Integration
+                            </h5>
+
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-cog me-2"></i>Constructor</h6>
+                                <p>Create a server-side DataTable with Kyte backend integration.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>const userTable = new KyteTable(
+    k,                      // Kyte instance
+    '#usersTable',          // Table selector
+    'User',                 // Model name
+    [                       // Column definitions
+        { data: 'id', title: 'ID' },
+        { data: 'name', title: 'Name' },
+        { data: 'email', title: 'Email' },
+        { data: 'role_obj.name', title: 'Role' }
+    ],
+    true,                   // Sortable
+    [[0, 'desc']],         // Default order
+    true,                   // Show edit button
+    true,                   // Show clickable rows
+    'id',                   // ID field
+    '/user/details.html'    // Detail page URL
+);</code></pre>
+                                <p class="mt-2"><strong>Features:</strong></p>
+                                <ul>
+                                    <li>Server-side pagination, sorting, and searching</li>
+                                    <li>Automatic foreign key resolution (e.g., <code>role_obj.name</code>)</li>
+                                    <li>Built-in edit/delete action buttons</li>
+                                    <li>Row click navigation</li>
+                                    <li>Auto-refresh on form submission</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- KyteForm Class -->
+                        <div class="mb-5">
+                            <h5 class="text-primary mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-edit me-2"></i>KyteForm Class - Dynamic Form Builder
+                            </h5>
+
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-cog me-2"></i>Constructor</h6>
+                                <p>Create a dynamic form with validation and automatic CRUD operations.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>const userForm = new KyteForm(
+    k,                      // Kyte instance
+    '#userForm',            // Form container selector
+    'User',                 // Model name
+    { kyte_account: 1 },   // Hidden fields
+    [                       // Field definitions
+        {
+            field: 'name',
+            type: 'text',
+            label: 'Full Name',
+            placeholder: 'Enter full name',
+            required: true,
+            col: 6
+        },
+        {
+            field: 'email',
+            type: 'text',
+            label: 'Email Address',
+            placeholder: 'user@example.com',
+            required: true,
+            col: 6
+        },
+        {
+            field: 'role',
+            type: 'select',
+            label: 'Role',
+            required: true,
+            col: 6,
+            option: {
+                ajax: true,
+                data_model_name: 'Role',
+                data_model_field: 'name',
+                data_model_value: 'id'
+            }
+        },
+        {
+            field: 'password',
+            type: 'password',
+            label: 'Password',
+            required: true,
+            col: 6
+        }
+    ],
+    'User Form',            // Form title
+    userTable,              // Optional table to refresh
+    '#userModal',           // Optional modal selector
+    '#openFormBtn'          // Optional trigger button
+);</code></pre>
+                                <p class="mt-2"><strong>Field Types:</strong></p>
+                                <ul>
+                                    <li><code>text</code> - Text input</li>
+                                    <li><code>password</code> - Password input</li>
+                                    <li><code>textarea</code> - Multiline text</li>
+                                    <li><code>select</code> - Dropdown (supports AJAX loading)</li>
+                                    <li><code>file</code> - File upload (supports S3 direct upload)</li>
+                                    <li><code>date</code> - Date picker</li>
+                                    <li><code>checkbox</code> - Checkbox</li>
+                                    <li><code>radio</code> - Radio buttons</li>
+                                </ul>
+                                <p class="mt-2"><strong>Features:</strong></p>
+                                <ul>
+                                    <li>Automatic validation</li>
+                                    <li>Bootstrap modal integration</li>
+                                    <li>Edit/create mode switching</li>
+                                    <li>AJAX-populated dropdowns</li>
+                                    <li>File upload with progress</li>
+                                    <li>Itemized/repeatable field groups</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- KyteNav Class -->
+                        <div class="mb-5">
+                            <h5 class="text-primary mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-bars me-2"></i>KyteNav Class - Navigation Bar
+                            </h5>
+
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-cog me-2"></i>Constructor</h6>
+                                <p>Create a Bootstrap 5 navigation bar.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>const nav = new KyteNav(
+    '#navigation',          // Navigation container
+    [                       // Menu items
+        { label: 'Home', url: '/index.html' },
+        { label: 'Dashboard', url: '/dashboard.html' },
+        {
+            label: 'Admin',
+            children: [
+                { label: 'Users', url: '/admin/users.html' },
+                { label: 'Settings', url: '/admin/settings.html' }
+            ]
+        }
+    ],
+    () => {                 // Logout callback
+        k.sessionDestroy(() => {
+            window.location.href = '/login.html';
+        });
+    },
+    '<strong>MyApp</strong>' // Brand HTML
+);</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- KyteSidenav Class -->
+                        <div class="mb-5">
+                            <h5 class="text-primary mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-stream me-2"></i>KyteSidenav Class - Sidebar Navigation
+                            </h5>
+
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-cog me-2"></i>Constructor</h6>
+                                <p>Create a hash-based sidebar navigation.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>const sidenav = new KyteSidenav(
+    '#sidebar',             // Sidebar container
+    [                       // Menu items
+        { label: 'Overview', hash: '#overview', icon: 'fas fa-home' },
+        { label: 'Profile', hash: '#profile', icon: 'fas fa-user' },
+        { label: 'Settings', hash: '#settings', icon: 'fas fa-cog' }
+    ],
+    (hash) => {             // Navigation callback
+        console.log('Navigated to:', hash);
+        // Show/hide content based on hash
+    }
+);</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- KyteCalendar Class -->
+                        <div class="mb-5">
+                            <h5 class="text-primary mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-calendar me-2"></i>KyteCalendar Class - Date Range Selector
+                            </h5>
+
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-cog me-2"></i>Constructor</h6>
+                                <p>Create a custom calendar with date range selection.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>const calendar = new KyteCalendar(
+    '#calendarContainer',   // Container selector
+    4,                      // Number of rows (months)
+    3,                      // Number of columns
+    (startDate, endDate) => {
+        console.log('Selected range:', startDate, 'to', endDate);
+    }
+);</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- KytePasswordRequirement Class -->
+                        <div class="mb-5">
+                            <h5 class="text-primary mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-lock me-2"></i>KytePasswordRequirement Class - Password Validation
+                            </h5>
+
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-cog me-2"></i>Constructor</h6>
+                                <p>Create real-time password validation with visual feedback.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>const passwordChecker = new KytePasswordRequirement(
+    '#passwordField',       // Password input selector
+    {
+        minLength: 8,
+        requireUppercase: true,
+        requireLowercase: true,
+        requireNumber: true,
+        requireSpecial: true
+    }
+);</code></pre>
+                                <p class="mt-2">Automatically displays validation checklist and updates in real-time as user types.</p>
+                            </div>
+                        </div>
+
+                        <!-- KyteWebComponent Class -->
+                        <div class="mb-5">
+                            <h5 class="text-primary mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-puzzle-piece me-2"></i>KyteWebComponent Class - Template Engine
+                            </h5>
+
+                            <div class="mb-4">
+                                <h6 class="text-secondary"><i class="fas fa-cog me-2"></i>Constructor</h6>
+                                <p>Simple mustache-style template engine for rendering dynamic content.</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>// HTML template
+&lt;div id="userCard"&gt;
+    &lt;h3&gt;{{name}}&lt;/h3&gt;
+    &lt;p&gt;{{email}}&lt;/p&gt;
+    &lt;p&gt;Role: {{role_obj.name}}&lt;/p&gt;
+&lt;/div&gt;
+
+// JavaScript
+const component = new KyteWebComponent(
+    '#userCard',
+    {
+        name: 'John Doe',
+        email: 'john@example.com',
+        role_obj: { name: 'Admin' }
+    },
+    (data) => {
+        // Optional mutator function
+        data.name = data.name.toUpperCase();
+        return data;
+    }
+);</code></pre>
+                                <p class="mt-2"><strong>Template Syntax:</strong></p>
+                                <ul>
+                                    <li><code>{{'{{'}}property{{'}}'}}</code> - Simple property</li>
+                                    <li><code>{{'{{'}}nested.property{{'}}'}}</code> - Nested property</li>
+                                    <li><code>{{'{{'}}array[0]{{'}}'}}</code> - Array access</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Complete Example -->
+                        <div class="mb-5">
+                            <h5 class="text-primary mb-3" style="border-bottom: 2px solid #3e3e42; padding-bottom: 0.5rem;">
+                                <i class="fas fa-code me-2"></i>Complete Example - User Management Page
+                            </h5>
+
+                            <div class="mb-4">
+                                <p><strong>Note:</strong> In published pages, <code>k</code> is automatically initialized. This example shows what your page JavaScript would look like:</p>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>// k is automatically created and initialized by Kyte:
+// var k = new Kyte(endpoint, public_key, identifier, account_number, app_identifier);
+// k.init();
+
+// Check authentication
+if (!k.isSession(false, false)) {
+    window.location.href = '/login.html';
+}
+
+// Enable periodic session check
+k.isSession(true, true, 30000);
+
+// Create user table
+const userTable = new KyteTable(
+    k,                      // Use the global k instance
+    '#usersTable',
+    'User',
+    [
+        { data: 'id', title: 'ID' },
+        { data: 'name', title: 'Name' },
+        { data: 'email', title: 'Email' },
+        { data: 'role_obj.name', title: 'Role' }
+    ],
+    true,
+    [[0, 'desc']],
+    true,
+    true,
+    'id',
+    '/user/details.html'
+);
+
+// Create user form
+const userForm = new KyteForm(
+    k,
+    '#userForm',
+    'User',
+    {},
+    [
+        {
+            field: 'name',
+            type: 'text',
+            label: 'Full Name',
+            required: true,
+            col: 6
+        },
+        {
+            field: 'email',
+            type: 'text',
+            label: 'Email',
+            required: true,
+            col: 6
+        },
+        {
+            field: 'role',
+            type: 'select',
+            label: 'Role',
+            required: true,
+            col: 6,
+            option: {
+                ajax: true,
+                data_model_name: 'Role',
+                data_model_field: 'name',
+                data_model_value: 'id'
+            }
+        },
+        {
+            field: 'password',
+            type: 'password',
+            label: 'Password',
+            required: true,
+            col: 6
+        }
+    ],
+    'User Form',
+    userTable,
+    '#userModal',
+    '#createUserBtn'
+);
+
+// Create navigation
+const nav = new KyteNav(
+    '#navigation',
+    [
+        { label: 'Dashboard', url: '/dashboard.html' },
+        { label: 'Users', url: '/users.html' },
+        { label: 'Settings', url: '/settings.html' }
+    ],
+    () => {
+        k.sessionDestroy(() => {
+            window.location.href = '/login.html';
+        });
+    },
+    '&lt;strong&gt;MyApp&lt;/strong&gt;'
+);</code></pre>
                             </div>
                         </div>
                     </div>

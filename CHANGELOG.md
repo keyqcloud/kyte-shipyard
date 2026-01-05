@@ -1,3 +1,88 @@
+## 1.6.4
+
+### Major Enhancements:
+- **Internationalization (i18n) Support**: Added comprehensive multi-language support with 4 languages (English, Japanese, Korean, Spanish)
+  - Implemented KyteI18n library for dynamic language switching
+  - Translated all UI elements across Model and Controller detail pages, AWS Keys, API Keys, System Log, Dashboard, and all form modals
+  - Added language persistence with localStorage
+  - Fixed timing issues with async i18n initialization by introducing `KyteI18nReady` event
+  - Included form modals, buttons, labels, navigation elements, table columns, and filter panels
+
+- **Application Dashboard**: Created comprehensive dashboard for application health and metrics
+  - Real-time resource counts (Models, Controllers, Pages, Sites, Functions, Cron Jobs)
+  - 24-hour health metrics showing Critical, Error, and Warning counts
+  - Cron job monitoring (Enabled jobs, Dead letter queue, 24h success rate)
+  - Recent errors list with severity indicators and timestamps
+  - Recent cron executions with status, duration, and timestamps
+  - Progressive data loading - stats update as queries complete for better UX
+  - Individual loading indicators per stat card with shimmer effect
+  - Added Dashboard link to application sidebar navigation
+  - Optimized queries to avoid memory exhaustion on large datasets
+
+- **Monaco Editor IntelliSense for Kyte PHP**: Added intelligent code completion in function editor
+  - Autocomplete for `$this->` properties (user, api, model, response, etc.)
+  - Autocomplete for `$this->api->` properties (user, account, session, app, field, value, etc.)
+  - Autocomplete for `$this->user->` fields (id, name, email, kyte_account, etc.)
+  - ModelObject and Model method suggestions with signatures
+  - Environment variable (KYTE_APP_ENV) suggestions
+  - All suggestions based on actual Kyte PHP framework code (verified from source)
+
+- **Monaco Editor IntelliSense for Kyte JavaScript**: Added intelligent code completion in page editor JavaScript tab
+  - Autocomplete for Kyte API JS SDK methods (k object)
+  - Method signatures with parameter documentation
+  - Autocomplete for KyteTable, KyteForm, KyteNav, KyteSidenav, KyteCalendar classes
+  - Constructor parameter hints with documentation
+  - Property and method suggestions for all Kyte JS classes
+  - Signature help shows parameter hints when typing method calls
+
+- **Monaco Editor IntelliSense for Custom Scripts**: Added intelligent code completion in custom script editor for JavaScript files
+  - Full Kyte API JS SDK autocomplete (k.get, k.post, k.put, k.delete, etc.)
+  - Signature help provider for parameter hints (triggers on opening parenthesis)
+  - Keyboard shortcuts: Cmd+I and Cmd+Space to manually trigger suggestions
+  - Trigger character support - autocomplete opens automatically when typing "k."
+  - Complete method signatures with parameter names and documentation
+  - Support for all Kyte JS classes (KyteTable, KyteForm, KyteNav, etc.)
+
+- **Function Type Documentation**: Added comprehensive documentation in function editor
+  - New Documentation tab with detailed explanations of all function types
+  - Code examples for hooks (hook_init, hook_auth, hook_prequery, hook_preprocess, hook_response_data, hook_process_get_response)
+  - Code examples for overrides (new, update, get, delete)
+  - Code examples for custom functions
+  - Best practices and common patterns sections
+  - Popup window feature for viewing documentation on second monitor
+  - GitHub documentation links
+
+- **Function Type Helper Modal**: Added quick reference in controller detail page
+  - Question mark icon in function type dropdown
+  - Popup modal with concise explanations of hooks, overrides, and custom functions
+  - Proper z-index handling to appear above other modals
+
+### UI Improvements:
+- **Controller Detail Page Revamp**: Replaced KyteSidenav with Bootstrap 5 native tabs
+  - Fixed navigation conflicts
+  - Added sidebar info panel with function count
+  - Added quick actions for adding functions
+  - Improved responsive design
+
+- **Model Detail Page Revamp**: Replaced KyteSidenav with Bootstrap 5 native tabs
+  - Consistent tab navigation across pages
+  - Added sidebar info panels
+  - Fixed content visibility issues
+  - Improved export functionality
+
+- **Modal Improvements**:
+  - Fixed z-index conflicts between modals
+  - Improved close button styling with proper × symbol
+  - Enhanced title bar styling with Kyte brand colors
+  - Better hover effects and visual feedback
+
+### Bug Fixes:
+- Fixed modal z-index issues causing help modals to appear behind other modals
+- Fixed i18n translation timing issues with form generation
+- Fixed popup window button event handler conflicts
+- Fixed close button missing × symbol in jQuery UI dialogs
+- Improved documentation footer padding to prevent content cutoff
+
 ## 1.6.3
 
 - Reorganize menu items

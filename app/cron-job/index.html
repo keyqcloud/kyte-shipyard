@@ -25,7 +25,20 @@
     <!-- Monaco Editor -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
     <!-- Kyte -->
-    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
     <script>
         // Auto-detect localhost and load non-obfuscated source files for development
         (function() {
@@ -46,6 +59,30 @@
                 console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
             }
         })();
+    </script>
+
+    <!-- i18n Library -->
+    <script src="/assets/js/kyte-i18n.js"></script>
+
+    <!-- Initialize i18n for authenticated pages -->
+    <script>
+        document.addEventListener('KyteInitialized', function(e) {
+            const kyteI18n = new KyteI18n('en', '/assets/i18n/');
+
+            // Make kyteI18n globally available for sidebar translation
+            window.kyteI18n = kyteI18n;
+
+            // Get user language from localStorage (stored during login)
+            const cachedLanguage = localStorage.getItem('kyte_user_language');
+
+            // Initialize with cached language or browser detection
+            kyteI18n.init(cachedLanguage).then(() => {
+                console.log('[i18n] Page initialized with language:', kyteI18n.getCurrentLanguage());
+                kyteI18n.translateDOM();
+            }).catch(error => {
+                console.error('[i18n] Failed to initialize:', error);
+            });
+        });
     </script>
 
 </head>
@@ -86,12 +123,12 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-2"></i>Account
+                            <i class="fas fa-user-circle me-2"></i><span data-i18n="nav.account">Account</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i><span data-i18n="nav.settings">Settings</span></a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i>Logout</a></li>
+                            <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i><span data-i18n="nav.logout">Logout</span></a></li>
                         </ul>
                     </li>
                 </ul>
@@ -106,7 +143,7 @@
                 <div class="sidebar-header">
                     <a href="#" id="back-to-cron-jobs" class="sidebar-back-button">
                         <i class="fas fa-arrow-left"></i>
-                        <span>Back to Cron Jobs</span>
+                        <span data-i18n="ui.cron_detail.back_to_list">Back to Cron Jobs</span>
                     </a>
                 </div>
 
@@ -125,19 +162,19 @@
                 <!-- Job Info Panel -->
                 <div class="sidebar-info-panel mt-3 px-3">
                     <div class="info-item">
-                        <label>Status:</label>
+                        <label data-i18n="ui.cron_detail.status_label">Status:</label>
                         <span id="job-status" class="badge"></span>
                     </div>
                     <div class="info-item">
-                        <label>Last Run:</label>
-                        <span id="last-run">Never</span>
+                        <label data-i18n="ui.cron_detail.last_run_label">Last Run:</label>
+                        <span id="last-run" data-i18n="ui.cron_detail.never">Never</span>
                     </div>
                     <div class="info-item">
-                        <label>Next Run:</label>
-                        <span id="next-run">Not scheduled</span>
+                        <label data-i18n="ui.cron_detail.next_run_label">Next Run:</label>
+                        <span id="next-run" data-i18n="ui.cron_detail.not_scheduled">Not scheduled</span>
                     </div>
                     <div class="info-item">
-                        <label>Success Rate:</label>
+                        <label data-i18n="ui.cron_detail.success_rate_label">Success Rate:</label>
                         <span id="success-rate">N/A</span>
                     </div>
                 </div>
@@ -145,16 +182,16 @@
                 <!-- Quick Actions -->
                 <div class="sidebar-actions mt-3 px-3">
                     <button id="trigger-job" class="btn btn-sm btn-success w-100 mb-2">
-                        <i class="fas fa-play"></i> Trigger Now
+                        <i class="fas fa-play"></i> <span data-i18n="ui.cron_detail.trigger_now">Trigger Now</span>
                     </button>
                     <button id="edit-settings" class="btn btn-sm btn-outline-secondary w-100 mb-2">
-                        <i class="fas fa-cog"></i> Edit Settings
+                        <i class="fas fa-cog"></i> <span data-i18n="ui.cron_detail.edit_settings">Edit Settings</span>
                     </button>
                     <button id="view-executions" class="btn btn-sm btn-outline-info w-100 mb-2">
-                        <i class="fas fa-history"></i> View Executions
+                        <i class="fas fa-history"></i> <span data-i18n="ui.cron_detail.view_executions">View Executions</span>
                     </button>
                     <button id="view-versions" class="btn btn-sm btn-outline-primary w-100">
-                        <i class="fas fa-code-branch"></i> Version History
+                        <i class="fas fa-code-branch"></i> <span data-i18n="ui.cron_detail.version_history">Version History</span>
                     </button>
                 </div>
             </div>
@@ -166,15 +203,15 @@
                     <div class="editor-toolbar">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">
-                                <i class="fas fa-code"></i> Job Code
+                                <i class="fas fa-code"></i> <span data-i18n="ui.cron_detail.job_code">Job Code</span>
                                 <span id="version-badge" class="badge bg-secondary ms-2"></span>
                             </h5>
                             <div>
                                 <button id="toggle-help" class="btn btn-outline-info btn-sm me-2">
-                                    <i class="fas fa-question-circle"></i> Help
+                                    <i class="fas fa-question-circle"></i> <span data-i18n="ui.cron_detail.help_button">Help</span>
                                 </button>
                                 <button id="save-code" class="btn btn-primary btn-sm me-2">
-                                    <i class="fas fa-save"></i> Save <kbd>Ctrl+S</kbd>
+                                    <i class="fas fa-save"></i> <span data-i18n="ui.cron_detail.save_button">Save</span> <kbd>Ctrl+S</kbd>
                                 </button>
                             </div>
                         </div>
@@ -240,10 +277,10 @@
         <footer class="detail-page-footer">
             <div class="footer-content d-flex justify-content-between align-items-center">
                 <div class="footer-versions">
-                    <div>Kyte Shipyard™ Version <span id="kyteShipyardVersion"></span></div>
-                    <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
+                    <div><span data-i18n="footer.shipyard_version">Kyte Shipyard™ Version</span> <span id="kyteShipyardVersion"></span></div>
+                    <div><span data-i18n="footer.js_version">Kyte JS Version</span> <span id="kyteJSVersion"></span></div>
                 </div>
-                <p class="footer-copyright mb-0">KeyQ © 2020-2026</p>
+                <p class="footer-copyright mb-0" data-i18n="footer.copyright">KeyQ © 2020-2026</p>
             </div>
         </footer>
     </div>
@@ -253,62 +290,62 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-cog"></i> Edit Job Settings</h5>
+                    <h5 class="modal-title"><i class="fas fa-cog"></i> <span data-i18n="ui.cron_detail.modal.settings.title">Edit Job Settings</span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" style="padding: 2rem;">
                     <!-- Step 1: Basic Info -->
                     <div class="mb-4">
-                        <label for="edit-job-name" class="form-label">Job Name <span class="text-danger">*</span></label>
+                        <label for="edit-job-name" class="form-label" data-i18n="ui.cron.wizard.name_label">Job Name</label> <span class="text-danger">*</span>
                         <input type="text" class="form-control form-control-lg" id="edit-job-name">
                     </div>
                     <div class="mb-4">
-                        <label for="edit-job-description" class="form-label">Description (optional)</label>
+                        <label for="edit-job-description" class="form-label" data-i18n="ui.cron.wizard.description_label">Description (optional)</label>
                         <textarea class="form-control" id="edit-job-description" rows="3"></textarea>
                     </div>
 
                     <!-- Step 2: Schedule -->
                     <div class="mb-4">
-                        <label class="form-label">How often should this job run?</label>
+                        <label class="form-label" data-i18n="ui.cron.wizard.schedule_question">How often should this job run?</label>
                         <div class="schedule-options">
                             <div class="schedule-option" data-schedule="interval">
                                 <input type="radio" name="edit-schedule-type" id="edit-schedule-interval" value="interval">
                                 <label for="edit-schedule-interval">
                                     <i class="fas fa-clock"></i>
-                                    <strong>Run on Interval</strong>
-                                    <small>Best for most jobs - run every X seconds/minutes/hours</small>
+                                    <strong data-i18n="ui.cron.wizard.schedule.interval">Run on Interval</strong>
+                                    <small data-i18n="ui.cron.wizard.schedule.interval_desc">Best for most jobs - run every X seconds/minutes/hours</small>
                                 </label>
                             </div>
                             <div class="schedule-option" data-schedule="daily">
                                 <input type="radio" name="edit-schedule-type" id="edit-schedule-daily" value="daily">
                                 <label for="edit-schedule-daily">
                                     <i class="fas fa-calendar-day"></i>
-                                    <strong>Daily</strong>
-                                    <small>Run once every day at a specific time</small>
+                                    <strong data-i18n="ui.cron.wizard.schedule.daily">Daily</strong>
+                                    <small data-i18n="ui.cron.wizard.schedule.daily_desc">Run once every day at a specific time</small>
                                 </label>
                             </div>
                             <div class="schedule-option" data-schedule="weekly">
                                 <input type="radio" name="edit-schedule-type" id="edit-schedule-weekly" value="weekly">
                                 <label for="edit-schedule-weekly">
                                     <i class="fas fa-calendar-week"></i>
-                                    <strong>Weekly</strong>
-                                    <small>Run once per week on a specific day and time</small>
+                                    <strong data-i18n="ui.cron.wizard.schedule.weekly">Weekly</strong>
+                                    <small data-i18n="ui.cron.wizard.schedule.weekly_desc">Run once per week on a specific day and time</small>
                                 </label>
                             </div>
                             <div class="schedule-option" data-schedule="monthly">
                                 <input type="radio" name="edit-schedule-type" id="edit-schedule-monthly" value="monthly">
                                 <label for="edit-schedule-monthly">
                                     <i class="fas fa-calendar"></i>
-                                    <strong>Monthly</strong>
-                                    <small>Run once per month on a specific day</small>
+                                    <strong data-i18n="ui.cron.wizard.schedule.monthly">Monthly</strong>
+                                    <small data-i18n="ui.cron.wizard.schedule.monthly_desc">Run once per month on a specific day</small>
                                 </label>
                             </div>
                             <div class="schedule-option" data-schedule="cron">
                                 <input type="radio" name="edit-schedule-type" id="edit-schedule-cron" value="cron">
                                 <label for="edit-schedule-cron">
                                     <i class="fas fa-code"></i>
-                                    <strong>Cron Expression</strong>
-                                    <small>Advanced - use custom cron syntax</small>
+                                    <strong data-i18n="ui.cron.wizard.schedule.cron">Cron Expression</strong>
+                                    <small data-i18n="ui.cron.wizard.schedule.cron_desc">Advanced - use custom cron syntax</small>
                                 </label>
                             </div>
                         </div>
@@ -318,55 +355,55 @@
                     <div class="schedule-fields mb-4">
                         <!-- Interval -->
                         <div class="edit-schedule-config" data-schedule="interval">
-                            <label for="edit-interval-value" class="form-label">Run every</label>
+                            <label for="edit-interval-value" class="form-label" data-i18n="ui.cron.wizard.interval.label">Run every</label>
                             <div class="row">
                                 <div class="col-6">
                                     <input type="number" class="form-control" id="edit-interval-value" value="1" min="1">
                                 </div>
                                 <div class="col-6">
                                     <select class="form-select" id="edit-interval-unit">
-                                        <option value="60">Minutes</option>
-                                        <option value="3600">Hours</option>
-                                        <option value="86400">Days</option>
+                                        <option value="60" data-i18n="ui.cron.wizard.interval.minutes">Minutes</option>
+                                        <option value="3600" data-i18n="ui.cron.wizard.interval.hours">Hours</option>
+                                        <option value="86400" data-i18n="ui.cron.wizard.interval.days">Days</option>
                                     </select>
                                 </div>
                             </div>
-                            <small class="text-muted">Job will run every <span id="edit-interval-preview">1 hour</span></small>
+                            <small class="text-muted"><span data-i18n="ui.cron.wizard.interval.preview">Job will run every</span> <span id="edit-interval-preview">1 hour</span></small>
                         </div>
 
                         <!-- Daily -->
                         <div class="edit-schedule-config d-none" data-schedule="daily">
                             <div class="mb-3">
-                                <label for="edit-daily-time" class="form-label">Time of Day</label>
+                                <label for="edit-daily-time" class="form-label" data-i18n="ui.cron.wizard.daily.time_label">Time of Day</label>
                                 <input type="time" class="form-control" id="edit-daily-time">
                             </div>
                             <div class="mb-3">
-                                <label for="edit-daily-timezone" class="form-label">Timezone</label>
+                                <label for="edit-daily-timezone" class="form-label" data-i18n="ui.cron.wizard.daily.timezone_label">Timezone</label>
                                 <input type="text" class="form-control" id="edit-daily-timezone" placeholder="UTC">
-                                <small class="text-muted">Examples: UTC, America/New_York, Europe/London</small>
+                                <small class="text-muted" data-i18n="ui.cron.wizard.daily.timezone_hint">Examples: UTC, America/New_York, Europe/London</small>
                             </div>
                         </div>
 
                         <!-- Weekly -->
                         <div class="edit-schedule-config d-none" data-schedule="weekly">
                             <div class="mb-3">
-                                <label for="edit-weekly-day" class="form-label">Day of Week</label>
+                                <label for="edit-weekly-day" class="form-label" data-i18n="ui.cron.wizard.weekly.day_label">Day of Week</label>
                                 <select class="form-select" id="edit-weekly-day">
-                                    <option value="1">Monday</option>
-                                    <option value="2">Tuesday</option>
-                                    <option value="3">Wednesday</option>
-                                    <option value="4">Thursday</option>
-                                    <option value="5">Friday</option>
-                                    <option value="6">Saturday</option>
-                                    <option value="0">Sunday</option>
+                                    <option value="1" data-i18n="ui.cron.wizard.weekly.monday">Monday</option>
+                                    <option value="2" data-i18n="ui.cron.wizard.weekly.tuesday">Tuesday</option>
+                                    <option value="3" data-i18n="ui.cron.wizard.weekly.wednesday">Wednesday</option>
+                                    <option value="4" data-i18n="ui.cron.wizard.weekly.thursday">Thursday</option>
+                                    <option value="5" data-i18n="ui.cron.wizard.weekly.friday">Friday</option>
+                                    <option value="6" data-i18n="ui.cron.wizard.weekly.saturday">Saturday</option>
+                                    <option value="0" data-i18n="ui.cron.wizard.weekly.sunday">Sunday</option>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="edit-weekly-time" class="form-label">Time of Day</label>
+                                <label for="edit-weekly-time" class="form-label" data-i18n="ui.cron.wizard.weekly.time_label">Time of Day</label>
                                 <input type="time" class="form-control" id="edit-weekly-time">
                             </div>
                             <div class="mb-3">
-                                <label for="edit-weekly-timezone" class="form-label">Timezone</label>
+                                <label for="edit-weekly-timezone" class="form-label" data-i18n="ui.cron.wizard.weekly.timezone_label">Timezone</label>
                                 <input type="text" class="form-control" id="edit-weekly-timezone" placeholder="UTC">
                             </div>
                         </div>
@@ -374,16 +411,16 @@
                         <!-- Monthly -->
                         <div class="edit-schedule-config d-none" data-schedule="monthly">
                             <div class="mb-3">
-                                <label for="edit-monthly-day" class="form-label">Day of Month</label>
+                                <label for="edit-monthly-day" class="form-label" data-i18n="ui.cron.wizard.monthly.day_label">Day of Month</label>
                                 <input type="number" class="form-control" id="edit-monthly-day" min="1" max="31">
-                                <small class="text-muted">Day 1-31 (if day doesn't exist in month, last day will be used)</small>
+                                <small class="text-muted" data-i18n="ui.cron.wizard.monthly.day_hint">Day 1-31 (if day doesn't exist in month, last day will be used)</small>
                             </div>
                             <div class="mb-3">
-                                <label for="edit-monthly-time" class="form-label">Time of Day</label>
+                                <label for="edit-monthly-time" class="form-label" data-i18n="ui.cron.wizard.monthly.time_label">Time of Day</label>
                                 <input type="time" class="form-control" id="edit-monthly-time">
                             </div>
                             <div class="mb-3">
-                                <label for="edit-monthly-timezone" class="form-label">Timezone</label>
+                                <label for="edit-monthly-timezone" class="form-label" data-i18n="ui.cron.wizard.monthly.timezone_label">Timezone</label>
                                 <input type="text" class="form-control" id="edit-monthly-timezone" placeholder="UTC">
                             </div>
                         </div>
@@ -391,9 +428,9 @@
                         <!-- Cron -->
                         <div class="edit-schedule-config d-none" data-schedule="cron">
                             <div class="mb-3">
-                                <label for="edit-cron-expression" class="form-label">Cron Expression</label>
-                                <input type="text" class="form-control" id="edit-cron-expression" placeholder="0 2 * * *">
-                                <small class="text-muted">Example: 0 2 * * * (runs at 2:00 AM daily)</small>
+                                <label for="edit-cron-expression" class="form-label" data-i18n="ui.cron.wizard.cron.expression_label">Cron Expression</label>
+                                <input type="text" class="form-control" id="edit-cron-expression" data-i18n-placeholder="ui.cron.wizard.cron.expression_placeholder" placeholder="0 2 * * *">
+                                <small class="text-muted" data-i18n="ui.cron.wizard.cron.expression_hint">Example: 0 2 * * * (runs at 2:00 AM daily)</small>
                             </div>
                         </div>
                     </div>
@@ -402,26 +439,26 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="mb-3">
-                                <label for="edit-job-timeout" class="form-label">Timeout (seconds)</label>
+                                <label for="edit-job-timeout" class="form-label" data-i18n="ui.cron.wizard.timeout_label">Timeout (seconds)</label>
                                 <input type="number" class="form-control" id="edit-job-timeout" min="30" max="1800">
-                                <small class="text-muted">Maximum execution time before timeout</small>
+                                <small class="text-muted" data-i18n="ui.cron.wizard.timeout_hint">Maximum execution time before timeout</small>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="mb-3">
-                                <label for="edit-job-enabled" class="form-label">Status</label>
+                                <label for="edit-job-enabled" class="form-label" data-i18n="ui.cron_detail.modal.settings.status_label">Status</label>
                                 <select class="form-select" id="edit-job-enabled">
-                                    <option value="1">Enabled (will run on schedule)</option>
-                                    <option value="0">Disabled (paused)</option>
+                                    <option value="1" data-i18n="ui.cron.wizard.enabled_option">Enabled (will run on schedule)</option>
+                                    <option value="0" data-i18n="ui.cron.wizard.disabled_option">Disabled (paused)</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="ui.cron_detail.modal.settings.cancel">Cancel</button>
                     <button type="button" class="btn btn-primary" id="save-settings">
-                        <i class="fas fa-save"></i> Save Changes
+                        <i class="fas fa-save"></i> <span data-i18n="ui.cron_detail.modal.settings.save">Save Changes</span>
                     </button>
                 </div>
             </div>
@@ -433,7 +470,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-history"></i> Execution History</h5>
+                    <h5 class="modal-title"><i class="fas fa-history"></i> <span data-i18n="ui.cron_detail.modal.executions.title">Execution History</span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -441,25 +478,25 @@
                         <div class="col-md-3">
                             <div class="stat-card">
                                 <div class="stat-value" id="stat-total">0</div>
-                                <div class="stat-label">Total Executions</div>
+                                <div class="stat-label" data-i18n="ui.cron_detail.modal.executions.total">Total Executions</div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="stat-card success">
                                 <div class="stat-value" id="stat-success">0</div>
-                                <div class="stat-label">Successful</div>
+                                <div class="stat-label" data-i18n="ui.cron_detail.modal.executions.successful">Successful</div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="stat-card danger">
                                 <div class="stat-value" id="stat-failed">0</div>
-                                <div class="stat-label">Failed</div>
+                                <div class="stat-label" data-i18n="ui.cron_detail.modal.executions.failed">Failed</div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="stat-card warning">
                                 <div class="stat-value" id="stat-timeout">0</div>
-                                <div class="stat-label">Timeouts</div>
+                                <div class="stat-label" data-i18n="ui.cron_detail.modal.executions.timeouts">Timeouts</div>
                             </div>
                         </div>
                     </div>
@@ -467,18 +504,18 @@
                     <table id="executions-table" class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Status</th>
-                                <th>Scheduled</th>
-                                <th>Started</th>
-                                <th>Completed</th>
-                                <th>Duration</th>
-                                <th>Actions</th>
+                                <th data-i18n="ui.cron_detail.modal.executions.status_column">Status</th>
+                                <th data-i18n="ui.cron_detail.modal.executions.scheduled_column">Scheduled</th>
+                                <th data-i18n="ui.cron_detail.modal.executions.started_column">Started</th>
+                                <th data-i18n="ui.cron_detail.modal.executions.completed_column">Completed</th>
+                                <th data-i18n="ui.cron_detail.modal.executions.duration_column">Duration</th>
+                                <th data-i18n="ui.cron_detail.modal.executions.actions_column">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="executions-tbody">
                             <tr>
                                 <td colspan="6" class="text-center">
-                                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                                    <i class="fas fa-spinner fa-spin"></i> <span data-i18n="action.loading">Loading...</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -493,7 +530,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-info-circle"></i> Execution Details</h5>
+                    <h5 class="modal-title"><i class="fas fa-info-circle"></i> <span data-i18n="ui.cron_detail.modal.execution_detail.title">Execution Details</span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -510,24 +547,24 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-code-branch"></i> Version History</h5>
+                    <h5 class="modal-title"><i class="fas fa-code-branch"></i> <span data-i18n="ui.cron_detail.modal.versions.title">Version History</span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <table id="versions-table" class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Version</th>
-                                <th>Date</th>
-                                <th>Author</th>
-                                <th>Status</th>
-                                <th>Actions</th>
+                                <th data-i18n="ui.cron_detail.modal.versions.version_column">Version</th>
+                                <th data-i18n="ui.cron_detail.modal.versions.date_column">Date</th>
+                                <th data-i18n="ui.cron_detail.modal.versions.author_column">Author</th>
+                                <th data-i18n="ui.cron_detail.modal.versions.status_column">Status</th>
+                                <th data-i18n="ui.cron_detail.modal.versions.actions_column">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="versions-tbody">
                             <tr>
                                 <td colspan="5" class="text-center">
-                                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                                    <i class="fas fa-spinner fa-spin"></i> <span data-i18n="action.loading">Loading...</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -542,7 +579,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-code"></i> Code Comparison</h5>
+                    <h5 class="modal-title"><i class="fas fa-code"></i> <span data-i18n="ui.cron_detail.modal.diff.title">Code Comparison</span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">

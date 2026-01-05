@@ -79,6 +79,11 @@ document.addEventListener('KyteInitialized', function(e) {
             let appnav = generateAppNav(encoded);
             let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${app.name}`);
             navbar.create();
+
+            // Translate the page after navigation is created
+            if (window.kyteI18n) {
+                window.kyteI18n.translateDOM();
+            }
             
             if (app) {
                 initializeKyteConnectComparison();
@@ -111,14 +116,21 @@ document.addEventListener('KyteInitialized', function(e) {
 // Populate application settings form
 function populateApplicationSettings(app) {
     $("#obfuscate_kyte_connect").val(parseInt(app.obfuscate_kyte_connect));
-    
+
     // AWS credentials
     if (typeof app.aws_key === "object" && app.aws_key) {
         $("#aws_username").val(app.aws_key.username || '');
         $("#aws_public_key").val(app.aws_key.public_key || '');
     }
-    
+
     $("#userorg_colname").val(app.userorg_colname);
+
+    // Application default language
+    if (app.default_language) {
+        $("#app_default_language").val(app.default_language);
+    } else {
+        $("#app_default_language").val('en'); // Default to English
+    }
 }
 
 // Load and populate data models
@@ -757,6 +769,7 @@ function saveApplicationSettings(_ks, idx) {
         'password_colname': userModelIdx == 0 ? null : $("#password_colname option:selected").text(),
         'org_model': userModelIdx == 0 || orgModelIdx == 0 ? null : $('#org_model option:selected').text(),
         'userorg_colname': userModelIdx == 0 || orgModelIdx == 0 ? null : $("#userorg_colname option:selected").text(),
+        'default_language': $("#app_default_language").val()
     };
 
     // Show loading state

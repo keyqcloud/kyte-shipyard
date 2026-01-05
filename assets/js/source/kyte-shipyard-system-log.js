@@ -5,28 +5,39 @@ document.addEventListener('KyteInitialized', function(e) {
         return;
     }
 
-    // Initialize date pickers
-    $("#filter-start-date").datepicker({
-        dateFormat: 'mm/dd/yy',
-        maxDate: 0, // Today
-        onSelect: function(dateText) {
-            // Set end date min date to selected start date
-            let selectedDate = $(this).datepicker('getDate');
-            $("#filter-end-date").datepicker('option', 'minDate', selectedDate);
-        }
-    });
+    // Wait for i18n to be ready before creating tables with translations
+    document.addEventListener('KyteI18nReady', function() {
+        // Translation helper
+        const t = (key, fallback) => {
+            if (window.kyteI18n) {
+                let text = window.kyteI18n.t(key);
+                return text === key ? fallback : text;
+            }
+            return fallback;
+        };
 
-    $("#filter-end-date").datepicker({
-        dateFormat: 'mm/dd/yy',
-        maxDate: 0 // Today
-    });
+        // Initialize date pickers
+        $("#filter-start-date").datepicker({
+            dateFormat: 'mm/dd/yy',
+            maxDate: 0, // Today
+            onSelect: function(dateText) {
+                // Set end date min date to selected start date
+                let selectedDate = $(this).datepicker('getDate');
+                $("#filter-end-date").datepicker('option', 'minDate', selectedDate);
+            }
+        });
 
-    // Enhanced column definitions for system logs
-    let colDef = [
+        $("#filter-end-date").datepicker({
+            dateFormat: 'mm/dd/yy',
+            maxDate: 0 // Today
+        });
+
+        // Enhanced column definitions for system logs
+        let colDef = [
         {
             'targets': 0,
             'data': 'log_level',
-            'label': 'Level',
+            'label': t('ui.system_log.table.level', 'Level'),
             render: function(data, type, row, meta) {
                 const levelClass = data || 'error';
                 const levelText = (data || 'error').toUpperCase();
@@ -36,7 +47,7 @@ document.addEventListener('KyteInitialized', function(e) {
         {
             'targets': 1,
             'data': 'date_created',
-            'label': 'Date',
+            'label': t('ui.system_log.table.date', 'Date'),
             render: function(data, type, row, meta) {
                 return `<span style="color:#4a5568;">${data || '-'}</span>`;
             }
@@ -44,7 +55,7 @@ document.addEventListener('KyteInitialized', function(e) {
         {
             'targets': 2,
             'data': 'account_id',
-            'label': 'Account',
+            'label': t('ui.system_log.table.account', 'Account'),
             render: function(data, type, row, meta) {
                 if (data) {
                     return `<span class="account-badge">ACC-${data}</span>`;
@@ -55,7 +66,7 @@ document.addEventListener('KyteInitialized', function(e) {
         {
             'targets': 3,
             'data': 'source',
-            'label': 'Source',
+            'label': t('ui.system_log.table.source', 'Source'),
             render: function(data, type, row, meta) {
                 if (!data) return '<span style="color:#cbd5e0;">unknown</span>';
 
@@ -74,7 +85,7 @@ document.addEventListener('KyteInitialized', function(e) {
         {
             'targets': 4,
             'data': 'message',
-            'label': 'Message',
+            'label': t('ui.system_log.table.message', 'Message'),
             render: function(data, type, row, meta) {
                 let output = '';
 
@@ -233,7 +244,8 @@ document.addEventListener('KyteInitialized', function(e) {
         initTable(conditions);
     });
 
-    // Initial table load with default filters (error and critical levels)
-    const initialConditions = buildFilterConditions();
-    initTable(initialConditions);
+        // Initial table load with default filters (error and critical levels)
+        const initialConditions = buildFilterConditions();
+        initTable(initialConditions);
+    }); // End KyteI18nReady listener
 });

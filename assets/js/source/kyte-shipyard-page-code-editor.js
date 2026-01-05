@@ -1,5 +1,47 @@
 import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/+esm';
 
+// Configure Monaco with data URL workers to avoid CORS
+window.MonacoEnvironment = {
+    getWorker: function (moduleId, label) {
+        const getWorkerBlob = (workerUrl) => {
+            // Fetch worker code and create blob URL
+            const workerCode = `
+                self.MonacoEnvironment = {
+                    baseUrl: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/esm/vs'
+                };
+                importScripts('${workerUrl}');
+            `;
+            const blob = new Blob([workerCode], { type: 'application/javascript' });
+            return URL.createObjectURL(blob);
+        };
+
+        const baseUrl = 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/esm/vs';
+        let workerUrl;
+
+        if (label === 'json') {
+            workerUrl = `${baseUrl}/language/json/json.worker.js`;
+        } else if (label === 'css' || label === 'scss' || label === 'less') {
+            workerUrl = `${baseUrl}/language/css/css.worker.js`;
+        } else if (label === 'html' || label === 'handlebars' || label === 'razor') {
+            workerUrl = `${baseUrl}/language/html/html.worker.js`;
+        } else if (label === 'typescript' || label === 'javascript') {
+            workerUrl = `${baseUrl}/language/typescript/ts.worker.js`;
+        } else {
+            workerUrl = `${baseUrl}/editor/editor.worker.js`;
+        }
+
+        try {
+            return new Worker(getWorkerBlob(workerUrl));
+        } catch (err) {
+            console.warn('Worker creation failed for', label, ':', err);
+            // Monaco will fall back to sync mode
+            throw err;
+        }
+    }
+};
+
+console.log('✓ Monaco configured with blob-based workers');
+
 var _ks; // Kyte SDK instance
 
 var htmlEditor;
@@ -253,6 +295,15 @@ ${htmlContent}
 function previewVersion(versionData, _ks) {
     console.log(versionData);
     
+    // Translation helper
+    const t = (key, fallback, params = {}) => {
+        if (window.kyteI18n) {
+            let text = window.kyteI18n.t(key, params);
+            return text === key ? fallback : text;
+        }
+        return fallback;
+    };
+
     // Create modal with loading state immediately
     let previewContent = `
         <div class="modal fade" id="versionPreviewModal" tabindex="-1" data-bs-backdrop="static">
@@ -264,7 +315,7 @@ function previewVersion(versionData, _ks) {
                                 Version ${versionData.version_number}
                             </div>
                             <div>
-                                <h5 class="modal-title mb-1" style="color: #ffffff; font-weight: 600;">Version Preview</h5>
+                                <h5 class="modal-title mb-1" style="color: #ffffff; font-weight: 600;">${t('ui.page_editor.version_modal.title', 'Version Preview')}</h5>
                                 <div class="text-muted" style="font-size: 0.85rem;">
                                     ${new Date(versionData.date_created).toLocaleString()} • ${versionData.created_by?.name || 'Unknown'}
                                 </div>
@@ -273,7 +324,7 @@ function previewVersion(versionData, _ks) {
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: invert(1);"></button>
                     </div>
                     <div class="modal-body p-0" style="height: calc(100vh - 200px); position: relative;">
-                        
+
                         <!-- Loading State -->
                         <div id="versionLoadingState" class="loading-overlay" style="
                             position: absolute;
@@ -297,8 +348,8 @@ function previewVersion(versionData, _ks) {
                                 animation: spin 1s linear infinite;
                                 margin-bottom: 2rem;
                             "></div>
-                            <h6 style="color: #ffffff; font-weight: 600; margin-bottom: 0.5rem;">Loading Version Content</h6>
-                            <div style="color: #969696; font-size: 0.9rem;">Fetching version ${versionData.version_number} details...</div>
+                            <h6 style="color: #ffffff; font-weight: 600; margin-bottom: 0.5rem;">${t('ui.page_editor.version_modal.loading_title', 'Loading Version Content')}</h6>
+                            <div style="color: #969696; font-size: 0.9rem;">${t('ui.page_editor.version_modal.loading_text', 'Fetching version details...', {version: versionData.version_number})}</div>
                             
                             <!-- Loading Progress Steps -->
                             <div class="loading-steps mt-4" style="display: flex; gap: 1rem; align-items: center;">
@@ -320,7 +371,7 @@ function previewVersion(versionData, _ks) {
                                         border-radius: 50%;
                                         animation: pulse 1.5s infinite;
                                     "></div>
-                                    Retrieving content
+                                    ${t('ui.page_editor.version_modal.loading_step_retrieve', 'Retrieving')}
                                 </div>
                                 <div class="loading-step" style="
                                     display: flex;
@@ -339,7 +390,7 @@ function previewVersion(versionData, _ks) {
                                         background: #3e3e42;
                                         border-radius: 50%;
                                     "></div>
-                                    Processing data
+                                    ${t('ui.page_editor.version_modal.loading_step_process', 'Processing')}
                                 </div>
                                 <div class="loading-step" style="
                                     display: flex;
@@ -358,7 +409,7 @@ function previewVersion(versionData, _ks) {
                                         background: #3e3e42;
                                         border-radius: 50%;
                                     "></div>
-                                    Rendering preview
+                                    ${t('ui.page_editor.version_modal.loading_step_render', 'Rendering')}
                                 </div>
                             </div>
                         </div>
@@ -368,16 +419,16 @@ function previewVersion(versionData, _ks) {
                             <!-- Tab Navigation -->
                             <div class="preview-tabs d-flex border-bottom" style="background: #252526; border-color: #3e3e42 !important;">
                                 <button class="preview-tab active" data-preview-target="html" style="padding: 1rem 2rem; background: none; border: none; color: #969696; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s ease; font-weight: 500;">
-                                    <i class="fab fa-html5 me-2" style="color: #e34c26;"></i>HTML
+                                    <i class="fab fa-html5 me-2" style="color: #e34c26;"></i>${t('ui.page_editor.version_modal.tab_html', 'HTML')}
                                 </button>
                                 <button class="preview-tab" data-preview-target="css" style="padding: 1rem 2rem; background: none; border: none; color: #969696; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s ease; font-weight: 500;">
-                                    <i class="fab fa-css3-alt me-2" style="color: #1572b6;"></i>CSS
+                                    <i class="fab fa-css3-alt me-2" style="color: #1572b6;"></i>${t('ui.page_editor.version_modal.tab_css', 'CSS')}
                                 </button>
                                 <button class="preview-tab" data-preview-target="javascript" style="padding: 1rem 2rem; background: none; border: none; color: #969696; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s ease; font-weight: 500;">
-                                    <i class="fab fa-js me-2" style="color: #f7df1e;"></i>JavaScript
+                                    <i class="fab fa-js me-2" style="color: #f7df1e;"></i>${t('ui.page_editor.version_modal.tab_javascript', 'JavaScript')}
                                 </button>
                                 <button class="preview-tab" data-preview-target="diff" style="padding: 1rem 2rem; background: none; border: none; color: #969696; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s ease; font-weight: 500;">
-                                    <i class="fas fa-code-branch me-2" style="color: #ff6b35;"></i>Changes
+                                    <i class="fas fa-code-branch me-2" style="color: #ff6b35;"></i>${t('ui.page_editor.version_modal.tab_changes', 'Changes')}
                                 </button>
                             </div>
                             
@@ -391,15 +442,15 @@ function previewVersion(versionData, _ks) {
                         <div class="d-flex w-100 justify-content-between align-items-center">
                             <div class="version-info" style="color: #969696; font-size: 0.85rem;">
                                 <i class="fas fa-info-circle me-1"></i>
-                                ${versionData.can_revert ? 'This version can be restored' : 'This is the current version'}
+                                ${versionData.can_revert ? t('ui.page_editor.version_modal.can_restore', 'This version can be restored') : t('ui.page_editor.version_modal.current_version', 'This is the current version')}
                             </div>
                             <div class="d-flex gap-2">
                                 <button type="button" class="btn" data-bs-dismiss="modal" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500; transition: all 0.2s ease;">
-                                    <i class="fas fa-times me-2"></i>Close
+                                    <i class="fas fa-times me-2"></i>${t('ui.page_editor.version_modal.button_close', 'Close')}
                                 </button>
                                 ${versionData.can_revert ? `
                                 <button type="button" id="restoreVersionBtn" class="btn" style="background: linear-gradient(135deg, #238636, #2ea043); border: none; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500; transition: all 0.2s ease;">
-                                    <i class="fas fa-undo me-2"></i>Restore This Version
+                                    <i class="fas fa-undo me-2"></i>${t('ui.page_editor.version_modal.button_restore', 'Restore This Version')}
                                 </button>
                                 ` : ''}
                             </div>
@@ -478,6 +529,15 @@ function updateLoadingStep(stepNumber) {
 }
 
 function showLoadingError(message) {
+    // Translation helper
+    const t = (key, fallback, params = {}) => {
+        if (window.kyteI18n) {
+            let text = window.kyteI18n.t(key, params);
+            return text === key ? fallback : text;
+        }
+        return fallback;
+    };
+
     $('#versionLoadingState').html(`
         <div style="text-align: center;">
             <div class="error-icon" style="
@@ -492,7 +552,7 @@ function showLoadingError(message) {
             ">
                 <i class="fas fa-exclamation-triangle" style="color: white; font-size: 1.5rem;"></i>
             </div>
-            <h6 style="color: #f85149; font-weight: 600; margin-bottom: 0.5rem;">Loading Failed</h6>
+            <h6 style="color: #f85149; font-weight: 600; margin-bottom: 0.5rem;">${t('ui.page_editor.version_modal.loading_failed', 'Loading Failed')}</h6>
             <div style="color: #969696; font-size: 0.9rem; margin-bottom: 2rem;">${message}</div>
             <button class="btn" onclick="$('#versionPreviewModal').modal('hide');" style="
                 background: #3c3c3c;
@@ -502,25 +562,34 @@ function showLoadingError(message) {
                 border-radius: 6px;
                 font-weight: 500;
             ">
-                <i class="fas fa-times me-2"></i>Close
+                <i class="fas fa-times me-2"></i>${t('ui.page_editor.version_modal.button_close', 'Close')}
             </button>
         </div>
     `);
 }
 
 function populateVersionContent(versionContent, versionData, _ks) {
+    // Translation helper
+    const t = (key, fallback, params = {}) => {
+        if (window.kyteI18n) {
+            let text = window.kyteI18n.t(key, params);
+            return text === key ? fallback : text;
+        }
+        return fallback;
+    };
+
     const tabContent = `
         <!-- HTML Content -->
         <div class="preview-content active" id="preview-html" style="height: 100%; display: flex; flex-direction: column;">
             <div class="content-header p-3" style="background: #252526; border-bottom: 1px solid #3e3e42; flex-shrink: 0;">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0" style="color: #ffffff; font-weight: 600;">HTML Content</h6>
+                    <h6 class="mb-0" style="color: #ffffff; font-weight: 600;">${t('ui.page_editor.version_modal.tab_html', 'HTML')}</h6>
                     <div class="d-flex gap-2">
                         <button class="btn btn-sm copy-content" data-content-type="html" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.375rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">
-                            <i class="fas fa-copy me-1"></i>Copy
+                            <i class="fas fa-copy me-1"></i>${t('ui.page_editor.version_modal.button_copy', 'Copy')}
                         </button>
                         <button class="btn btn-sm format-content" data-content-type="html" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.375rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">
-                            <i class="fas fa-code me-1"></i>Format
+                            <i class="fas fa-code me-1"></i>${t('ui.page_editor.version_modal.button_format', 'Format')}
                         </button>
                     </div>
                 </div>
@@ -534,13 +603,13 @@ function populateVersionContent(versionContent, versionData, _ks) {
         <div class="preview-content" id="preview-css" style="height: 100%; display: none; flex-direction: column;">
             <div class="content-header p-3" style="background: #252526; border-bottom: 1px solid #3e3e42; flex-shrink: 0;">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0" style="color: #ffffff; font-weight: 600;">CSS Content</h6>
+                    <h6 class="mb-0" style="color: #ffffff; font-weight: 600;">${t('ui.page_editor.version_modal.tab_css', 'CSS')}</h6>
                     <div class="d-flex gap-2">
                         <button class="btn btn-sm copy-content" data-content-type="css" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.375rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">
-                            <i class="fas fa-copy me-1"></i>Copy
+                            <i class="fas fa-copy me-1"></i>${t('ui.page_editor.version_modal.button_copy', 'Copy')}
                         </button>
                         <button class="btn btn-sm format-content" data-content-type="css" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.375rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">
-                            <i class="fas fa-code me-1"></i>Format
+                            <i class="fas fa-code me-1"></i>${t('ui.page_editor.version_modal.button_format', 'Format')}
                         </button>
                     </div>
                 </div>
@@ -554,13 +623,13 @@ function populateVersionContent(versionContent, versionData, _ks) {
         <div class="preview-content" id="preview-javascript" style="height: 100%; display: none; flex-direction: column;">
             <div class="content-header p-3" style="background: #252526; border-bottom: 1px solid #3e3e42; flex-shrink: 0;">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0" style="color: #ffffff; font-weight: 600;">JavaScript Content</h6>
+                    <h6 class="mb-0" style="color: #ffffff; font-weight: 600;">${t('ui.page_editor.version_modal.tab_javascript', 'JavaScript')}</h6>
                     <div class="d-flex gap-2">
                         <button class="btn btn-sm copy-content" data-content-type="javascript" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.375rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">
-                            <i class="fas fa-copy me-1"></i>Copy
+                            <i class="fas fa-copy me-1"></i>${t('ui.page_editor.version_modal.button_copy', 'Copy')}
                         </button>
                         <button class="btn btn-sm format-content" data-content-type="javascript" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; padding: 0.375rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">
-                            <i class="fas fa-code me-1"></i>Format
+                            <i class="fas fa-code me-1"></i>${t('ui.page_editor.version_modal.button_format', 'Format')}
                         </button>
                     </div>
                 </div>
@@ -573,7 +642,7 @@ function populateVersionContent(versionContent, versionData, _ks) {
         <!-- Changes/Diff Content -->
         <div class="preview-content" id="preview-diff" style="height: 100%; display: none; flex-direction: column;">
             <div class="content-header p-3" style="background: #252526; border-bottom: 1px solid #3e3e42; flex-shrink: 0;">
-                <h6 class="mb-0" style="color: #ffffff; font-weight: 600;">Changes Summary</h6>
+                <h6 class="mb-0" style="color: #ffffff; font-weight: 600;">${t('ui.page_editor.version_modal.change_summary', 'Change Summary')}</h6>
             </div>
             <div class="changes-container p-4" style="flex: 1; overflow: auto; background: #1e1e1e;">
                 <div class="change-summary mb-4 p-3 rounded" style="background: #252526; border: 1px solid #3e3e42;">
@@ -654,9 +723,9 @@ function bindVersionPreviewEvents(versionContent, versionData, _ks) {
         navigator.clipboard.writeText(content).then(() => {
             const btn = $(this);
             const originalHtml = btn.html();
-            btn.html('<i class="fas fa-check me-1"></i>Copied!');
+            btn.html(`<i class="fas fa-check me-1"></i>${t('ui.page_editor.version_modal.button_copied', 'Copied!')}`);
             btn.css('background', '#238636');
-            
+
             setTimeout(() => {
                 btn.html(originalHtml);
                 btn.css('background', '#3c3c3c');
@@ -997,6 +1066,15 @@ function escapeHtml(text) {
 
 // Initialize change summary modal
 function initializeChangeSummaryModal() {
+    // Translation helper
+    const t = (key, fallback) => {
+        if (window.kyteI18n) {
+            let text = window.kyteI18n.t(key);
+            return text === key ? fallback : text;
+        }
+        return fallback;
+    };
+
     // Add modal HTML to the page if it doesn't exist
     if (!document.getElementById('changeSummaryModal')) {
         const modalHTML = `
@@ -1006,58 +1084,58 @@ function initializeChangeSummaryModal() {
                         <div class="modal-header" style="background: #252526; border-bottom: 1px solid #3e3e42;">
                             <h5 class="modal-title" style="color: #ffffff; font-weight: 600;">
                                 <i class="fas fa-edit me-2"></i>
-                                Add Change Summary
+                                ${t('ui.page_editor.change_modal.title', 'Add Change Summary')}
                             </h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
                             <div id="actionTypeBadge" class="mb-3" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
                                 <i class="fas fa-save"></i>
-                                <span>Saving Changes</span>
+                                <span>${t('ui.page_editor.change_modal.badge_save', 'Saving Changes')}</span>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label for="changeSummaryInput" class="form-label" style="color: #cccccc; font-weight: 500;">
-                                    What changed in this version?
+                                    ${t('ui.page_editor.change_modal.label', 'What changed in this version?')}
                                 </label>
-                                <textarea 
-                                    class="form-control" 
-                                    id="changeSummaryInput" 
-                                    rows="3" 
-                                    placeholder="Briefly describe your changes (optional)..."
+                                <textarea
+                                    class="form-control"
+                                    id="changeSummaryInput"
+                                    rows="3"
+                                    placeholder="${t('ui.page_editor.change_modal.placeholder', 'Briefly describe your changes (optional)...')}"
                                     maxlength="500"
                                     style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4; border-radius: 6px;"
                                 ></textarea>
                                 <div style="color: #969696; font-size: 0.85rem; margin-top: 0.5rem;">
-                                    Leave empty to use default summary. <code style="background: #252526; padding: 0.2rem 0.4rem; border-radius: 4px; color: #ff6b35;">Ctrl+Enter</code> to save quickly.
-                                    <br><small style="color: #666666;">Note: No version will be created if no changes are detected.</small>
+                                    ${t('ui.page_editor.change_modal.help_text', 'Leave empty to use default summary.')} <code style="background: #252526; padding: 0.2rem 0.4rem; border-radius: 4px; color: #ff6b35;">Ctrl+Enter</code> ${t('ui.page_editor.change_modal.help_shortcut', 'to save quickly.')}
+                                    <br><small style="color: #666666;">${t('ui.page_editor.change_modal.help_note', 'Note: No version will be created if no changes are detected.')}</small>
                                 </div>
                             </div>
-                            
+
                             <div>
-                                <label class="form-label" style="color: #cccccc; font-weight: 500;">Quick Options</label>
+                                <label class="form-label" style="color: #cccccc; font-weight: 500;">${t('ui.page_editor.change_modal.quick_options', 'Quick Options')}</label>
                                 <div class="quick-options" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
-                                    <span class="quick-option" onclick="setSummary('Fixed styling issues')">Fixed styling issues</span>
-                                    <span class="quick-option" onclick="setSummary('Updated content')">Updated content</span>
-                                    <span class="quick-option" onclick="setSummary('Added new features')">Added new features</span>
-                                    <span class="quick-option" onclick="setSummary('Bug fixes')">Bug fixes</span>
-                                    <span class="quick-option" onclick="setSummary('Performance improvements')">Performance improvements</span>
-                                    <span class="quick-option" onclick="setSummary('Code refactoring')">Code refactoring</span>
+                                    <span class="quick-option" onclick="setSummary('${t('ui.page_editor.change_modal.quick_styling', 'Fixed styling issues')}')">${t('ui.page_editor.change_modal.quick_styling', 'Fixed styling issues')}</span>
+                                    <span class="quick-option" onclick="setSummary('${t('ui.page_editor.change_modal.quick_content', 'Updated content')}')">${t('ui.page_editor.change_modal.quick_content', 'Updated content')}</span>
+                                    <span class="quick-option" onclick="setSummary('${t('ui.page_editor.change_modal.quick_features', 'Added new features')}')">${t('ui.page_editor.change_modal.quick_features', 'Added new features')}</span>
+                                    <span class="quick-option" onclick="setSummary('${t('ui.page_editor.change_modal.quick_bugs', 'Bug fixes')}')">${t('ui.page_editor.change_modal.quick_bugs', 'Bug fixes')}</span>
+                                    <span class="quick-option" onclick="setSummary('${t('ui.page_editor.change_modal.quick_performance', 'Performance improvements')}')">${t('ui.page_editor.change_modal.quick_performance', 'Performance improvements')}</span>
+                                    <span class="quick-option" onclick="setSummary('${t('ui.page_editor.change_modal.quick_refactor', 'Code refactoring')}')">${t('ui.page_editor.change_modal.quick_refactor', 'Code refactoring')}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer" style="background: #2d2d30; border-top: 1px solid #3e3e42;">
                             <button type="button" class="btn-editor btn-editor-secondary" data-bs-dismiss="modal">
                                 <i class="fas fa-times"></i>
-                                Cancel
+                                ${t('ui.page_editor.change_modal.button_cancel', 'Cancel')}
                             </button>
                             <button type="button" class="btn-editor btn-editor-secondary" onclick="window.proceedWithAction('')">
                                 <i class="fas fa-forward"></i>
-                                Skip Summary
+                                ${t('ui.page_editor.change_modal.button_skip', 'Skip Summary')}
                             </button>
                             <button type="button" id="confirmActionBtn" class="btn-editor btn-editor-primary" onclick="window.proceedWithAction()">
                                 <i class="fas fa-save"></i>
-                                Save with Summary
+                                ${t('ui.page_editor.change_modal.button_save', 'Save with Summary')}
                             </button>
                         </div>
                     </div>
@@ -1115,27 +1193,95 @@ function initializeChangeSummaryModal() {
 function showChangeSummaryModal(action, callback) {
     currentAction = action;
     pendingActionCallback = callback;
-    
+
+    // Translation helper
+    const t = (key, fallback) => {
+        if (window.kyteI18n) {
+            let text = window.kyteI18n.t(key);
+            return text === key ? fallback : text;
+        }
+        return fallback;
+    };
+
+    // Translate modal title
+    const modalTitle = document.querySelector('#changeSummaryModal .modal-title');
+    if (modalTitle) {
+        modalTitle.innerHTML = `<i class="fas fa-edit me-2"></i>${t('ui.page_editor.change_modal.title', 'Add Change Summary')}`;
+    }
+
+    // Translate label
+    const label = document.querySelector('#changeSummaryModal label[for="changeSummaryInput"]');
+    if (label) {
+        label.textContent = t('ui.page_editor.change_modal.label', 'What changed in this version?');
+    }
+
+    // Translate placeholder
+    const textarea = document.getElementById('changeSummaryInput');
+    if (textarea) {
+        textarea.placeholder = t('ui.page_editor.change_modal.placeholder', 'Briefly describe your changes (optional)...');
+    }
+
+    // Translate help text
+    const helpTextDiv = document.querySelector('#changeSummaryModal .modal-body > div:nth-child(2) > div');
+    if (helpTextDiv) {
+        helpTextDiv.innerHTML = `${t('ui.page_editor.change_modal.help_text', 'Leave empty to use default summary.')} <code style="background: #252526; padding: 0.2rem 0.4rem; border-radius: 4px; color: #ff6b35;">Ctrl+Enter</code> ${t('ui.page_editor.change_modal.help_shortcut', 'to save quickly.')}<br><small style="color: #666666;">${t('ui.page_editor.change_modal.help_note', 'Note: No version will be created if no changes are detected.')}</small>`;
+    }
+
+    // Translate quick options label
+    const quickOptionsLabel = document.querySelector('#changeSummaryModal .modal-body > div:nth-child(3) > label');
+    if (quickOptionsLabel) {
+        quickOptionsLabel.textContent = t('ui.page_editor.change_modal.quick_options', 'Quick Options');
+    }
+
+    // Translate quick option buttons
+    const quickOptions = document.querySelectorAll('#changeSummaryModal .quick-option');
+    const quickOptionKeys = [
+        { key: 'ui.page_editor.change_modal.quick_styling', fallback: 'Fixed styling issues' },
+        { key: 'ui.page_editor.change_modal.quick_content', fallback: 'Updated content' },
+        { key: 'ui.page_editor.change_modal.quick_features', fallback: 'Added new features' },
+        { key: 'ui.page_editor.change_modal.quick_bugs', fallback: 'Bug fixes' },
+        { key: 'ui.page_editor.change_modal.quick_performance', fallback: 'Performance improvements' },
+        { key: 'ui.page_editor.change_modal.quick_refactor', fallback: 'Code refactoring' }
+    ];
+    quickOptions.forEach((option, index) => {
+        if (quickOptionKeys[index]) {
+            const translatedText = t(quickOptionKeys[index].key, quickOptionKeys[index].fallback);
+            option.textContent = translatedText;
+            option.setAttribute('onclick', `setSummary('${translatedText}')`);
+        }
+    });
+
+    // Translate footer buttons
+    const cancelBtn = document.querySelector('#changeSummaryModal .modal-footer .btn-editor-secondary[data-bs-dismiss="modal"]');
+    if (cancelBtn) {
+        cancelBtn.innerHTML = `<i class="fas fa-times"></i>${t('ui.page_editor.change_modal.button_cancel', 'Cancel')}`;
+    }
+
+    const skipBtn = document.querySelector('#changeSummaryModal .modal-footer .btn-editor-secondary[onclick*="proceedWithAction"]');
+    if (skipBtn) {
+        skipBtn.innerHTML = `<i class="fas fa-forward"></i>${t('ui.page_editor.change_modal.button_skip', 'Skip Summary')}`;
+    }
+
     const badge = document.getElementById('actionTypeBadge');
     const confirmBtn = document.getElementById('confirmActionBtn');
-    
+
     if (action === 'save') {
-        badge.innerHTML = '<i class="fas fa-save"></i><span>Saving Changes</span>';
+        badge.innerHTML = `<i class="fas fa-save"></i><span>${t('ui.page_editor.change_modal.badge_save', 'Saving Changes')}</span>`;
         badge.className = 'action-type-badge action-type-save mb-3';
-        confirmBtn.innerHTML = '<i class="fas fa-save"></i>Save with Summary';
+        confirmBtn.innerHTML = `<i class="fas fa-save"></i>${t('ui.page_editor.change_modal.button_save', 'Save with Summary')}`;
         confirmBtn.className = 'btn-editor btn-editor-success';
     } else {
-        badge.innerHTML = '<i class="fas fa-upload"></i><span>Publishing Page</span>';
+        badge.innerHTML = `<i class="fas fa-upload"></i><span>${t('ui.page_editor.change_modal.badge_publish', 'Publishing Page')}</span>`;
         badge.className = 'action-type-badge action-type-publish mb-3';
-        confirmBtn.innerHTML = '<i class="fas fa-upload"></i>Publish with Summary';
+        confirmBtn.innerHTML = `<i class="fas fa-upload"></i>${t('ui.page_editor.change_modal.button_publish', 'Publish with Summary')}`;
         confirmBtn.className = 'btn-editor btn-editor-primary';
     }
-    
+
     // Clear previous input and show modal
     document.getElementById('changeSummaryInput').value = '';
     const modal = new bootstrap.Modal(document.getElementById('changeSummaryModal'));
     modal.show();
-    
+
     // Focus the textarea after modal is shown
     $('#changeSummaryModal').on('shown.bs.modal', function() {
         document.getElementById('changeSummaryInput').focus();
@@ -1420,8 +1566,180 @@ document.addEventListener('click', function(e) {
     }
 });
 
+// Open documentation in popup window
+const openDocsBtn = document.getElementById('openDocsInWindow');
+if (openDocsBtn) {
+    openDocsBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // Get the documentation content
+        const docContent = document.getElementById('Documentation');
+        if (!docContent) return;
+
+        // Create a new window with appropriate size
+        const width = 1200;
+        const height = 800;
+        const left = (screen.width - width) / 2;
+        const top = (screen.height - height) / 2;
+
+        const popupWindow = window.open(
+            '',
+            'KyteAPIJSDocs',
+            `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`
+        );
+
+        if (popupWindow) {
+            // Build the popup HTML with all necessary styles
+            popupWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Kyte API JS Documentation</title>
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+                    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+                    <link rel="preconnect" href="https://fonts.googleapis.com">
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+                    <style>
+                        body {
+                            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                            background: #1e1e1e;
+                            color: #d4d4d4;
+                            margin: 0;
+                            padding: 2rem;
+                            line-height: 1.6;
+                        }
+                        h4, h5, h6 {
+                            color: #ffffff;
+                        }
+                        .text-muted {
+                            color: #969696 !important;
+                        }
+                        .text-primary {
+                            color: #4299e1 !important;
+                        }
+                        .text-secondary {
+                            color: #a0aec0 !important;
+                        }
+                        code {
+                            background: #252526;
+                            padding: 0.2rem 0.4rem;
+                            border-radius: 4px;
+                            color: #ff6b35;
+                            font-family: 'JetBrains Mono', monospace;
+                        }
+                        pre {
+                            background: #252526;
+                            border: 1px solid #3e3e42;
+                            border-radius: 4px;
+                            padding: 1rem;
+                            overflow-x: auto;
+                        }
+                        pre code {
+                            background: transparent;
+                            padding: 0;
+                            color: #d4d4d4;
+                        }
+                        ul, ol {
+                            margin-left: 1.5rem;
+                        }
+                        li {
+                            margin-bottom: 0.5rem;
+                        }
+                        .mb-2 { margin-bottom: 0.5rem; }
+                        .mb-3 { margin-bottom: 1rem; }
+                        .mb-4 { margin-bottom: 1.5rem; }
+                        .mb-5 { margin-bottom: 3rem; }
+                        .mt-2 { margin-top: 0.5rem; }
+                        .mt-3 { margin-top: 1rem; }
+                        .me-2 { margin-right: 0.5rem; }
+                    </style>
+                </head>
+                <body>
+                    ${docContent.innerHTML}
+                </body>
+                </html>
+            `);
+            popupWindow.document.close();
+        }
+    });
+}
+
 document.addEventListener('KyteInitialized', function(e) {
     _ks = e.detail._ks;
+
+    // Initialize i18n system with user's language preference
+    if (typeof window.kyteI18n === 'undefined') {
+        // Priority order: localStorage > sessionStorage > user profile > browser > default
+        let cachedLanguage = localStorage.getItem('kyte_user_language') || sessionStorage.getItem('kyte_language');
+
+        if (cachedLanguage) {
+            // Use cached language immediately
+            window.kyteI18n = new KyteI18n(cachedLanguage, '/assets/i18n/');
+            window.kyteI18n.init(cachedLanguage).then(() => {
+                window.kyteI18n.translateDOM();
+                console.log(`i18n initialized with cached language: ${cachedLanguage}`);
+            }).catch(err => {
+                console.error('Failed to initialize i18n:', err);
+            });
+        } else {
+            // Fetch user profile to get language preference
+            const userId = _ks.getCookie('accountIdx');
+            if (userId && userId !== '0') {
+                _ks.sign((signature) => {
+                    _ks.get('KyteUser', 'id', userId, [], function(response) {
+                        const userLanguage = response.data[0]?.language || 'en';
+
+                        window.kyteI18n = new KyteI18n(userLanguage, '/assets/i18n/');
+                        window.kyteI18n.init(userLanguage).then(() => {
+                            window.kyteI18n.translateDOM();
+                            console.log(`i18n initialized with user profile language: ${userLanguage}`);
+
+                            // Cache for future use
+                            localStorage.setItem('kyte_user_language', userLanguage);
+                        }).catch(err => {
+                            console.error('Failed to initialize i18n:', err);
+                        });
+                    }, function(error) {
+                        console.error('Failed to fetch user profile:', error);
+                        // Fall back to browser language
+                        initializeI18nFallback();
+                    });
+                }, (error) => {
+                    console.error('Failed to sign request:', error);
+                    initializeI18nFallback();
+                });
+            } else {
+                // No user logged in, use browser language
+                initializeI18nFallback();
+            }
+        }
+
+        // Listen for language changes from other components (like navigation language selector)
+        window.addEventListener('kyteLanguageSelectorChanged', function(e) {
+            const newLanguage = e.detail.language;
+            if (window.kyteI18n && window.kyteI18n.getCurrentLanguage() !== newLanguage) {
+                window.kyteI18n.setLanguage(newLanguage).then(() => {
+                    console.log(`Page editor language updated to: ${newLanguage}`);
+                }).catch(err => {
+                    console.error('Failed to update language:', err);
+                });
+            }
+        });
+    }
+
+    // Helper function to initialize with fallback (browser language)
+    function initializeI18nFallback() {
+        window.kyteI18n = new KyteI18n('en', '/assets/i18n/');
+        window.kyteI18n.init().then(() => {
+            window.kyteI18n.translateDOM();
+            console.log(`i18n initialized with browser/fallback language: ${window.kyteI18n.getCurrentLanguage()}`);
+        }).catch(err => {
+            console.error('Failed to initialize i18n:', err);
+        });
+    }
 
     $('#pageLoaderModal').modal('show');
 
@@ -1477,32 +1795,914 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#setting-is_js_module").val(pageData.page.is_js_module);
                 $("#setting-use_container").val(pageData.page.use_container);
 
+                // Configure Monaco for better IntelliSense before creating editors
+                monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+                    target: monaco.languages.typescript.ScriptTarget.ES2020,
+                    allowNonTsExtensions: true,
+                    moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+                    module: monaco.languages.typescript.ModuleKind.CommonJS,
+                    noEmit: true,
+                    typeRoots: ["node_modules/@types"]
+                });
+
+                monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+                    noSemanticValidation: false,
+                    noSyntaxValidation: false
+                });
+
+                monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
+
+                // Define Kyte API types
+                const kyteApiDefs = `
+/**
+ * Kyte API JS Library v1.2.24
+ * Main API client for Kyte backend communication
+ *
+ * IMPORTANT: In published pages, the Kyte instance is automatically created as a global variable named 'k'.
+ * Usage: k.get(), k.post(), k.isSession(), etc.
+ */
+
+/**
+ * Main Kyte API client class
+ */
+declare class Kyte {
+    /**
+     * Backend API endpoint URL
+     */
+    url: string;
+
+    /**
+     * API public key
+     */
+    access_key: string;
+
+    /**
+     * API identifier
+     */
+    identifier: string;
+
+    /**
+     * Account number
+     */
+    account_number: string;
+
+    /**
+     * Transaction token (rotates per request)
+     */
+    txToken: string;
+
+    /**
+     * User session token
+     */
+    sessionToken: string;
+
+    /**
+     * Optional application ID for context switching
+     */
+    applicationId: string;
+
+    /**
+     * Creates a new Kyte API instance
+     * @param url Backend API endpoint
+     * @param access_key API public key
+     * @param identifier API identifier
+     * @param account_number Account number
+     */
+    constructor(url: string, access_key: string, identifier: string, account_number: string);
+
+    /**
+     * Initialize Kyte instance by loading credentials from cookies
+     */
+    init(): void;
+
+    /**
+     * Get API version
+     * @param callback Success callback
+     * @param error Error callback
+     */
+    apiVersion(callback: (response: any) => void, error?: (error: any) => void): void;
+
+    /**
+     * Generate HMAC signature for authenticated requests
+     * @param callback Success callback with signature
+     * @param error Error callback
+     */
+    sign(callback: (signature: string) => void, error?: (error: any) => void): void;
+
+    /**
+     * Send data to the backend (internal method)
+     * @param method HTTP method (GET, POST, PUT, DELETE)
+     * @param model Model name
+     * @param field Field name
+     * @param value Field value
+     * @param data Request data
+     * @param formdata FormData object
+     * @param headers Additional headers
+     * @param callback Success callback
+     * @param error Error callback
+     */
+    sendData(method: string, model: string, field?: string, value?: any, data?: any, formdata?: FormData, headers?: any[], callback?: (response: any) => void, error?: (error: any) => void): void;
+
+    /**
+     * Create new record in the backend
+     * @param model Model name
+     * @param data Record data
+     * @param formdata Optional FormData for file uploads
+     * @param headers Additional headers
+     * @param callback Success callback
+     * @param error Error callback
+     */
+    post(model: string, data?: any, formdata?: FormData, headers?: any[], callback?: (response: any) => void, error?: (error: any) => void): void;
+
+    /**
+     * Update existing record in the backend
+     * @param model Model name
+     * @param field Field to match
+     * @param value Value to match
+     * @param data Update data
+     * @param formdata Optional FormData
+     * @param headers Additional headers
+     * @param callback Success callback
+     * @param error Error callback
+     */
+    put(model: string, field?: string, value?: any, data?: any, formdata?: FormData, headers?: any[], callback?: (response: any) => void, error?: (error: any) => void): void;
+
+    /**
+     * Retrieve records from the backend
+     * @param model Model name
+     * @param field Field to match
+     * @param value Value to match
+     * @param headers Additional headers
+     * @param callback Success callback
+     * @param error Error callback
+     */
+    get(model: string, field?: string, value?: any, headers?: any[], callback?: (response: any) => void, error?: (error: any) => void): void;
+
+    /**
+     * Delete records from the backend (soft delete)
+     * @param model Model name
+     * @param field Field to match
+     * @param value Value to match
+     * @param callback Success callback
+     * @param error Error callback
+     */
+    delete(model: string, field?: string, value?: any, callback?: (response: any) => void, error?: (error: any) => void): void;
+
+    /**
+     * Set a browser cookie
+     * @param name Cookie name
+     * @param value Cookie value
+     * @param minutes Expiration time in minutes (default: 60)
+     * @param crossDomain Whether to allow cross-domain cookies
+     */
+    setCookie(name: string, value: string, minutes?: number, crossDomain?: boolean): void;
+
+    /**
+     * Get a browser cookie value
+     * @param name Cookie name
+     * @returns Cookie value or empty string
+     */
+    getCookie(name: string): string;
+
+    /**
+     * Get URL query parameter value
+     * @param name Parameter name
+     * @returns Parameter value
+     */
+    getUrlParameter(name: string): string;
+
+    /**
+     * Get decoded page request object from URL
+     * @returns Decoded request object
+     */
+    getPageRequest(): any;
+
+    /**
+     * Create encoded page request URL
+     * @param model Model name
+     * @param value ID value
+     * @returns Encoded request URL parameter
+     */
+    setPageRequest(model: string, value: any): string;
+
+    /**
+     * Create a new user session (login)
+     * @param identity Login credentials object {username, password}
+     * @param callback Success callback
+     * @param error Error callback
+     * @param sessionController Optional custom session controller name
+     */
+    sessionCreate(identity: {username: string, password: string}, callback: (response: any) => void, error?: (error: any) => void, sessionController?: string): void;
+
+    /**
+     * Check if session exists in cookies
+     * @returns True if session cookie exists
+     */
+    checkSession(): boolean;
+
+    /**
+     * Redirect to login page
+     */
+    redirectToLogin(): void;
+
+    /**
+     * Check if a valid session exists
+     * @param periodic Enable periodic checking
+     * @param redir Redirect to login if no session
+     * @param interval Check interval in milliseconds (default: 30000)
+     * @returns True if session exists
+     */
+    isSession(periodic?: boolean, redir?: boolean, interval?: number): boolean;
+
+    /**
+     * Destroy the current session (logout)
+     * @param error Error callback
+     */
+    sessionDestroy(error?: (error: any) => void): void;
+
+    /**
+     * Display a SweetAlert2 alert dialog
+     * @param title Alert title
+     * @param message Alert message
+     * @param callback Callback when alert is dismissed
+     * @param dismiss Whether alert can be dismissed
+     */
+    alert(title: string, message: string, callback?: () => void, dismiss?: boolean): void;
+
+    /**
+     * Display a SweetAlert2 confirmation dialog
+     * @param title Confirmation title
+     * @param message Confirmation message
+     * @param callback Callback when confirmed
+     * @param cancel Callback when cancelled
+     */
+    confirm(title: string, message: string, callback?: () => void, cancel?: () => void): void;
+
+    /**
+     * Validate a form element (checks required fields)
+     * @param form Form element to validate
+     * @returns True if form is valid
+     */
+    validateForm(form: HTMLFormElement): boolean;
+
+    /**
+     * Get nested object property using dot notation
+     * @param obj Object to query
+     * @param path Property path (e.g., 'user.profile.name')
+     * @returns Property value or undefined
+     */
+    getNestedValue(obj: any, path: string): any;
+}
+
+/**
+ * DataTables integration with Kyte backend
+ */
+declare class KyteTable {
+    /**
+     * Create a server-side DataTable with Kyte backend integration
+     * @param kyte Kyte instance
+     * @param selector Table element selector
+     * @param model Model name
+     * @param columnDefs Column definitions
+     * @param sortable Enable sorting
+     * @param orderBy Default order [[column, direction]]
+     * @param editable Show edit button
+     * @param clickable Enable row click navigation
+     * @param idField ID field name
+     * @param detailUrl Detail page URL
+     */
+    constructor(
+        kyte: Kyte,
+        selector: string,
+        model: string,
+        columnDefs: any[],
+        sortable: boolean,
+        orderBy: any[],
+        editable: boolean,
+        clickable: boolean,
+        idField: string,
+        detailUrl: string
+    );
+
+    /**
+     * Refresh table data
+     */
+    refresh(): void;
+}
+
+/**
+ * Field definition for KyteForm
+ */
+interface KyteFormField {
+    field: string;
+    type: 'text' | 'password' | 'textarea' | 'select' | 'file' | 'date' | 'checkbox' | 'radio';
+    label: string;
+    placeholder?: string;
+    required?: boolean;
+    col?: number;
+    option?: {
+        ajax?: boolean;
+        data_model_name?: string;
+        data_model_field?: string;
+        data_model_value?: string;
+        data?: any[];
+    };
+}
+
+/**
+ * Dynamic form builder with validation
+ */
+declare class KyteForm {
+    /**
+     * Create a dynamic form with validation and automatic CRUD operations
+     * @param kyte Kyte instance
+     * @param selector Form container selector
+     * @param model Model name
+     * @param hiddenFields Hidden field values
+     * @param elements Field definitions
+     * @param title Form title
+     * @param table Optional KyteTable to refresh after submission
+     * @param modal Optional modal selector
+     * @param trigger Optional trigger button selector
+     */
+    constructor(
+        kyte: Kyte,
+        selector: string,
+        model: string,
+        hiddenFields: any,
+        elements: KyteFormField[],
+        title: string,
+        table?: KyteTable,
+        modal?: string,
+        trigger?: string
+    );
+
+    /**
+     * Populate form for editing
+     * @param data Record data
+     */
+    populate(data: any): void;
+
+    /**
+     * Reset form
+     */
+    reset(): void;
+}
+
+/**
+ * Menu item definition
+ */
+interface MenuItem {
+    label: string;
+    url?: string;
+    hash?: string;
+    icon?: string;
+    children?: MenuItem[];
+}
+
+/**
+ * Bootstrap 5 navigation bar
+ */
+declare class KyteNav {
+    /**
+     * Create a Bootstrap 5 navigation bar
+     * @param selector Navigation container selector
+     * @param menuArray Menu items
+     * @param logoutCallback Logout callback function
+     * @param brandHTML Brand HTML content
+     */
+    constructor(
+        selector: string,
+        menuArray: MenuItem[],
+        logoutCallback: () => void,
+        brandHTML: string
+    );
+}
+
+/**
+ * Hash-based sidebar navigation
+ */
+declare class KyteSidenav {
+    /**
+     * Create a hash-based sidebar navigation
+     * @param selector Sidebar container selector
+     * @param menuArray Menu items
+     * @param callback Navigation callback
+     */
+    constructor(
+        selector: string,
+        menuArray: MenuItem[],
+        callback: (hash: string) => void
+    );
+}
+
+/**
+ * Custom calendar with date range selection
+ */
+declare class KyteCalendar {
+    /**
+     * Create a custom calendar with date range selection
+     * @param selector Container selector
+     * @param rows Number of rows (months)
+     * @param cols Number of columns
+     * @param onChange Callback when date range is selected
+     */
+    constructor(
+        selector: string,
+        rows: number,
+        cols: number,
+        onChange: (startDate: Date, endDate: Date) => void
+    );
+}
+
+/**
+ * Password requirement configuration
+ */
+interface PasswordRequirements {
+    minLength?: number;
+    requireUppercase?: boolean;
+    requireLowercase?: boolean;
+    requireNumber?: boolean;
+    requireSpecial?: boolean;
+}
+
+/**
+ * Real-time password validation with visual feedback
+ */
+declare class KytePasswordRequirement {
+    /**
+     * Create real-time password validation
+     * @param selector Password input selector
+     * @param requirements Password requirements configuration
+     */
+    constructor(
+        selector: string,
+        requirements: PasswordRequirements
+    );
+}
+
+/**
+ * Simple mustache-style template engine
+ */
+declare class KyteWebComponent {
+    /**
+     * Create a template-based web component
+     * @param selector Container selector
+     * @param data Data to render in template
+     * @param mutator Optional function to transform data before rendering
+     */
+    constructor(
+        selector: string,
+        data: any,
+        mutator?: (data: any) => any
+    );
+
+    /**
+     * Update component data and re-render
+     * @param data New data
+     */
+    update(data: any): void;
+}
+
+/**
+ * Global Kyte instance - automatically initialized in published pages
+ * @type {Kyte}
+ */
+declare var k: Kyte;
+`;
+
+                // Don't add types yet - wait for editor to be created first
+
+                // Create HTML Editor
                 htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {
                     value: pageData.html,
                     theme: colorMode,
                     language: "html",
                     automaticLayout: true,
                     wordWrap: true,
-                    // wordWrapColumn: 40,
-                    // Set this to false to not auto word wrap minified files
                     wordWrapMinified: true,
-                    // try "same", "indent" or "none"
                     wrappingIndent: 'indent'
                 });
 
+                // Create JavaScript Editor with IntelliSense enabled
                 jsEditor = monaco.editor.create(document.getElementById("jsEditor"), {
                     value: pageData.javascript,
                     theme: colorMode,
                     language: "javascript",
                     automaticLayout: true,
                     wordWrap: true,
-                    // wordWrapColumn: 40,
-                    // Set this to false to not auto word wrap minified files
                     wordWrapMinified: true,
-                    // try "same", "indent" or "none"
-                    wrappingIndent: 'indent'
+                    wrappingIndent: 'indent',
+                    // Enable IntelliSense features
+                    suggestOnTriggerCharacters: true,
+                    quickSuggestions: {
+                        other: true,
+                        comments: false,
+                        strings: false
+                    },
+                    quickSuggestionsDelay: 100,
+                    parameterHints: {
+                        enabled: true,
+                        cycle: true
+                    },
+                    suggest: {
+                        snippetsPreventQuickSuggestions: false,
+                        showMethods: true,
+                        showFunctions: true,
+                        showConstructors: true,
+                        showFields: true,
+                        showVariables: true,
+                        showClasses: true,
+                        showStructs: true,
+                        showInterfaces: true,
+                        showModules: true,
+                        showProperties: true,
+                        showEvents: true,
+                        showOperators: true,
+                        showUnits: true,
+                        showValues: true,
+                        showConstants: true,
+                        showEnums: true,
+                        showEnumMembers: true,
+                        showKeywords: true,
+                        showWords: true,
+                        showColors: true,
+                        showFiles: true,
+                        showReferences: true,
+                        showFolders: true,
+                        showTypeParameters: true,
+                        showSnippets: true
+                    },
+                    acceptSuggestionOnCommitCharacter: true,
+                    acceptSuggestionOnEnter: 'on',
+                    tabCompletion: 'on'
                 });
 
+                // NOW add the type definitions AFTER editor is created
+                console.log('Adding Kyte API type definitions...');
+
+                // Add types first
+                monaco.languages.typescript.javascriptDefaults.addExtraLib(kyteApiDefs, 'file:///kyte-api.d.ts');
+
+                // Add simple global k declaration
+                monaco.languages.typescript.javascriptDefaults.addExtraLib(`
+/**
+ * Global Kyte API instance - automatically initialized in published pages
+ */
+declare var k: Kyte;
+`, 'file:///globals.d.ts');
+
+                console.log('✓ Type definitions added');
+                console.log('Extra Libs:', monaco.languages.typescript.javascriptDefaults.getExtraLibs());
+
+                // Add a keybinding to manually trigger suggestions
+                jsEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Space, () => {
+                    jsEditor.trigger('keyboard', 'editor.action.triggerSuggest', {});
+                });
+
+                // Register custom completion provider for Kyte API (no workers needed!)
+                monaco.languages.registerCompletionItemProvider('javascript', {
+                    triggerCharacters: ['.'],
+                    provideCompletionItems: function (model, position) {
+                        const textUntilPosition = model.getValueInRange({
+                            startLineNumber: position.lineNumber,
+                            startColumn: 1,
+                            endLineNumber: position.lineNumber,
+                            endColumn: position.column
+                        });
+
+                        // Check if we're after "k."
+                        const match = textUntilPosition.match(/k\.(\w*)$/);
+                        if (!match) {
+                            return { suggestions: [] };
+                        }
+
+                        const word = model.getWordUntilPosition(position);
+                        const range = {
+                            startLineNumber: position.lineNumber,
+                            endLineNumber: position.lineNumber,
+                            startColumn: word.startColumn,
+                            endColumn: word.endColumn
+                        };
+
+                        // Kyte API method completions
+                        const suggestions = [
+                            {
+                                label: 'get',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'get(${1:model}, ${2:field}, ${3:value}, [], ${4:(response) => {\n\t$0\n}}, ${5:(error) => {\n\tconsole.error(error);\n}})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Retrieve records from the backend\n\nExample:\nk.get("User", "email", "user@example.com", [],\n  (response) => { console.log(response); },\n  (error) => { console.error(error); }\n);',
+                                range: range
+                            },
+                            {
+                                label: 'post',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'post(${1:model}, ${2:data}, null, [], ${3:(response) => {\n\t$0\n}}, ${4:(error) => {\n\tconsole.error(error);\n}})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Create new records in the backend\n\nExample:\nk.post("User", { name: "John", email: "john@example.com" }, null, [],\n  (response) => { console.log(response); },\n  (error) => { console.error(error); }\n);',
+                                range: range
+                            },
+                            {
+                                label: 'put',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'put(${1:model}, ${2:field}, ${3:value}, ${4:data}, null, [], ${5:(response) => {\n\t$0\n}}, ${6:(error) => {\n\tconsole.error(error);\n}})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Update existing records in the backend\n\nExample:\nk.put("User", "id", "123", { name: "Jane" }, null, [],\n  (response) => { console.log(response); },\n  (error) => { console.error(error); }\n);',
+                                range: range
+                            },
+                            {
+                                label: 'delete',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'delete(${1:model}, ${2:field}, ${3:value}, ${4:(response) => {\n\t$0\n}}, ${5:(error) => {\n\tconsole.error(error);\n}})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Delete records from the backend (soft delete)\n\nExample:\nk.delete("User", "id", "123",\n  (response) => { console.log(response); },\n  (error) => { console.error(error); }\n);',
+                                range: range
+                            },
+                            {
+                                label: 'sessionCreate',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'sessionCreate({ username: ${1:"user@example.com"}, password: ${2:"password"} }, ${3:(response) => {\n\t$0\n}}, ${4:(error) => {\n\tconsole.error(error);\n}})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Create a new user session (login)',
+                                range: range
+                            },
+                            {
+                                label: 'sessionDestroy',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'sessionDestroy(${1:(error) => {\n\tif (error) console.error(error);\n\telse window.location.href = "/login.html";\n}})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Destroy the current session (logout)',
+                                range: range
+                            },
+                            {
+                                label: 'isSession',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'isSession(${1:false}, ${2:false})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Check if a valid session exists\n\nParameters:\n- periodic: Enable periodic checking (default: false)\n- redir: Redirect to login if no session (default: false)\n- interval: Check interval in ms (default: 30000)\n\nExample:\nif (!k.isSession(false, false)) {\n  window.location.href = "/login.html";\n}',
+                                range: range
+                            },
+                            {
+                                label: 'checkSession',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'checkSession()',
+                                documentation: 'Check if session cookie exists',
+                                range: range
+                            },
+                            {
+                                label: 'init',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'init()',
+                                documentation: 'Initialize Kyte instance by loading credentials from cookies (called automatically)',
+                                range: range
+                            },
+                            {
+                                label: 'sign',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'sign(${1:(signature) => {\n\t$0\n}}, ${2:(error) => {\n\tconsole.error(error);\n}})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Generate HMAC signature for authenticated requests',
+                                range: range
+                            },
+                            {
+                                label: 'setCookie',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'setCookie(${1:"name"}, ${2:"value"}, ${3:60})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Set a browser cookie\n\nParameters:\n- name: Cookie name\n- value: Cookie value\n- minutes: Expiration time in minutes (default: 60)',
+                                range: range
+                            },
+                            {
+                                label: 'getCookie',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'getCookie(${1:"name"})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Get a browser cookie value',
+                                range: range
+                            },
+                            {
+                                label: 'getUrlParameter',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'getUrlParameter(${1:"paramName"})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Get URL query parameter value',
+                                range: range
+                            },
+                            {
+                                label: 'getPageRequest',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'getPageRequest()',
+                                documentation: 'Get decoded page request object from URL',
+                                range: range
+                            },
+                            {
+                                label: 'setPageRequest',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'setPageRequest(${1:"model"}, ${2:id})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Create encoded page request URL',
+                                range: range
+                            },
+                            {
+                                label: 'alert',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'alert(${1:"title"}, ${2:"message"}, ${3:() => {\n\t$0\n}})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Display a SweetAlert2 alert dialog',
+                                range: range
+                            },
+                            {
+                                label: 'confirm',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'confirm(${1:"title"}, ${2:"message"}, ${3:() => {\n\t// Confirmed\n\t$0\n}}, ${4:() => {\n\t// Cancelled\n}})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Display a SweetAlert2 confirmation dialog',
+                                range: range
+                            },
+                            {
+                                label: 'validateForm',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'validateForm(${1:formElement})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Validate a form element (checks required fields)',
+                                range: range
+                            },
+                            {
+                                label: 'getNestedValue',
+                                kind: monaco.languages.CompletionItemKind.Method,
+                                insertText: 'getNestedValue(${1:obj}, ${2:"path.to.property"})',
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'Get nested object property using dot notation',
+                                range: range
+                            }
+                        ];
+
+                        return { suggestions: suggestions };
+                    }
+                });
+
+                // Register signature help provider for parameter hints
+                monaco.languages.registerSignatureHelpProvider('javascript', {
+                    signatureHelpTriggerCharacters: ['(', ','],
+                    provideSignatureHelp: function (model, position) {
+                        const textUntilPosition = model.getValueInRange({
+                            startLineNumber: 1,
+                            startColumn: 1,
+                            endLineNumber: position.lineNumber,
+                            endColumn: position.column
+                        });
+
+                        // Define signatures for Kyte methods
+                        const signatures = {
+                            'k.get': {
+                                label: 'k.get(model, field, value, headers, callback, error)',
+                                documentation: 'Retrieve records from the backend',
+                                parameters: [
+                                    { label: 'model', documentation: 'Model name (e.g., "User")' },
+                                    { label: 'field', documentation: 'Field to match (e.g., "email")' },
+                                    { label: 'value', documentation: 'Value to match (e.g., "user@example.com")' },
+                                    { label: 'headers', documentation: 'Additional headers array (usually [])' },
+                                    { label: 'callback', documentation: 'Success callback function(response) {}' },
+                                    { label: 'error', documentation: 'Error callback function(error) {}' }
+                                ]
+                            },
+                            'k.post': {
+                                label: 'k.post(model, data, formdata, headers, callback, error)',
+                                documentation: 'Create new records in the backend',
+                                parameters: [
+                                    { label: 'model', documentation: 'Model name' },
+                                    { label: 'data', documentation: 'Object with field values { name: "John", email: "john@example.com" }' },
+                                    { label: 'formdata', documentation: 'FormData object (for file uploads) or null' },
+                                    { label: 'headers', documentation: 'Additional headers array (usually [])' },
+                                    { label: 'callback', documentation: 'Success callback function(response) {}' },
+                                    { label: 'error', documentation: 'Error callback function(error) {}' }
+                                ]
+                            },
+                            'k.put': {
+                                label: 'k.put(model, field, value, data, formdata, headers, callback, error)',
+                                documentation: 'Update existing records in the backend',
+                                parameters: [
+                                    { label: 'model', documentation: 'Model name' },
+                                    { label: 'field', documentation: 'Field to match (e.g., "id")' },
+                                    { label: 'value', documentation: 'Value to match (e.g., "123")' },
+                                    { label: 'data', documentation: 'Object with fields to update { name: "Jane" }' },
+                                    { label: 'formdata', documentation: 'FormData object or null' },
+                                    { label: 'headers', documentation: 'Additional headers array (usually [])' },
+                                    { label: 'callback', documentation: 'Success callback function(response) {}' },
+                                    { label: 'error', documentation: 'Error callback function(error) {}' }
+                                ]
+                            },
+                            'k.delete': {
+                                label: 'k.delete(model, field, value, callback, error)',
+                                documentation: 'Delete records from the backend (soft delete)',
+                                parameters: [
+                                    { label: 'model', documentation: 'Model name' },
+                                    { label: 'field', documentation: 'Field to match (e.g., "id")' },
+                                    { label: 'value', documentation: 'Value to match (e.g., "123")' },
+                                    { label: 'callback', documentation: 'Success callback function(response) {}' },
+                                    { label: 'error', documentation: 'Error callback function(error) {}' }
+                                ]
+                            },
+                            'k.sessionCreate': {
+                                label: 'k.sessionCreate(identity, callback, error, sessionController)',
+                                documentation: 'Create a new user session (login)',
+                                parameters: [
+                                    { label: 'identity', documentation: 'Login credentials { username: "user@example.com", password: "password" }' },
+                                    { label: 'callback', documentation: 'Success callback function(response) {}' },
+                                    { label: 'error', documentation: 'Error callback function(error) {}' },
+                                    { label: 'sessionController', documentation: 'Optional custom session controller name' }
+                                ]
+                            },
+                            'k.sessionDestroy': {
+                                label: 'k.sessionDestroy(error)',
+                                documentation: 'Destroy the current session (logout)',
+                                parameters: [
+                                    { label: 'error', documentation: 'Error callback function(error) {}' }
+                                ]
+                            },
+                            'k.isSession': {
+                                label: 'k.isSession(periodic, redir, interval)',
+                                documentation: 'Check if a valid session exists',
+                                parameters: [
+                                    { label: 'periodic', documentation: 'Enable periodic checking (default: false)' },
+                                    { label: 'redir', documentation: 'Redirect to login if no session (default: false)' },
+                                    { label: 'interval', documentation: 'Check interval in milliseconds (default: 30000)' }
+                                ]
+                            },
+                            'k.setCookie': {
+                                label: 'k.setCookie(name, value, minutes, crossDomain)',
+                                documentation: 'Set a browser cookie',
+                                parameters: [
+                                    { label: 'name', documentation: 'Cookie name' },
+                                    { label: 'value', documentation: 'Cookie value' },
+                                    { label: 'minutes', documentation: 'Expiration time in minutes (default: 60)' },
+                                    { label: 'crossDomain', documentation: 'Allow cross-domain cookies (default: false)' }
+                                ]
+                            },
+                            'k.alert': {
+                                label: 'k.alert(title, message, callback, dismiss)',
+                                documentation: 'Display a SweetAlert2 alert dialog',
+                                parameters: [
+                                    { label: 'title', documentation: 'Alert title' },
+                                    { label: 'message', documentation: 'Alert message' },
+                                    { label: 'callback', documentation: 'Callback when dismissed function() {}' },
+                                    { label: 'dismiss', documentation: 'Allow dismissing (default: true)' }
+                                ]
+                            },
+                            'k.confirm': {
+                                label: 'k.confirm(title, message, callback, cancel)',
+                                documentation: 'Display a SweetAlert2 confirmation dialog',
+                                parameters: [
+                                    { label: 'title', documentation: 'Confirmation title' },
+                                    { label: 'message', documentation: 'Confirmation message' },
+                                    { label: 'callback', documentation: 'Callback when confirmed function() {}' },
+                                    { label: 'cancel', documentation: 'Callback when cancelled function() {}' }
+                                ]
+                            }
+                        };
+
+                        // Find which Kyte method is being called
+                        let matchedMethod = null;
+                        let parameterIndex = 0;
+
+                        for (const method in signatures) {
+                            const regex = new RegExp(method.replace('.', '\\.') + '\\s*\\(([^)]*)$');
+                            const match = textUntilPosition.match(regex);
+                            if (match) {
+                                matchedMethod = method;
+                                // Count commas to determine which parameter we're on
+                                parameterIndex = (match[1].match(/,/g) || []).length;
+                                break;
+                            }
+                        }
+
+                        if (!matchedMethod) {
+                            return null;
+                        }
+
+                        const sig = signatures[matchedMethod];
+                        return {
+                            value: {
+                                signatures: [{
+                                    label: sig.label,
+                                    documentation: sig.documentation,
+                                    parameters: sig.parameters
+                                }],
+                                activeSignature: 0,
+                                activeParameter: parameterIndex
+                            },
+                            dispose: () => {}
+                        };
+                    }
+                });
+
+                console.log('✓ Custom Kyte API completion provider registered (no workers needed!)');
+                console.log('✓ Signature help provider registered for parameter hints');
+                console.log('✓ JavaScript editor ready with IntelliSense');
+                console.log('TIP: Type "k." to see Kyte API methods, or press Ctrl+Space (Cmd+Space on Mac)');
+
+                // Create CSS Editor
                 cssEditor = monaco.editor.create(document.getElementById("cssEditor"), {
                     value: pageData.stylesheet,
                     theme: colorMode,
@@ -1596,7 +2796,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 ];
                 var tblScripts = new KyteTable(_ks, $("#scripts-table"), {'name':"KyteScriptAssignment",'field':"page",'value':pageData.page.id}, colDefScripts, true, [0,"asc"], false, true);
                 tblScripts.init();
-                var frmScript = new KyteForm(_ks, $("#modalFormScripts"), 'KyteScriptAssignment', hiddenScriptAssignment, fldsScripts, 'Script Assignment', tblScripts, true, $("#addScript"));
+                var frmScript = new KyteForm(_ks, $("#modalFormScripts"), 'KyteScriptAssignment', hiddenScriptAssignment, fldsScripts, window.kyteI18n ? window.kyteI18n.t('ui.page_editor.modal_script.title_add') : 'Script Assignment', tblScripts, true, $("#addScript"));
                 frmScript.init();
                 tblScripts.bindEdit(frmScript);
                 // global scripts
@@ -1635,7 +2835,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 ];
                 var tblLibraries = new KyteTable(_ks, $("#libraries-table"), {'name':"KyteLibraryAssignment",'field':"page",'value':pageData.page.id}, colDefLibraries, true, [0,"asc"], false, true);
                 tblLibraries.init();
-                var frmLibrary = new KyteForm(_ks, $("#modalFormLibraries"), 'KyteLibraryAssignment', hiddenScriptAssignment, fldsLibraries, 'Script Assignment', tblLibraries, true, $("#addLibrary"));
+                var frmLibrary = new KyteForm(_ks, $("#modalFormLibraries"), 'KyteLibraryAssignment', hiddenScriptAssignment, fldsLibraries, window.kyteI18n ? window.kyteI18n.t('ui.page_editor.modal_library.title_add') : 'Library Assignment', tblLibraries, true, $("#addLibrary"));
                 frmLibrary.init();
                 tblLibraries.bindEdit(frmLibrary);
                 // global libraries
@@ -1680,17 +2880,22 @@ document.addEventListener('KyteInitialized', function(e) {
                 ];
                 var tblComponents = new KyteTable(_ks, $("#components-table"), {'name':"KytePageWebComponent",'field':"page",'value':pageData.page.id}, colDefComponents, true, [0,"asc"], true, true);
                 tblComponents.init();
-                var frmComponent = new KyteForm(_ks, $("#modalFormComponent"), 'KytePageWebComponent', hiddenComponent, fldsComponent, 'Web Component', tblComponents, true, $("#addComponent"));
+                var frmComponent = new KyteForm(_ks, $("#modalFormComponent"), 'KytePageWebComponent', hiddenComponent, fldsComponent, window.kyteI18n ? window.kyteI18n.t('ui.page_editor.modal_component.title_add') : 'Web Component', tblComponents, true, $("#addComponent"));
                 frmComponent.init();
                 tblComponents.bindEdit(frmComponent);
 
                 // Version History table
+                const t = (key, fallback) => window.kyteI18n ? window.kyteI18n.t(key, fallback) : fallback;
                 let colDefVersionHistory = [
-                    {'targets': 0, 'data': 'version_number', 'label': 'Version'},
-                    {'targets': 1, 'data': 'date_created', 'label': 'Date'},
-                    {'targets': 2, 'data': 'change_summary', 'label': 'Summary'},
-                    {'targets': 3, 'data': 'created_by.name', 'label': 'Author', render: function(data, type, row, meta) { return data ? data : ''; }},
-                    {'targets': 4, 'data': 'can_revert', 'label': 'Current Version', render: function(data, type, row, meta) { return data == false ? '<i class="fas fa-check text-success"></i> Yes' : '<i class="fas fa-times text-danger"></i> No'; }},
+                    {'targets': 0, 'data': 'version_number', 'label': t('ui.page_editor.version_table.column_version', 'Version')},
+                    {'targets': 1, 'data': 'date_created', 'label': t('ui.page_editor.version_table.column_date', 'Date')},
+                    {'targets': 2, 'data': 'change_summary', 'label': t('ui.page_editor.version_table.column_summary', 'Summary')},
+                    {'targets': 3, 'data': 'created_by.name', 'label': t('ui.page_editor.version_table.column_author', 'Author'), render: function(data, type, row, meta) { return data ? data : ''; }},
+                    {'targets': 4, 'data': 'can_revert', 'label': t('ui.page_editor.version_table.column_current', 'Current Version'), render: function(data, type, row, meta) {
+                        const yesText = window.kyteI18n ? window.kyteI18n.t('ui.page_editor.version_table.yes', 'Yes') : 'Yes';
+                        const noText = window.kyteI18n ? window.kyteI18n.t('ui.page_editor.version_table.no', 'No') : 'No';
+                        return data == false ? `<i class="fas fa-check text-success"></i> ${yesText}` : `<i class="fas fa-times text-danger"></i> ${noText}`;
+                    }},
                 ];
 
                 tblVersionHistory = new KyteTable(_ks, $("#version-history-table"), 
@@ -1704,7 +2909,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 tblVersionHistory.customActionButton = [
                     {
                         'className':'previewVersion',
-                        'label':'Preview',
+                        'label': window.kyteI18n ? window.kyteI18n.t('ui.page_editor.version_table.button_preview', 'Preview') : 'Preview',
                         'faicon': 'fas fa-eye', // optional
                         'callback': function(data, model, row) {
                             previewVersion(data, _ks);
@@ -1712,7 +2917,7 @@ document.addEventListener('KyteInitialized', function(e) {
                     },
                     {
                         'className':'restoreVersion',
-                        'label':'Restore',
+                        'label': window.kyteI18n ? window.kyteI18n.t('ui.page_editor.version_table.button_restore', 'Restore') : 'Restore',
                         'faicon': 'fas fa-undo', // optional
                         'callback': function(data, model, row) {
                             restoreVersion(data, _ks);

@@ -13,7 +13,7 @@ let page_path = '';
 document.addEventListener('KyteInitialized', function(e) {
     let _ks = e.detail._ks;
     $('#pageLoaderModal').modal('show');
-    
+
     if (_ks.isSession()) {
         // get url param
         let idx = _ks.getPageRequest();
@@ -703,10 +703,20 @@ document.addEventListener('KyteInitialized', function(e) {
             'site': siteIdx
         }, null, [], function(r) {
             if (r.data.length > 0) {
+                let pageId = r.data[0].id;
+
                 // generate kyte connect
                 let connect = "let endpoint = 'https://"+kyte_endpoint+"';var k = new Kyte(endpoint, '"+kyte_pub+"', '"+kyte_iden+"', '"+kyte_num+"', '"+kyte_app+"');k.init();\n\n";
+
+                // Set up "Open in Editor" button URL
+                let editorObj = {'model': 'KytePage', 'idx': pageId};
+                let editorEncoded = encodeURIComponent(btoa(JSON.stringify(editorObj)));
+                let editorUrl = '/app/page/?request=' + editorEncoded;
+                $("#openInEditor").attr('href', editorUrl);
+                $("#openInEditor").show();
+
                 // create s3 file and invalidate
-                _ks.put('KytePage', 'id', r.data[0].id, {'state': 1}, null, [], function(r) {
+                _ks.put('KytePage', 'id', pageId, {'state': 1}, null, [], function(r) {
                     $('#pageLoaderModal').modal('hide');
                     $("#wizard-4").addClass('d-none');
                     $("#wizard-final").removeClass('d-none');
@@ -723,7 +733,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 console.log(err);
                 alert("Something went wrong while trying to save your page...");
             }
-            
+
         }, function(err) {
             $('#pageLoaderModal').modal('hide');
             console.log(err);

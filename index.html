@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Kyte Shipyard - Sign In</title>
+    <title data-i18n="ui.login.page_title">Kyte Shipyard - Sign In</title>
     <!-- Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
@@ -18,9 +18,37 @@
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
     <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
-    <script src="/assets/js/kyte-shipyard.js"></script>
-    <script src="/assets/js/login.js"></script>
-    
+    <script>
+        // Auto-detect localhost and load non-obfuscated source files for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
+
+            const scripts = ['kyte-shipyard.js', 'kyte-i18n.js', 'login.js'];
+            scripts.forEach(function(script) {
+                document.write('<script src="' + jsPath + script + '"><\/script>');
+            });
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
+            }
+        })();
+    </script>
+    <script>
+        // Initialize i18n for login page (browser detection only, no session)
+        document.addEventListener('DOMContentLoaded', function() {
+            const kyteI18n = new KyteI18n('en', '/assets/i18n/');
+
+            // Browser detection only (no user session on login page)
+            kyteI18n.init(null).then(() => {
+                console.log('Login page i18n initialized with language:', kyteI18n.getCurrentLanguage());
+                kyteI18n.translateDOM();
+            }).catch(error => {
+                console.error('Failed to initialize login page i18n:', error);
+            });
+        });
+    </script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -392,41 +420,41 @@
                 <img src="/assets/images/keyq_logo_horizontal_v2_dark.png" alt="KeyQ Cloud Solutions" class="keyq-logo-img">
                 <div class="kyte-branding">
                     <img src="/assets/images/kyte_shipyard_light.png" alt="Kyte Shipyard" class="kyte-logo-img">
-                    <p class="brand-subtitle">Kyte Shipyard™</p>
-                    <p class="brand-subtitle" style="font-style: italic;">Next Generation App Building</p>
+                    <p class="brand-subtitle" data-i18n="ui.login.brand_subtitle">Kyte Shipyard™</p>
+                    <p class="brand-subtitle" style="font-style: italic;" data-i18n="ui.login.brand_tagline">Next Generation App Building</p>
                 </div>
             </div>
 
             <!-- Login form -->
             <div class="login-body">
-                <h2 class="form-section-title">Welcome to Kyte Shipyard</h2>
-                <p class="form-section-subtitle">Sign in to continue to your workspace</p>
-                
+                <h2 class="form-section-title" data-i18n="ui.login.welcome_title">Welcome to Kyte Shipyard</h2>
+                <p class="form-section-subtitle" data-i18n="ui.login.welcome_subtitle">Sign in to continue to your workspace</p>
+
                 <form id="login-form">
                     <p class="error-message d-none" id="errorMsg"></p>
-                    
+
                     <div class="form-group">
-                        <input type="email" class="form-control" name="email" placeholder="Enter your email" required>
+                        <input type="email" class="form-control" name="email" data-i18n-placeholder="ui.login.email_placeholder" placeholder="Enter your email" required>
                         <i class="fas fa-envelope input-icon"></i>
                     </div>
-                    
+
                     <div class="form-group">
-                        <input type="password" class="form-control" name="password" placeholder="Enter your password" required>
+                        <input type="password" class="form-control" name="password" data-i18n-placeholder="ui.login.password_placeholder" placeholder="Enter your password" required>
                         <i class="fas fa-lock input-icon"></i>
                     </div>
-                    
+
                     <button id="signin" type="submit" class="btn btn-primary">
-                        <span class="btn-text">Sign in to Kyte Shipyard</span>
+                        <span class="btn-text" data-i18n="ui.login.signin_button">Sign in to Kyte Shipyard</span>
                     </button>
-                    
+
                     <p class="terms-text">
-                        By continuing, you agree to the 
-                        <a href="https://www.keyq.cloud/terms" target="_blank">Terms of Service</a>, 
-                        <a href="https://www.keyq.cloud/privacy" target="_blank">Privacy Policy</a> 
-                        and use of cookies.
+                        <span data-i18n="ui.login.terms_prefix">By continuing, you agree to the</span>
+                        <a href="https://www.keyq.cloud/terms" target="_blank" data-i18n="ui.login.terms_of_service">Terms of Service</a>,
+                        <a href="https://www.keyq.cloud/privacy" target="_blank" data-i18n="ui.login.privacy_policy">Privacy Policy</a>
+                        <span data-i18n="ui.login.terms_suffix">and use of cookies.</span>
                     </p>
-                    
-                    <a href="/reset.html" class="forgot-password">Having trouble signing in?</a>
+
+                    <a href="/reset.html" class="forgot-password" data-i18n="ui.login.forgot_password">Having trouble signing in?</a>
                 </form>
             </div>
         </div>
@@ -434,10 +462,10 @@
 
     <!-- Footer -->
     <div class="footer-info">
-        <div class="copyright">KeyQ © 2020-2026</div>
+        <div class="copyright" data-i18n="ui.login.copyright">KeyQ © 2020-2026</div>
         <div class="versions">
-            <span>Kyte Shipyard™ Version <span id="kyteShipyardVersion"></span></span>
-            <span>Kyte JS Version <span id="kyteJSVersion"></span></span>
+            <span><span data-i18n="ui.login.version_shipyard">Kyte Shipyard™ Version</span> <span id="kyteShipyardVersion"></span></span>
+            <span><span data-i18n="ui.login.version_js">Kyte JS Version</span> <span id="kyteJSVersion"></span></span>
         </div>
     </div>
 </body>

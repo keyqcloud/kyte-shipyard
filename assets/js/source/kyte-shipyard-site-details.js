@@ -22,127 +22,191 @@ let sideNavItemCount = 1;
 let currentColumnStyle = 0;
 let currentNavItemStyle = 0;
 
-let scriptElement = [
-    [
-        {
-            'field':'name',
-            'type':'text',
-            'label':'Script Name',
-            'required':true
-        },
-        {
-            'field':'s3key',
-            'type':'text',
-            'label':'File Name',
-            'required':true
-        },
-    ],
-    [
-        {
-            'field':'script_type',
-            'type':'select',
-            'label':'Script Stype',
-            'required':true,
-            'option': {
-                'ajax': false,
-                'data': {
-                    'css': 'CSS Stylesheet',
-                    'js': 'JavaScript'
-                }
-            }
-        },
-        {
-            'field':'include_all',
-            'type':'select',
-            'label':'Globally Include',
-            'required':true,
-            'option': {
-                'ajax': false,
-                'data': {
-                    0: 'No',
-                    1: 'Yes'
-                }
-            }
-        }
-    ],
-    [
-        {
-            'field':'description',
-            'type':'textarea',
-            'label':'Description',
-            'required':false
-        },
-    ],
-];
+// Form element definitions - will be populated after i18n loads
+let scriptElement = [];
+let libraryElement = [];
+let sectionsFormElement = [];
+let mediaElements = [];
 
-let libraryElement = [
-    [
-        {
-            'field':'name',
-            'type':'text',
-            'label':'Script Name',
-            'required':true
-        },
-        {
-            'id':'library_script_type',
-            'field':'script_type',
-            'type':'select',
-            'label':'Script Type',
-            'required':true,
-            'option': {
-                'ajax': false,
-                'data': {
-                    'css': 'CSS Stylesheet',
-                    'js': 'JavaScript'
-                }
-            }
-        },
-        {
-            'id':'library_is_js_module',
-            'field':'is_js_module',
-            'type':'select',
-            'label':'JavaScript Module',
-            'required':true,
-            'option': {
-                'ajax': false,
-                'data': {
-                    0: 'No',
-                    1: 'Yes'
-                }
-            }
-        },
-        {
-            'field':'include_all',
-            'type':'select',
-            'label':'Globally Include',
-            'required':true,
-            'option': {
-                'ajax': false,
-                'data': {
-                    0: 'No',
-                    1: 'Yes'
-                }
-            }
-        }
-    ],
-    [
+// Function to generate form elements with translations
+function generateFormElements() {
+    const i18n = window.kyteI18n;
+    const t = (key, fallback) => i18n ? i18n.t(key) : fallback;
 
-        {
-            'field':'link',
-            'type':'text',
-            'label':'Link',
-            'required':true
-        },
-    ],
-    [
-        {
-            'field':'description',
-            'type':'textarea',
-            'label':'Description',
-            'required':false
-        },
-    ],
-];
+    scriptElement = [
+        [
+            {
+                'field':'name',
+                'type':'text',
+                'label': t('ui.site_detail.form.script_name', 'Script Name'),
+                'required':true
+            },
+            {
+                'field':'s3key',
+                'type':'text',
+                'label': t('ui.site_detail.form.file_name', 'File Name'),
+                'required':true
+            },
+        ],
+        [
+            {
+                'field':'script_type',
+                'type':'select',
+                'label': t('ui.site_detail.form.script_type', 'Script Type'),
+                'required':true,
+                'option': {
+                    'ajax': false,
+                    'data': {
+                        'css': t('ui.site_detail.form.css_stylesheet', 'CSS Stylesheet'),
+                        'js': t('ui.site_detail.form.javascript', 'JavaScript')
+                    }
+                }
+            },
+            {
+                'field':'include_all',
+                'type':'select',
+                'label': t('ui.site_detail.form.globally_include', 'Globally Include'),
+                'required':true,
+                'option': {
+                    'ajax': false,
+                    'data': {
+                        0: t('ui.site_detail.form.no', 'No'),
+                        1: t('ui.site_detail.form.yes', 'Yes')
+                    }
+                }
+            }
+        ],
+        [
+            {
+                'field':'description',
+                'type':'textarea',
+                'label': t('ui.site_detail.form.description', 'Description'),
+                'required':false
+            },
+        ],
+    ];
+
+    libraryElement = [
+        [
+            {
+                'field':'name',
+                'type':'text',
+                'label': t('ui.site_detail.form.script_name', 'Script Name'),
+                'required':true
+            },
+            {
+                'id':'library_script_type',
+                'field':'script_type',
+                'type':'select',
+                'label': t('ui.site_detail.form.script_type', 'Script Type'),
+                'required':true,
+                'option': {
+                    'ajax': false,
+                    'data': {
+                        'css': t('ui.site_detail.form.css_stylesheet', 'CSS Stylesheet'),
+                        'js': t('ui.site_detail.form.javascript', 'JavaScript')
+                    }
+                }
+            },
+            {
+                'id':'library_is_js_module',
+                'field':'is_js_module',
+                'type':'select',
+                'label': t('ui.site_detail.form.js_module', 'JavaScript Module'),
+                'required':true,
+                'option': {
+                    'ajax': false,
+                    'data': {
+                        0: t('ui.site_detail.form.no', 'No'),
+                        1: t('ui.site_detail.form.yes', 'Yes')
+                    }
+                }
+            },
+            {
+                'field':'include_all',
+                'type':'select',
+                'label': t('ui.site_detail.form.globally_include', 'Globally Include'),
+                'required':true,
+                'option': {
+                    'ajax': false,
+                    'data': {
+                        0: t('ui.site_detail.form.no', 'No'),
+                        1: t('ui.site_detail.form.yes', 'Yes')
+                    }
+                }
+            }
+        ],
+        [
+            {
+                'field':'link',
+                'type':'text',
+                'label': t('ui.site_detail.form.path', 'Path'),
+                'required':true
+            },
+        ],
+        [
+            {
+                'field':'description',
+                'type':'textarea',
+                'label': t('ui.site_detail.form.description', 'Description'),
+                'required':false
+            },
+        ],
+    ];
+
+    sectionsFormElement = [
+        [
+            {
+                'field':'title',
+                'type':'text',
+                'label': t('ui.site_detail.form.section_name', 'Section Name'),
+                'required':true
+            },
+            {
+                'field':'category',
+                'type':'select',
+                'label': t('ui.site_detail.form.category', 'Category'),
+                'required':true,
+                'option': {
+                    'ajax': false,
+                    'data': {
+                        'header': t('ui.site_detail.form.header', 'Header'),
+                        'footer': t('ui.site_detail.form.footer', 'Footer'),
+                        'other': t('ui.site_detail.form.other', 'Other')
+                    }
+                }
+            },
+        ],
+        [
+            {
+                'field':'description',
+                'type':'text',
+                'label': t('ui.site_detail.form.description', 'Description'),
+                'required':true
+            },
+        ],
+    ];
+
+    mediaElements = [
+        [
+            {
+                'field':'name',
+                'type':'text',
+                'label': t('ui.site_detail.form.name', 'Name'),
+                'required':true
+            },
+        ],
+        [
+            {
+                'field':'media',
+                'type':'file',
+                'label': t('ui.site_detail.form.static_asset', 'Static asset file'),
+                'required':true
+            },
+        ]
+    ];
+}
+
 function checkScriptTypeAndUpdateModule() {
     let scriptType = $("#library_script_type").val();
     if (scriptType == 'js') {
@@ -152,58 +216,6 @@ function checkScriptTypeAndUpdateModule() {
         $("#library_is_js_module").prop('disabled', true);
     }
 }
-
-let sectionsFormElement = [
-    [
-        {
-            'field':'title',
-            'type':'text',
-            'label':'Section Name',
-            'required':true
-        },
-        {
-            'field':'category',
-            'type':'select',
-            'label':'Category',
-            'required':true,
-            'option': {
-                'ajax': false,
-                'data': {
-                    'header': 'Header',
-                    'footer': 'Footer',
-                    'other': 'Other'
-                }
-            }
-        },
-    ],
-    [
-        {
-            'field':'description',
-            'type':'text',
-            'label':'Description',
-            'required':true
-        },
-    ],
-];
-
-let mediaElements = [
-    [
-        {
-            'field':'name',
-            'type':'text',
-            'label':'Name',
-            'required':true
-        },
-    ],
-    [
-        {
-            'field':'media',
-            'type':'file',
-            'label':'Static asset file',
-            'required':true
-        },
-    ]
-];
 
 let colDefPage = [
     {'targets':0,'data':'title','label':'Page Title'},
@@ -255,9 +267,24 @@ document.addEventListener('KyteInitialized', function(e) {
     $(hash+'-nav-link').addClass('active');
     
     if (_ks.isSession()) {
-        // get url param
-        let idx = _ks.getPageRequest();
-        idx = idx.idx;
+        // Wait for i18n to be ready before generating forms
+        function waitForI18n(callback) {
+            if (window.kyteI18n && window.kyteI18n.translations && Object.keys(window.kyteI18n.translations).length > 0) {
+                callback();
+            } else {
+                setTimeout(() => waitForI18n(callback), 50);
+            }
+        }
+
+        waitForI18n(() => {
+            console.log('[Site Detail] i18n ready, generating forms');
+
+            // Generate form elements with translations
+            generateFormElements();
+
+            // get url param
+            let idx = _ks.getPageRequest();
+            idx = idx.idx;
 
         let hidden = [
             {
@@ -287,9 +314,26 @@ document.addEventListener('KyteInitialized', function(e) {
                     }
                 }
                 $("#site-name").html(currentSiteData.name);
-                $("#domain-name").html('<i class="fas fa-link me-2"></i>'+(currentSiteData.aliasDomain ? currentSiteData.aliasDomain : currentSiteData.cfDomain));
-                $("#domain-name").attr('href', 'https://'+(currentSiteData.aliasDomain ? currentSiteData.aliasDomain : currentSiteData.cfDomain));
+                const domainUrl = currentSiteData.aliasDomain ? currentSiteData.aliasDomain : currentSiteData.cfDomain;
+                $("#domain-name").html(domainUrl);
+                $("#domain-name").attr('href', 'https://' + domainUrl);
                 $("#region").html(currentSiteData.region);
+
+                // Setup copy URL button
+                const copyUrlBtn = document.getElementById('copy-url-btn');
+                if (copyUrlBtn) {
+                    copyUrlBtn.onclick = function(e) {
+                        e.preventDefault();
+                        const fullUrl = 'https://' + domainUrl;
+                        navigator.clipboard.writeText(fullUrl).then(function() {
+                            const tooltip = document.getElementById('copy-tooltip');
+                            tooltip.classList.add('show');
+                            setTimeout(function() {
+                                tooltip.classList.remove('show');
+                            }, 1500);
+                        });
+                    };
+                }
                 $("#aliasDomain").val(currentSiteData.aliasDomain);
                 $("#default_lang").val(currentSiteData.default_lang);
                 $("#ga_code").val(currentSiteData.ga_code);
@@ -337,7 +381,8 @@ document.addEventListener('KyteInitialized', function(e) {
                 // scripts
                 var tblScript = new KyteTable(_ks, $("#scripts-table"), {'name':"KyteScript",'field':"site",'value':idx}, colDefScript, true, [0,"asc"], false, true, 'id', '/app/script/');
                 tblScript.init();
-                var modalFormScript = new KyteForm(_ks, $("#modalFormScript"), 'KyteScript', hidden, scriptElement, 'Script', tblScript, true, $("#newScript"));
+                const scriptTitle = window.kyteI18n ? window.kyteI18n.t('ui.site_detail.modal.script_title', 'Script') : 'Script';
+                var modalFormScript = new KyteForm(_ks, $("#modalFormScript"), 'KyteScript', hidden, scriptElement, scriptTitle, tblScript, true, $("#newScript"));
                 modalFormScript.success = function(r) {
                     if (r.data[0]) {
                         let obj = {'model': 'KyteScript', 'idx':r.data[0].id};
@@ -351,7 +396,8 @@ document.addEventListener('KyteInitialized', function(e) {
                 // Library
                 var tblLibrary = new KyteTable(_ks, $("#libraries-table"), {'name':"KyteLibrary",'field':"site",'value':idx}, colDefLibrary, true, [0,"asc"], true, true);
                 tblLibrary.init();
-                var modalFormLibrary = new KyteForm(_ks, $("#modalFormLibrary"), 'KyteLibrary', hidden, libraryElement, 'Script', tblLibrary, true, $("#addLibrary"));
+                const libraryTitle = window.kyteI18n ? window.kyteI18n.t('ui.site_detail.modal.library_title', 'Library') : 'Library';
+                var modalFormLibrary = new KyteForm(_ks, $("#modalFormLibrary"), 'KyteLibrary', hidden, libraryElement, libraryTitle, tblLibrary, true, $("#addLibrary"));
                 modalFormLibrary.init();
                 tblLibrary.bindEdit(modalFormLibrary);
                 checkScriptTypeAndUpdateModule();
@@ -362,7 +408,8 @@ document.addEventListener('KyteInitialized', function(e) {
                 // media
                 var tblMedia = new KyteTable(_ks, $("#media-table"), {'name':"Media",'field':"site",'value':idx}, colDefMedia, true, [0,"asc"], false, true);
                 tblMedia.init();
-                var modalFormMedia = new KyteForm(_ks, $("#modalFormMedia"), 'Media', hidden, mediaElements, 'Media', tblMedia, true, $("#newMedia"));
+                const mediaTitle = window.kyteI18n ? window.kyteI18n.t('ui.site_detail.modal.media_title', 'Media') : 'Media';
+                var modalFormMedia = new KyteForm(_ks, $("#modalFormMedia"), 'Media', hidden, mediaElements, mediaTitle, tblMedia, true, $("#newMedia"));
                 modalFormMedia.init();
                 tblMedia.bindEdit(modalFormMedia);
 
@@ -372,7 +419,8 @@ document.addEventListener('KyteInitialized', function(e) {
                     $('#pageLoaderModal').modal('hide');
                 }
                 tblSections.init();
-                var modalFormSection = new KyteForm(_ks, $("#modalFormSection"), 'KyteSectionTemplate', hidden, sectionsFormElement, 'Section', tblSections, true, $("#addSection"));
+                const sectionTitle = window.kyteI18n ? window.kyteI18n.t('ui.site_detail.modal.section_title', 'Section') : 'Section';
+                var modalFormSection = new KyteForm(_ks, $("#modalFormSection"), 'KyteSectionTemplate', hidden, sectionsFormElement, sectionTitle, tblSections, true, $("#addSection"));
                 modalFormSection.init();
                 tblSections.bindEdit(modalFormSection);
 
@@ -1036,24 +1084,30 @@ document.addEventListener('KyteInitialized', function(e) {
             const template = document.getElementById('navigation-item-template');
             const clone = template.content.cloneNode(true);
             const listItem = clone.querySelector('.navigation-item');
-            
+
             // Set data attribute
             listItem.setAttribute('data-nav-item-id', item.id);
-            
+
+            // Translate all data-i18n attributes in the cloned template
+            if (window.kyteI18n) {
+                window.kyteI18n.translateDOM(clone);
+            }
+
             // Populate form fields
             clone.querySelector('.nav-item-title').value = item.title || '';
             clone.querySelector('.nav-item-icon').value = item.faicon || '';
             clone.querySelector('.nav-item-element-id').value = item.element_id || '';
             clone.querySelector('.nav-item-element-class').value = item.element_class || '';
             clone.querySelector('.nav-item-position').value = item.center || '1';
-            
+
             // Set link type and show/hide appropriate fields
             const linkType = determineItemLinkType(item);
             clone.querySelector('.nav-item-type').value = linkType;
-            
+
             // Populate pages dropdown
             const pageSelect = clone.querySelector('.nav-item-page');
-            pageSelect.innerHTML = '<option value="">Select a page...</option>';
+            const selectPageText = window.kyteI18n ? window.kyteI18n.t('ui.site_detail.navigation.template.page_placeholder') : 'Select a page...';
+            pageSelect.innerHTML = `<option value="">${selectPageText}</option>`;
             currentSitePages.forEach(page => {
                 const option = document.createElement('option');
                 option.value = page.id;
@@ -1063,10 +1117,11 @@ document.addEventListener('KyteInitialized', function(e) {
                 }
                 pageSelect.appendChild(option);
             });
-            
+
             // Populate parent items dropdown
             const parentSelect = clone.querySelector('.nav-item-parent');
-            parentSelect.innerHTML = '<option value="0">No Parent (Top Level)</option>';
+            const noParentText = window.kyteI18n ? window.kyteI18n.t('ui.site_detail.navigation.template.no_parent') : 'No Parent (Top Level)';
+            parentSelect.innerHTML = `<option value="0">${noParentText}</option>`;
             navigationItems.forEach(navItem => {
                 if (navItem.id !== item.id) { // Don't allow self as parent
                     const option = document.createElement('option');
@@ -1458,7 +1513,8 @@ document.addEventListener('KyteInitialized', function(e) {
 
         // Create new navigation menu
         function createNewNavigation(_ks, siteId) {
-            const name = prompt('Enter navigation menu name:');
+            const promptText = window.kyteI18n ? window.kyteI18n.t('ui.site_detail.navigation.create_prompt') : 'Enter navigation menu name:';
+            const name = prompt(promptText);
             if (!name) return;
             
             const newNavData = {
@@ -1619,23 +1675,29 @@ document.addEventListener('KyteInitialized', function(e) {
             const template = document.getElementById('sidenav-item-template');
             const clone = template.content.cloneNode(true);
             const listItem = clone.querySelector('.sidenav-item');
-            
+
             // Set data attribute
             listItem.setAttribute('data-sidenav-item-id', item.id);
-            
+
+            // Translate all data-i18n attributes in the cloned template
+            if (window.kyteI18n) {
+                window.kyteI18n.translateDOM(clone);
+            }
+
             // Populate form fields
             clone.querySelector('.sidenav-item-title').value = item.title || '';
             clone.querySelector('.sidenav-item-icon').value = item.faicon || '';
             clone.querySelector('.sidenav-item-element-id').value = item.element_id || '';
             clone.querySelector('.sidenav-item-element-class').value = item.element_class || '';
-            
+
             // Set link type and show/hide appropriate fields
             const linkType = determineSideNavItemLinkType(item);
             clone.querySelector('.sidenav-item-type').value = linkType;
-            
+
             // Populate pages dropdown
             const pageSelect = clone.querySelector('.sidenav-item-page');
-            pageSelect.innerHTML = '<option value="">Select a page...</option>';
+            const selectPageText = window.kyteI18n ? window.kyteI18n.t('ui.site_detail.sidenav.template.page_placeholder') : 'Select a page...';
+            pageSelect.innerHTML = `<option value="">${selectPageText}</option>`;
             currentSitePages.forEach(page => {
                 const option = document.createElement('option');
                 option.value = page.id;
@@ -1645,15 +1707,15 @@ document.addEventListener('KyteInitialized', function(e) {
                 }
                 pageSelect.appendChild(option);
             });
-            
+
             // Set link value if custom link
             if (linkType === 'link') {
                 clone.querySelector('.sidenav-item-link').value = item.link || '';
             }
-            
+
             // Show/hide appropriate fields based on type
             toggleSideNavigationItemFields(clone, linkType);
-            
+
             return clone;
         }
 
@@ -1732,14 +1794,18 @@ document.addEventListener('KyteInitialized', function(e) {
             document.getElementById('sidenav-info-item-count').textContent = sideNavItems.length || '0';
             
             // Update column style display
-            const columnStyleNames = ['Default Style', 'Rounded Corners', 'Rounded + Full Height'];
-            const columnStyleName = columnStyleNames[sideNavData.columnStyle || 0];
-            document.getElementById('sidenav-info-column-style').textContent = columnStyleName;
-            
+            const columnStyleKeys = ['ui.site_detail.sidenav.badge_default', 'ui.site_detail.sidenav.badge_rounded', 'ui.site_detail.sidenav.badge_rounded_full'];
+            const columnStyleKey = columnStyleKeys[sideNavData.columnStyle || 0];
+            const columnStyleBadge = document.getElementById('sidenav-info-column-style');
+            columnStyleBadge.setAttribute('data-i18n', columnStyleKey);
+            columnStyleBadge.textContent = window.kyteI18n ? window.kyteI18n.t(columnStyleKey) : 'Default';
+
             // Update item style display
-            const itemStyleNames = ['Left Aligned', 'Centered'];
-            const itemStyleName = itemStyleNames[sideNavData.labelCenterBlock || 0];
-            document.getElementById('sidenav-info-item-style').textContent = itemStyleName;
+            const itemStyleKeys = ['ui.site_detail.sidenav.badge_left_aligned', 'ui.site_detail.sidenav.badge_centered'];
+            const itemStyleKey = itemStyleKeys[sideNavData.labelCenterBlock || 0];
+            const itemStyleBadge = document.getElementById('sidenav-info-item-style');
+            itemStyleBadge.setAttribute('data-i18n', itemStyleKey);
+            itemStyleBadge.textContent = window.kyteI18n ? window.kyteI18n.t(itemStyleKey) : 'Left Aligned';
             
             if (sideNavData.date_modified) {
                 const date = new Date(sideNavData.date_modified);
@@ -1840,10 +1906,12 @@ document.addEventListener('KyteInitialized', function(e) {
                     });
                     const selectedLayout = document.querySelector(`[data-column-style="${currentColumnStyle}"]`);
                     if (selectedLayout) selectedLayout.classList.add('selected');
-                    const columnStyleNames = ['Default Style', 'Rounded Corners', 'Rounded + Full Height'];
-                    document.getElementById('sidenav-info-column-style').textContent = columnStyleNames[currentColumnStyle];
+                    const columnStyleKeys = ['ui.site_detail.sidenav.badge_default', 'ui.site_detail.sidenav.badge_rounded', 'ui.site_detail.sidenav.badge_rounded_full'];
+                    const columnStyleBadge = document.getElementById('sidenav-info-column-style');
+                    columnStyleBadge.setAttribute('data-i18n', columnStyleKeys[currentColumnStyle]);
+                    columnStyleBadge.textContent = window.kyteI18n ? window.kyteI18n.t(columnStyleKeys[currentColumnStyle]) : 'Default';
                 }
-                
+
                 if (event.target.name === 'navItemStyle') {
                     currentNavItemStyle = parseInt(event.target.value);
                     // Update visual selection
@@ -1852,8 +1920,10 @@ document.addEventListener('KyteInitialized', function(e) {
                     });
                     const selectedNavItem = document.querySelector(`[data-nav-item-style="${currentNavItemStyle}"]`);
                     if (selectedNavItem) selectedNavItem.classList.add('selected');
-                    const itemStyleNames = ['Left Aligned', 'Centered'];
-                    document.getElementById('sidenav-info-item-style').textContent = itemStyleNames[currentNavItemStyle];
+                    const itemStyleKeys = ['ui.site_detail.sidenav.badge_left_aligned', 'ui.site_detail.sidenav.badge_centered'];
+                    const itemStyleBadge = document.getElementById('sidenav-info-item-style');
+                    itemStyleBadge.setAttribute('data-i18n', itemStyleKeys[currentNavItemStyle]);
+                    itemStyleBadge.textContent = window.kyteI18n ? window.kyteI18n.t(itemStyleKeys[currentNavItemStyle]) : 'Left Aligned';
 
                     // Update preview
                     updateSideNavigationPreview();
@@ -2060,7 +2130,8 @@ document.addEventListener('KyteInitialized', function(e) {
 
         // Create new side navigation menu
         function createNewSideNavigation(_ks, siteId) {
-            const name = prompt('Enter side navigation menu name:');
+            const promptText = window.kyteI18n ? window.kyteI18n.t('ui.site_detail.sidenav.create_prompt') : 'Enter side navigation menu name:';
+            const name = prompt(promptText);
             if (!name) return;
             
             const newSideNavData = {
@@ -2174,6 +2245,7 @@ document.addEventListener('KyteInitialized', function(e) {
 
         initializeSideNavigationManagement(_ks, idx);
 
+        }); // end waitForI18n
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
     }

@@ -21,7 +21,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
-    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
     <script>
         // Auto-detect localhost and load non-obfuscated source files for development
         (function() {
@@ -32,6 +45,7 @@
                 'kyte-shipyard.js',
                 'navigation.js',
                 'kyte-shipyard-tables.js',
+                'kyte-i18n.js',
                 'kyte-shipyard-system-log.js'
             ];
 
@@ -44,9 +58,29 @@
             }
         })();
     </script>
+
+    <!-- Initialize i18n for authenticated pages -->
     <script>
-        // Initialize account-level navigation for system log page
         document.addEventListener('KyteInitialized', function(e) {
+            const kyteI18n = new KyteI18n('en', '/assets/i18n/');
+
+            // Make kyteI18n globally available
+            window.kyteI18n = kyteI18n;
+
+            // Get user language from localStorage (stored during login)
+            const cachedLanguage = localStorage.getItem('kyte_user_language');
+
+            // Initialize with cached language or browser detection
+            kyteI18n.init(cachedLanguage).then(() => {
+                console.log('[i18n] Page initialized with language:', kyteI18n.getCurrentLanguage());
+                kyteI18n.translateDOM();
+
+                // Dispatch custom event after i18n is fully loaded
+                document.dispatchEvent(new CustomEvent('KyteI18nReady'));
+            }).catch(error => {
+                console.error('[i18n] Failed to initialize:', error);
+            });
+
             let navbar = new KyteNav("#mainnav", rootnav, null, 'Kyte Shipyard<sup>&trade;</sup><img src="/assets/images/kyte_shipyard_light.png">');
             navbar.create();
         });
@@ -647,34 +681,34 @@
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
                             <a class="nav-link me-2 text-light" href="/app/">
-                                <i class="fas fa-rocket me-2"></i>Projects
+                                <i class="fas fa-rocket me-2"></i><span data-i18n="nav.projects">Projects</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link me-2 text-light" href="/app/aws.html">
-                                <i class="fab fa-aws me-2"></i>AWS Keys
+                                <i class="fab fa-aws me-2"></i><span data-i18n="nav.aws_keys">AWS Keys</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link me-2 text-light" href="/app/keys.html">
-                                <i class="fas fa-key me-2"></i>API Keys
+                                <i class="fas fa-key me-2"></i><span data-i18n="nav.api_keys">API Keys</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link me-2 text-light" href="/app/system-log.html">
-                                <i class="fas fa-list-alt me-2"></i>System Log
+                                <i class="fas fa-list-alt me-2"></i><span data-i18n="nav.system_log">System Log</span>
                             </a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle me-2 text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user-circle me-2"></i>Account
+                                <i class="fas fa-user-circle me-2"></i><span data-i18n="nav.account">Account</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i><span data-i18n="nav.settings">Settings</span></a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i>Logout</a></li>
+                                <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i><span data-i18n="nav.logout">Logout</span></a></li>
                             </ul>
                         </li>
                     </ul>
@@ -691,42 +725,42 @@
                     
                     <!-- Filter Panel -->
                     <div class="filter-panel">
-                        <h5><i class="fas fa-filter me-2"></i>Filter Logs</h5>
+                        <h5><i class="fas fa-filter me-2"></i><span data-i18n="ui.system_log.filter.title">Filter Logs</span></h5>
                         <div class="filter-row">
                             <div class="filter-group">
-                                <label for="filter-log-level">Log Level</label>
+                                <label for="filter-log-level" data-i18n="ui.system_log.filter.log_level">Log Level</label>
                                 <select id="filter-log-level" multiple>
-                                    <option value="debug">Debug</option>
-                                    <option value="info">Info</option>
-                                    <option value="warning">Warning</option>
-                                    <option value="error" selected>Error</option>
-                                    <option value="critical" selected>Critical</option>
+                                    <option value="debug" data-i18n="ui.system_log.filter.level.debug">Debug</option>
+                                    <option value="info" data-i18n="ui.system_log.filter.level.info">Info</option>
+                                    <option value="warning" data-i18n="ui.system_log.filter.level.warning">Warning</option>
+                                    <option value="error" selected data-i18n="ui.system_log.filter.level.error">Error</option>
+                                    <option value="critical" selected data-i18n="ui.system_log.filter.level.critical">Critical</option>
                                 </select>
                             </div>
                             <div class="filter-group">
-                                <label for="filter-source">Source</label>
+                                <label for="filter-source" data-i18n="ui.system_log.filter.source">Source</label>
                                 <select id="filter-source">
-                                    <option value="">All Sources</option>
-                                    <option value="error_handler">Error Handler</option>
-                                    <option value="exception_handler">Exception Handler</option>
-                                    <option value="logger">Logger</option>
-                                    <option value="output_buffer">Output Buffer</option>
+                                    <option value="" data-i18n="ui.system_log.filter.all_sources">All Sources</option>
+                                    <option value="error_handler" data-i18n="ui.system_log.filter.error_handler">Error Handler</option>
+                                    <option value="exception_handler" data-i18n="ui.system_log.filter.exception_handler">Exception Handler</option>
+                                    <option value="logger" data-i18n="ui.system_log.filter.logger">Logger</option>
+                                    <option value="output_buffer" data-i18n="ui.system_log.filter.output_buffer">Output Buffer</option>
                                 </select>
                             </div>
                             <div class="filter-group">
-                                <label for="filter-start-date">Start Date</label>
-                                <input type="text" id="filter-start-date" placeholder="Select start date" readonly>
+                                <label for="filter-start-date" data-i18n="ui.system_log.filter.start_date">Start Date</label>
+                                <input type="text" id="filter-start-date" data-i18n-placeholder="ui.system_log.filter.start_date_placeholder" placeholder="Select start date" readonly>
                             </div>
                             <div class="filter-group">
-                                <label for="filter-end-date">End Date</label>
-                                <input type="text" id="filter-end-date" placeholder="Select end date" readonly>
+                                <label for="filter-end-date" data-i18n="ui.system_log.filter.end_date">End Date</label>
+                                <input type="text" id="filter-end-date" data-i18n-placeholder="ui.system_log.filter.end_date_placeholder" placeholder="Select end date" readonly>
                             </div>
                             <div class="filter-actions">
                                 <button id="btn-apply-filter" class="btn-filter">
-                                    <i class="fas fa-check me-1"></i> Apply
+                                    <i class="fas fa-check me-1"></i> <span data-i18n="ui.system_log.filter.apply">Apply</span>
                                 </button>
                                 <button id="btn-clear-filter" class="btn-clear">
-                                    <i class="fas fa-times me-1"></i> Clear
+                                    <i class="fas fa-times me-1"></i> <span data-i18n="ui.system_log.filter.clear">Clear</span>
                                 </button>
                             </div>
                         </div>
@@ -743,10 +777,10 @@
     <footer>
         <div class="footer-content d-flex justify-content-between align-items-center">
             <div class="footer-versions">
-                <div>Kyte Shipyard™ Version <span id="kyteShipyardVersion"></span></div>
-                <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
+                <div><span data-i18n="footer.shipyard_version">Kyte Shipyard™ Version</span> <span id="kyteShipyardVersion"></span></div>
+                <div><span data-i18n="footer.js_version">Kyte JS Version</span> <span id="kyteJSVersion"></span></div>
             </div>
-            <p class="footer-copyright mb-0">KeyQ © 2020-2026</p>
+            <p class="footer-copyright mb-0" data-i18n="footer.copyright">KeyQ © 2020-2026</p>
         </div>
     </footer>
 </body>

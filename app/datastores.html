@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Kyte - Shipyard</title>
+    <title data-i18n="ui.datastores.page_title">Data Stores - Kyte Shipyard</title>
     <!-- Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
@@ -21,7 +21,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
-    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
     <script>
         // Auto-detect localhost and load non-obfuscated source files for development
         (function() {
@@ -29,6 +42,7 @@
             const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
 
             const scripts = [
+                'kyte-i18n.js',
                 'kyte-shipyard.js',
                 'navigation.js',
                 'kyte-shipyard-datastores.js',
@@ -43,6 +57,27 @@
                 console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
             }
         })();
+    </script>
+
+    <!-- Initialize i18n for authenticated pages -->
+    <script>
+        document.addEventListener('KyteInitialized', function(e) {
+            const kyteI18n = new KyteI18n('en', '/assets/i18n/');
+
+            // Make kyteI18n globally available for sidebar translation
+            window.kyteI18n = kyteI18n;
+
+            // Get user language from localStorage (stored during login)
+            const cachedLanguage = localStorage.getItem('kyte_user_language');
+
+            // Initialize with cached language or browser detection
+            kyteI18n.init(cachedLanguage).then(() => {
+                console.log('[i18n] Page initialized with language:', kyteI18n.getCurrentLanguage());
+                kyteI18n.translateDOM();
+            }).catch(error => {
+                console.error('[i18n] Failed to initialize:', error);
+            });
+        });
     </script>
 
 </head>
@@ -83,12 +118,12 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-2"></i>Account
+                            <i class="fas fa-user-circle me-2"></i><span data-i18n="nav.account">Account</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i><span data-i18n="nav.settings">Settings</span></a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i>Logout</a></li>
+                            <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i><span data-i18n="nav.logout">Logout</span></a></li>
                         </ul>
                     </li>
                 </ul>
@@ -112,13 +147,13 @@
             <div class="page-header">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h1 class="section-heading">Data Store</h1>
-                        <p class="page-subtitle">Create and manage your object stores.</p>
+                        <h1 class="section-heading" data-i18n="ui.datastores.title">Data Stores</h1>
+                        <p class="page-subtitle" data-i18n="ui.datastores.subtitle">Configure S3 storage buckets for your application data</p>
                     </div>
                     <div>
                         <a class="btn-new" href="#" id="new">
                             <i class="fas fa-plus"></i>
-                            New
+                            <span data-i18n="ui.datastores.new">New</span>
                         </a>
                     </div>
                 </div>
@@ -138,10 +173,10 @@
     <footer>
         <div class="footer-content d-flex justify-content-between align-items-center">
             <div class="footer-versions">
-                <div>Kyte Shipyard™ Version <span id="kyteShipyardVersion"></span></div>
-                <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
+                <div><span data-i18n="footer.shipyard_version">Kyte Shipyard™ Version</span> <span id="kyteShipyardVersion"></span></div>
+                <div><span data-i18n="footer.js_version">Kyte JS Version</span> <span id="kyteJSVersion"></span></div>
             </div>
-            <p class="footer-copyright mb-0">KeyQ © 2020-2026</p>
+            <p class="footer-copyright mb-0" data-i18n="footer.copyright">KeyQ © 2020-2026</p>
         </div>
     </footer>
 </body>

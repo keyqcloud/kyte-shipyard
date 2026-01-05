@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Kyte - Web Component Editor</title>
+    <title>Web Component Editor - Kyte Shipyard</title>
     <!-- Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
@@ -21,8 +21,23 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
+    <!-- html2canvas for snapshot feature -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- Kyte -->
-    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
     <script>
         // Auto-detect localhost and load non-obfuscated source files for development
         (function() {
@@ -30,6 +45,7 @@
             const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
 
             const scripts = [
+                'kyte-i18n.js',
                 'kyte-shipyard.js',
                 'navigation.js',
                 'kyte-shipyard-tables.js'
@@ -39,14 +55,44 @@
                 document.write('<script src="' + jsPath + script + '"><\/script>');
             });
 
+            // Load component details script (not a module anymore - uses AMD loader)
+            const componentDetailsPath = isLocalhost
+                ? '/assets/js/source/kyte-shipyard-component-details.js'
+                : '/assets/js/kyte-shipyard-component-details.js';
+            document.write('<script src="' + componentDetailsPath + '"><\/script>');
+
             if (isLocalhost) {
                 console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
             }
         })();
     </script>
-    <script type="module" src="/assets/js/kyte-shipyard-component-details.js"></script>
+
+    <!-- Monaco Editor Loader -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+    <script>
+        // Configure Monaco Editor loader
+        require.config({
+            paths: {
+                'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs'
+            }
+        });
+    </script>
 
     <style>
+        /* Fix Monaco Editor codicon font */
+        @font-face {
+            font-family: "codicon";
+            font-display: block;
+            src: url("https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/base/browser/ui/codicons/codicon/codicon.ttf") format("truetype");
+        }
+
+        /* Override any Monaco styles that might be looking for local codicon font */
+        .monaco-editor .codicon,
+        .monaco-workbench .codicon,
+        .codicon[class*='codicon-'] {
+            font-family: "codicon" !important;
+        }
+
         * {
             box-sizing: border-box;
         }
@@ -570,6 +616,125 @@
             min-height: 80px;
             resize: vertical;
         }
+
+        /* Preview Mode Buttons */
+        .preview-mode-btn {
+            background: #3c3c3c !important;
+            border: 1px solid #5a5a5a !important;
+            color: #d4d4d4 !important;
+            padding: 0.25rem 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .preview-mode-btn:hover {
+            background: #4a4a4a !important;
+            color: #ffffff !important;
+        }
+
+        .preview-mode-btn.active {
+            background: #ff6b35 !important;
+            border-color: #ff6b35 !important;
+            color: #ffffff !important;
+        }
+
+        /* Quick Test Preview Grid */
+        .quick-test-preview {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 1fr;
+            padding: 1rem;
+            background: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 8px;
+            min-height: 400px;
+        }
+
+        .quick-test-preview.instances-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .quick-test-preview.instances-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .quick-test-item {
+            background: #ffffff;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        /* Quick Test Mode Buttons */
+        .quick-test-mode-btn {
+            background: #3c3c3c;
+            border: 1px solid #5a5a5a;
+            color: #d4d4d4;
+        }
+
+        .quick-test-mode-btn:hover {
+            background: #4a4a4a;
+            color: #ffffff;
+        }
+
+        .quick-test-mode-btn.active {
+            background: #ff6b35;
+            border-color: #ff6b35;
+            color: #ffffff;
+        }
+
+        /* Preview Container Responsive Width */
+        .preview-container iframe {
+            max-width: 100%;
+            margin: 0 auto;
+            display: block;
+            transition: width 0.3s ease;
+        }
+
+        /* Modal Tab Styling */
+        .nav-tabs .nav-link {
+            background: #252526;
+            border: 1px solid #3e3e42;
+            color: #d4d4d4;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background: #2d2d30;
+            color: #ffffff;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: #ff6b35;
+            border-color: #ff6b35;
+            color: #ffffff;
+        }
+
+        /* Sample Data Editor Container */
+        .sample-data-editor {
+            position: relative;
+        }
+
+        .sample-data-editor #sampleDataEditor {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Properties Panel Type Icons */
+        .property-type-icon {
+            color: #969696;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Enhanced placeholder item with type selector */
+        .placeholder-item .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .placeholder-item select.form-select {
+            max-width: 150px;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 
@@ -624,19 +789,31 @@
                         <div>
                             <a class="btn-editor btn-editor-danger" id="backToController" href="#">
                                 <i class="fas fa-arrow-left"></i>
-                                Exit
+                                <span data-i18n="ui.component_editor.exit">Exit</span>
                             </a>
                         </div>
-                        
+
                         <div class="component-info">
                             <h2 class="component-title" id="component-name">Component Name</h2>
                             <h3 class="component-identifier" id="component-identifier">component-identifier</h3>
                         </div>
-                        
+
                         <div class="d-flex gap-2">
+                            <button class="btn-editor btn-editor-success" id="getCodeBtn">
+                                <i class="fas fa-code"></i>
+                                <span data-i18n="ui.component_editor.get_code">Get Code</span>
+                            </button>
+                            <button class="btn-editor btn-editor-info" id="snapshotBtn" data-i18n-title="ui.component_editor.snapshot.tooltip" title="Take preview snapshot for gallery view">
+                                <i class="fas fa-camera"></i>
+                                <span data-i18n="ui.component_editor.snapshot">Snapshot</span>
+                            </button>
+                            <button class="btn-editor btn-editor-success" id="exportBtn">
+                                <i class="fas fa-download"></i>
+                                <span data-i18n="ui.component_editor.export">Export</span>
+                            </button>
                             <button class="btn-editor btn-editor-warning" id="saveCode">
                                 <i class="fas fa-save"></i>
-                                Save
+                                <span data-i18n="ui.component_editor.save">Save</span>
                             </button>
                         </div>
                     </div>
@@ -645,11 +822,23 @@
                     <div class="editor-tabs">
                         <button class="editor-tab active" data-target="Editor">
                             <i class="fas fa-code"></i>
-                            Code Editor
+                            <span data-i18n="ui.component_editor.tabs.code_editor">Code Editor</span>
+                        </button>
+                        <button class="editor-tab" data-target="SampleData">
+                            <i class="fas fa-database"></i>
+                            <span data-i18n="ui.component_editor.tabs.sample_data">Sample Data</span>
+                        </button>
+                        <button class="editor-tab" data-target="QuickTest">
+                            <i class="fas fa-vial"></i>
+                            <span data-i18n="ui.component_editor.tabs.quick_test">Quick Test</span>
                         </button>
                         <button class="editor-tab" data-target="Settings">
                             <i class="fas fa-cog"></i>
-                            Settings
+                            <span data-i18n="ui.component_editor.tabs.settings">Settings</span>
+                        </button>
+                        <button class="editor-tab" data-target="Help">
+                            <i class="fas fa-question-circle"></i>
+                            <span data-i18n="ui.component_editor.tabs.help">Help</span>
                         </button>
                     </div>
                 </div>
@@ -663,45 +852,60 @@
                             <div class="editor-panel">
                                 <div class="panel-header">
                                     <i class="fab fa-html5 me-2"></i>
-                                    HTML Template
+                                    <span data-i18n="ui.component_editor.panels.html_template">HTML Template</span>
                                 </div>
                                 <div class="panel-content">
                                     <div id="htmlEditor" class="monaco-container"></div>
                                 </div>
                             </div>
-                            
+
                             <!-- CSS Editor -->
                             <div class="editor-panel">
                                 <div class="panel-header">
                                     <i class="fab fa-css3-alt me-2"></i>
-                                    CSS Styles
+                                    <span data-i18n="ui.component_editor.panels.css_styles">CSS Styles</span>
                                 </div>
                                 <div class="panel-content">
                                     <div id="cssEditor" class="monaco-container"></div>
                                 </div>
                             </div>
-                            
+
                             <!-- Preview -->
                             <div class="editor-panel">
                                 <div class="panel-header">
-                                    <i class="fas fa-eye me-2"></i>
-                                    Live Preview
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fas fa-eye me-2"></i>
+                                            <span data-i18n="ui.component_editor.panels.live_preview">Live Preview</span>
+                                        </div>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <button type="button" class="btn btn-sm preview-mode-btn active" data-width="100%" data-i18n-title="ui.component_editor.preview.desktop" title="Desktop">
+                                                <i class="fas fa-desktop"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm preview-mode-btn" data-width="768px" data-i18n-title="ui.component_editor.preview.tablet" title="Tablet">
+                                                <i class="fas fa-tablet-alt"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm preview-mode-btn" data-width="375px" data-i18n-title="ui.component_editor.preview.mobile" title="Mobile">
+                                                <i class="fas fa-mobile-alt"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="panel-content">
                                     <div id="preview" class="preview-container"></div>
                                 </div>
                             </div>
-                            
+
                             <!-- Properties Panel -->
                             <div class="editor-panel">
                                 <div class="panel-header">
                                     <i class="fas fa-sliders-h me-2"></i>
-                                    Properties & Placeholders
+                                    <span data-i18n="ui.component_editor.panels.properties">Properties & Placeholders</span>
                                 </div>
                                 <div class="panel-content">
                                     <div class="properties-container">
                                         <div class="properties-section">
-                                            <h6>Template Placeholders</h6>
+                                            <h6 data-i18n="ui.component_editor.panels.template_placeholders">Template Placeholders</h6>
                                             <div id="placeholderWrapper">
                                                 <!-- Placeholder inputs will be generated here -->
                                             </div>
@@ -714,31 +918,136 @@
                     
                     <!-- Settings Section -->
                     <div id="Settings" class="secondary-content">
-                        <h4 class="mb-4">Component Settings</h4>
+                        <h4 class="mb-4" data-i18n="ui.component_editor.settings.title">Component Settings</h4>
                         <div class="settings-grid">
                             <!-- Component Name -->
                             <div class="setting-card">
-                                <div class="setting-card-header">Component Name</div>
+                                <div class="setting-card-header" data-i18n="ui.component_editor.settings.component_name">Component Name</div>
                                 <div class="setting-card-body">
-                                    <input type="text" class="form-control" id="setting-component-name" placeholder="Enter component name" />
+                                    <input type="text" class="form-control" id="setting-component-name" data-i18n-placeholder="ui.component_editor.settings.placeholder.name" placeholder="Enter component name" />
                                 </div>
                             </div>
-                            
+
                             <!-- Component Identifier -->
                             <div class="setting-card">
-                                <div class="setting-card-header">Component Identifier</div>
+                                <div class="setting-card-header" data-i18n="ui.component_editor.settings.component_identifier">Component Identifier</div>
                                 <div class="setting-card-body">
-                                    <input type="text" class="form-control" id="setting-component-identifier" placeholder="component-identifier" />
-                                    <small class="text-muted mt-2 d-block">Unique identifier for this component</small>
+                                    <input type="text" class="form-control" id="setting-component-identifier" data-i18n-placeholder="ui.component_editor.settings.placeholder.identifier" placeholder="component-identifier" />
+                                    <small class="text-muted mt-2 d-block" data-i18n="ui.component_editor.settings.identifier_help">Unique identifier for this component</small>
                                 </div>
                             </div>
-                            
+
                             <!-- Description -->
                             <div class="setting-card">
-                                <div class="setting-card-header">Description</div>
+                                <div class="setting-card-header" data-i18n="ui.component_editor.settings.description">Description</div>
                                 <div class="setting-card-body">
-                                    <textarea class="form-control" id="setting-component-description" placeholder="Describe the purpose and usage of this component"></textarea>
+                                    <textarea class="form-control" id="setting-component-description" data-i18n-placeholder="ui.component_editor.settings.placeholder.description" placeholder="Describe the purpose and usage of this component"></textarea>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sample Data Section -->
+                    <div id="SampleData" class="secondary-content">
+                        <h4 class="mb-4" data-i18n="ui.component_editor.sample_data.title">Sample Data for Testing</h4>
+                        <p class="text-muted mb-3" data-i18n="ui.component_editor.sample_data.description">Define sample data as a JSON array to test your component with realistic values. The preview will render multiple instances using this data.</p>
+                        <div class="sample-data-editor" style="height: 500px; border: 1px solid #3e3e42; border-radius: 8px;">
+                            <div id="sampleDataEditor"></div>
+                        </div>
+                        <div class="mt-3">
+                            <button class="btn btn-sm btn-success" id="applySampleDataBtn">
+                                <i class="fas fa-check"></i> <span data-i18n="ui.component_editor.sample_data.apply">Apply Sample Data to Preview</span>
+                            </button>
+                            <button class="btn btn-sm btn-secondary" id="clearSampleDataBtn">
+                                <i class="fas fa-times"></i> <span data-i18n="ui.component_editor.sample_data.clear">Clear</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Test Section -->
+                    <div id="QuickTest" class="secondary-content">
+                        <h4 class="mb-4" data-i18n="ui.component_editor.quick_test.title">Quick Test - Multiple Instances</h4>
+                        <p class="text-muted mb-3" data-i18n="ui.component_editor.quick_test.description">See how your component looks with multiple instances side-by-side</p>
+                        <div class="d-flex gap-2 mb-3">
+                            <button class="btn btn-sm btn-primary quick-test-mode-btn active" data-instances="1" data-i18n="ui.component_editor.quick_test.single">Single</button>
+                            <button class="btn btn-sm btn-primary quick-test-mode-btn" data-instances="2" data-i18n="ui.component_editor.quick_test.double">Double</button>
+                            <button class="btn btn-sm btn-primary quick-test-mode-btn" data-instances="3" data-i18n="ui.component_editor.quick_test.triple">Triple</button>
+                        </div>
+                        <div id="quickTestPreview" class="quick-test-preview">
+                            <!-- Multiple component instances will be rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- Help Section -->
+                    <div id="Help" class="secondary-content">
+                        <h4 class="mb-4" data-i18n="ui.component_editor.help.title">Web Component Help & Documentation</h4>
+
+                        <div class="setting-card mb-3">
+                            <div class="setting-card-header">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <span data-i18n="ui.component_editor.help.what.title">What are Web Components?</span>
+                            </div>
+                            <div class="setting-card-body">
+                                <p data-i18n="ui.component_editor.help.what.description">Web Components are reusable HTML+CSS templates that can be dynamically populated with data. They use mustache-style placeholders for dynamic content.</p>
+                            </div>
+                        </div>
+
+                        <div class="setting-card mb-3">
+                            <div class="setting-card-header">
+                                <i class="fas fa-code me-2"></i>
+                                <span data-i18n="ui.component_editor.help.syntax.title">Placeholder Syntax</span>
+                            </div>
+                            <div class="setting-card-body">
+                                <p data-i18n="ui.component_editor.help.syntax.description">Use double curly braces to create placeholders in your HTML:</p>
+                                <pre style="background: #1e1e1e; padding: 1rem; border-radius: 4px; color: #d4d4d4;"><code>&lt;h3&gt;<span style="color: #ff6b35;">{{title}}</span>&lt;/h3&gt;
+&lt;p&gt;<span style="color: #ff6b35;">{{description}}</span>&lt;/p&gt;
+&lt;img src="<span style="color: #ff6b35;">{{image_url}}</span>" /&gt;</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="setting-card mb-3">
+                            <div class="setting-card-header">
+                                <i class="fas fa-laptop-code me-2"></i>
+                                <span data-i18n="ui.component_editor.help.usage.title">Using in Your Application</span>
+                            </div>
+                            <div class="setting-card-body">
+                                <p data-i18n="ui.component_editor.help.usage.description">Load and use your component with kyte-api-js:</p>
+                                <pre style="background: #1e1e1e; padding: 1rem; border-radius: 4px; color: #d4d4d4; font-size: 0.85rem;"><code>// Load component from API
+_kyte.get('KyteWebComponent', 'identifier', 'my-component', [], (r) => {
+    let component = r.data[0];
+    let components = {};
+    components[component.identifier] =
+        component.html + '&lt;style&gt;' + component.stylesheet + '&lt;/style&gt;';
+
+    // Create instance and bind data
+    let kwc = new KyteWebComponent(components);
+    kwc.bind('#container', component.identifier, yourDataArray);
+});</code></pre>
+                                <p class="mt-2"><small data-i18n="ui.component_editor.help.usage.note" data-i18n-html="true">Use the <strong>"Get Code"</strong> button for component-specific code you can copy.</small></p>
+                            </div>
+                        </div>
+
+                        <div class="setting-card mb-3">
+                            <div class="setting-card-header">
+                                <i class="fas fa-paint-brush me-2"></i>
+                                <span data-i18n="ui.component_editor.help.css.title">CSS Scoping Tips</span>
+                            </div>
+                            <div class="setting-card-body">
+                                <ul>
+                                    <li data-i18n="ui.component_editor.help.css.tip1">Use unique class names to avoid conflicts</li>
+                                    <li data-i18n="ui.component_editor.help.css.tip2">Component CSS is injected inline with HTML</li>
+                                    <li data-i18n="ui.component_editor.help.css.tip3" data-i18n-html="true">Consider using a prefix for your component classes (e.g., <code>.card-component-title</code>)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="setting-card">
+                            <div class="setting-card-header">
+                                <i class="fas fa-book me-2"></i>
+                                <span data-i18n="ui.component_editor.help.resources.title">Additional Resources</span>
+                            </div>
+                            <div class="setting-card-body">
+                                <p><span data-i18n="ui.component_editor.help.resources.description">For full documentation, visit:</span> <a href="https://docs.keyq.cloud/web-components" target="_blank" style="color: #ff6b35;">https://docs.keyq.cloud/web-components</a></p>
                             </div>
                         </div>
                     </div>
@@ -760,5 +1069,151 @@
 
     <!-- modal form -->
     <div id="modalForm"></div>
+
+    <!-- Get Code Modal -->
+    <div class="modal fade" id="getCodeModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background: #2d2d30; color: #d4d4d4; border: 1px solid #3e3e42;">
+                <div class="modal-header" style="border-bottom: 1px solid #3e3e42;">
+                    <h5 class="modal-title" style="color: #ffffff;">
+                        <i class="fas fa-code me-2"></i>
+                        <span data-i18n="ui.component_editor.modal.get_code.title">Component Usage Code</span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-3" id="codeModalTabs" role="tablist" style="border-bottom: 1px solid #3e3e42;">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="loadingCode-tab" data-bs-toggle="tab" data-bs-target="#loadingCode" type="button" style="color: #d4d4d4;" data-i18n="ui.component_editor.modal.get_code.tab.loading">Loading Component</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="usageCode-tab" data-bs-toggle="tab" data-bs-target="#usageCode" type="button" style="color: #d4d4d4;" data-i18n="ui.component_editor.modal.get_code.tab.usage">Usage Example</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="sampleDataCode-tab" data-bs-toggle="tab" data-bs-target="#sampleDataCode" type="button" style="color: #d4d4d4;" data-i18n="ui.component_editor.modal.get_code.tab.sample_data">Sample Data</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="codeModalTabContent">
+                        <div class="tab-pane fade show active" id="loadingCode" role="tabpanel">
+                            <pre style="background: #1e1e1e; padding: 1rem; border-radius: 4px; color: #d4d4d4; max-height: 400px; overflow-y: auto;"><code id="loadingCodeContent"></code></pre>
+                            <button class="btn btn-sm btn-success mt-2" onclick="copyToClipboard('loadingCodeContent')">
+                                <i class="fas fa-copy me-1"></i> <span data-i18n="ui.component_editor.modal.get_code.copy">Copy Code</span>
+                            </button>
+                        </div>
+                        <div class="tab-pane fade" id="usageCode" role="tabpanel">
+                            <pre style="background: #1e1e1e; padding: 1rem; border-radius: 4px; color: #d4d4d4; max-height: 400px; overflow-y: auto;"><code id="usageCodeContent"></code></pre>
+                            <button class="btn btn-sm btn-success mt-2" onclick="copyToClipboard('usageCodeContent')">
+                                <i class="fas fa-copy me-1"></i> <span data-i18n="ui.component_editor.modal.get_code.copy">Copy Code</span>
+                            </button>
+                        </div>
+                        <div class="tab-pane fade" id="sampleDataCode" role="tabpanel">
+                            <pre style="background: #1e1e1e; padding: 1rem; border-radius: 4px; color: #d4d4d4; max-height: 400px; overflow-y: auto;"><code id="sampleDataCodeContent"></code></pre>
+                            <button class="btn btn-sm btn-success mt-2" onclick="copyToClipboard('sampleDataCodeContent')">
+                                <i class="fas fa-copy me-1"></i> <span data-i18n="ui.component_editor.modal.get_code.copy">Copy Code</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Component Modal -->
+    <div class="modal fade" id="importModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background: #2d2d30; color: #d4d4d4; border: 1px solid #3e3e42;">
+                <div class="modal-header" style="border-bottom: 1px solid #3e3e42;">
+                    <h5 class="modal-title" style="color: #ffffff;">
+                        <i class="fas fa-upload me-2"></i>
+                        <span data-i18n="ui.component_editor.modal.import.title">Import Component</span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p data-i18n="ui.component_editor.modal.import.description">Upload a JSON file exported from another component to import it.</p>
+                    <input type="file" class="form-control" id="importFileInput" accept=".json" style="background: #3c3c3c; border: 1px solid #5a5a5a; color: #d4d4d4;">
+                    <div class="mt-3" id="importPreview" style="display: none;">
+                        <h6 data-i18n="ui.component_editor.modal.import.preview_title">Component Preview:</h6>
+                        <ul id="importPreviewDetails" style="font-size: 0.9rem;"></ul>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #3e3e42;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="ui.component_editor.modal.import.cancel">Cancel</button>
+                    <button type="button" class="btn btn-success" id="importConfirmBtn" disabled>
+                        <i class="fas fa-check me-1"></i> <span data-i18n="ui.component_editor.modal.import.confirm">Import</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Component Templates Modal (for new components) -->
+    <div class="modal fade" id="templatesModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content" style="background: #2d2d30; color: #d4d4d4; border: 1px solid #3e3e42;">
+                <div class="modal-header" style="border-bottom: 1px solid #3e3e42;">
+                    <h5 class="modal-title" style="color: #ffffff;">
+                        <i class="fas fa-th-large me-2"></i>
+                        <span data-i18n="ui.component_editor.modal.templates.title">Choose a Component Template</span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3" id="templatesGrid">
+                        <!-- Template cards will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Initialize i18n for authenticated pages -->
+    <script>
+        document.addEventListener('KyteInitialized', async function(e) {
+            // Get user's stored language preference
+            const userLanguage = localStorage.getItem('kyte_user_language');
+
+            const kyteI18n = new KyteI18n('en', '/assets/i18n/');
+
+            // Initialize with user's preference (falls back to browser detection if null)
+            await kyteI18n.init(userLanguage);
+
+            // Make kyteI18n globally available
+            window.kyteI18n = kyteI18n;
+
+            // Translate all DOM elements with data-i18n attributes
+            kyteI18n.translateDOM();
+
+            // Manually update page title
+            document.title = kyteI18n.t('ui.component_editor.page_title');
+        });
+    </script>
+
+    <script>
+        // Copy to clipboard helper function
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            const t = window.kyteI18n ? (key) => window.kyteI18n.t(key) : (key) => key;
+
+            navigator.clipboard.writeText(text).then(() => {
+                // Show success feedback
+                const btn = event.target.closest('button');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check me-1"></i> ' + t('ui.component_editor.modal.get_code.copied');
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-info');
+
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.remove('btn-info');
+                    btn.classList.add('btn-success');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert(t('ui.component_editor.modal.get_code.copy_failed') || 'Failed to copy to clipboard');
+            });
+        }
+    </script>
 </body>
 </html>

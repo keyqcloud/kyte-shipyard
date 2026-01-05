@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Kyte - Shipyard</title>
+    <title data-i18n="ui.dashboard.page_title">Dashboard - Kyte Shipyard</title>
     <!-- Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
@@ -22,7 +22,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
-    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
     <script>
         // Auto-detect localhost and load non-obfuscated source files for development
         (function() {
@@ -33,8 +46,9 @@
                 'kyte-shipyard.js',
                 'navigation.js',
                 'kyte-shipyard-tables.js',
+                'kyte-i18n.js',
                 'kyte-shipyard-app-dashboard.js',
-                'kyte-shipyard-sites.js'
+                'kyte-shipyard-dashboard.js'
             ];
 
             scripts.forEach(function(script) {
@@ -47,18 +61,201 @@
         })();
     </script>
 
+    <!-- Initialize i18n for authenticated pages -->
+    <script>
+        document.addEventListener('KyteInitialized', function(e) {
+            const kyteI18n = new KyteI18n('en', '/assets/i18n/');
+
+            // Make kyteI18n globally available for sidebar translation
+            window.kyteI18n = kyteI18n;
+
+            // Get user language from localStorage (stored during login)
+            const cachedLanguage = localStorage.getItem('kyte_user_language');
+
+            // Initialize with cached language or browser detection
+            kyteI18n.init(cachedLanguage).then(() => {
+                console.log('[i18n] Page initialized with language:', kyteI18n.getCurrentLanguage());
+                kyteI18n.translateDOM();
+
+                // Dispatch custom event after i18n is fully loaded
+                document.dispatchEvent(new CustomEvent('KyteI18nReady'));
+            }).catch(error => {
+                console.error('[i18n] Failed to initialize:', error);
+            });
+        });
+    </script>
+
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.resources { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .stat-icon.health { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .stat-icon.activity { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .stat-icon.cron { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #718096;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin: 0.5rem 0;
+        }
+
+        .stat-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            color: #4a5568;
+        }
+
+        .dashboard-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error-item, .cron-item {
+            display: grid;
+            grid-template-columns: auto auto 1fr auto;
+            gap: 1rem;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .error-item:last-child, .cron-item:last-child {
+            border-bottom: none;
+        }
+
+        .error-icon, .cron-icon {
+            font-size: 1.25rem;
+        }
+
+        .error-level, .cron-status {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: #f1f5f9;
+            color: #4a5568;
+        }
+
+        .error-message, .cron-name {
+            font-size: 0.875rem;
+            color: #2d3748;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .error-time, .cron-time {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            text-align: right;
+        }
+
+        .cron-duration {
+            font-size: 0.75rem;
+            color: #718096;
+            font-family: monospace;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #a0aec0;
+            font-size: 0.875rem;
+        }
+
+        /* Loading skeleton */
+        .stat-card.loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .stat-card.loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 12px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Page loading modal. Once session is validated, the loading modal will close. -->
-    <div id="pageLoaderModal" class="modal white" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-        <div class="modal-dialog modal-sm h-100 d-flex">
-            <div class="mx-auto align-self-center" style="width: 48px">
-                <div class="spinner-wrapper text-center fa-6x"><span class="fas fa-sync fa-spin"></span></div>
-            </div>
-        </div>
-    </div>
-
     <div id="wrapper">
         <!-- START UNIFIED TOP NAV -->
         <nav id="application-nav" class="navbar navbar-dark navbar-expand-sm">
@@ -75,21 +272,21 @@
                 </a>
 
                 <!-- Center: App Selector -->
-                <a id="app-selector" class="mx-auto" href="#">
+                <div id="app-selector" class="mx-auto">
                     <i class="fas fa-rocket"></i>
-                    <span id="app-name">Loading...</span>
-                </a>
+                    <span id="app-name" data-i18n="nav.loading">Loading...</span>
+                </div>
 
                 <!-- Right: Account Dropdown -->
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-2"></i>Account
+                            <i class="fas fa-user-circle me-2"></i><span data-i18n="nav.account">Account</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i><span data-i18n="nav.settings">Settings</span></a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i>Logout</a></li>
+                            <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i><span data-i18n="nav.logout">Logout</span></a></li>
                         </ul>
                     </li>
                 </ul>
@@ -109,53 +306,80 @@
 
             <!-- Main Content -->
             <div class="main-content">
-            <!-- Page Header -->
-            <div class="page-header">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <h1 class="section-heading">Sites</h1>
-                        <p class="page-subtitle">Deploy and manage your application sites</p>
-                    </div>
-                    <div>
-                        <a class="btn-new" href="#" id="new">
-                            <i class="fas fa-plus"></i>
-                            New Site
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sites Content -->
-            <div id="content-data-wrapper">
-                <div class="table-container">
-                    <table id="data-table" class="table table-striped w-100"></table>
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="section-heading"><i class="fas fa-tachometer-alt me-2" style="color: #667eea;"></i><span data-i18n="ui.dashboard.title">Dashboard</span></h1>
+                    <p class="page-subtitle" data-i18n="ui.dashboard.subtitle">Overview of your application health and metrics</p>
                 </div>
 
-                <!-- Optional: Grid View (initially hidden) -->
-                <div class="sites-grid" style="display: none;">
-                    <!-- Example site cards - these would be populated by JavaScript -->
-                    <div class="site-card">
-                        <div class="site-card-header">
-                            <h3 class="site-title">Production Site</h3>
-                            <span class="site-status active">Active</span>
+                <!-- Dashboard Stats -->
+                <div class="dashboard-grid">
+                    <div id="resources-stats" class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-icon resources">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <span class="stat-label" data-i18n="ui.dashboard.resources.title">Resources</span>
                         </div>
-                        <a href="#" class="site-url">https://myapp.com</a>
-                        <div class="site-meta">
-                            <span>Last deploy: 2 hours ago</span>
-                            <span>Version: v1.2.3</span>
+                        <div class="stat-details">
+                            <div><span id="stat-models">0</span> <span data-i18n="ui.dashboard.resources.models">Models</span></div>
+                            <div><span id="stat-controllers">0</span> <span data-i18n="ui.dashboard.resources.controllers">Controllers</span></div>
+                            <div><span id="stat-pages">0</span> <span data-i18n="ui.dashboard.resources.pages">Pages</span></div>
+                            <div><span id="stat-sites">0</span> <span data-i18n="ui.dashboard.resources.sites">Sites</span></div>
+                            <div><span id="stat-functions">0</span> <span data-i18n="ui.dashboard.resources.functions">Functions</span></div>
+                            <div><span id="stat-cron-jobs">0</span> <span data-i18n="ui.dashboard.resources.cron_jobs">Cron Jobs</span></div>
                         </div>
                     </div>
-                    
-                    <div class="site-card">
-                        <div class="site-card-header">
-                            <h3 class="site-title">Staging Site</h3>
-                            <span class="site-status active">Active</span>
+
+                    <div id="errors-stats" class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-icon health">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <span class="stat-label" data-i18n="ui.dashboard.health.title">Health (24h)</span>
                         </div>
-                        <a href="#" class="site-url">https://staging.myapp.com</a>
-                        <div class="site-meta">
-                            <span>Last deploy: 1 day ago</span>
-                            <span>Version: v1.3.0-rc1</span>
+                        <div class="stat-value"><span id="stat-errors-24h">0</span></div>
+                        <div class="stat-details">
+                            <div>🔴 <span id="stat-errors-critical">0</span> <span data-i18n="ui.dashboard.health.critical">Critical</span></div>
+                            <div>🟠 <span id="stat-errors-error">0</span> <span data-i18n="ui.dashboard.health.errors">Errors</span></div>
+                            <div>🟡 <span id="stat-errors-warning">0</span> <span data-i18n="ui.dashboard.health.warnings">Warnings</span></div>
                         </div>
+                    </div>
+
+                    <div id="cron-stats" class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-icon cron">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <span class="stat-label" data-i18n="ui.dashboard.cron.title">Cron Jobs</span>
+                        </div>
+                        <div class="stat-details">
+                            <div>✅ <span id="stat-cron-enabled">0</span> <span data-i18n="ui.dashboard.cron.enabled">Enabled</span></div>
+                            <div>🔴 <span id="stat-cron-dead-letter">0</span> <span data-i18n="ui.dashboard.cron.dead_letter">Dead Letter</span></div>
+                            <div>📊 <span id="stat-cron-success-rate">100%</span> <span data-i18n="ui.dashboard.cron.success_rate">Success (24h)</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Errors -->
+                <div class="dashboard-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-exclamation-triangle" style="color: #f5576c;"></i>
+                        <span data-i18n="ui.dashboard.errors.title">Recent Errors (24h)</span>
+                    </h2>
+                    <div id="recent-errors-list">
+                        <div class="empty-state" data-i18n="nav.loading">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Recent Cron Executions -->
+                <div class="dashboard-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-history" style="color: #43e97b;"></i>
+                        <span data-i18n="ui.dashboard.cron.recent_executions">Recent Cron Executions</span>
+                    </h2>
+                    <div id="recent-cron-list">
+                        <div class="empty-state" data-i18n="nav.loading">Loading...</div>
                     </div>
                 </div>
             </div>
@@ -163,42 +387,15 @@
     </div>
 
     <!-- Footer -->
-        <footer>
-            <div class="footer-content d-flex justify-content-between align-items-center">
-                <div class="footer-versions">
-                    <div>Kyte Shipyard™ Version <span id="kyteShipyardVersion"></span></div>
-                    <div>Kyte JS Version <span id="kyteJSVersion"></span></div>
-                </div>
-                <p class="footer-copyright mb-0">KeyQ © 2020-2026</p>
+    <footer>
+        <div class="footer-content d-flex justify-content-between align-items-center">
+            <div class="footer-versions">
+                <div><span data-i18n="footer.shipyard_version">Kyte Shipyard™ Version</span> <span id="kyteShipyardVersion"></span></div>
+                <div><span data-i18n="footer.js_version">Kyte JS Version</span> <span id="kyteJSVersion"></span></div>
             </div>
+            <p class="footer-copyright mb-0" data-i18n="footer.copyright">KeyQ © 2020-2026</p>
+        </div>
     </footer>
-
-    <!-- modal form -->
-    <div id="modalForm"></div>
-
-    <script>
-        // Optional: View toggle functionality
-        document.querySelectorAll('[data-view]').forEach(button => {
-            button.addEventListener('click', function() {
-                const view = this.dataset.view;
-                const tableContainer = document.querySelector('.table-container');
-                const gridContainer = document.querySelector('.sites-grid');
-                
-                // Update active state
-                document.querySelectorAll('[data-view]').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Toggle views
-                if (view === 'grid') {
-                    tableContainer.style.display = 'none';
-                    gridContainer.style.display = 'grid';
-                } else {
-                    tableContainer.style.display = 'block';
-                    gridContainer.style.display = 'none';
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

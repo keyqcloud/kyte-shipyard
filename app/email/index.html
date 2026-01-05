@@ -22,7 +22,20 @@
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
     <!-- Kyte -->
-    <script src="https://cdn.keyqcloud.com/kyte/js/stable/kyte.js" crossorigin="anonymous"></script>
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
     <script>
         // Auto-detect localhost and load non-obfuscated source files for development
         (function() {
@@ -44,6 +57,27 @@
         })();
     </script>
     <script type="module" src="/assets/js/kyte-shipyard-email-template-editor.js"></script>
+
+    <!-- i18n Support -->
+    <script src="/assets/js/source/kyte-i18n.js"></script>
+    <script>
+        document.addEventListener('KyteInitialized', function(e) {
+            // Initialize i18n
+            const kyteI18n = new KyteI18n('en', '/assets/i18n/');
+            window.kyteI18n = kyteI18n;
+
+            // Check for cached language preference
+            const cachedLanguage = localStorage.getItem('kyte_user_language');
+
+            // Initialize and translate
+            kyteI18n.init(cachedLanguage).then(() => {
+                kyteI18n.translateDOM();
+                console.log('[Email Template Editor] Translations loaded for:', kyteI18n.getCurrentLanguage());
+            }).catch(error => {
+                console.error('[Email Template Editor] Failed to load translations:', error);
+            });
+        });
+    </script>
 
     <style>
         * {
@@ -576,6 +610,61 @@
         .no-template-message p {
             margin-bottom: 0;
         }
+
+        /* Dark Theme Modal Styling */
+        .modal-content {
+            background: #2d2d30 !important;
+            color: #d4d4d4 !important;
+            border: 1px solid #3e3e42 !important;
+        }
+
+        .modal-header {
+            background: #252526 !important;
+            border-bottom: 1px solid #3e3e42 !important;
+            color: #ffffff !important;
+        }
+
+        .modal-title {
+            color: #ffffff !important;
+        }
+
+        .modal-body {
+            background: #2d2d30 !important;
+            color: #d4d4d4 !important;
+        }
+
+        .modal-body label {
+            color: #d4d4d4 !important;
+        }
+
+        .modal-footer {
+            background: #252526 !important;
+            border-top: 1px solid #3e3e42 !important;
+        }
+
+        .btn-close {
+            filter: invert(1) !important;
+        }
+
+        /* Form controls in modals */
+        .modal .form-control,
+        .modal .form-select {
+            background: #1e1e1e !important;
+            border: 1px solid #5a5a5a !important;
+            color: #d4d4d4 !important;
+        }
+
+        .modal .form-control:focus,
+        .modal .form-select:focus {
+            background: #252526 !important;
+            border-color: #ff6b35 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.2) !important;
+        }
+
+        .modal .form-control::placeholder {
+            color: #969696 !important;
+        }
     </style>
 </head>
 
@@ -600,16 +689,16 @@
             <div id="sidenav" class="d-flex flex-column flex-shrink-0">
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0 text-white">Email Template Editor</h6>
+                        <h6 class="mb-0 text-white" data-i18n="ui.email_editor.sidebar_title">Email Template Editor</h6>
                         <button class="btn btn-sm text-white d-md-none" id="closeSidebar">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="sidebar-nav">
                     <div class="nav-section">
-                        <div class="nav-section-title">Email Templates</div>
+                        <div class="nav-section-title" data-i18n="ui.email_editor.templates_title">Email Templates</div>
                         <div id="email-templates-list">
                             <!-- Email templates will be loaded dynamically -->
                         </div>
@@ -625,40 +714,40 @@
                         <div>
                             <a class="btn-editor btn-editor-danger" id="backToSite" href="#">
                                 <i class="fas fa-arrow-left"></i>
-                                Exit
+                                <span data-i18n="ui.email_editor.exit_button">Exit</span>
                             </a>
                         </div>
-                        
+
                         <div class="template-info">
-                            <h2 class="template-title" id="email-title">Select a Template</h2>
-                            <h3 class="template-identifier" id="email-identifier">Choose from the sidebar</h3>
+                            <h2 class="template-title" id="email-title" data-i18n="ui.email_editor.select_template">Select a Template</h2>
+                            <h3 class="template-identifier" id="email-identifier" data-i18n="ui.email_editor.choose_from_sidebar">Choose from the sidebar</h3>
                         </div>
-                        
+
                         <div class="d-flex gap-2">
                             <button class="btn-editor btn-editor-success" id="previewEmail">
                                 <i class="fas fa-eye"></i>
-                                Preview
+                                <span data-i18n="ui.email_editor.preview_button">Preview</span>
                             </button>
                             <button class="btn-editor btn-editor-warning" id="saveCode">
                                 <i class="fas fa-save"></i>
-                                Save
+                                <span data-i18n="ui.email_editor.save_button">Save</span>
                             </button>
                         </div>
                     </div>
-                    
+
                     <!-- Editor Tabs -->
                     <div class="editor-tabs">
                         <button class="editor-tab active" data-target="HTML">
                             <i class="fab fa-html5"></i>
-                            HTML
+                            <span data-i18n="ui.email_editor.tab_html">HTML</span>
                         </button>
                         <button class="editor-tab" data-target="Preview">
                             <i class="fas fa-eye"></i>
-                            Preview
+                            <span data-i18n="ui.email_editor.tab_preview">Preview</span>
                         </button>
                         <button class="editor-tab" data-target="Settings">
                             <i class="fas fa-cog"></i>
-                            Settings
+                            <span data-i18n="ui.email_editor.tab_settings">Settings</span>
                         </button>
                     </div>
                 </div>
@@ -668,8 +757,8 @@
                     <!-- HTML Editor -->
                     <div id="HTML" class="editor-container active no-template">
                         <div class="no-template-message">
-                            <h3>No Template Selected</h3>
-                            <p>Select an email template from the sidebar to start editing.</p>
+                            <h3 data-i18n="ui.email_editor.no_template_title">No Template Selected</h3>
+                            <p data-i18n="ui.email_editor.no_template_message">Select an email template from the sidebar to start editing.</p>
                         </div>
                         <div id="htmlEditor" style="width: 100%; height: 100%; display: none;"></div>
                     </div>
@@ -678,33 +767,33 @@
                     <div id="Preview" class="editor-container">
                         <div id="previewEmailTemplate" style="width: 100%; height: 100%; background-color: #fff;"></div>
                     </div>
-                    
+
                     <!-- Settings Section -->
                     <div id="Settings" class="secondary-content">
-                        <h4 class="mb-4">Email Template Settings</h4>
+                        <h4 class="mb-4" data-i18n="ui.email_editor.settings_title">Email Template Settings</h4>
                         <div class="settings-grid">
                             <!-- Template Title -->
                             <div class="setting-card">
-                                <div class="setting-card-header">Template Title</div>
+                                <div class="setting-card-header" data-i18n="ui.email_editor.setting_title_header">Template Title</div>
                                 <div class="setting-card-body">
-                                    <input type="text" class="form-control" id="setting-email-title" placeholder="Enter template title" />
+                                    <input type="text" class="form-control" id="setting-email-title" data-i18n-placeholder="ui.email_editor.setting_title_placeholder" placeholder="Enter template title" />
                                 </div>
                             </div>
-                            
+
                             <!-- Template Identifier -->
                             <div class="setting-card">
-                                <div class="setting-card-header">Template Identifier</div>
+                                <div class="setting-card-header" data-i18n="ui.email_editor.setting_identifier_header">Template Identifier</div>
                                 <div class="setting-card-body">
-                                    <input type="text" class="form-control" id="setting-email-identifier" placeholder="template-identifier" />
-                                    <small class="text-muted mt-2 d-block">Unique identifier for this email template</small>
+                                    <input type="text" class="form-control" id="setting-email-identifier" data-i18n-placeholder="ui.email_editor.setting_identifier_placeholder" placeholder="template-identifier" />
+                                    <small class="text-muted mt-2 d-block" data-i18n="ui.email_editor.setting_identifier_help">Unique identifier for this email template</small>
                                 </div>
                             </div>
-                            
+
                             <!-- Description -->
                             <div class="setting-card">
-                                <div class="setting-card-header">Description</div>
+                                <div class="setting-card-header" data-i18n="ui.email_editor.setting_description_header">Description</div>
                                 <div class="setting-card-body">
-                                    <textarea class="form-control" id="setting-email-description" placeholder="Describe the purpose of this email template"></textarea>
+                                    <textarea class="form-control" id="setting-email-description" data-i18n-placeholder="ui.email_editor.setting_description_placeholder" placeholder="Describe the purpose of this email template"></textarea>
                                 </div>
                             </div>
                         </div>
