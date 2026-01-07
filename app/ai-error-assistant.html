@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title data-i18n="ui.dashboard.page_title">Dashboard - Kyte Shipyard</title>
+    <title data-i18n="ui.ai_assistant.page_title">AI Error Assistant - Kyte Shipyard</title>
     <!-- Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
@@ -22,6 +22,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script>
         // Auto-detect localhost and conditionally load local kyte.js for development
         (function() {
@@ -48,7 +49,7 @@
                 'kyte-shipyard-tables.js',
                 'kyte-i18n.js',
                 'kyte-shipyard-app-dashboard.js',
-                'kyte-shipyard-dashboard.js'
+                'kyte-shipyard-ai-error-analysis.js'
             ];
 
             scripts.forEach(function(script) {
@@ -124,10 +125,10 @@
             font-size: 1.5rem;
         }
 
-        .stat-icon.resources { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .stat-icon.health { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
-        .stat-icon.activity { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
-        .stat-icon.cron { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; }
+        .stat-icon.ai { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .stat-icon.fixes { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; }
+        .stat-icon.pending { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; }
+        .stat-icon.cost { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); color: white; }
 
         .stat-label {
             font-size: 0.875rem;
@@ -171,57 +172,139 @@
             gap: 0.5rem;
         }
 
-        .error-item, .cron-item {
+        .analysis-item {
             display: grid;
-            grid-template-columns: auto auto 1fr auto;
+            grid-template-columns: auto 1fr auto auto;
             gap: 1rem;
             align-items: center;
             padding: 0.75rem;
             border-bottom: 1px solid #f1f5f9;
+            transition: background 0.2s ease;
         }
 
-        .error-item:last-child, .cron-item:last-child {
+        .analysis-item:hover {
+            background: #f8fafc;
+            cursor: pointer;
+        }
+
+        .analysis-item:last-child {
             border-bottom: none;
         }
 
-        .error-icon, .cron-icon {
+        .analysis-status {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.25rem;
         }
 
-        .error-level, .cron-status {
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            background: #f1f5f9;
-            color: #4a5568;
+        .analysis-status.completed { background: #d1fae5; color: #065f46; }
+        .analysis-status.pending { background: #fef3c7; color: #92400e; }
+        .analysis-status.processing { background: #dbeafe; color: #1e40af; }
+        .analysis-status.failed { background: #fee2e2; color: #991b1b; }
+
+        .analysis-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
         }
 
-        .error-message, .cron-name {
+        .analysis-error {
             font-size: 0.875rem;
             color: #2d3748;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            font-weight: 500;
         }
 
-        .error-time, .cron-time {
+        .analysis-meta {
+            font-size: 0.75rem;
+            color: #718096;
+        }
+
+        .analysis-confidence {
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .analysis-confidence.high { background: #d1fae5; color: #065f46; }
+        .analysis-confidence.medium { background: #fef3c7; color: #92400e; }
+        .analysis-confidence.low { background: #fee2e2; color: #991b1b; }
+
+        .analysis-time {
             font-size: 0.75rem;
             color: #a0aec0;
             text-align: right;
         }
 
-        .cron-duration {
-            font-size: 0.75rem;
-            color: #718096;
-            font-family: monospace;
-        }
-
         .empty-state {
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 2rem;
             color: #a0aec0;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-text {
             font-size: 0.875rem;
+            color: #718096;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .filter-label {
+            font-size: 0.75rem;
+            color: #718096;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-group select {
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: #2d3748;
+            background: white;
+        }
+
+        .btn-refresh {
+            margin-left: auto;
+            align-self: flex-end;
         }
 
         /* Loading skeleton */
@@ -308,92 +391,138 @@
             <div class="main-content">
                 <!-- Page Header -->
                 <div class="page-header">
-                    <h1 class="section-heading"><i class="fas fa-tachometer-alt me-2" style="color: #667eea;"></i><span data-i18n="ui.dashboard.title">Dashboard</span></h1>
-                    <p class="page-subtitle" data-i18n="ui.dashboard.subtitle">Overview of your application health and metrics</p>
+                    <h1 class="section-heading"><i class="fas fa-robot me-2" style="color: #667eea;"></i><span data-i18n="ui.ai_assistant.title">AI Error Assistant</span></h1>
+                    <p class="page-subtitle" data-i18n="ui.ai_assistant.subtitle">AI-powered error analysis and automatic fix suggestions</p>
                 </div>
 
                 <!-- Dashboard Stats -->
                 <div class="dashboard-grid">
-                    <div id="resources-stats" class="stat-card">
+                    <div id="ai-stats-total" class="stat-card loading">
                         <div class="stat-card-header">
-                            <div class="stat-icon resources">
-                                <i class="fas fa-database"></i>
+                            <div class="stat-icon ai">
+                                <i class="fas fa-brain"></i>
                             </div>
-                            <span class="stat-label" data-i18n="ui.dashboard.resources.title">Resources</span>
+                            <span class="stat-label" data-i18n="ui.ai_assistant.stats.analyses">Total Analyses</span>
                         </div>
+                        <div class="stat-value"><span id="stat-total-analyses">0</span></div>
                         <div class="stat-details">
-                            <div><span id="stat-models">0</span> <span data-i18n="ui.dashboard.resources.models">Models</span></div>
-                            <div><span id="stat-controllers">0</span> <span data-i18n="ui.dashboard.resources.controllers">Controllers</span></div>
-                            <div><span id="stat-pages">0</span> <span data-i18n="ui.dashboard.resources.pages">Pages</span></div>
-                            <div><span id="stat-sites">0</span> <span data-i18n="ui.dashboard.resources.sites">Sites</span></div>
-                            <div><span id="stat-functions">0</span> <span data-i18n="ui.dashboard.resources.functions">Functions</span></div>
-                            <div><span id="stat-cron-jobs">0</span> <span data-i18n="ui.dashboard.resources.cron_jobs">Cron Jobs</span></div>
+                            <div>✅ <span id="stat-completed">0</span> <span data-i18n="ui.ai_assistant.stats.completed">Completed</span></div>
+                            <div>⏳ <span id="stat-queued">0</span> <span data-i18n="ui.ai_assistant.stats.queued">Queued</span></div>
+                            <div>🔄 <span id="stat-processing">0</span> <span data-i18n="ui.ai_assistant.stats.processing">Processing</span></div>
                         </div>
                     </div>
 
-                    <div id="errors-stats" class="stat-card">
+                    <div id="ai-stats-fixes" class="stat-card loading">
                         <div class="stat-card-header">
-                            <div class="stat-icon health">
-                                <i class="fas fa-heartbeat"></i>
+                            <div class="stat-icon fixes">
+                                <i class="fas fa-wrench"></i>
                             </div>
-                            <span class="stat-label" data-i18n="ui.dashboard.health.title">Health (24h)</span>
+                            <span class="stat-label" data-i18n="ui.ai_assistant.stats.fixes">Fixes Applied</span>
                         </div>
-                        <div class="stat-value"><span id="stat-errors-24h">0</span></div>
+                        <div class="stat-value"><span id="stat-fixes-applied">0</span></div>
                         <div class="stat-details">
-                            <div>🔴 <span id="stat-errors-critical">0</span> <span data-i18n="ui.dashboard.health.critical">Critical</span></div>
-                            <div>🟠 <span id="stat-errors-error">0</span> <span data-i18n="ui.dashboard.health.errors">Errors</span></div>
-                            <div>🟡 <span id="stat-errors-warning">0</span> <span data-i18n="ui.dashboard.health.warnings">Warnings</span></div>
+                            <div>🤖 <span id="stat-fixes-auto">0</span> <span data-i18n="ui.ai_assistant.stats.auto">Automatic</span></div>
+                            <div>👤 <span id="stat-fixes-manual">0</span> <span data-i18n="ui.ai_assistant.stats.manual">Manual</span></div>
+                            <div>💡 <span id="stat-fixes-suggested">0</span> <span data-i18n="ui.ai_assistant.stats.suggested">Suggested</span></div>
                         </div>
                     </div>
 
-                    <div id="cron-stats" class="stat-card">
+                    <div id="ai-stats-success" class="stat-card loading">
                         <div class="stat-card-header">
-                            <div class="stat-icon cron">
-                                <i class="fas fa-clock"></i>
+                            <div class="stat-icon pending">
+                                <i class="fas fa-chart-line"></i>
                             </div>
-                            <span class="stat-label" data-i18n="ui.dashboard.cron.title">Cron Jobs</span>
+                            <span class="stat-label" data-i18n="ui.ai_assistant.stats.success_rate">Success Rate</span>
                         </div>
+                        <div class="stat-value"><span id="stat-success-rate">0</span>%</div>
                         <div class="stat-details">
-                            <div>✅ <span id="stat-cron-enabled">0</span> <span data-i18n="ui.dashboard.cron.enabled">Enabled</span></div>
-                            <div>🔴 <span id="stat-cron-dead-letter">0</span> <span data-i18n="ui.dashboard.cron.dead_letter">Dead Letter</span></div>
-                            <div>📊 <span id="stat-cron-success-rate">100%</span> <span data-i18n="ui.dashboard.cron.success_rate">Success (24h)</span></div>
+                            <div>🎯 <span id="stat-avg-confidence">0</span>% <span data-i18n="ui.ai_assistant.stats.avg_confidence">Avg Confidence</span></div>
+                            <div>📊 <span id="stat-fixable-rate">0</span>% <span data-i18n="ui.ai_assistant.stats.fixable">Fixable</span></div>
                         </div>
                     </div>
 
-                    <div id="ai-assistant-stats" class="stat-card" style="cursor: pointer;" onclick="window.location.href='/app/ai-error-assistant.html?request=' + new URLSearchParams(window.location.search).get('request')">
+                    <div id="ai-stats-cost" class="stat-card loading">
                         <div class="stat-card-header">
-                            <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                                <i class="fas fa-robot"></i>
+                            <div class="stat-icon cost">
+                                <i class="fas fa-dollar-sign"></i>
                             </div>
-                            <span class="stat-label" data-i18n="ui.dashboard.ai_assistant.title">AI Assistant</span>
+                            <span class="stat-label" data-i18n="ui.ai_assistant.stats.estimated_cost">Estimated Cost</span>
                         </div>
+                        <div class="stat-value">$<span id="stat-total-cost">0.00</span></div>
                         <div class="stat-details">
-                            <div>🧠 <span id="stat-ai-analyses">0</span> <span data-i18n="ui.dashboard.ai_assistant.analyses">Analyses</span></div>
-                            <div>✅ <span id="stat-ai-fixes">0</span> <span data-i18n="ui.dashboard.ai_assistant.fixes">Fixes Applied</span></div>
-                            <div>💡 <span id="stat-ai-pending">0</span> <span data-i18n="ui.dashboard.ai_assistant.pending">Pending</span></div>
+                            <div>📅 <span data-i18n="ui.ai_assistant.stats.this_month">This Month</span>: $<span id="stat-cost-month">0.00</span></div>
+                            <div>📆 <span data-i18n="ui.ai_assistant.stats.this_week">This Week</span>: $<span id="stat-cost-week">0.00</span></div>
+                            <div>
+                                <i class="fas fa-info-circle" style="cursor: help; opacity: 0.8;"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="Estimated costs based on AWS Bedrock token usage. Check AWS Billing Console for actual costs."></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Recent Errors -->
+                <!-- Filters -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <label class="filter-label" data-i18n="ui.ai_assistant.filters.status">Status</label>
+                        <select id="filter-status">
+                            <option value="all" data-i18n="ui.ai_assistant.filters.all">All</option>
+                            <option value="completed" data-i18n="ui.ai_assistant.filters.completed">Completed</option>
+                            <option value="queued" data-i18n="ui.ai_assistant.filters.queued">Queued</option>
+                            <option value="processing" data-i18n="ui.ai_assistant.filters.processing">Processing</option>
+                            <option value="failed" data-i18n="ui.ai_assistant.filters.failed">Failed</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label" data-i18n="ui.ai_assistant.filters.fixable">Fixable</label>
+                        <select id="filter-fixable">
+                            <option value="all" data-i18n="ui.ai_assistant.filters.all">All</option>
+                            <option value="yes" data-i18n="ui.ai_assistant.filters.yes">Yes</option>
+                            <option value="no" data-i18n="ui.ai_assistant.filters.no">No</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label" data-i18n="ui.ai_assistant.filters.fix_status">Fix Status</label>
+                        <select id="filter-fix-status">
+                            <option value="all" data-i18n="ui.ai_assistant.filters.all">All</option>
+                            <option value="suggested" data-i18n="ui.ai_assistant.filters.suggested">Suggested</option>
+                            <option value="applied_auto" data-i18n="ui.ai_assistant.filters.applied_auto">Applied (Auto)</option>
+                            <option value="applied_manual" data-i18n="ui.ai_assistant.filters.applied_manual">Applied (Manual)</option>
+                            <option value="rejected" data-i18n="ui.ai_assistant.filters.rejected">Rejected</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary btn-refresh" id="btn-refresh">
+                        <i class="fas fa-sync-alt"></i> <span data-i18n="ui.ai_assistant.actions.refresh">Refresh</span>
+                    </button>
+                </div>
+
+                <!-- Recent Analyses -->
                 <div class="dashboard-section">
                     <h2 class="section-title">
-                        <i class="fas fa-exclamation-triangle" style="color: #f5576c;"></i>
-                        <span data-i18n="ui.dashboard.errors.title">Recent Errors (24h)</span>
+                        <i class="fas fa-list-ul" style="color: #667eea;"></i>
+                        <span data-i18n="ui.ai_assistant.recent.title">Recent Analyses</span>
                     </h2>
-                    <div id="recent-errors-list">
-                        <div class="empty-state" data-i18n="nav.loading">Loading...</div>
+                    <div id="recent-analyses-list">
+                        <div class="empty-state">
+                            <i class="fas fa-robot"></i>
+                            <div class="empty-state-title" data-i18n="ui.ai_assistant.empty.title">No analyses yet</div>
+                            <div class="empty-state-text" data-i18n="ui.ai_assistant.empty.text">AI error analyses will appear here once the cron job processes errors</div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Recent Cron Executions -->
+                <!-- Analysis Trends Chart -->
                 <div class="dashboard-section">
                     <h2 class="section-title">
-                        <i class="fas fa-history" style="color: #43e97b;"></i>
-                        <span data-i18n="ui.dashboard.cron.recent_executions">Recent Cron Executions</span>
+                        <i class="fas fa-chart-area" style="color: #43e97b;"></i>
+                        <span data-i18n="ui.ai_assistant.trends.title">Analysis Trends (7 Days)</span>
                     </h2>
-                    <div id="recent-cron-list">
-                        <div class="empty-state" data-i18n="nav.loading">Loading...</div>
+                    <div class="chart-container">
+                        <canvas id="trends-chart"></canvas>
                     </div>
                 </div>
             </div>

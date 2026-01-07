@@ -42,12 +42,14 @@ document.addEventListener('KyteInitialized', function(e) {
         showSectionLoader('resources');
         showSectionLoader('errors');
         showSectionLoader('cron');
+        showSectionLoader('ai-assistant');
 
         // Fetch all metrics in parallel (they update UI as they complete)
         Promise.all([
             fetchResourceCounts(),
             fetchErrorMetrics(),
-            fetchCronJobMetrics()
+            fetchCronJobMetrics(),
+            fetchAIAssistantMetrics()
         ]).then(() => {
             console.log('Dashboard loaded');
         }).catch(error => {
@@ -345,6 +347,50 @@ document.addEventListener('KyteInitialized', function(e) {
                         hideSectionLoader('cron');
                         resolve();
                     });
+                });
+            });
+        }
+
+        function fetchAIAssistantMetrics() {
+            return new Promise((resolve) => {
+                // Get AI error analyses for this application
+                _ks.get('AIErrorAnalysis', 'application', appId, [], (res) => {
+                    if (res.data && res.data.length > 0) {
+                        const analyses = res.data;
+
+                        // Calculate stats
+                        const total = analyses.length;
+                        const fixesApplied = analyses.filter(a =>
+                            a.fix_status === 'applied_auto' || a.fix_status === 'applied_manual'
+                        ).length;
+                        const pending = analyses.filter(a =>
+                            a.fix_status === 'suggested' || a.analysis_status === 'queued' || a.analysis_status === 'processing'
+                        ).length;
+
+                        // Update UI
+                        $('#stat-ai-analyses').text(total);
+                        $('#stat-ai-fixes').text(fixesApplied);
+                        $('#stat-ai-pending').text(pending);
+
+                        hideSectionLoader('ai-assistant');
+                        resolve();
+                    } else {
+                        // No analyses yet
+                        $('#stat-ai-analyses').text(0);
+                        $('#stat-ai-fixes').text(0);
+                        $('#stat-ai-pending').text(0);
+
+                        hideSectionLoader('ai-assistant');
+                        resolve();
+                    }
+                }, () => {
+                    // Error loading - set to 0
+                    $('#stat-ai-analyses').text(0);
+                    $('#stat-ai-fixes').text(0);
+                    $('#stat-ai-pending').text(0);
+
+                    hideSectionLoader('ai-assistant');
+                    resolve();
                 });
             });
         }

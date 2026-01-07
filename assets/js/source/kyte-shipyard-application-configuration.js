@@ -849,21 +849,69 @@ function setupNavigationHandlers() {
     document.querySelectorAll('[data-section]').forEach(button => {
         button.addEventListener('click', function() {
             const section = this.dataset.section;
-            
+
+            // Update URL hash
+            window.location.hash = convertSectionToHash(section);
+
             // Update active nav item
             document.querySelectorAll('[data-section]').forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
-            
+
             // Show corresponding section
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(section).classList.add('active');
-            
+
             // Initialize Kyte Connect comparison when that section is shown
             if (section === 'KyteConnect' && api && app) {
                 initializeKyteConnectComparison();
             }
         });
     });
+
+    // Handle initial hash or hash changes
+    loadSectionFromHash();
+    window.addEventListener('hashchange', loadSectionFromHash);
+}
+
+// Convert section name to hash format (e.g., "AIErrorCorrection" -> "ai-error-correction")
+function convertSectionToHash(section) {
+    return section.replace(/([A-Z])/g, '-$1').toLowerCase().replace(/^-/, '');
+}
+
+// Convert hash to section name (e.g., "ai-error-correction" -> "AIErrorCorrection")
+function convertHashToSection(hash) {
+    return hash.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase())
+               .replace(/^([a-z])/, (match, letter) => letter.toUpperCase());
+}
+
+// Load and display section based on URL hash
+function loadSectionFromHash() {
+    const hash = window.location.hash.replace('#', '');
+
+    if (!hash) {
+        // No hash, default to first section (App)
+        return;
+    }
+
+    // Convert hash to section ID
+    const sectionId = convertHashToSection(hash);
+    const sectionElement = document.getElementById(sectionId);
+    const navButton = document.querySelector(`[data-section="${sectionId}"]`);
+
+    if (sectionElement && navButton) {
+        // Update active nav item
+        document.querySelectorAll('[data-section]').forEach(btn => btn.classList.remove('active'));
+        navButton.classList.add('active');
+
+        // Show corresponding section
+        document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+        sectionElement.classList.add('active');
+
+        // Initialize Kyte Connect comparison when that section is shown
+        if (sectionId === 'KyteConnect' && api && app) {
+            initializeKyteConnectComparison();
+        }
+    }
 }
 
 // Utility functions

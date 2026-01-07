@@ -54,7 +54,7 @@ document.addEventListener('KyteInitialized', function(e) {
         },
         {
             'targets': 2,
-            'data': 'account_id',
+            'data': 'kyte_account',
             'label': t('ui.system_log.table.account', 'Account'),
             render: function(data, type, row, meta) {
                 if (data) {

@@ -50,7 +50,8 @@
                 'kyte-shipyard.js',
                 'navigation.js',
                 'kyte-shipyard-tables.js',
-                'kyte-shipyard-application-configuration.js'
+                'kyte-shipyard-application-configuration.js',
+                'kyte-shipyard-ai-error-correction.js'
             ];
 
             scripts.forEach(function(script) {
@@ -171,6 +172,10 @@
                         <button class="nav-link" data-section="KyteConnect">
                             <i class="fas fa-rocket"></i>
                             <span data-i18n="ui.config.sidebar.kyte_connect">Kyte Connect</span>
+                        </button>
+                        <button class="nav-link" data-section="AIErrorCorrection">
+                            <i class="fas fa-robot"></i>
+                            <span data-i18n="ui.config.sidebar.ai_error_correction">AI Error Correction</span>
                         </button>
                     </div>
                 </div>
@@ -480,6 +485,268 @@
                                     <span id="modifications-count">0</span> <span data-i18n="ui.config.kyte_connect.comparison.modifications">modifications</span>
                                 </span>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Error Correction Configuration Section -->
+                <div id="AIErrorCorrection" class="content-section">
+                    <!-- Loading State -->
+                    <div id="ai-config-loading" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3" data-i18n="ui.config.ai_error.loading">Loading AI Error Correction Configuration...</p>
+                    </div>
+
+                    <!-- Configuration Form -->
+                    <div id="ai-config-form" style="display: none;">
+                        <!-- Status Header -->
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-card-icon">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h3 class="config-card-title" data-i18n="ui.config.ai_error.status_title">AI Error Correction Status</h3>
+                                    <div id="ai-config-status" class="mt-2">
+                                        <span class="badge bg-secondary" data-i18n="ui.config.ai_error.loading">Loading...</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button id="ai-quick-enable-btn" class="btn btn-success me-2">
+                                        <i class="fas fa-power-off"></i> <span data-i18n="ui.config.ai_error.quick_enable">Quick Enable</span>
+                                    </button>
+                                    <button id="ai-quick-disable-btn" class="btn btn-danger">
+                                        <i class="fas fa-power-off"></i> <span data-i18n="ui.config.ai_error.quick_disable">Quick Disable</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Statistics -->
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-card-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div>
+                                    <h3 class="config-card-title" data-i18n="ui.config.ai_error.statistics">Statistics</h3>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="ai-stats-total-analyses">0</div>
+                                        <div class="stat-label" data-i18n="ui.config.ai_error.total_analyses">Total Analyses</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="ai-stats-fixes-applied">0</div>
+                                        <div class="stat-label" data-i18n="ui.config.ai_error.fixes_applied">Fixes Applied</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="ai-stats-success-rate">0</div>
+                                        <div class="stat-label" data-i18n="ui.config.ai_error.success_rate">Success Rate (%)</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="ai-stats-total-cost">$0.00</div>
+                                        <div class="stat-label">
+                                            <span data-i18n="ui.config.ai_error.estimated_cost">Estimated Cost</span>
+                                            <i class="fas fa-info-circle"
+                                               style="cursor: help; opacity: 0.8;"
+                                               data-bs-toggle="tooltip"
+                                               data-bs-placement="top"
+                                               data-i18n-title="ui.config.ai_error.estimated_cost_tooltip"
+                                               title="This is an estimated cost based on token usage. AWS Bedrock pricing may vary. Please check your AWS Billing Console for actual costs."></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button id="ai-reset-stats-btn" class="btn btn-outline-danger">
+                                    <i class="fas fa-undo"></i> <span data-i18n="ui.config.ai_error.reset_statistics">Reset Statistics</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Feature Settings -->
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-card-icon">
+                                    <i class="fas fa-toggle-on"></i>
+                                </div>
+                                <div>
+                                    <h3 class="config-card-title" data-i18n="ui.config.ai_error.feature_settings">Feature Settings</h3>
+                                </div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="ai-enabled">
+                                    <label class="form-check-label" for="ai-enabled">
+                                        <strong data-i18n="ui.config.ai_error.enable_ai">Enable AI Error Correction</strong>
+                                        <small class="d-block text-muted" data-i18n="ui.config.ai_error.enable_ai_desc">Master toggle for the entire system</small>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="ai-auto-fix-enabled">
+                                    <label class="form-check-label" for="ai-auto-fix-enabled">
+                                        <strong data-i18n="ui.config.ai_error.enable_auto_fix">Enable Auto-Fix Mode</strong>
+                                        <small class="d-block text-muted" data-i18n="ui.config.ai_error.enable_auto_fix_desc">Automatically apply high-confidence fixes (default: suggest only)</small>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label"><span data-i18n="ui.config.ai_error.min_confidence">Minimum Confidence for Auto-Fix</span>: <span id="ai-min-confidence-value">90</span>%</label>
+                                <input type="range" class="form-range" id="ai-min-confidence" min="0" max="100" step="5" value="90">
+                                <small class="form-text text-muted" data-i18n="ui.config.ai_error.min_confidence_desc">Only fixes with confidence above this threshold will be auto-applied</small>
+                            </div>
+                        </div>
+
+                        <!-- Rate Limiting & Cost Control -->
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-card-icon">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                </div>
+                                <div>
+                                    <h3 class="config-card-title" data-i18n="ui.config.ai_error.rate_limiting">Rate Limiting & Cost Control</h3>
+                                </div>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="ui.config.ai_error.max_per_hour">Max Analyses Per Hour</label>
+                                    <input type="number" class="form-control" id="ai-max-per-hour" min="1" max="100" value="10">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="ui.config.ai_error.max_per_day">Max Analyses Per Day</label>
+                                    <input type="number" class="form-control" id="ai-max-per-day" min="1" max="1000" value="50">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="ui.config.ai_error.max_monthly_cost">Max Monthly Cost (USD)</label>
+                                    <input type="number" class="form-control" id="ai-max-monthly-cost" min="0" step="10" value="100">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="ui.config.ai_error.cooldown_period">Cooldown Period (minutes)</label>
+                                    <input type="number" class="form-control" id="ai-cooldown-minutes" min="0" max="1440" value="30">
+                                    <small class="form-text text-muted" data-i18n="ui.config.ai_error.cooldown_period_desc">Wait time before re-analyzing same error</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loop Detection -->
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-card-icon">
+                                    <i class="fas fa-sync"></i>
+                                </div>
+                                <div>
+                                    <h3 class="config-card-title" data-i18n="ui.config.ai_error.loop_detection">Loop Detection</h3>
+                                </div>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="ui.config.ai_error.max_fix_attempts">Max Fix Attempts</label>
+                                    <input type="number" class="form-control" id="ai-max-attempts" min="1" max="20" value="5">
+                                    <small class="form-text text-muted" data-i18n="ui.config.ai_error.max_fix_attempts_desc">Max consecutive fixes before disabling</small>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="ui.config.ai_error.loop_window">Loop Detection Window (minutes)</label>
+                                    <input type="number" class="form-control" id="ai-loop-window" min="1" max="1440" value="60">
+                                    <small class="form-text text-muted" data-i18n="ui.config.ai_error.loop_window_desc">Time window for detecting recurring errors</small>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="ai-auto-disable-loop" checked>
+                                    <label class="form-check-label" for="ai-auto-disable-loop">
+                                        <strong data-i18n="ui.config.ai_error.auto_disable_loop">Auto-disable on Loop Detection</strong>
+                                        <small class="d-block text-muted" data-i18n="ui.config.ai_error.auto_disable_loop_desc">Automatically disable auto-fix when infinite loop detected</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Batch Processing -->
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-card-icon">
+                                    <i class="fas fa-layer-group"></i>
+                                </div>
+                                <div>
+                                    <h3 class="config-card-title" data-i18n="ui.config.ai_error.batch_processing">Batch Processing</h3>
+                                </div>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="ui.config.ai_error.batch_size">Batch Size</label>
+                                    <input type="number" class="form-control" id="ai-batch-size" min="1" max="100" value="10">
+                                    <small class="form-text text-muted" data-i18n="ui.config.ai_error.batch_size_desc">Max analyses per cron job run</small>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="ui.config.ai_error.max_concurrent">Max Concurrent API Calls</label>
+                                    <input type="number" class="form-control" id="ai-max-concurrent" min="1" max="10" value="3">
+                                    <small class="form-text text-muted" data-i18n="ui.config.ai_error.max_concurrent_desc">Parallel Bedrock API calls</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Preferences -->
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-card-icon">
+                                    <i class="fas fa-sliders-h"></i>
+                                </div>
+                                <div>
+                                    <h3 class="config-card-title" data-i18n="ui.config.ai_error.analysis_preferences">Analysis Preferences</h3>
+                                </div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="ai-include-warnings">
+                                    <label class="form-check-label" for="ai-include-warnings" data-i18n="ui.config.ai_error.include_warnings">
+                                        Include Warnings (not just errors)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="ai-include-models" checked>
+                                    <label class="form-check-label" for="ai-include-models" data-i18n="ui.config.ai_error.include_models">
+                                        Include Model Definitions in Context
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="ai-include-request" checked>
+                                    <label class="form-check-label" for="ai-include-request" data-i18n="ui.config.ai_error.include_request">
+                                        Include Request Data in Context
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="ai-include-framework" checked>
+                                    <label class="form-check-label" for="ai-include-framework" data-i18n="ui.config.ai_error.include_framework">
+                                        Include Framework Documentation
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div class="d-flex justify-content-end">
+                            <button id="ai-save-config-btn" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> <span data-i18n="ui.config.ai_error.save_config">Save Configuration</span>
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -97,6 +97,12 @@ function generateAppSidebar(encodedRequest) {
                         href: '/app/log.html?request=' + encodedRequest
                     },
                     {
+                        faicon: 'fas fa-robot',
+                        label: 'AI Error Assistant',
+                        labelKey: 'sidebar.ai_error_assistant',
+                        href: '/app/ai-error-assistant.html?request=' + encodedRequest
+                    },
+                    {
                         faicon: 'fas fa-cog',
                         label: 'Configuration',
                         labelKey: 'sidebar.configuration',
@@ -214,6 +220,12 @@ function generateAppNav(encodedRequest) {
                         class:'me-2',
                         label:'Error Log',
                         href:'/app/log.html?request='+encodedRequest
+                    },
+                    {
+                        faicon:'fas fa-robot',
+                        class:'me-2',
+                        label:'AI Error Assistant',
+                        href:'/app/ai-error-assistant.html?request='+encodedRequest
                     },
                     {
                         faicon:'fas fa-cog',
