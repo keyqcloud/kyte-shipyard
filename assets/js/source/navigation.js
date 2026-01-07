@@ -1,3 +1,6 @@
+// Store global Kyte instance for navigation
+let _kyteGlobal = null;
+
 // Generate Application Sidebar Navigation (Phase 2)
 function generateAppSidebar(encodedRequest) {
     return {
@@ -545,9 +548,9 @@ function loadAppSidebar() {
     // Try to get application name from the request
     try {
         const decoded = JSON.parse(atob(decodeURIComponent(request)));
-        if (decoded.idx) {
+        if (decoded.idx && _kyteGlobal) {
             // Fetch application details to populate app selector
-            fetchApplicationName(decoded.idx);
+            fetchApplicationName(decoded.idx, _kyteGlobal);
         }
     } catch (e) {
         console.warn('Could not decode request parameter:', e);
@@ -558,17 +561,56 @@ function loadAppSidebar() {
 }
 
 // Fetch and display application name in top nav
-function fetchApplicationName(appId) {
+function fetchApplicationName(appId, kyteInstance) {
     const appSelectorElement = document.getElementById('app-selector');
     const appNameElement = document.getElementById('app-name');
 
     if (!appNameElement) return;
 
-    // Set static text to avoid unnecessary API calls
-    appNameElement.textContent = 'Application';
+    // Fetch application details from API
+    kyteInstance.get('Application', 'id', appId, [], (response) => {
+        if (response.data && response.data.length > 0) {
+            const app = response.data[0];
+            appNameElement.textContent = app.name;
+        } else {
+            appNameElement.textContent = 'Application';
+        }
+    }, (error) => {
+        console.error('Failed to fetch application name:', error);
+        appNameElement.textContent = 'Application';
+    });
 
     // Update the link to go back to project list
     if (appSelectorElement) {
         appSelectorElement.href = '/app/?request=' + encodeURIComponent(btoa(JSON.stringify({'model': 'Application', 'idx': appId})));
     }
 }
+
+// Initialize application name on page load for all pages
+document.addEventListener('KyteInitialized', function(e) {
+    const _ks = e.detail._ks;
+
+    // Store Kyte instance globally for use by loadAppSidebar
+    _kyteGlobal = _ks;
+
+    const appNameElement = document.getElementById('app-name');
+
+    // Only run if the app-name element exists
+    if (!appNameElement) return;
+
+    // Get the request parameter from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const request = urlParams.get('request');
+
+    if (request) {
+        try {
+            const decoded = JSON.parse(atob(decodeURIComponent(request)));
+            if (decoded.idx) {
+                // Fetch application name
+                fetchApplicationName(decoded.idx, _ks);
+            }
+        } catch (e) {
+            console.warn('Could not decode request parameter for app name:', e);
+        }
+    }
+});

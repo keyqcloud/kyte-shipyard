@@ -538,19 +538,47 @@ document.addEventListener('KyteInitialized', function(e) {
             }
         });
 
+        // Helper functions for sticky tabs (hash-based navigation)
+        function convertSectionToHash(sectionId) {
+            // Convert from PascalCase/camelCase to kebab-case
+            // Pages -> pages, SideNav -> side-nav
+            return sectionId.replace(/([A-Z])/g, '-$1').toLowerCase().replace(/^-/, '');
+        }
+
+        function convertHashToSection(hash) {
+            // Convert from kebab-case to PascalCase/camelCase
+            // pages -> Pages, side-nav -> SideNav
+            return hash.replace(/-([a-z])/g, (g) => g[1].toUpperCase()).replace(/^[a-z]/, (c) => c.toUpperCase());
+        }
+
+        function loadSectionFromHash() {
+            const hash = window.location.hash.substring(1); // Remove the '#'
+            if (hash) {
+                const sectionId = convertHashToSection(hash);
+                const navButton = document.querySelector(`[data-section="${sectionId}"]`);
+                if (navButton) {
+                    navButton.click();
+                }
+            }
+        }
+
         // Navigation functionality
         document.querySelectorAll('[data-section]').forEach(button => {
             button.addEventListener('click', function() {
                 const section = this.dataset.section;
-                
+
+                // Update URL hash for sticky tabs
+                const hash = convertSectionToHash(section);
+                history.pushState(null, null, `#${hash}`);
+
                 // Update active nav item
                 document.querySelectorAll('[data-section]').forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
-                
+
                 // Show corresponding section
                 document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
                 document.getElementById(section).classList.add('active');
-                
+
                 // Special handling for Navigation and SideNav sections
                 if (section === 'Navigation') {
                     // Ensure navigation data is loaded when section is first viewed
@@ -571,6 +599,12 @@ document.addEventListener('KyteInitialized', function(e) {
                 }
             });
         });
+
+        // Load section from hash on page load (after click handlers are set up)
+        loadSectionFromHash();
+
+        // Handle browser back/forward navigation
+        window.addEventListener('hashchange', loadSectionFromHash);
 
         function showNoDomainState() {
             document.getElementById('no-domain-state').style.display = 'block';

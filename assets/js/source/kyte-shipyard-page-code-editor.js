@@ -1688,27 +1688,22 @@ document.addEventListener('KyteInitialized', function(e) {
             // Fetch user profile to get language preference
             const userId = _ks.getCookie('accountIdx');
             if (userId && userId !== '0') {
-                _ks.sign((signature) => {
-                    _ks.get('KyteUser', 'id', userId, [], function(response) {
-                        const userLanguage = response.data[0]?.language || 'en';
+                _ks.get('KyteUser', 'id', userId, [], function(response) {
+                    const userLanguage = response.data[0]?.language || 'en';
 
-                        window.kyteI18n = new KyteI18n(userLanguage, '/assets/i18n/');
-                        window.kyteI18n.init(userLanguage).then(() => {
-                            window.kyteI18n.translateDOM();
-                            console.log(`i18n initialized with user profile language: ${userLanguage}`);
+                    window.kyteI18n = new KyteI18n(userLanguage, '/assets/i18n/');
+                    window.kyteI18n.init(userLanguage).then(() => {
+                        window.kyteI18n.translateDOM();
+                        console.log(`i18n initialized with user profile language: ${userLanguage}`);
 
-                            // Cache for future use
-                            localStorage.setItem('kyte_user_language', userLanguage);
-                        }).catch(err => {
-                            console.error('Failed to initialize i18n:', err);
-                        });
-                    }, function(error) {
-                        console.error('Failed to fetch user profile:', error);
-                        // Fall back to browser language
-                        initializeI18nFallback();
+                        // Cache for future use
+                        localStorage.setItem('kyte_user_language', userLanguage);
+                    }).catch(err => {
+                        console.error('Failed to initialize i18n:', err);
                     });
-                }, (error) => {
-                    console.error('Failed to sign request:', error);
+                }, function(error) {
+                    console.error('Failed to fetch user profile:', error);
+                    // Fall back to browser language
                     initializeI18nFallback();
                 });
             } else {

@@ -79,120 +79,104 @@ document.addEventListener('KyteInitialized', function(e) {
                 };
 
                 // Count DataModels (has application field)
-                _ks.sign((sig) => {
-                    _ks.get('DataModel', 'application', appId, [], (res) => {
-                        dashboardData.resources.models = res.data ? res.data.length : 0;
-                        $('#stat-models').text(dashboardData.resources.models);
-                        checkComplete();
-                    }, checkComplete);
-                });
+                _ks.get('DataModel', 'application', appId, [], (res) => {
+                    dashboardData.resources.models = res.data ? res.data.length : 0;
+                    $('#stat-models').text(dashboardData.resources.models);
+                    checkComplete();
+                }, checkComplete);
 
                 // Count Controllers (has application field)
-                _ks.sign((sig) => {
-                    _ks.get('Controller', 'application', appId, [], (res) => {
-                        dashboardData.resources.controllers = res.data ? res.data.length : 0;
-                        $('#stat-controllers').text(dashboardData.resources.controllers);
-                        checkComplete();
-                    }, checkComplete);
-                });
+                _ks.get('Controller', 'application', appId, [], (res) => {
+                    dashboardData.resources.controllers = res.data ? res.data.length : 0;
+                    $('#stat-controllers').text(dashboardData.resources.controllers);
+                    checkComplete();
+                }, checkComplete);
 
                 // Count Pages (query by site, sites belong to application)
-                _ks.sign((sig) => {
-                    // First get all sites for this application
-                    _ks.get('KyteSite', 'application', appId, [], (siteRes) => {
-                        if (siteRes.data && siteRes.data.length > 0) {
-                            const siteIds = siteRes.data.map(s => s.id);
-                            let pagesCount = 0;
-                            let sitesChecked = 0;
+                // First get all sites for this application
+                _ks.get('KyteSite', 'application', appId, [], (siteRes) => {
+                    if (siteRes.data && siteRes.data.length > 0) {
+                        const siteIds = siteRes.data.map(s => s.id);
+                        let pagesCount = 0;
+                        let sitesChecked = 0;
 
-                            // Query pages for each site
-                            siteIds.forEach(siteId => {
-                                _ks.sign((sig2) => {
-                                    _ks.get('KytePage', 'site', siteId, [], (pageRes) => {
-                                        if (pageRes.data) {
-                                            pagesCount += pageRes.data.length;
-                                            dashboardData.resources.pages = pagesCount;
-                                            $('#stat-pages').text(pagesCount);
-                                        }
-                                        sitesChecked++;
-                                        if (sitesChecked === siteIds.length) {
-                                            checkComplete();
-                                        }
-                                    }, () => {
-                                        sitesChecked++;
-                                        if (sitesChecked === siteIds.length) {
-                                            dashboardData.resources.pages = pagesCount;
-                                            $('#stat-pages').text(pagesCount);
-                                            checkComplete();
-                                        }
-                                    });
-                                });
+                        // Query pages for each site
+                        siteIds.forEach(siteId => {
+                            _ks.get('KytePage', 'site', siteId, [], (pageRes) => {
+                                if (pageRes.data) {
+                                    pagesCount += pageRes.data.length;
+                                    dashboardData.resources.pages = pagesCount;
+                                    $('#stat-pages').text(pagesCount);
+                                }
+                                sitesChecked++;
+                                if (sitesChecked === siteIds.length) {
+                                    checkComplete();
+                                }
+                            }, () => {
+                                sitesChecked++;
+                                if (sitesChecked === siteIds.length) {
+                                    dashboardData.resources.pages = pagesCount;
+                                    $('#stat-pages').text(pagesCount);
+                                    checkComplete();
+                                }
                             });
-                        } else {
-                            dashboardData.resources.pages = 0;
-                            $('#stat-pages').text(0);
-                            checkComplete();
-                        }
-                    }, checkComplete);
-                });
+                        });
+                    } else {
+                        dashboardData.resources.pages = 0;
+                        $('#stat-pages').text(0);
+                        checkComplete();
+                    }
+                }, checkComplete);
 
                 // Count Sites (has application field)
-                _ks.sign((sig) => {
-                    _ks.get('KyteSite', 'application', appId, [], (res) => {
-                        dashboardData.resources.sites = res.data ? res.data.length : 0;
-                        $('#stat-sites').text(dashboardData.resources.sites);
-                        checkComplete();
-                    }, checkComplete);
-                });
+                _ks.get('KyteSite', 'application', appId, [], (res) => {
+                    dashboardData.resources.sites = res.data ? res.data.length : 0;
+                    $('#stat-sites').text(dashboardData.resources.sites);
+                    checkComplete();
+                }, checkComplete);
 
                 // Count Functions (linked via controller)
-                _ks.sign((sig) => {
-                    // Get all controllers for this app first
-                    _ks.get('Controller', 'application', appId, [], (res) => {
-                        if (res.data && res.data.length > 0) {
-                            const controllerIds = res.data.map(c => c.id);
-                            let functionsCount = 0;
-                            let controllersChecked = 0;
+                // Get all controllers for this app first
+                _ks.get('Controller', 'application', appId, [], (res) => {
+                    if (res.data && res.data.length > 0) {
+                        const controllerIds = res.data.map(c => c.id);
+                        let functionsCount = 0;
+                        let controllersChecked = 0;
 
-                            // Query functions for each controller
-                            controllerIds.forEach(controllerId => {
-                                _ks.sign((sig2) => {
-                                    _ks.get('Function', 'controller', controllerId, [], (funcRes) => {
-                                        if (funcRes.data) {
-                                            functionsCount += funcRes.data.length;
-                                            dashboardData.resources.functions = functionsCount;
-                                            $('#stat-functions').text(functionsCount);
-                                        }
-                                        controllersChecked++;
-                                        if (controllersChecked === controllerIds.length) {
-                                            checkComplete();
-                                        }
-                                    }, () => {
-                                        controllersChecked++;
-                                        if (controllersChecked === controllerIds.length) {
-                                            dashboardData.resources.functions = functionsCount;
-                                            $('#stat-functions').text(functionsCount);
-                                            checkComplete();
-                                        }
-                                    });
-                                });
+                        // Query functions for each controller
+                        controllerIds.forEach(controllerId => {
+                            _ks.get('Function', 'controller', controllerId, [], (funcRes) => {
+                                if (funcRes.data) {
+                                    functionsCount += funcRes.data.length;
+                                    dashboardData.resources.functions = functionsCount;
+                                    $('#stat-functions').text(functionsCount);
+                                }
+                                controllersChecked++;
+                                if (controllersChecked === controllerIds.length) {
+                                    checkComplete();
+                                }
+                            }, () => {
+                                controllersChecked++;
+                                if (controllersChecked === controllerIds.length) {
+                                    dashboardData.resources.functions = functionsCount;
+                                    $('#stat-functions').text(functionsCount);
+                                    checkComplete();
+                                }
                             });
-                        } else {
-                            dashboardData.resources.functions = 0;
-                            $('#stat-functions').text(0);
-                            checkComplete();
-                        }
-                    }, checkComplete);
-                });
+                        });
+                    } else {
+                        dashboardData.resources.functions = 0;
+                        $('#stat-functions').text(0);
+                        checkComplete();
+                    }
+                }, checkComplete);
 
                 // Count Cron Jobs (has application field)
-                _ks.sign((sig) => {
-                    _ks.get('CronJob', 'application', appId, [], (res) => {
-                        dashboardData.resources.cronJobs = res.data ? res.data.length : 0;
-                        $('#stat-cron-jobs').text(dashboardData.resources.cronJobs);
-                        checkComplete();
-                    }, checkComplete);
-                });
+                _ks.get('CronJob', 'application', appId, [], (res) => {
+                    dashboardData.resources.cronJobs = res.data ? res.data.length : 0;
+                    $('#stat-cron-jobs').text(dashboardData.resources.cronJobs);
+                    checkComplete();
+                }, checkComplete);
             });
         }
 
@@ -201,37 +185,85 @@ document.addEventListener('KyteInitialized', function(e) {
                 // Get errors from last 24 hours
                 const oneDayAgo = Math.floor(Date.now() / 1000) - (24 * 60 * 60);
 
-                _ks.sign((sig) => {
-                    _ks.get('KyteError', 'app_id', appId, [], (res) => {
-                        if (res.data) {
-                            // Filter errors from last 24h
-                            const recentErrors = res.data.filter(err => err.date_created >= oneDayAgo);
+                // First, get the Application record to find its identifier
+                _ks.get('Application', 'id', appId, [], (appRes) => {
+                    if (appRes.data && appRes.data.length > 0) {
+                        const appIdentifier = appRes.data[0].identifier;
 
-                            dashboardData.errors.total24h = recentErrors.length;
-                            dashboardData.errors.critical = recentErrors.filter(e => e.log_level === 'critical').length;
-                            dashboardData.errors.error = recentErrors.filter(e => e.log_level === 'error').length;
-                            dashboardData.errors.warning = recentErrors.filter(e => e.log_level === 'warning').length;
+                        // Now query KyteError by the app identifier string
+                        _ks.get('KyteError', 'app_id', appIdentifier, [], (res) => {
+                                    if (res.data) {
+                                        // Helper function to parse date_created (format: "MM/DD/YYYY HH:MM:SS")
+                                        const parseErrorDate = (dateStr) => {
+                                            if (!dateStr || dateStr === '') return 0;
+                                            // Parse MM/DD/YYYY HH:MM:SS format
+                                            const parts = dateStr.match(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/);
+                                            if (parts) {
+                                                const date = new Date(
+                                                    parseInt(parts[3]), // year
+                                                    parseInt(parts[1]) - 1, // month (0-indexed)
+                                                    parseInt(parts[2]), // day
+                                                    parseInt(parts[4]), // hour
+                                                    parseInt(parts[5]), // minute
+                                                    parseInt(parts[6])  // second
+                                                );
+                                                return Math.floor(date.getTime() / 1000);
+                                            }
+                                            return 0;
+                                        };
 
-                            // Get most recent critical/error entries (max 5)
-                            dashboardData.errors.recent = recentErrors
-                                .filter(e => e.log_level === 'critical' || e.log_level === 'error')
-                                .sort((a, b) => b.date_created - a.date_created)
-                                .slice(0, 5);
-                        } else {
-                            dashboardData.errors.total24h = 0;
-                            dashboardData.errors.critical = 0;
-                            dashboardData.errors.error = 0;
-                            dashboardData.errors.warning = 0;
-                            dashboardData.errors.recent = [];
-                        }
+                                        // Filter errors from last 24h
+                                        const recentErrors = res.data.filter(err => {
+                                            const timestamp = parseErrorDate(err.date_created);
+                                            return timestamp >= oneDayAgo;
+                                        });
+
+                                        dashboardData.errors.total24h = recentErrors.length;
+                                        dashboardData.errors.critical = recentErrors.filter(e => e.log_level === 'critical').length;
+                                        dashboardData.errors.error = recentErrors.filter(e => e.log_level === 'error').length;
+                                        dashboardData.errors.warning = recentErrors.filter(e => e.log_level === 'warning').length;
+
+                                        // Get most recent critical/error entries (max 5)
+                                        dashboardData.errors.recent = recentErrors
+                                            .filter(e => e.log_level === 'critical' || e.log_level === 'error')
+                                            .sort((a, b) => parseErrorDate(b.date_created) - parseErrorDate(a.date_created))
+                                            .slice(0, 5);
+                                    } else {
+                                        dashboardData.errors.total24h = 0;
+                                        dashboardData.errors.critical = 0;
+                                        dashboardData.errors.error = 0;
+                                        dashboardData.errors.warning = 0;
+                                        dashboardData.errors.recent = [];
+                                    }
+                            renderErrorStats();
+                            hideSectionLoader('errors');
+                            resolve();
+                        }, () => {
+                            renderErrorStats();
+                            hideSectionLoader('errors');
+                            resolve();
+                        });
+                    } else {
+                        // Application not found, show zero errors
+                        dashboardData.errors.total24h = 0;
+                        dashboardData.errors.critical = 0;
+                        dashboardData.errors.error = 0;
+                        dashboardData.errors.warning = 0;
+                        dashboardData.errors.recent = [];
                         renderErrorStats();
                         hideSectionLoader('errors');
                         resolve();
-                    }, () => {
-                        renderErrorStats();
-                        hideSectionLoader('errors');
-                        resolve();
-                    });
+                    }
+                }, () => {
+                    // Failed to get application, show zero errors
+                    dashboardData.errors.total24h = 0;
+                    dashboardData.errors.critical = 0;
+                    dashboardData.errors.error = 0;
+                    dashboardData.errors.warning = 0;
+                    dashboardData.errors.recent = [];
+                    renderErrorStats();
+                    hideSectionLoader('errors');
+                    resolve();
                 });
             });
         }
@@ -239,8 +271,7 @@ document.addEventListener('KyteInitialized', function(e) {
         function fetchCronJobMetrics() {
             return new Promise((resolve) => {
                 // Get cron jobs first
-                _ks.sign((sig) => {
-                    _ks.get('CronJob', 'application', appId, [], (res) => {
+                _ks.get('CronJob', 'application', appId, [], (res) => {
                         if (res.data && res.data.length > 0) {
                             const cronJobs = res.data;
                             dashboardData.cronJobs.total = cronJobs.length;
@@ -269,8 +300,7 @@ document.addEventListener('KyteInitialized', function(e) {
 
                             // Fetch executions for each cron job individually to avoid loading too much data
                             cronJobIds.forEach((jobId, index) => {
-                                _ks.sign((sig) => {
-                                    _ks.get('CronJobExecution', 'cron_job', jobId, [], (execRes) => {
+                                _ks.get('CronJobExecution', 'cron_job', jobId, [], (execRes) => {
                                         if (execRes.data) {
                                             // Only keep executions from last 7 days
                                             const recentExecs = execRes.data.filter(e => e.date_created >= sevenDaysAgo);
@@ -319,7 +349,6 @@ document.addEventListener('KyteInitialized', function(e) {
                                             resolve();
                                         }
                                     });
-                                });
                             });
                         } else {
                             dashboardData.cronJobs.total = 0;
@@ -347,7 +376,6 @@ document.addEventListener('KyteInitialized', function(e) {
                         hideSectionLoader('cron');
                         resolve();
                     });
-                });
             });
         }
 
@@ -401,6 +429,25 @@ document.addEventListener('KyteInitialized', function(e) {
         }
 
         function renderErrorStats() {
+            // Helper function to parse date_created (format: "MM/DD/YYYY HH:MM:SS")
+            const parseErrorDate = (dateStr) => {
+                if (!dateStr || dateStr === '') return 0;
+                // Parse MM/DD/YYYY HH:MM:SS format
+                const parts = dateStr.match(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/);
+                if (parts) {
+                    const date = new Date(
+                        parseInt(parts[3]), // year
+                        parseInt(parts[1]) - 1, // month (0-indexed)
+                        parseInt(parts[2]), // day
+                        parseInt(parts[4]), // hour
+                        parseInt(parts[5]), // minute
+                        parseInt(parts[6])  // second
+                    );
+                    return Math.floor(date.getTime() / 1000);
+                }
+                return 0;
+            };
+
             // Render error stats
             $('#stat-errors-24h').text(dashboardData.errors.total24h || 0);
             $('#stat-errors-critical').text(dashboardData.errors.critical || 0);
@@ -414,7 +461,8 @@ document.addEventListener('KyteInitialized', function(e) {
             if (dashboardData.errors.recent && dashboardData.errors.recent.length > 0) {
                 dashboardData.errors.recent.forEach(error => {
                     const icon = error.log_level === 'critical' ? '🔴' : '🟠';
-                    const timeAgo = formatTimeAgo(error.date_created);
+                    const timestamp = parseErrorDate(error.date_created);
+                    const timeAgo = formatTimeAgo(timestamp);
                     const message = error.message ? error.message.substring(0, 100) : t('ui.dashboard.errors.no_message', 'No message');
 
                     $errorList.append(`

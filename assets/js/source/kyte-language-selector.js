@@ -309,27 +309,21 @@ class KyteLanguageSelector {
                 return;
             }
 
-            // Sign request
-            this.kyte.sign((signature) => {
-                // Update user language preference
-                this.kyte.put('KyteUser', 'id', userId,
-                    { language: langCode },
-                    null, // formdata
-                    [], // headers
-                    (response) => {
-                        console.log('User language preference updated successfully');
-                        resolve();
-                    },
-                    (error) => {
-                        console.error('Failed to update user language preference:', error);
-                        // Don't reject - continue with language change even if API fails
-                        resolve();
-                    }
-                );
-            }, (error) => {
-                console.error('Failed to sign request:', error);
-                resolve(); // Continue anyway
-            });
+            // Update user language preference
+            this.kyte.put('KyteUser', 'id', userId,
+                { language: langCode },
+                null, // formdata
+                [], // headers
+                (response) => {
+                    console.log('User language preference updated successfully');
+                    resolve();
+                },
+                (error) => {
+                    console.error('Failed to update user language preference:', error);
+                    // Don't reject - continue with language change even if API fails
+                    resolve();
+                }
+            );
         });
     }
 
