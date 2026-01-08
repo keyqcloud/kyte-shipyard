@@ -29,6 +29,7 @@ jobs:
         cp *.html tmp/
         cp -r app tmp/app
         mkdir tmp/assets
+        cp -r assets/i18n tmp/assets/
         cp -r assets/css tmp/assets/
         cp -r assets/images tmp/assets/
         mkdir tmp/assets/js
