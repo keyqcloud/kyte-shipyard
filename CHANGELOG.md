@@ -1,3 +1,5 @@
+## 1.6.6 (pending)
+
 ## 1.6.5
 
 - Fix some hard coded source paths for internationalization and intellisense autocomplete.
