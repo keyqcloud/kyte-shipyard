@@ -1,3 +1,7 @@
+## 1.6.5
+
+- Fix some hard coded source paths for internationalization and intellisense autocomplete.
+
 ## 1.6.4
 
 ### Major Enhancements:

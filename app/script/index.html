@@ -67,7 +67,14 @@
     <script type="module" src="/assets/js/kyte-shipyard-script-editor.js"></script>
 
     <!-- i18n Support -->
-    <script src="/assets/js/source/kyte-i18n.js"></script>
+    <script>
+        // Load kyte-i18n.js with localhost detection
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
+            document.write('<script src="' + jsPath + 'kyte-i18n.js"><\/script>');
+        })();
+    </script>
     <script>
         document.addEventListener('KyteInitialized', function(e) {
             // Initialize i18n

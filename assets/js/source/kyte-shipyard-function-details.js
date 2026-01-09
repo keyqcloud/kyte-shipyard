@@ -1,7 +1,7 @@
 // Enhanced kyte-shipyard-function-details.js with Version Control
 import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/+esm';
 import {registerPHPSnippetLanguage} from '/assets/js/packages/php-snippet/registerPHPSnippetLanguage.js';
-import {registerKytePhpIntelliSense} from '/assets/js/source/kyte-php-intellisense.js';
+import {registerKytePhpIntelliSense} from '/assets/js/kyte-php-intellisense.js';
 
 var editor;
 var tblVersionHistory;
