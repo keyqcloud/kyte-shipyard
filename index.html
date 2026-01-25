@@ -55,59 +55,135 @@
         }
 
         body, html {
-            height: 100%;
+            min-height: 100%;
             margin: 0;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4a90e2 0%, #2c5aa0 100%);
             overflow-x: hidden;
         }
 
-        /* Animated background elements */
+        /* Lava lamp style background elements - Enhanced visibility */
         .bg-decoration {
             position: fixed;
             pointer-events: none;
             z-index: 1;
         }
 
-        .bg-circle-1 {
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-            top: -150px;
-            right: -150px;
-            animation: float 6s ease-in-out infinite;
+        /* Organic blob 1 - Large white/blue blob */
+        .bg-blob-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.12) 40%, transparent 70%);
+            border-radius: 45% 55% 60% 40% / 50% 60% 40% 50%;
+            top: -250px;
+            right: -200px;
+            animation: wave1 14s ease-in-out infinite, morph1 10s ease-in-out infinite;
+            filter: blur(40px);
         }
 
-        .bg-circle-2 {
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 50%;
-            bottom: -100px;
-            left: -100px;
-            animation: float 8s ease-in-out infinite reverse;
+        /* Organic blob 2 - Medium orange accent blob */
+        .bg-blob-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(ellipse at center, rgba(255, 120, 70, 0.22) 0%, rgba(255, 107, 53, 0.14) 40%, transparent 70%);
+            border-radius: 60% 40% 50% 50% / 40% 50% 50% 60%;
+            bottom: -200px;
+            left: -150px;
+            animation: wave2 16s ease-in-out infinite, morph2 12s ease-in-out infinite;
+            filter: blur(45px);
         }
 
-        .bg-triangle {
-            width: 0;
-            height: 0;
-            border-left: 100px solid transparent;
-            border-right: 100px solid transparent;
-            border-bottom: 173px solid rgba(255, 255, 255, 0.02);
-            top: 20%;
-            left: 10%;
-            animation: rotate 20s linear infinite;
+        /* Organic blob 3 - Medium white blob */
+        .bg-blob-3 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.09) 40%, transparent 70%);
+            border-radius: 50% 60% 40% 50% / 60% 40% 60% 40%;
+            top: 30%;
+            left: -120px;
+            animation: wave3 18s ease-in-out infinite, morph3 13s ease-in-out infinite;
+            filter: blur(40px);
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
+        /* Organic blob 4 - Small orange blob */
+        .bg-blob-4 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(ellipse at center, rgba(255, 140, 80, 0.2) 0%, rgba(247, 147, 30, 0.12) 40%, transparent 70%);
+            border-radius: 40% 60% 50% 50% / 50% 40% 60% 50%;
+            top: 15%;
+            right: 8%;
+            animation: wave4 13s ease-in-out infinite, morph4 9s ease-in-out infinite;
+            filter: blur(35px);
         }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* Organic blob 5 - Small white blob */
+        .bg-blob-5 {
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.08) 40%, transparent 70%);
+            border-radius: 55% 45% 60% 40% / 45% 55% 45% 55%;
+            bottom: 20%;
+            right: 15%;
+            animation: wave5 15s ease-in-out infinite, morph5 11s ease-in-out infinite;
+            filter: blur(38px);
+        }
+
+        /* Wave animations - enhanced vertical movement */
+        @keyframes wave1 {
+            0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+            50% { transform: translateY(120px) translateX(-50px) scale(1.05); }
+        }
+
+        @keyframes wave2 {
+            0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+            50% { transform: translateY(-100px) translateX(60px) scale(1.08); }
+        }
+
+        @keyframes wave3 {
+            0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+            50% { transform: translateY(110px) translateX(40px) scale(1.06); }
+        }
+
+        @keyframes wave4 {
+            0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+            50% { transform: translateY(-90px) translateX(-35px) scale(1.07); }
+        }
+
+        @keyframes wave5 {
+            0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+            50% { transform: translateY(95px) translateX(45px) scale(1.04); }
+        }
+
+        /* Morph animations - organic shape changes */
+        @keyframes morph1 {
+            0%, 100% { border-radius: 45% 55% 60% 40% / 50% 60% 40% 50%; }
+            33% { border-radius: 55% 45% 50% 50% / 60% 40% 50% 50%; }
+            66% { border-radius: 50% 50% 45% 55% / 45% 55% 60% 40%; }
+        }
+
+        @keyframes morph2 {
+            0%, 100% { border-radius: 60% 40% 50% 50% / 40% 50% 50% 60%; }
+            33% { border-radius: 50% 50% 60% 40% / 50% 60% 40% 50%; }
+            66% { border-radius: 40% 60% 45% 55% / 55% 45% 60% 40%; }
+        }
+
+        @keyframes morph3 {
+            0%, 100% { border-radius: 50% 60% 40% 50% / 60% 40% 60% 40%; }
+            33% { border-radius: 40% 50% 60% 50% / 50% 60% 50% 40%; }
+            66% { border-radius: 60% 40% 50% 50% / 40% 50% 40% 60%; }
+        }
+
+        @keyframes morph4 {
+            0%, 100% { border-radius: 40% 60% 50% 50% / 50% 40% 60% 50%; }
+            33% { border-radius: 60% 50% 40% 50% / 40% 60% 50% 50%; }
+            66% { border-radius: 50% 40% 60% 50% / 60% 50% 40% 50%; }
+        }
+
+        @keyframes morph5 {
+            0%, 100% { border-radius: 55% 45% 60% 40% / 45% 55% 45% 55%; }
+            33% { border-radius: 45% 55% 50% 50% / 55% 45% 60% 40%; }
+            66% { border-radius: 60% 40% 45% 55% / 50% 50% 55% 45%; }
         }
 
         .login-container {
@@ -115,9 +191,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 40px 20px;
             position: relative;
             z-index: 2;
+        }
+
+        /* Ensure container can scroll if viewport is too small */
+        @media (max-height: 700px) {
+            .login-container {
+                align-items: flex-start;
+                padding-top: 20px;
+                padding-bottom: 100px; /* Space for footer */
+            }
         }
 
         .login-card {
@@ -146,7 +231,7 @@
 
         .login-header {
             background: linear-gradient(135deg, #ff6b35, #f7931e);
-            padding: 40px 40px 30px;
+            padding: 24px 32px;
             text-align: center;
             color: white;
             position: relative;
@@ -169,33 +254,36 @@
             100% { transform: translate(60px, 60px); }
         }
 
-        .keyq-logo-img {
-            height: 80px;
-            margin: 0 auto 25px;
-            display: block;
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
             position: relative;
             z-index: 1;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
         }
 
-        .kyte-branding {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            z-index: 1;
+        .keyq-logo-img {
+            height: 48px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .logo-divider {
+            width: 1px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .kyte-logo-img {
-            height: 35px;
-            margin-bottom: 8px;
+            height: 36px;
             opacity: 0.95;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
         }
 
         .brand-subtitle {
-            font-size: 14px;
-            opacity: 0.9;
+            font-size: 12px;
+            opacity: 0.85;
             font-weight: 300;
             margin: 0;
             position: relative;
@@ -203,27 +291,53 @@
         }
 
         .login-body {
-            padding: 40px;
+            padding: 32px 40px;
+            position: relative;
+        }
+
+        /* Subtle background logo watermark */
+        .login-body::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 180px;
+            background: url('/assets/images/keyq_logo_horizontal_v2_dark.png') center/contain no-repeat;
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .login-body > * {
+            position: relative;
+            z-index: 1;
         }
 
         .form-section-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 600;
             color: #2d3748;
-            margin-bottom: 8px;
+            margin-bottom: 24px;
             text-align: center;
         }
 
         .form-section-subtitle {
             color: #718096;
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 14px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            display: none; /* Removed for compactness */
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             position: relative;
+        }
+
+        .form-group:last-of-type {
+            margin-bottom: 24px;
         }
 
         .form-control {
@@ -298,10 +412,10 @@
         }
 
         .terms-text {
-            font-size: 13px;
+            font-size: 12px;
             color: #718096;
             text-align: center;
-            margin: 24px 0 16px;
+            margin: 20px 0 16px;
             line-height: 1.5;
         }
 
@@ -340,6 +454,38 @@
             z-index: 1;
         }
 
+        .made-with-love {
+            font-size: 13px;
+            margin-bottom: 12px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .made-with-love .heart {
+            color: #ff6b6b;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        .made-with-love a {
+            color: rgba(255, 255, 255, 1);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid transparent;
+        }
+
+        .made-with-love a:hover {
+            border-bottom-color: rgba(255, 255, 255, 0.8);
+            color: #fff;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10%, 30% { transform: scale(1.1); }
+            20%, 40% { transform: scale(1); }
+        }
+
         .footer-info .copyright {
             margin-bottom: 8px;
             font-weight: 500;
@@ -367,19 +513,29 @@
                 margin: 10px;
                 border-radius: 16px;
             }
-            
+
             .login-header {
-                padding: 30px 30px 25px;
+                padding: 20px 24px;
             }
-            
+
+            .logo-container {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .logo-divider {
+                width: 30px;
+                height: 1px;
+            }
+
             .login-body {
-                padding: 30px;
+                padding: 24px 30px;
             }
-            
-            .brand-title {
-                font-size: 24px;
+
+            .form-section-title {
+                font-size: 20px;
             }
-            
+
             .footer-info .versions {
                 flex-direction: column;
                 gap: 4px;
@@ -394,14 +550,57 @@
                 transition-duration: 0.01ms !important;
             }
         }
+
+        /* Grid pattern removed - caused visible blue tiles */
+
+        /* Improve button pressed state */
+        .btn-primary:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Better accessibility focus states */
+        *:focus-visible {
+            outline: 2px solid #ff6b35;
+            outline-offset: 2px;
+        }
+
+        /* Smooth page load */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        body {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        /* Info banner with blue accent (sky theme) */
+        .info-banner {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #1e40af;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-banner i {
+            color: #3b82f6;
+        }
     </style>
 </head>
 
 <body>
-    <!-- Background decorations -->
-    <div class="bg-decoration bg-circle-1"></div>
-    <div class="bg-decoration bg-circle-2"></div>
-    <div class="bg-decoration bg-triangle"></div>
+    <!-- Background decorations - Lava lamp style organic blobs -->
+    <div class="bg-decoration bg-blob-1"></div>
+    <div class="bg-decoration bg-blob-2"></div>
+    <div class="bg-decoration bg-blob-3"></div>
+    <div class="bg-decoration bg-blob-4"></div>
+    <div class="bg-decoration bg-blob-5"></div>
 
     <!-- Page loading modal. Once session is validated, the loading modal will close. -->
     <div id="pageLoaderModal" class="modal white" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
@@ -417,18 +616,17 @@
         <div class="login-card">
             <!-- Header with branding -->
             <div class="login-header">
-                <img src="/assets/images/keyq_logo_horizontal_v2_dark.png" alt="KeyQ Cloud Solutions" class="keyq-logo-img">
-                <div class="kyte-branding">
+                <div class="logo-container">
+                    <img src="/assets/images/keyq_logo_horizontal_v2_dark.png" alt="KeyQ Cloud Solutions" class="keyq-logo-img">
+                    <div class="logo-divider"></div>
                     <img src="/assets/images/kyte_shipyard_light.png" alt="Kyte Shipyard" class="kyte-logo-img">
-                    <p class="brand-subtitle" data-i18n="ui.login.brand_subtitle">Kyte Shipyard™</p>
-                    <p class="brand-subtitle" style="font-style: italic;" data-i18n="ui.login.brand_tagline">Next Generation App Building</p>
                 </div>
+                <p class="brand-subtitle" data-i18n="ui.login.brand_tagline">Next Generation App Building Platform</p>
             </div>
 
             <!-- Login form -->
             <div class="login-body">
-                <h2 class="form-section-title" data-i18n="ui.login.welcome_title">Welcome to Kyte Shipyard</h2>
-                <p class="form-section-subtitle" data-i18n="ui.login.welcome_subtitle">Sign in to continue to your workspace</p>
+                <h2 class="form-section-title" data-i18n="ui.login.welcome_title">Sign In</h2>
 
                 <form id="login-form">
                     <p class="error-message d-none" id="errorMsg"></p>
@@ -462,6 +660,9 @@
 
     <!-- Footer -->
     <div class="footer-info">
+        <div class="made-with-love">
+            Made with <span class="heart">♥</span> by <a href="https://www.keyq.cloud" target="_blank" rel="noopener">KeyQ</a>
+        </div>
         <div class="copyright" data-i18n="ui.login.copyright">KeyQ © 2020-2026</div>
         <div class="versions">
             <span><span data-i18n="ui.login.version_shipyard">Kyte Shipyard™ Version</span> <span id="kyteShipyardVersion"></span></span>
