@@ -150,13 +150,18 @@ function getData(_ks, idx, model, appId) {
 
         var tblData = new KyteTable(_ks, $("#data-table"), {'name':"AppModelWrapper",'field':null,'value':null}, modelColDef, true, [0,"asc"], true, true);
         tblData.httpHeaders = [{'name':'x-kyte-app-id','value':appId},{'name':'x-kyte-app-model','value':model}];
-        tblData.init();
 
-        // Update records count in sidebar
-        $('#data-table').on('draw.dt', function() {
-            var info = $(this).DataTable().page.info();
-            $('#records-count').text(info.recordsTotal);
-        });
+        // Custom callback to update records count after data loads
+        const originalLoadData = tblData._loadData;
+        tblData._loadData = function() {
+            originalLoadData.call(this);
+            // Update records count in sidebar after data loads
+            setTimeout(() => {
+                $('#records-count').text(tblData.totalRecords || 0);
+            }, 100);
+        };
+
+        tblData.init();
 
         // init form
         const dataModalTitle = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.data_title') : 'Model Data';
@@ -167,6 +172,32 @@ function getData(_ks, idx, model, appId) {
         modelDataForm.httpHeaders = [{'name':'x-kyte-app-id','value':appId},{'name':'x-kyte-app-model','value':model}];
         modelDataForm.init();
         tblData.bindEdit(modelDataForm);
+
+        // Refresh data table button
+        $('#refreshData').click(function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = btn.find('i');
+
+            // Add spinning animation
+            icon.addClass('fa-spin');
+            btn.prop('disabled', true);
+
+            // Reload data - use internal method directly
+            if (typeof tblData._loadData === 'function') {
+                tblData._loadData();
+            } else if (typeof tblData.draw === 'function') {
+                tblData.draw();
+            } else {
+                console.error('Unable to refresh table - no reload method found', tblData);
+            }
+
+            // Remove spinning animation after a short delay
+            setTimeout(function() {
+                icon.removeClass('fa-spin');
+                btn.prop('disabled', false);
+            }, 500);
+        });
     });
 }
 
@@ -404,79 +435,516 @@ function download_code(model, code, ext) {
     window.URL.revokeObjectURL(url);
 }
 
+// Helper function to escape CSV values (RFC 4180 compliant)
+function escapeCsvValue(value) {
+    if (value === null || value === undefined) {
+        return '';
+    }
+
+    // Convert to string
+    let str = String(value);
+
+    // If contains comma, quote, or newline, wrap in quotes and escape quotes
+    if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+        return '"' + str.replace(/"/g, '""') + '"';
+    }
+
+    return str;
+}
+
+// Helper function to flatten nested objects for export
+function flattenValue(value) {
+    if (value === null || value === undefined) {
+        return '';
+    }
+    if (typeof value === 'object') {
+        // If it has an id property, use that (foreign key)
+        if (value.hasOwnProperty('id')) {
+            return value.id;
+        }
+        // Otherwise convert to JSON string
+        return JSON.stringify(value);
+    }
+    return value;
+}
+
+// Download model definition (schema)
+function download_model_definition(_ks, format) {
+    if (!modelStructure || modelStructure.length === 0) {
+        _ks.alert('No Model Definition', 'Model definition not loaded. Please refresh the page.');
+        return;
+    }
+
+    const modelDef = {
+        name: model,
+        attributes: modelStructure.map(attr => ({
+            name: attr.name,
+            type: attr.type,
+            size: attr.size,
+            required: attr.required === 1,
+            protected: attr.protected === 1,
+            unsigned: attr.unsigned === 1,
+            default: attr.defaults,
+            description: attr.description,
+            foreignKey: attr.foreignKeyModel ? {
+                model: attr.foreignKeyModel.name,
+                field: attr.foreignKeyAttribute
+            } : null
+        }))
+    };
+
+    const jsonStr = JSON.stringify(modelDef, null, 2);
+    const blob = new Blob([universalBOM + jsonStr], {type: "application/json"});
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    a.href = url;
+    a.download = model + '_definition.json';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+}
+
+// Download all data
 function download_data(_ks, format) {
     $('#pageLoaderModal').modal('show');
-    // Use httpHeaders to pass app context instead of URL parameters
+
     const headers = [
         {'name':'x-kyte-app-id','value':appId},
         {'name':'x-kyte-app-model','value':model}
     ];
-    _ks.get('AppModelWrapper', null, null, headers, function(r) {
-        if(r.data.length > 0) {
 
-            if (format == 'json') {
-                blob = new Blob([universalBOM+JSON.stringify(r.data)], {type: "octet/stream"});
-                url = window.URL.createObjectURL(blob);
-                var a = document.createElement("a");
-                document.body.appendChild(a);
-                a.style = "display: none";
-                a.href = url;
-                a.download = model+'.json';
-                a.click();
-                window.URL.revokeObjectURL(url);
-            } else if (format == 'csv') {
-                const header = Object.keys(r.data[0]).join(',');
-                const csv = r.data.map(obj => {
-                    if (typeof obj === 'object' && obj !== null && obj.hasOwnProperty('id')) {
-                        return Object.values(obj).map(value => {
-                            return typeof value === 'object' ? value.id : value;
-                        }).join(',');
-                    } else {
-                      return Object.values(obj).join(',');
-                    }
-                }).join('\n');
-                const csvContent = `${header}\n${csv}`;
-                blob = new Blob([universalBOM+csvContent], {type: "octet/stream"});
-                url = window.URL.createObjectURL(blob);
-                var a = document.createElement("a");
-                document.body.appendChild(a);
-                a.style = "display: none";
-                a.href = url;
-                a.download = model+'.csv';
-                a.click();
-                window.URL.revokeObjectURL(url);
-            } else if (format == 'txt') {
-                const header = Object.keys(r.data[0]).join('\t');
-                const txt = r.data.map(obj => {
-                    if (typeof obj === 'object' && obj !== null && obj.hasOwnProperty('id')) {
-                        return Object.values(obj).map(value => {
-                            return typeof value === 'object' ? value.id : value;
-                        }).join('\t');
-                    } else {
-                      return Object.values(obj).join('\t');
-                    }
-                }).join('\n');
-                const txtContent = `${header}\n${txt}`;
-                blob = new Blob([universalBOM+txtContent], {type: "octet/stream"});
-                url = window.URL.createObjectURL(blob);
-                var a = document.createElement("a");
-                document.body.appendChild(a);
-                a.style = "display: none";
-                a.href = url;
-                a.download = model+'.txt';
-                a.click();
-                window.URL.revokeObjectURL(url);
-            } else {
-                alert("Invalid output format requested");
-            }
-        } else {
-            alert("No data found to download");
+    _ks.get('AppModelWrapper', null, null, headers, function(r) {
+        if (!r.data || r.data.length === 0) {
+            $('#pageLoaderModal').modal('hide');
+            _ks.alert('No Data', 'No records found to export.');
+            return;
         }
-        $('#pageLoaderModal').modal('hide');
+
+        try {
+            let blob, url;
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+
+            if (format === 'json') {
+                // JSON export
+                const jsonStr = JSON.stringify(r.data, null, 2);
+                blob = new Blob([universalBOM + jsonStr], {type: "application/json"});
+                url = window.URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                a.href = url;
+                a.download = model + '_data_' + timestamp + '.json';
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+            } else if (format === 'csv') {
+                // CSV export with proper escaping
+                const headers = Object.keys(r.data[0]);
+                const headerRow = headers.map(h => escapeCsvValue(h)).join(',');
+
+                const rows = r.data.map(obj => {
+                    return headers.map(header => {
+                        const value = flattenValue(obj[header]);
+                        return escapeCsvValue(value);
+                    }).join(',');
+                });
+
+                const csvContent = headerRow + '\n' + rows.join('\n');
+                blob = new Blob([universalBOM + csvContent], {type: "text/csv"});
+                url = window.URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                a.href = url;
+                a.download = model + '_data_' + timestamp + '.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+            } else if (format === 'txt') {
+                // TSV export (tab-separated)
+                const headers = Object.keys(r.data[0]);
+                const headerRow = headers.join('\t');
+
+                const rows = r.data.map(obj => {
+                    return headers.map(header => {
+                        const value = flattenValue(obj[header]);
+                        // For TSV, replace tabs and newlines with spaces
+                        return String(value).replace(/[\t\n\r]/g, ' ');
+                    }).join('\t');
+                });
+
+                const tsvContent = headerRow + '\n' + rows.join('\n');
+                blob = new Blob([universalBOM + tsvContent], {type: "text/tab-separated-values"});
+                url = window.URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                a.href = url;
+                a.download = model + '_data_' + timestamp + '.txt';
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+            } else if (format === 'xlsx') {
+                // Excel export using SheetJS
+                if (typeof XLSX === 'undefined') {
+                    $('#pageLoaderModal').modal('hide');
+                    _ks.alert('Library Missing', 'SheetJS library not loaded. Please refresh the page.');
+                    return;
+                }
+
+                // Flatten nested objects for Excel
+                const flatData = r.data.map(obj => {
+                    const flatObj = {};
+                    Object.keys(obj).forEach(key => {
+                        flatObj[key] = flattenValue(obj[key]);
+                    });
+                    return flatObj;
+                });
+
+                // Create workbook and worksheet
+                const ws = XLSX.utils.json_to_sheet(flatData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, model.substring(0, 31)); // Excel sheet name limit
+
+                // Generate Excel file
+                XLSX.writeFile(wb, model + '_data_' + timestamp + '.xlsx');
+
+            } else {
+                $('#pageLoaderModal').modal('hide');
+                _ks.alert('Invalid Format', 'The requested export format is not supported.');
+                return;
+            }
+
+            $('#pageLoaderModal').modal('hide');
+
+            // Show success message
+            console.log(`Successfully exported ${r.data.length} records as ${format.toUpperCase()}`);
+
+        } catch (error) {
+            console.error('Export error:', error);
+            $('#pageLoaderModal').modal('hide');
+            _ks.alert('Export Failed', 'An error occurred while exporting data: ' + error.message);
+        }
+
     }, function(e) {
-        console.error(e);
-        alert(e);
+        console.error('Data fetch error:', e);
         $('#pageLoaderModal').modal('hide');
+        _ks.alert('Export Failed', 'Failed to fetch data from server: ' + (e.message || e));
+    });
+}
+
+// ===== IMPORT FUNCTIONALITY =====
+
+// Global import state
+let importState = {
+    parsedData: [],
+    validationErrors: [],
+    importResults: {
+        success: [],
+        errors: []
+    }
+};
+
+// Download import template
+function download_import_template(_ks, format) {
+    if (!modelStructure || modelStructure.length === 0) {
+        _ks.alert('No Model Definition', 'Model structure not loaded. Please refresh the page.');
+        return;
+    }
+
+    // Get field names (exclude protected fields and audit fields)
+    const excludeFields = ['id', 'kyte_account', 'created_by', 'date_created', 'modified_by', 'date_modified', 'deleted', 'deleted_by', 'date_deleted'];
+    const fields = modelStructure
+        .filter(attr => attr.protected !== 1 && !excludeFields.includes(attr.name))
+        .map(attr => attr.name);
+
+    if (fields.length === 0) {
+        _ks.alert('No Fields', 'No importable fields found in this model.');
+        return;
+    }
+
+    // Create sample row with hints
+    const sampleRow = {};
+    modelStructure.forEach(attr => {
+        if (fields.includes(attr.name)) {
+            let hint = '';
+            if (attr.type === 's') hint = 'text';
+            else if (attr.type === 'i' || attr.type === 'bi') hint = '123';
+            else if (attr.type === 'd') hint = '99.99';
+            else if (attr.type === 't' || attr.type === 'tt' || attr.type === 'mt' || attr.type === 'lt') hint = 'long text';
+            else if (attr.type === 'date') hint = '2026-01-25';
+            else if (attr.foreignKeyModel) hint = 'FK:' + attr.foreignKeyModel.id;
+            else hint = 'value';
+
+            sampleRow[attr.name] = hint;
+        }
+    });
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+
+    if (format === 'csv') {
+        // CSV template
+        const headerRow = fields.map(f => escapeCsvValue(f)).join(',');
+        const sampleRowStr = fields.map(f => escapeCsvValue(sampleRow[f])).join(',');
+        const csvContent = headerRow + '\n' + sampleRowStr;
+
+        const blob = new Blob([universalBOM + csvContent], {type: "text/csv"});
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = url;
+        a.download = model + '_import_template_' + timestamp + '.csv';
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+    } else if (format === 'xlsx') {
+        // Excel template
+        if (typeof XLSX === 'undefined') {
+            _ks.alert('Library Missing', 'SheetJS library not loaded. Please refresh the page.');
+            return;
+        }
+
+        const templateData = [sampleRow];
+        const ws = XLSX.utils.json_to_sheet(templateData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Import Template');
+
+        XLSX.writeFile(wb, model + '_import_template_' + timestamp + '.xlsx');
+    }
+}
+
+// Parse uploaded file
+function parse_import_file(file, callback, errorCallback) {
+    const fileName = file.name.toLowerCase();
+    const fileExtension = fileName.split('.').pop();
+
+    if (fileExtension === 'json') {
+        // Parse JSON
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (!Array.isArray(data)) {
+                    errorCallback('JSON file must contain an array of objects.');
+                    return;
+                }
+                callback(data);
+            } catch (error) {
+                errorCallback('Invalid JSON format: ' + error.message);
+            }
+        };
+        reader.onerror = function() {
+            errorCallback('Failed to read file.');
+        };
+        reader.readAsText(file);
+
+    } else if (fileExtension === 'csv' || fileExtension === 'txt' || fileExtension === 'tsv') {
+        // Parse CSV/TSV
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const text = e.target.result;
+                const delimiter = fileExtension === 'tsv' ? '\t' : ',';
+                const lines = text.split('\n').filter(line => line.trim().length > 0);
+
+                if (lines.length < 2) {
+                    errorCallback('File must contain at least a header row and one data row.');
+                    return;
+                }
+
+                // Parse header
+                const headers = lines[0].split(delimiter).map(h => h.trim().replace(/^"|"$/g, ''));
+
+                // Parse rows
+                const data = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(delimiter).map(v => v.trim().replace(/^"|"$/g, ''));
+                    const row = {};
+                    headers.forEach((header, index) => {
+                        row[header] = values[index] || '';
+                    });
+                    data.push(row);
+                }
+
+                callback(data);
+            } catch (error) {
+                errorCallback('Failed to parse CSV/TSV: ' + error.message);
+            }
+        };
+        reader.onerror = function() {
+            errorCallback('Failed to read file.');
+        };
+        reader.readAsText(file);
+
+    } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+        // Parse Excel
+        if (typeof XLSX === 'undefined') {
+            errorCallback('SheetJS library not loaded. Please refresh the page.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+
+                if (jsonData.length === 0) {
+                    errorCallback('Excel file is empty.');
+                    return;
+                }
+
+                callback(jsonData);
+            } catch (error) {
+                errorCallback('Failed to parse Excel file: ' + error.message);
+            }
+        };
+        reader.onerror = function() {
+            errorCallback('Failed to read file.');
+        };
+        reader.readAsArrayBuffer(file);
+
+    } else {
+        errorCallback('Unsupported file format. Please upload CSV, TSV, JSON, or Excel (XLSX) files.');
+    }
+}
+
+// Validate import data
+function validate_import_data(data) {
+    if (!modelStructure || modelStructure.length === 0) {
+        return {valid: false, errors: ['Model structure not loaded']};
+    }
+
+    const errors = [];
+    const requiredFields = modelStructure
+        .filter(attr => attr.required === 1 && attr.name !== 'id' && attr.name !== 'kyte_account')
+        .map(attr => attr.name);
+
+    // Check each row
+    data.forEach((row, index) => {
+        const rowNum = index + 1;
+
+        // Check required fields
+        requiredFields.forEach(field => {
+            if (!row[field] || row[field] === '') {
+                errors.push({
+                    row: rowNum,
+                    field: field,
+                    error: `Required field '${field}' is missing or empty`
+                });
+            }
+        });
+
+        // Check data types (basic validation)
+        modelStructure.forEach(attr => {
+            if (row.hasOwnProperty(attr.name) && row[attr.name] !== '') {
+                const value = row[attr.name];
+
+                // Integer validation
+                if ((attr.type === 'i' || attr.type === 'bi') && isNaN(parseInt(value))) {
+                    errors.push({
+                        row: rowNum,
+                        field: attr.name,
+                        error: `Field '${attr.name}' must be a number, got '${value}'`
+                    });
+                }
+
+                // Decimal validation
+                if (attr.type === 'd' && isNaN(parseFloat(value))) {
+                    errors.push({
+                        row: rowNum,
+                        field: attr.name,
+                        error: `Field '${attr.name}' must be a decimal number, got '${value}'`
+                    });
+                }
+            }
+        });
+    });
+
+    return {
+        valid: errors.length === 0,
+        errors: errors
+    };
+}
+
+// Perform import with progress tracking
+async function perform_import(_ks, data, progressCallback, completeCallback) {
+    const total = data.length;
+    let processed = 0;
+    let successCount = 0;
+    let errorCount = 0;
+    const errors = [];
+
+    // Sequential import (one at a time)
+    for (let i = 0; i < data.length; i++) {
+        const row = data[i];
+
+        try {
+            // Create promise wrapper for kyte.post
+            await new Promise((resolve, reject) => {
+                const headers = [
+                    {'name': 'x-kyte-app-id', 'value': appId},
+                    {'name': 'x-kyte-app-model', 'value': model}
+                ];
+
+                _ks.post('AppModelWrapper', row, null, headers,
+                    function(response) {
+                        successCount++;
+                        processed++;
+                        progressCallback({
+                            processed: processed,
+                            total: total,
+                            successCount: successCount,
+                            errorCount: errorCount
+                        });
+                        resolve(response);
+                    },
+                    function(error) {
+                        errorCount++;
+                        processed++;
+                        errors.push({
+                            row: i + 1,
+                            data: row,
+                            error: error.error || error.message || error
+                        });
+                        progressCallback({
+                            processed: processed,
+                            total: total,
+                            successCount: successCount,
+                            errorCount: errorCount
+                        });
+                        resolve(); // Don't reject, continue with next row
+                    }
+                );
+            });
+
+            // Small delay to prevent overwhelming the server
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+        } catch (error) {
+            console.error('Import error:', error);
+        }
+    }
+
+    completeCallback({
+        total: total,
+        successCount: successCount,
+        errorCount: errorCount,
+        errors: errors
     });
 }
 
@@ -765,6 +1233,307 @@ document.addEventListener('KyteInitialized', function(e) {
 
             download_data(_ks, format);
         });
+
+        $(".downloadModelDefBtn").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            let format = $(this).data('downloadFormat');
+
+            download_model_definition(_ks, format);
+        });
+
+        // ===== IMPORT EVENT HANDLERS =====
+
+        // Download template
+        $(".downloadTemplateBtn").click(function(e) {
+            e.preventDefault();
+            let format = $(this).data('templateFormat');
+            download_import_template(_ks, format);
+        });
+
+        // Drag & drop file upload
+        const dropzone = document.getElementById('import-dropzone');
+        const fileInput = document.getElementById('import-file-input');
+
+        dropzone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).addClass('border-primary bg-light');
+        });
+
+        dropzone.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).removeClass('border-primary bg-light');
+        });
+
+        dropzone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).removeClass('border-primary bg-light');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleImportFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (files.length > 0) {
+                handleImportFile(files[0]);
+            }
+        });
+
+        // Handle file upload
+        function handleImportFile(file) {
+            // Show file info
+            $('#import-filename').text(file.name);
+            $('#import-filesize').text((file.size / 1024).toFixed(2) + ' KB');
+            $('#import-file-info').show();
+
+            // Parse file
+            $('#pageLoaderModal').modal('show');
+            parse_import_file(file,
+                function(data) {
+                    // Success
+                    $('#pageLoaderModal').modal('hide');
+                    importState.parsedData = data;
+
+                    // Validate
+                    const validation = validate_import_data(data);
+                    importState.validationErrors = validation.errors;
+
+                    // Show preview
+                    showImportPreview(data, validation);
+
+                    // Move to step 2
+                    $('#import-step-1').hide();
+                    $('#import-step-2').show();
+                },
+                function(error) {
+                    // Error
+                    $('#pageLoaderModal').modal('hide');
+                    _ks.alert('Parse Error', error);
+                }
+            );
+        }
+
+        // Show import preview
+        function showImportPreview(data, validation) {
+            const previewTable = $('#import-preview-table');
+            previewTable.find('thead').empty();
+            previewTable.find('tbody').empty();
+
+            // Show validation summary
+            const summaryDiv = $('#import-validation-summary');
+            if (validation.valid) {
+                summaryDiv.html(`
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Validation Passed!</strong> All ${data.length} rows are valid and ready to import.
+                    </div>
+                `);
+                $('#import-start-btn').prop('disabled', false);
+            } else {
+                summaryDiv.html(`
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Validation Issues Found:</strong> ${validation.errors.length} error(s) in ${data.length} row(s).
+                        You can still proceed, but rows with errors will be skipped.
+                        <button class="btn btn-sm btn-warning ms-2" onclick="$('#validation-details').toggle()">
+                            <i class="fas fa-list me-1"></i>Show Details
+                        </button>
+                    </div>
+                    <div id="validation-details" style="display: none;" class="mt-2">
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-warning">
+                                <tr><th>Row</th><th>Field</th><th>Error</th></tr>
+                            </thead>
+                            <tbody>
+                                ${validation.errors.map(err => `
+                                    <tr>
+                                        <td>${err.row}</td>
+                                        <td>${err.field}</td>
+                                        <td>${err.error}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `);
+                $('#import-start-btn').prop('disabled', false); // Allow import anyway
+            }
+
+            // Show preview (first 10 rows)
+            if (data.length > 0) {
+                const headers = Object.keys(data[0]);
+                const headerRow = '<tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr>';
+                previewTable.find('thead').html(headerRow);
+
+                const previewRows = data.slice(0, 10);
+                const bodyRows = previewRows.map((row, index) => {
+                    const cells = headers.map(h => `<td>${row[h] || ''}</td>`).join('');
+                    return `<tr><td class="text-muted small">${index + 1}</td>${cells}</tr>`;
+                }).join('');
+
+                previewTable.find('thead tr').prepend('<th>#</th>');
+                previewTable.find('tbody').html(bodyRows);
+
+                if (data.length > 10) {
+                    previewTable.find('tbody').append(`
+                        <tr>
+                            <td colspan="${headers.length + 1}" class="text-center text-muted">
+                                ... and ${data.length - 10} more rows
+                            </td>
+                        </tr>
+                    `);
+                }
+            }
+        }
+
+        // Back to upload
+        $('#import-back-btn').click(function() {
+            $('#import-step-2').hide();
+            $('#import-step-1').show();
+            // Reset file input
+            $('#import-file-input').val('');
+            $('#import-file-info').hide();
+        });
+
+        // Start import
+        $('#import-start-btn').click(function() {
+            // Move to step 3
+            $('#import-step-2').hide();
+            $('#import-step-3').show();
+
+            // Initialize progress
+            const total = importState.parsedData.length;
+            $('#import-total-count').text(total);
+            $('#import-progress-text').text('0 / ' + total);
+            $('#import-progress-percent').text('0%');
+            $('#import-progress-bar').css('width', '0%');
+            $('#import-success-count').text('0');
+            $('#import-error-count').text('0');
+
+            // Start import
+            perform_import(_ks, importState.parsedData,
+                function(progress) {
+                    // Progress callback
+                    const percent = Math.round((progress.processed / progress.total) * 100);
+                    $('#import-progress-text').text(progress.processed + ' / ' + progress.total);
+                    $('#import-progress-percent').text(percent + '%');
+                    $('#import-progress-bar').css('width', percent + '%');
+                    $('#import-success-count').text(progress.successCount);
+                    $('#import-error-count').text(progress.errorCount);
+                },
+                function(results) {
+                    // Complete callback
+                    importState.importResults = results;
+
+                    // Show results
+                    showImportResults(results);
+
+                    // Move to step 4
+                    $('#import-step-3').hide();
+                    $('#import-step-4').show();
+                }
+            );
+        });
+
+        // Show import results
+        function showImportResults(results) {
+            const summaryDiv = $('#import-results-summary');
+
+            if (results.errorCount === 0) {
+                summaryDiv.html(`
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Import Successful!</strong> All ${results.successCount} records were imported successfully.
+                    </div>
+                `);
+                $('#import-errors-section').hide();
+            } else {
+                summaryDiv.html(`
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Import Completed with Errors:</strong>
+                        ${results.successCount} successful, ${results.errorCount} failed out of ${results.total} total.
+                    </div>
+                `);
+
+                // Show errors
+                const errorsTable = $('#import-errors-table tbody');
+                errorsTable.empty();
+                results.errors.forEach(err => {
+                    errorsTable.append(`
+                        <tr>
+                            <td>${err.row}</td>
+                            <td><code>${JSON.stringify(err.data)}</code></td>
+                            <td class="text-danger">${err.error}</td>
+                        </tr>
+                    `);
+                });
+                $('#import-errors-section').show();
+            }
+        }
+
+        // Download error report
+        $('#download-error-report-btn').click(function() {
+            const errors = importState.importResults.errors;
+            if (errors.length === 0) return;
+
+            const csvHeader = 'Row,Data,Error\n';
+            const csvRows = errors.map(err => {
+                return `${err.row},"${JSON.stringify(err.data).replace(/"/g, '""')}","${String(err.error).replace(/"/g, '""')}"`;
+            }).join('\n');
+
+            const csvContent = universalBOM + csvHeader + csvRows;
+            const blob = new Blob([csvContent], {type: "text/csv"});
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            a.href = url;
+            a.download = model + '_import_errors_' + new Date().toISOString().slice(0, 10) + '.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        });
+
+        // Import another file
+        $('#import-new-btn').click(function() {
+            // Reset state
+            importState = {
+                parsedData: [],
+                validationErrors: [],
+                importResults: {success: [], errors: []}
+            };
+
+            // Reset UI
+            $('#import-step-4').hide();
+            $('#import-step-1').show();
+            $('#import-file-input').val('');
+            $('#import-file-info').hide();
+        });
+
+        // Refresh data table
+        $('#import-refresh-data-btn').click(function() {
+            // Switch to data tab
+            $('#model-tabs a[href="#data-tab"]').tab('show');
+
+            // Reload data table if it exists
+            if (typeof tblData !== 'undefined') {
+                if (typeof tblData._loadData === 'function') {
+                    tblData._loadData();
+                } else if (typeof tblData.draw === 'function') {
+                    tblData.draw();
+                }
+            }
+        });
+
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
     }

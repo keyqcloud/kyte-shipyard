@@ -22,6 +22,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
+    <!-- SheetJS for Excel export -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     <!-- Kyte -->
     <script>
         // Auto-detect localhost and conditionally load local kyte.js for development
@@ -245,9 +247,14 @@
                                 <i class="fas fa-database me-2"></i>
                                 <span data-i18n="ui.model_detail.data_title">Model Data</span>
                             </h2>
-                            <a class="btn btn-md btn-outline-secondary" href="#" id="newData">
-                                <i class="fas fa-plus me-2"></i><span data-i18n="ui.model_detail.add_record">Add Record</span>
-                            </a>
+                            <div>
+                                <button class="btn btn-md btn-outline-primary" id="refreshData">
+                                    <i class="fas fa-sync-alt me-2"></i><span data-i18n="ui.model_detail.refresh_data">Refresh</span>
+                                </button>
+                                <a class="btn btn-md btn-outline-secondary ms-2" href="#" id="newData">
+                                    <i class="fas fa-plus me-2"></i><span data-i18n="ui.model_detail.add_record">Add Record</span>
+                                </a>
+                            </div>
                         </div>
                         <div class="section-content">
                             <table id="data-table" class="table table-striped w-100"></table>
@@ -272,46 +279,85 @@
 
                     <!-- Export Tab -->
                     <div class="tab-pane fade p-3" id="export-tab">
+                        <!-- Export Model Definition Section -->
                         <div class="section-header mb-3">
                             <h2 class="section-title">
                                 <i class="fas fa-file-code me-2"></i>
-                                <span data-i18n="ui.model_detail.export_title">Export Model Definition</span>
+                                <span data-i18n="ui.model_detail.export_model_def_title">Export Model Definition</span>
                             </h2>
+                            <p class="text-muted">Download the model schema and structure (fields, types, relationships)</p>
+                        </div>
+                        <div class="section-content mb-5">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="card-img-top fas fa-4x fa-file-code text-primary mb-3"></i>
+                                            <h5 class="card-title">JSON Schema</h5>
+                                            <p class="mb-3 text-muted">Model definition as JSON</p>
+                                            <button class="btn btn-outline-primary downloadModelDefBtn" data-download-format="json">
+                                                <i class="fas fa-download me-2"></i> Download
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Export Data Section -->
+                        <div class="section-header mb-3 mt-5">
+                            <h2 class="section-title">
+                                <i class="fas fa-database me-2"></i>
+                                <span data-i18n="ui.model_detail.export_data_title">Export All Data</span>
+                            </h2>
+                            <p class="text-muted">Download all records from this model (not paginated - exports entire dataset)</p>
                         </div>
                         <div class="section-content">
                             <div class="row">
-                                <div class="col">
+                                <div class="col-md-3">
                                     <div class="card">
                                         <div class="card-body text-center">
-                                            <i class="card-img-top fas fa-6x fa-file-csv"></i>
+                                            <i class="card-img-top fas fa-4x fa-file-excel text-success mb-3"></i>
+                                            <h5 class="card-title">Excel</h5>
+                                            <p class="mb-3 text-muted" data-i18n="ui.model_detail.export_xlsx_desc">Download as Excel spreadsheet</p>
+                                            <button class="btn btn-success downloadDataBtn" data-download-format="xlsx">
+                                                <i class="fas fa-download me-2"></i> <span data-i18n="ui.model_detail.export_data">Export</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="card-img-top fas fa-4x fa-file-csv text-info mb-3"></i>
                                             <h5 class="card-title">CSV</h5>
-                                            <p class="mb-3 text-muted" data-i18n="ui.model_detail.export_csv_desc">Export data as comma-separated values</p>
-                                            <button class="btn btn-primary downloadDataBtn" data-download-format="csv">
-                                                <span data-i18n="ui.model_detail.export_data">Export Data</span> <i class="fas fa-download ms-2"></i>
+                                            <p class="mb-3 text-muted" data-i18n="ui.model_detail.export_csv_desc">Comma-separated values</p>
+                                            <button class="btn btn-info downloadDataBtn" data-download-format="csv">
+                                                <i class="fas fa-download me-2"></i> <span data-i18n="ui.model_detail.export_data">Export</span>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-md-3">
                                     <div class="card">
                                         <div class="card-body text-center">
-                                            <i class="card-img-top fas fa-6x fa-file-alt"></i>
+                                            <i class="card-img-top fas fa-4x fa-file-alt text-secondary mb-3"></i>
                                             <h5 class="card-title">JSON</h5>
-                                            <p class="mb-3 text-muted" data-i18n="ui.model_detail.export_json_desc">Export data as JSON format</p>
-                                            <button class="btn btn-primary downloadDataBtn" data-download-format="json">
-                                                <span data-i18n="ui.model_detail.export_data">Export Data</span> <i class="fas fa-download ms-2"></i>
+                                            <p class="mb-3 text-muted" data-i18n="ui.model_detail.export_json_desc">JSON array format</p>
+                                            <button class="btn btn-secondary downloadDataBtn" data-download-format="json">
+                                                <i class="fas fa-download me-2"></i> <span data-i18n="ui.model_detail.export_data">Export</span>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-md-3">
                                     <div class="card">
                                         <div class="card-body text-center">
-                                            <i class="card-img-top fas fa-6x fa-file-alt"></i>
-                                            <h5 class="card-title" data-i18n="ui.model_detail.export_text">Text</h5>
-                                            <p class="mb-3 text-muted" data-i18n="ui.model_detail.export_text_desc">Export data as tab-delimited text</p>
-                                            <button class="btn btn-primary downloadDataBtn" data-download-format="txt">
-                                                <span data-i18n="ui.model_detail.export_data">Export Data</span> <i class="fas fa-download ms-2"></i>
+                                            <i class="card-img-top fas fa-4x fa-file-alt text-dark mb-3"></i>
+                                            <h5 class="card-title" data-i18n="ui.model_detail.export_text">TSV</h5>
+                                            <p class="mb-3 text-muted" data-i18n="ui.model_detail.export_text_desc">Tab-separated values</p>
+                                            <button class="btn btn-dark downloadDataBtn" data-download-format="txt">
+                                                <i class="fas fa-download me-2"></i> <span data-i18n="ui.model_detail.export_data">Export</span>
                                             </button>
                                         </div>
                                     </div>
@@ -327,11 +373,169 @@
                                 <i class="fas fa-file-import me-2"></i>
                                 <span data-i18n="ui.model_detail.import_title">Import Data</span>
                             </h2>
+                            <p class="text-muted">Upload a file to bulk import records into this model</p>
                         </div>
-                        <div class="section-content">
-                            <div class="alert alert-info text-center" role="alert">
-                                <i class="fas fa-info-circle me-2"></i>
-                                <span data-i18n="ui.model_detail.import_coming_soon">This feature is coming soon! You'll be able to import data from various file formats.</span>
+
+                        <!-- Step 1: Download Template & Upload File -->
+                        <div id="import-step-1" class="import-step">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="card border-primary">
+                                        <div class="card-header bg-primary text-white">
+                                            <h5 class="mb-0"><i class="fas fa-download me-2"></i>Step 1: Download Template (Optional)</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Download a template file with the correct column headers for this model:</p>
+                                            <div class="btn-group" role="group">
+                                                <button class="btn btn-outline-primary downloadTemplateBtn" data-template-format="csv">
+                                                    <i class="fas fa-file-csv me-2"></i> CSV Template
+                                                </button>
+                                                <button class="btn btn-outline-success downloadTemplateBtn" data-template-format="xlsx">
+                                                    <i class="fas fa-file-excel me-2"></i> Excel Template
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card border-info">
+                                        <div class="card-header bg-info text-white">
+                                            <h5 class="mb-0"><i class="fas fa-upload me-2"></i>Step 2: Upload File</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="import-dropzone" class="border border-2 border-dashed rounded p-5 text-center" style="border-color: #17a2b8 !important; background: #f8f9fa; cursor: pointer;">
+                                                <i class="fas fa-cloud-upload-alt fa-4x text-info mb-3"></i>
+                                                <h5>Drag & Drop File Here</h5>
+                                                <p class="text-muted mb-3">or click to browse</p>
+                                                <input type="file" id="import-file-input" accept=".csv,.xlsx,.json,.txt,.tsv" style="display: none;">
+                                                <button type="button" class="btn btn-info" onclick="document.getElementById('import-file-input').click()">
+                                                    <i class="fas fa-folder-open me-2"></i>Choose File
+                                                </button>
+                                                <p class="text-muted mt-3 mb-0 small">Supported formats: CSV, Excel (XLSX), JSON, TSV</p>
+                                            </div>
+                                            <div id="import-file-info" class="mt-3" style="display: none;">
+                                                <div class="alert alert-success">
+                                                    <i class="fas fa-check-circle me-2"></i>
+                                                    <strong>File loaded:</strong> <span id="import-filename"></span> (<span id="import-filesize"></span>)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Preview & Validate -->
+                        <div id="import-step-2" class="import-step" style="display: none;">
+                            <div class="card border-warning">
+                                <div class="card-header bg-warning">
+                                    <h5 class="mb-0"><i class="fas fa-eye me-2"></i>Step 3: Preview & Validate</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="import-validation-summary" class="mb-3"></div>
+                                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                                        <table class="table table-sm table-bordered" id="import-preview-table">
+                                            <thead class="table-light" style="position: sticky; top: 0; z-index: 10;"></thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                    <div class="mt-3">
+                                        <button class="btn btn-secondary" id="import-back-btn">
+                                            <i class="fas fa-arrow-left me-2"></i>Back to Upload
+                                        </button>
+                                        <button class="btn btn-success" id="import-start-btn">
+                                            <i class="fas fa-play me-2"></i>Start Import
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Import Progress -->
+                        <div id="import-step-3" class="import-step" style="display: none;">
+                            <div class="card border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fas fa-spinner fa-spin me-2"></i>Step 4: Importing...</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Progress:</strong> <span id="import-progress-text">0 / 0</span></span>
+                                            <span id="import-progress-percent">0%</span>
+                                        </div>
+                                        <div class="progress" style="height: 25px;">
+                                            <div id="import-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"
+                                                 role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row text-center">
+                                        <div class="col-md-4">
+                                            <div class="card bg-light">
+                                                <div class="card-body">
+                                                    <h2 class="text-success mb-0" id="import-success-count">0</h2>
+                                                    <small class="text-muted">Successful</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card bg-light">
+                                                <div class="card-body">
+                                                    <h2 class="text-danger mb-0" id="import-error-count">0</h2>
+                                                    <small class="text-muted">Failed</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card bg-light">
+                                                <div class="card-body">
+                                                    <h2 class="text-info mb-0" id="import-total-count">0</h2>
+                                                    <small class="text-muted">Total</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Results -->
+                        <div id="import-step-4" class="import-step" style="display: none;">
+                            <div class="card border-success">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Import Complete</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="import-results-summary" class="mb-3"></div>
+                                    <div id="import-errors-section" style="display: none;">
+                                        <h6 class="text-danger"><i class="fas fa-exclamation-triangle me-2"></i>Errors:</h6>
+                                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                                            <table class="table table-sm table-bordered table-hover" id="import-errors-table">
+                                                <thead class="table-danger">
+                                                    <tr>
+                                                        <th>Row</th>
+                                                        <th>Data</th>
+                                                        <th>Error</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                        <button class="btn btn-outline-danger btn-sm mt-2" id="download-error-report-btn">
+                                            <i class="fas fa-download me-2"></i>Download Error Report
+                                        </button>
+                                    </div>
+                                    <div class="mt-3">
+                                        <button class="btn btn-primary" id="import-new-btn">
+                                            <i class="fas fa-upload me-2"></i>Import Another File
+                                        </button>
+                                        <button class="btn btn-success" id="import-refresh-data-btn">
+                                            <i class="fas fa-sync me-2"></i>Refresh Data Table
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

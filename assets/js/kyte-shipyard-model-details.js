@@ -1,1 +1,1893 @@
-const a0_0x289aef=a0_0x4b37;(function(_0x1d2f46,_0x2becf1){const _0x33c028=a0_0x4b37,_0x32a0d3=_0x1d2f46();while(!![]){try{const _0x96c0fb=parseInt(_0x33c028(0x155))/0x1*(-parseInt(_0x33c028(0x26b))/0x2)+parseInt(_0x33c028(0x1cb))/0x3*(-parseInt(_0x33c028(0x1cc))/0x4)+parseInt(_0x33c028(0x163))/0x5+parseInt(_0x33c028(0x2b7))/0x6*(-parseInt(_0x33c028(0x1bc))/0x7)+-parseInt(_0x33c028(0x24d))/0x8+-parseInt(_0x33c028(0x1e7))/0x9*(parseInt(_0x33c028(0x29f))/0xa)+parseInt(_0x33c028(0x1aa))/0xb;if(_0x96c0fb===_0x2becf1)break;else _0x32a0d3['push'](_0x32a0d3['shift']());}catch(_0x1f4a7b){_0x32a0d3['push'](_0x32a0d3['shift']());}}}(a0_0x3ab0,0x652aa));let subnavModel=[{'faicon':a0_0x289aef(0x231),'label':a0_0x289aef(0x1fb),'selector':'#Attributes'},{'faicon':a0_0x289aef(0x20c),'label':a0_0x289aef(0x199),'selector':'#Data'},{'faicon':a0_0x289aef(0x1be),'label':a0_0x289aef(0x1df),'selector':a0_0x289aef(0x2a9)},{'faicon':a0_0x289aef(0x212),'label':a0_0x289aef(0x26a),'selector':'#Export'},{'faicon':'fas\x20fa-file-import','label':a0_0x289aef(0x1f0),'selector':a0_0x289aef(0x21a)}];function a0_0x4b37(_0x52c8fc,_0x1ef980){const _0x3ab080=a0_0x3ab0();return a0_0x4b37=function(_0x4b37a6,_0x368c0b){_0x4b37a6=_0x4b37a6-0x155;let _0x277a55=_0x3ab080[_0x4b37a6];if(a0_0x4b37['WJNFRZ']===undefined){var _0x2a8aca=function(_0x58f5e9){const _0x42bdf9='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x3942c2='',_0xf0afd6='';for(let _0x59c09a=0x0,_0x32c8c5,_0x3fb373,_0x47911b=0x0;_0x3fb373=_0x58f5e9['charAt'](_0x47911b++);~_0x3fb373&&(_0x32c8c5=_0x59c09a%0x4?_0x32c8c5*0x40+_0x3fb373:_0x3fb373,_0x59c09a++%0x4)?_0x3942c2+=String['fromCharCode'](0xff&_0x32c8c5>>(-0x2*_0x59c09a&0x6)):0x0){_0x3fb373=_0x42bdf9['indexOf'](_0x3fb373);}for(let _0x7e334d=0x0,_0x511e3e=_0x3942c2['length'];_0x7e334d<_0x511e3e;_0x7e334d++){_0xf0afd6+='%'+('00'+_0x3942c2['charCodeAt'](_0x7e334d)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0xf0afd6);};a0_0x4b37['hsEPvf']=_0x2a8aca,_0x52c8fc=arguments,a0_0x4b37['WJNFRZ']=!![];}const _0x40aa4d=_0x3ab080[0x0],_0x1e2d18=_0x4b37a6+_0x40aa4d,_0x4a1cbc=_0x52c8fc[_0x1e2d18];return!_0x4a1cbc?(_0x277a55=a0_0x4b37['hsEPvf'](_0x277a55),_0x52c8fc[_0x1e2d18]=_0x277a55):_0x277a55=_0x4a1cbc,_0x277a55;},a0_0x4b37(_0x52c8fc,_0x1ef980);}var modelStructure=null,model,modelIdx,appId,swift,dart,json,universalBOM='\ufeff';let elements=[],controllerElements=[[{'field':a0_0x289aef(0x1a1),'type':a0_0x289aef(0x226),'label':a0_0x289aef(0x171),'required':!![]}],[{'field':a0_0x289aef(0x16a),'type':a0_0x289aef(0x256),'label':a0_0x289aef(0x1b8),'required':![]}]],colDefAttributes=[{'targets':0x0,'data':'name','label':a0_0x289aef(0x171),'render':function(_0x58f5e9,_0x42bdf9,_0x3942c2,_0xf0afd6){const _0x49b004=a0_0x289aef;if(_0x3942c2[_0x49b004(0x1b0)])return _0x58f5e9+_0x49b004(0x1b6)+_0x3942c2[_0x49b004(0x1b0)][_0x49b004(0x1a1)]+_0x49b004(0x232);return _0x58f5e9;}},{'targets':0x1,'data':a0_0x289aef(0x20e),'label':a0_0x289aef(0x27f),'render':function(_0x59c09a,_0x32c8c5,_0x3fb373,_0x47911b){const _0x429a36=a0_0x289aef;if(_0x59c09a=='i')return _0x429a36(0x288)+_0x3fb373[_0x429a36(0x255)]+')';if(_0x59c09a=='bi')return _0x429a36(0x185)+_0x3fb373[_0x429a36(0x255)]+')';if(_0x59c09a=='s')return _0x429a36(0x1d9)+_0x3fb373[_0x429a36(0x255)]+')';if(_0x59c09a=='t')return _0x429a36(0x1b4);if(_0x59c09a=='tt')return'TinyText';if(_0x59c09a=='mt')return _0x429a36(0x1bf);if(_0x59c09a=='lt')return'LongText';if(_0x59c09a=='b')return'Blob';if(_0x59c09a=='tb')return _0x429a36(0x1e3);if(_0x59c09a=='mb')return _0x429a36(0x27c);if(_0x59c09a=='lb')return'LongBlob';if(_0x59c09a==_0x429a36(0x297))return _0x429a36(0x245);return _0x59c09a;}},{'targets':0x2,'data':a0_0x289aef(0x1b9),'label':a0_0x289aef(0x18e),'render':function(_0x7e334d,_0x511e3e,_0x4abd83,_0x1d804e){const _0x543fcc=a0_0x289aef;return _0x7e334d==0x1?'NO':_0x543fcc(0x2ac);}},{'targets':0x3,'data':a0_0x289aef(0x1fc),'label':a0_0x289aef(0x265),'render':function(_0x3649ce,_0x32ad53,_0x282760,_0x5eba12){const _0x543085=a0_0x289aef;return _0x3649ce==0x1?_0x543085(0x2ac):'NO';}},{'targets':0x4,'data':'unsigned','label':a0_0x289aef(0x22c),'render':function(_0xe6c4fd,_0xbdd73f,_0x253f7c,_0x14831c){const _0x21ed89=a0_0x289aef;return _0xe6c4fd==0x1?_0x21ed89(0x2ac):'NO';}},{'targets':0x5,'data':'defaults','label':'Default'},{'targets':0x6,'data':a0_0x289aef(0x16a),'label':'Description'}];function getData(_0x54dd51,_0x42c486,_0x1eeca5,_0x46cffe){const _0x343d76=a0_0x289aef;_0x54dd51[_0x343d76(0x2b9)](_0x343d76(0x2bb),_0x343d76(0x2a0),_0x42c486,[],function(_0x37cca8){const _0x597f54=_0x343d76;let _0x565774=0x0,_0x33ffac=[],_0x321eef=[],_0x23e976=[{'targets':_0x565774,'data':'id','label':'#'}];_0x37cca8[_0x597f54(0x22d)]['length']>0x0&&(modelStructure=_0x37cca8['data'],_0x37cca8['data'][_0x597f54(0x22f)](_0x2c544b=>{const _0x37ff66=_0x597f54;_0x565774++,_0x23e976[_0x37ff66(0x15d)]({'targets':_0x565774,'data':_0x2c544b[_0x37ff66(0x1a1)],'label':_0x2c544b[_0x37ff66(0x1a1)],'render':function(_0x28df81,_0x3f5773,_0x456520,_0x3d432c){const _0x30384b=_0x37ff66;return typeof _0x28df81===_0x30384b(0x25e)?JSON[_0x30384b(0x286)](_0x28df81,undefined,0x4):_0x28df81?_0x28df81:'';}});if(_0x2c544b[_0x37ff66(0x1b0)]!==null&&_0x2c544b['foreignKeyModel']['id']>0x0&&_0x2c544b['foreignKeyAttribute'][_0x37ff66(0x270)]>0x0)_0x321eef[_0x37ff66(0x15d)]([{'field':_0x2c544b[_0x37ff66(0x1a1)],'type':'select','label':_0x2c544b['name'],'required':_0x2c544b['required']==0x1?!![]:![],'option':{'ajax':!![],'data_model_name':_0x2c544b[_0x37ff66(0x1b0)]['name'],'data_model_field':null,'data_model_value':null,'data_model_attributes':[_0x37ff66(0x1a1)],'data_model_default_field':_0x2c544b[_0x37ff66(0x1d8)]}}]);else{let _0x26d9a2='text';if(_0x2c544b[_0x37ff66(0x20e)]=='t')_0x26d9a2=_0x37ff66(0x256);if(_0x2c544b[_0x37ff66(0x20e)]==_0x37ff66(0x297))_0x26d9a2=_0x37ff66(0x297);_0x321eef[_0x37ff66(0x15d)]([{'field':_0x2c544b[_0x37ff66(0x1a1)],'type':_0x26d9a2,'label':_0x2c544b[_0x37ff66(0x1a1)],'required':_0x2c544b[_0x37ff66(0x1b9)]==0x1?!![]:![]}]);}_0x33ffac[_0x37ff66(0x15d)]({'name':_0x2c544b[_0x37ff66(0x1a1)],'type':_0x2c544b[_0x37ff66(0x20e)],'size':_0x2c544b[_0x37ff66(0x255)],'unsigned':_0x2c544b[_0x37ff66(0x1fe)],'protected':_0x2c544b[_0x37ff66(0x1fc)],'password':_0x2c544b[_0x37ff66(0x257)],'description':_0x2c544b[_0x37ff66(0x16a)],'defaults':_0x2c544b[_0x37ff66(0x233)],'required':_0x2c544b[_0x37ff66(0x1b9)],'foreignKeyModel':_0x2c544b[_0x37ff66(0x1b0)]!==null&&_0x2c544b[_0x37ff66(0x1b0)]['id']>0x0&&_0x2c544b['foreignKeyAttribute']['length']>0x0?_0x2c544b[_0x37ff66(0x1b0)][_0x37ff66(0x1a1)]:null,'foreignKeyAttribute':_0x2c544b[_0x37ff66(0x1b0)]!==null&&_0x2c544b[_0x37ff66(0x1b0)]['id']>0x0&&_0x2c544b[_0x37ff66(0x1d8)]['length']>0x0?_0x2c544b[_0x37ff66(0x1d8)]:null});}),json={'name':_0x1eeca5,'struct':_0x33ffac},swift=generate_swift(_0x1eeca5),dart=generate_dart(_0x1eeca5));_0x565774++,_0x23e976[_0x597f54(0x15d)]({'targets':_0x565774,'data':'date_created','label':'date_created','render':function(_0x215bed,_0x34640b,_0x54d4c0,_0x3efbdf){return _0x215bed?_0x215bed:'';}}),_0x565774++,_0x23e976[_0x597f54(0x15d)]({'targets':_0x565774,'data':_0x597f54(0x1d3),'label':_0x597f54(0x1d3),'render':function(_0x142038,_0x18d82b,_0x5172e2,_0x4cd833){return _0x142038?_0x142038:'';}});var _0x22aa3c=new KyteTable(_0x54dd51,$(_0x597f54(0x1f7)),{'name':_0x597f54(0x22e),'field':null,'value':null},_0x23e976,!![],[0x0,_0x597f54(0x1c7)],!![],!![]);_0x22aa3c[_0x597f54(0x2ba)]=[{'name':_0x597f54(0x15f),'value':_0x46cffe},{'name':_0x597f54(0x192),'value':_0x1eeca5}],_0x22aa3c[_0x597f54(0x182)](),$(_0x597f54(0x1f7))['on'](_0x597f54(0x290),function(){const _0x424087=_0x597f54;var _0x368043=$(this)[_0x424087(0x18b)]()[_0x424087(0x2aa)][_0x424087(0x1ca)]();$(_0x424087(0x2bd))[_0x424087(0x226)](_0x368043[_0x424087(0x236)]);});const _0x3eee26=window['kyteI18n']?window[_0x597f54(0x162)]['t'](_0x597f54(0x1e2)):_0x597f54(0x287),_0x215045=window[_0x597f54(0x162)]?window[_0x597f54(0x162)]['t']('ui.model_detail.modal.submit'):_0x597f54(0x215);var _0x2699ca=new KyteForm(_0x54dd51,$(_0x597f54(0x20f)),_0x597f54(0x22e),null,_0x321eef,_0x3eee26,_0x22aa3c,!![],$(_0x597f54(0x18d)));_0x2699ca[_0x597f54(0x1fa)]=_0x215045,_0x2699ca[_0x597f54(0x2ba)]=[{'name':'x-kyte-app-id','value':_0x46cffe},{'name':_0x597f54(0x192),'value':_0x1eeca5}],_0x2699ca[_0x597f54(0x182)](),_0x22aa3c[_0x597f54(0x22a)](_0x2699ca);});}function generate_dart(_0x1a6a31){const _0x38e24b=a0_0x289aef;let _0x58d6b9=new Date()[_0x38e24b(0x17b)]('en',{'year':'numeric','day':_0x38e24b(0x243),'month':'2-digit'}),_0x499302=_0x38e24b(0x261)+model+'.swift\x0d\x0a//\x0d\x0a//\x20Created\x20by\x20Kyte\x20Shipyard\x20on\x20'+_0x58d6b9+_0x38e24b(0x269);_0x499302+='class\x20'+model+_0x38e24b(0x281),_0x499302+='\x09int?\x20responseCode;\x0d\x0a',_0x499302+=_0x38e24b(0x251),_0x499302+=_0x38e24b(0x230),_0x499302+=_0x38e24b(0x28d),_0x499302+=_0x38e24b(0x27d),_0x499302+=_0x38e24b(0x167),_0x499302+=_0x38e24b(0x283),_0x499302+=_0x38e24b(0x2b8),_0x499302+=_0x38e24b(0x1d2),_0x499302+=_0x38e24b(0x2b4),_0x499302+=_0x38e24b(0x1c5),_0x499302+=_0x38e24b(0x1d1),_0x499302+=_0x38e24b(0x19b),_0x499302+=_0x38e24b(0x1c0),_0x499302+=_0x38e24b(0x273),_0x499302+='\x09List<'+model+'Data>?\x20data;\x0d\x0a\x0d\x0a',_0x499302+='\x09'+model+_0x38e24b(0x2b2),_0x499302+='\x09\x09this.responseCode,\x0d\x0a',_0x499302+=_0x38e24b(0x2a5),_0x499302+=_0x38e24b(0x18f),_0x499302+='\x09\x09this.uid,\x0d\x0a',_0x499302+=_0x38e24b(0x161),_0x499302+=_0x38e24b(0x21c),_0x499302+=_0x38e24b(0x234),_0x499302+=_0x38e24b(0x15e),_0x499302+=_0x38e24b(0x1ce),_0x499302+=_0x38e24b(0x20d),_0x499302+=_0x38e24b(0x208),_0x499302+=_0x38e24b(0x17f),_0x499302+=_0x38e24b(0x176),_0x499302+=_0x38e24b(0x201),_0x499302+=_0x38e24b(0x27a),_0x499302+=_0x38e24b(0x1ea),_0x499302+='\x09});\x0d\x0a\x0d\x0a',_0x499302+='\x09'+model+_0x38e24b(0x242),_0x499302+=_0x38e24b(0x1d7),_0x499302+='\x09\x09session\x20=\x20json[\x27session\x27];\x0d\x0a',_0x499302+='\x09\x09token\x20=\x20json[\x27token\x27];\x0d\x0a',_0x499302+=_0x38e24b(0x2b6),_0x499302+='\x09\x09sessionPermission\x20=\x20json[\x27sessionPermission\x27];\x0d\x0a',_0x499302+=_0x38e24b(0x23b),_0x499302+='\x09\x09draw\x20=\x20json[\x27draw\x27];\x0d\x0a',_0x499302+=_0x38e24b(0x158),_0x499302+='\x09\x09transaction\x20=\x20json[\x27transaction\x27];\x0d\x0a',_0x499302+='\x09\x09engineVersion\x20=\x20json[\x27engine_version\x27];\x0d\x0a',_0x499302+=_0x38e24b(0x275),_0x499302+=_0x38e24b(0x23e),_0x499302+=_0x38e24b(0x252),_0x499302+=_0x38e24b(0x229),_0x499302+='\x09\x09accountId\x20=\x20json[\x27account_id\x27];\x0d\x0a',_0x499302+='\x09\x09if\x20(json[\x27data\x27]\x20!=\x20null)\x20{\x0d\x0a',_0x499302+=_0x38e24b(0x271)+model+'Data>[];\x0d\x0a',_0x499302+=_0x38e24b(0x2be),_0x499302+='\x09\x09\x09\x09data!.add(new\x20'+model+'Data.fromJson(v));\x0d\x0a',_0x499302+='\x09\x09\x09});\x0d\x0a',_0x499302+=_0x38e24b(0x1ae),_0x499302+=_0x38e24b(0x258),_0x499302+='\x09Map<String,\x20dynamic>\x20toJson()\x20{\x0d\x0a',_0x499302+=_0x38e24b(0x1e4),_0x499302+=_0x38e24b(0x29b),_0x499302+=_0x38e24b(0x1cf),_0x499302+=_0x38e24b(0x274),_0x499302+=_0x38e24b(0x1e8),_0x499302+=_0x38e24b(0x27e),_0x499302+=_0x38e24b(0x1ee),_0x499302+=_0x38e24b(0x203),_0x499302+='\x09\x09data[\x27CONTENT_TYPE\x27]\x20=\x20this.cONTENTTYPE;\x0d\x0a',_0x499302+='\x09\x09data[\x27transaction\x27]\x20=\x20this.transaction;\x0d\x0a',_0x499302+='\x09\x09data[\x27engine_version\x27]\x20=\x20this.engineVersion;\x0d\x0a',_0x499302+=_0x38e24b(0x244),_0x499302+='\x09\x09data[\x27kyte_pub\x27]\x20=\x20this.kytePub;\x0d\x0a',_0x499302+='\x09\x09data[\x27kyte_num\x27]\x20=\x20this.kyteNum;\x0d\x0a',_0x499302+='\x09\x09data[\x27kyte_iden\x27]\x20=\x20this.kyteIden;\x0d\x0a',_0x499302+=_0x38e24b(0x1a8),_0x499302+=_0x38e24b(0x262),_0x499302+=_0x38e24b(0x207),_0x499302+=_0x38e24b(0x1ae),_0x499302+=_0x38e24b(0x28b),_0x499302+='\x09}\x0d\x0a',_0x499302+=_0x38e24b(0x16e);let _0x2998e8='',_0x2fa72e='',_0x336334='',_0x55868e='';return modelStructure[_0x38e24b(0x22f)](_0x1a5f2c=>{const _0x822bde=_0x38e24b;_0x2fa72e+=_0x822bde(0x1c9)+_0x1a5f2c['name']+',';let _0x18552e=_0x822bde(0x1ec);if(_0x1a5f2c['type']=='i')_0x18552e=_0x822bde(0x205);_0x2998e8+='\x09'+_0x18552e+'?\x20'+_0x1a5f2c[_0x822bde(0x1a1)]+_0x822bde(0x1bd),_0x336334+='\x09\x09'+_0x1a5f2c[_0x822bde(0x1a1)]+_0x822bde(0x2ae)+_0x1a5f2c['name']+_0x822bde(0x28c),_0x55868e+=_0x822bde(0x222)+_0x1a5f2c[_0x822bde(0x1a1)]+'\x27]\x20=\x20this.'+_0x1a5f2c[_0x822bde(0x1a1)]+_0x822bde(0x1bd);}),_0x499302+=_0x38e24b(0x280)+model+'Data\x20{\x0d\x0a',_0x499302+=_0x2998e8,_0x499302+=_0x38e24b(0x211),_0x499302+='\x09String?\x20kyte_account;\x0d\x0a',_0x499302+=_0x38e24b(0x272),_0x499302+=_0x38e24b(0x2c1),_0x499302+=_0x38e24b(0x15b),_0x499302+=_0x38e24b(0x1a5),_0x499302+=_0x38e24b(0x194),_0x499302+='\x09String?\x20date_deleted;\x0d\x0a',_0x499302+=_0x38e24b(0x1a6),_0x499302+='\x09'+model+'Data({\x0d\x0a',_0x499302+=_0x2fa72e[_0x38e24b(0x259)](/(^,)|(,$)/g,'')[_0x38e24b(0x259)](/,/g,',\x0d\x0a')+',\x0d\x0a',_0x499302+=_0x38e24b(0x29a),_0x499302+=_0x38e24b(0x1c8),_0x499302+='\x09\x09this.created_by,\x0d\x0a',_0x499302+=_0x38e24b(0x1dd),_0x499302+=_0x38e24b(0x190),_0x499302+=_0x38e24b(0x217),_0x499302+='\x09\x09this.deleted_by,\x0d\x0a',_0x499302+='\x09\x09this.date_deleted,\x0d\x0a',_0x499302+=_0x38e24b(0x1e1),_0x499302+=_0x38e24b(0x1da),_0x499302+='\x09'+model+_0x38e24b(0x20a),_0x499302+=_0x336334,_0x499302+=_0x38e24b(0x1f3),_0x499302+='\x09\x09kyte_account\x20=\x20json[\x27kyte_account\x27];\x0d\x0a',_0x499302+=_0x38e24b(0x2b1),_0x499302+=_0x38e24b(0x24c),_0x499302+=_0x38e24b(0x27b),_0x499302+=_0x38e24b(0x1cd),_0x499302+=_0x38e24b(0x1ff),_0x499302+='\x09\x09date_deleted\x20=\x20json[\x27date_deleted\x27];\x0d\x0a',_0x499302+=_0x38e24b(0x23c),_0x499302+=_0x38e24b(0x258),_0x499302+='\x09Map<String,\x20dynamic>\x20toJson()\x20{\x0d\x0a',_0x499302+='\x09\x09final\x20Map<String,\x20dynamic>\x20data\x20=\x20new\x20Map<String,\x20dynamic>();\x0d\x0a',_0x499302+=_0x55868e,_0x499302+=_0x38e24b(0x213),_0x499302+=_0x38e24b(0x193),_0x499302+=_0x38e24b(0x18a),_0x499302+=_0x38e24b(0x295),_0x499302+='\x09\x09data[\x27modified_by\x27]\x20=\x20this.modified_by;\x0d\x0a',_0x499302+='\x09\x09data[\x27date_modified\x27]\x20=\x20this.date_modified;\x0d\x0a',_0x499302+=_0x38e24b(0x2a2),_0x499302+='\x09\x09data[\x27date_deleted\x27]\x20=\x20this.date_deleted;\x0d\x0a',_0x499302+=_0x38e24b(0x28f),_0x499302+='\x09\x09return\x20data;\x0d\x0a',_0x499302+=_0x38e24b(0x169),_0x499302+=_0x38e24b(0x260),_0x499302;}function generate_swift(_0x1d69f1){const _0x35a200=a0_0x289aef;let _0x2612f2=new Date()[_0x35a200(0x17b)]('en',{'year':_0x35a200(0x1eb),'day':_0x35a200(0x243),'month':_0x35a200(0x243)}),_0x32ab27=_0x35a200(0x261)+_0x1d69f1+'.swift\x0d\x0a//\x0d\x0a//\x20Created\x20by\x20Kyte\x20Shipyard\x20on\x20'+_0x2612f2+_0x35a200(0x168);_0x32ab27+=_0x35a200(0x2af)+_0x1d69f1+_0x35a200(0x25d);let _0x24d0d6=_0x35a200(0x227),_0x3575eb='';return modelStructure[_0x35a200(0x22f)](_0x2e221d=>{const _0x43a27e=_0x35a200;_0x24d0d6+='\x20'+_0x2e221d[_0x43a27e(0x1a1)]+',';let _0x30eb16='String';if(_0x2e221d['type']=='i')_0x30eb16=_0x43a27e(0x1fd);_0x3575eb+=_0x43a27e(0x247)+_0x2e221d[_0x43a27e(0x1a1)]+':\x20'+_0x30eb16+(_0x2e221d[_0x43a27e(0x1b9)]==0x0?'?':'')+'\x0d\x0a';}),_0x32ab27+=_0x3575eb,_0x32ab27+=_0x35a200(0x1e6),_0x32ab27+='\x09let\x20id:\x20String\x0d\x0a',_0x32ab27+=_0x35a200(0x293),_0x32ab27+=_0x35a200(0x225),_0x32ab27+=_0x35a200(0x1a7),_0x32ab27+='\x09let\x20modified_by:\x20String?\x0d\x0a',_0x32ab27+='\x09let\x20date_modified:\x20String?\x0d\x0a',_0x32ab27+=_0x35a200(0x19d),_0x32ab27+=_0x35a200(0x1b7),_0x32ab27+='\x09let\x20deleted:\x20String?\x0d\x0a',_0x32ab27+=_0x35a200(0x1ab),_0x32ab27+=_0x24d0d6['replace'](/(^,)|(,$)/g,'')+'\x0d\x0a',_0x32ab27+='\x09\x09case\x20id,\x20kyte_account,\x20created_by,\x20date_created,\x20modified_by,\x20date_modified,\x20deleted_by,\x20date_deleted,\x20deleted\x0d\x0a',_0x32ab27+=_0x35a200(0x169),_0x32ab27+=_0x35a200(0x260),_0x32ab27;}function download_code(_0x7c280b,_0x4a599e,_0x35ae7c){const _0x100aaa=a0_0x289aef;blob=new Blob([universalBOM+_0x4a599e],{'type':_0x100aaa(0x254)}),url=window['URL'][_0x100aaa(0x181)](blob),$(_0x100aaa(0x26d))[_0x100aaa(0x159)](_0x100aaa(0x18c));var _0x1bec3c=document['createElement']('a');document['body'][_0x100aaa(0x206)](_0x1bec3c),_0x1bec3c['style']=_0x100aaa(0x228),_0x1bec3c['href']=url,_0x1bec3c['download']=_0x7c280b+'.'+_0x35ae7c,_0x1bec3c['click'](),window[_0x100aaa(0x1a0)]['revokeObjectURL'](url);}function a0_0x3ab0(){const _0x594036=['DwKUBw9KzwXFzgv0ywLSlMzVCM0UzgvZy3jPChrPB24','y3vYCMvUDefWCeLK','i2f0DhjPyNv0zxmTy291BNq','cqL0AgLZlMT5DgvqDwiSdqO','C3r5Bgu','y3jLyxrLt2jQzwn0vvjm','Aw5PDa','w25HBwu9iNnPEMuIxq','yMXVy2S','qMLNsw50ka','ugfZC3DVCMq','DwKUBw9KzwXFzgv0ywLSlMzVCM0UEwvZ','DwKUBw9KzwXFzgv0ywLSlMzVCM0UDhLWzv9IAwDPBNq','C2vSzwn0','cqLKyxrHwYDJCMvHDgvKx2j5j10Gpsb0AgLZlMnYzwf0zwrFyNK7dqO','rgf0yvrHyMXL','AgLKzq','i25LD0rHDge','tNvSBa','cqL0AgLZlNrVA2vUla0k','cqL0AgLZlM1VzgLMAwvKx2j5la0k','B3b0Aw9UCW','Ec1RExrLlwfWCc1TB2rLBa','cqLKyxrHwYDRExrLx2fJy291BNqNxsa9ihrOAxmUA3L0zv9Hy2nVDw50oW0k','cvn0CMLUzZ8GzgvSzxrLzf9IEtSncG','DhH0','lM1VzgfSlwnVBNrLBNq','tw9KzwWGqxr0CMLIDxrL','DMfSDwvZ','rgf0yq','C2v0qxr0CMLIDxrL','cvn0CMLUzZ8GA3L0zu51BtSncG','DwKUBw9KzwXFzgv0ywLSlMzVCM0UDhLWzv9IBg9I','cwXLDcbKzwXLDgvKx2j5oIbtDhjPBMC/dqO','rgvMyxvSDcb2ywX1zsb3AgvUignYzwf0Aw5Nig5LDYbYzwnVCMrZ','zM9YBvTPzcO9iMzVCM1Ftw9KzwXbDhrYAwj1DguIxq','vvjm','BMfTzq','yxbWBgLJyxrPB24','zgLZCgXHEq','Bw9KywXjza','cvn0CMLUzZ8Gzgf0zv9TB2rPzMLLzdSncG','cvn0CMLUzZ8GzgvSzxrLzdSncG0k','cwXLDcbKyxrLx2nYzwf0zwq6ifn0CMLUzZ8ncG','cqLKyxrHwYDHy2nVDw50x2LKj10Gpsb0AgLZlMfJy291BNrjzdSncG','rw5Oyw5JAw5NieT5DgvgB3jTig1VzgfSlI4U','mJe5nde1mJrXsMHxB3m','dqOjzw51BsbdB2rPBMDlzxLZoIbtDhjPBMCSienVzgLUz0TLEsb7dqO','CMvTB3zLqxr0CMLIDxrL','CgXHy2vOB2XKzxi','cqL9dqO','uhjVDgvJDgvK','zM9YzwLNBKTLEu1VzgvS','DwKUBw9KzwXFzgv0ywLSlMzVCM0UzgvMyxvSDa','y29UDgfPBNm','CgfYzw50tM9Kzq','vgv4Da','sgvSCcbVDgHLCNmGDw5KzxjZDgfUzcb3Agf0ihrOAxmGyxr0CMLIDxrLigLZihvZzwqGzM9Y','icGG','cwXLDcbKyxrLx2rLBgv0zwq6ifn0CMLUzZ8ncG','rgvZy3jPChrPB24','CMvXDwLYzwq','s3L0zuzVCM0','y2XHC3nmAxn0','ndK3mgriD3zfzW','oW0k','zMfZigzHlwXHEwvYlwDYB3vW','twvKAxvTvgv4Da','cvn0CMLUzZ8GA3L0zuLKzw47dqO','yM9KEq','DwKUBw9KzwXFzgv0ywLSlMzVCM0UBM8','Dgv4DenVBNrLBNq','DwKUBw9KzwXFzgv0ywLSlMzVCM0UDhLWzv9SB25NyMXVyG','cvn0CMLUzZ8GBw9KzwW7dqO','DwKUBw9KzwXFzgv0ywLSlMzVCM0UBMe','yxnJ','cqL0AgLZlMT5DgvFywnJB3vUDcWncG','cqL0AgLZlG','Aw5MBW','ndu5mdLxyxrgwNG','ndrIuwfgDg0','cqLKyxrLx21VzgLMAwvKid0GANnVBLSNzgf0zv9TB2rPzMLLzcDDoW0k','cqL0AgLZlNrYyw5Zywn0Aw9Ula0k','cqLKyxrHwYDZzxnZAw9Uj10Gpsb0AgLZlNnLC3nPB247dqO','CMvTB3zL','cvn0CMLUzZ8GA3L0zvb1yJSncG','cvn0CMLUzZ8GDhjHBNnHy3rPB247dqO','zgf0zv9TB2rPzMLLza','rgf0yu1VzgvS','DhjPBq','mc41','cqLYzxnWB25ZzunVzguGpsbQC29UwYDYzxnWB25Zzv9JB2rLj107dqO','zM9YzwLNBKTLEuf0DhjPyNv0zq','vMfYy2HHCIG','cx0PoW0kdqO','AM9PBG','ChjLDMvUDerLzMf1Bhq','cqL0AgLZlMrHDgvFy3jLyxrLzcWncG','q29UDhjVBgXLCG','q29UDhjVBgXLCNm','Dw5KzwzPBMvK','cqL0AgLZlMrLBgv0zwqSdqO','DwKUBw9KzwXFzgv0ywLSlM1VzgfSlMrHDgfFDgL0Bgu','vgLUEujSB2i','cqLMAw5HBcbnyxa8u3rYAw5NlcbKEw5HBwLJpIbKyxrHid0GBMv3ie1HCdXtDhjPBMCSigr5BMfTAwm+kcK7dqO','DwKUBw9KzwXFzgv0ywLSlMzVCM0UC2L6zq','cs8VigT5DguGBw9KzwWGyw5Kigf1zgL0igf0DhjPyNv0zxmncG','mJqYmwfgu1DcEG','cqLKyxrHwYD1AwqNxsa9ihrOAxmUDwLKoW0k','DwKUBw9KzwXFzgv0ywLSlMzVCM0UDhLWzv9KyxrL','cqL0AgLZlMrHDgencG','BNvTzxjPyW','u3rYAw5N','cIaGicaGicaGicaGihbVC2L0Aw9UoIbMAxHLzdSkicaGicaGicaGicaGDg9WoIaYmhb4oWOGicaGicaGicaGicbYAwDODdOGmJbWEdSkicaGicaGicaGicaGEI1PBMrLEdOGmtaWmda7cIaGicaGicaGicaGigjHy2TNCM91BMq6igXPBMvHCI1NCMfKAwvUDcGXmZvKzwCSicmXmgi5odeSicmWntK2nJKPoWOGicaGicaGicaGicbJB2XVCJOGD2HPDgu7cIaGicaGicaGicaGigjVCMrLCJOGBM9UztSkicaGicaGicaGicaGyM9YzgvYlxjHzgL1CZOGmtjWEdSkicaGicaGicaGicaGCgfKzgLUzZOGmxjLBsaXlJvYzw07cIaGicaGicaGicaGigjVEc1ZAgfKB3C6idaGnhb4ide1ChGGCMDIysGXnIWGmtG1lcaXmJKSidaUmYK7cIaGicaGicaGicaGigfUAw1HDgLVBJOGC2XPzgvjBLjPz2H0idaUnhmGzwfZzs1VDxq7cIaGicaGicaG','cqLKyxrHwYD0EfrPBwvZDgfTCcDDid0GDgHPCY50EfrPBwvZDgfTCdSncG','C2vSzwn0zwrjBMrLEa','sw1WB3j0','pgKGy2XHC3m9iMzHCYbMys1YB2nRzxqGBwuTmIi+pc9PpG','Dg9mB3DLCKnHC2u','cqLPzca9igPZB25Bj2LKj107dqO','zM9YBs1SB2fKAw5N','mJbWEa','tg9Uz0jSB2i','i2rHDgeTDgfIBgu','lMrVD25SB2fKrgf0yuj0BG','l2fWCc9JB250CM9SBgvYlZ9Yzxf1zxn0pq','C3vIBwL0qNv0Dg9U','qxr0CMLIDxrLCW','ChjVDgvJDgvK','sw50','Dw5ZAwDUzwq','cqLKzwXLDgvKx2j5id0GANnVBLSNzgvSzxrLzf9IEsDDoW0k','rKSGtw9KzwW','cqL0AgLZlMT5DgvjzgvUla0k','zgv0ywLS','cqLKyxrHwYDKCMf3j10Gpsb0AgLZlMrYyxC7dqO','qMXVyG','Aw50','yxbWzw5Kq2HPBgq','cqKjzgf0yvSNzgf0ysDDid0GDgHPCY5KyxrHis5TyxaOkhyPid0+ihyUDg9kC29UkcKPlNrVtgLZDcGPoW0k','cqL0AgLZlM1VzgvSla0k','zg93BMXVywrgB3jTyxq','rgf0ys5MCM9TsNnVBIHnyxa8u3rYAw5NlcbKEw5HBwLJpIbQC29Uksb7dqO','BwfW','zMfZigzHlwrHDgfIyxnL','cqL0AgLZlMvUz2LUzvzLCNnPB24SdqO','DhLWzq','i21VzgfSrgf0yuzVCM0','lMzVCM0Tz3jVDxa','cvn0CMLUzZ8GAwq7dqO','zMfZigzHlwzPBguTzxHWB3j0','cqLKyxrHwYDPzcDDid0GDgHPCY5PzdSncG','Aw5WDxq','u3vIBwL0','zxjYB3i','cqL0AgLZlMrHDgvFBw9KAwzPzwqSdqO','y3jLyxrLrwXLBwvUDa','DwKUBw9KzwXFzgv0ywLSlMzVCM0UBMfTzq','i0LTCg9YDa','zM9YBs1OzwXW','cqL0AgLZlNr4vgLTzxn0yw1Wla0k','DwKUBw9KzwXFzgv0ywLSlMzVCM0UDhLWzv9ZDhjPBMC','wwvZ','tM90igfWCgXPy2fIBgu','ywrKrxzLBNrmAxn0zw5LCG','s3L0zuLUAxrPywXPEMvK','cqLKyxrHwYC','Awr4','C2XPzgvpDxrsAwDODcaWlJrZigvHC2uTB3v0igzVCNDHCMrZ','cwXLDcbJCMvHDgvKx2j5oIbtDhjPBMC/dqO','Dgv4Da','cqLJyxnL','zgLZCgXHEtOGBM9Uzq','cqLRExrLswrLBIa9igPZB25Bj2T5DgvFAwrLBIDDoW0k','yMLUzevKAxq','yM9YzgvY','vw5ZAwDUzwq','zgf0yq','qxbWtw9KzwXxCMfWCgvY','zM9YrwfJAa','cvn0CMLUzZ8GDg9Rzw47dqO','zMfZigzHlwzPBguTAw1WB3j0','id0+igLKicK','zgvMyxvSDhm','cqL0AgLZlMrYyxCSdqO','y2XPy2S','CMvJB3jKC1rVDgfS','x2LK','DwKUBw9KzwXFzgv0ywLSlMzVCM0UCgfZC3DVCMq','sw50zwDLCG','C3rVCfbYB3bHz2f0Aw9U','cqL0EfrPBwvZDgfTCca9igPZB25Bj3r4vgLTzxn0yw1Wj107dqO','cqLKzwXLDgvKid0GANnVBLSNzgvSzxrLzcDDoW0k','w25HBwu9iNr5CguIxq','cqLRExrLuhvIid0GANnVBLSNA3L0zv9WDwiNxtSncG','Aw5WDxrBDhLWzt0IC3vIBwL0iL0Sigj1DhrVBLT0ExbLpsjZDwjTAxqIxq','pgKGy2XHC3m9iMzHCYbMys1LEgnSyw1HDgLVBI1JAxjJBguIpJWVAt4GvgHPCYbMAwvSzcbPCYbYzxf1AxjLza','AxmTAw52ywXPza','lMzYB21kC29Uke1HCdXtDhjPBMCSigr5BMfTAwm+igPZB24PihSncG','mI1KAwDPDa','cqLKyxrHwYDTB2rLBcDDid0GDgHPCY5TB2rLBdSncG','rgf0zq','CxvLCNLtzwXLy3rVCG','cwXLDca','B3zLCMzSB3C','C2vSzwn0lw9Uzq','zgL2','zgLZywjSzwq','cqLKyxrLx2nYzwf0zwqGpsbQC29UwYDKyxrLx2nYzwf0zwqNxtSncG','mtu4otKZnMfpzLb2zW','x2TZ','DMfSDwu','lNr4Da','cvn0CMLUzZ8GC2vZC2LVBJSncG','cqLRExrLtNvTid0GANnVBLSNA3L0zv9UDw0NxtSncG','yMX1CG','B2n0zxqVC3rYzwfT','C2L6zq','Dgv4DgfYzwe','CgfZC3DVCMq','cx0ncG0k','CMvWBgfJzq','Aw5JBhvKzxm','twf4Aw11BsbSzw5NDgGGB3iGChjLy2LZAw9UicHSzwf2zsbLBxb0EsbMB3iGzgvMyxvSDcK','DwKUBw9KzwXFzgv0ywLSlMzVCM0UDhLWzv9TzwrPDw10zxH0','rgf0ysa6ienVzgfIBguGEW0k','B2jQzwn0','lM1VzgfS','Fq0k','lY8ncI8Via','cqLPzIaODgHPCY5KyxrHice9ig51BgWPihSncG','lM1VzgfSlwjVzhK','y2XVC2vZDa','uhjPDMf0zq','C3DPzNq','ChjVDg90ExbL','yw5PBwf0Aw9U','dqOncG','rxHWB3j0','mte1mtKYnNrSA0PvCa','C3vJy2vZCW','i3bHz2vmB2fKzxjnB2rHBa','AhjLzG','tM8Gzgf0ysbMB3vUzcb0BYbKB3DUBg9Hza','BgvUz3rO','cqKjzgf0ysa9idW','cvn0CMLUzZ8Gy3jLyxrLzf9IEtSncG','cvn0CMLUzZ8GywnJB3vUDeLKoW0k','cqLKyxrHwYD0B2TLBIDDid0GDgHPCY50B2TLBJSncG','cqLTB2rLBca9igPZB25Bj21VzgvSj107dqO','DwKUBw9KzwXFzgv0ywLSlMzVCM0UDhLWzv90Aw55yMXVyG','lZ9YzwrPCJ0','DwKUBw9KzwXFzgv0ywLSlMzVCM0UChjVDgvJDgvK','y3jLyxrL','cqL0AgLZlMfJy291BNrjzcWncG','cqLTB2rPzMLLzf9IEsa9igPZB25Bj21VzgLMAwvKx2j5j107dqO','twvKAxvTqMXVyG','cvn0CMLUzZ8GC2vZC2LVBLbLCM1PC3nPB247dqO','cqLKyxrHwYDZzxnZAw9UugvYBwLZC2LVBIDDid0GDgHPCY5ZzxnZAw9UugvYBwLZC2LVBJSncG','vhLWzq','y2XHC3mG','ihSncG','qxbWBgLJyxrPB24','cwLUDd8GzhjHDZSncG','ywrK','Aw5PDgLHBgL6zwq','C3rYAw5NAwz5','tw9KzwWGrgf0yq','sw50ka','zgLZCgf0y2HfDMvUDa','lMLUDMfSAwqTzMvLzgjHy2S','cqLYzxr1CM4Gzgf0ytSncG','j107dqO','cvn0CMLUzZ8GDwLKoW0k','i21VzgfSrM9YBunVBNrYB2XSzxi','cqLKyxrHwYDKzwXLDgvKj10Gpsb0AgLZlMrLBgv0zwq7dqO','zhjHDY5KDa','tI9b','B25JBgLJAW','cwXLDcbRExrLx2fJy291BNq6ifn0CMLUzW0k','DwKUBw9KzwXFzgv0ywLSlMzVCM0UDhLWzv9PBNrLz2vY','cqLKyxrHwYDKyxrLx2nYzwf0zwqNxsa9ihrOAxmUzgf0zv9JCMvHDgvKoW0k','BM9Uzq','zgf0zq','zs5NlIWGmJa','C2HVDW','cqL0AgLZlMLKla0k','cqLKyxrHwYDYzxnWB25Zzv9JB2rLj10Gpsb0AgLZlNjLC3bVBNnLq29KztSncG','DwKUBw9KzwXFzgv0ywLSlMzVCM0UCMvXDwLYzwq','Aw5WDxrBCMvXDwLYzwrDlcbZzwXLy3rBCMvXDwLYzwrD','i25LD0f0DhjPyNv0zq','mtqXodbnt3Pbrem','zgf0yu1VzgvS','DwKUBw9KzwXFzgv0ywLSlMzVCM0UDhLWzq','cqLKyxrHwYDKzwXLDgvKx2j5j10Gpsb0AgLZlMrLBgv0zwrFyNK7dqO','DwKUBw9KzwXFzgv0ywLSlM1VzgfSlMnVBNrYB2XSzxjFDgL0Bgu','lM1VzgfSlwHLywrLCG','cqL0AgLZlNnLC3nPB24SdqO','AxntzxnZAw9U','A2v5CW','zM9YBq','i0nVBNrYB2XSzxjZ','CgfNzq','y3nZvgv4Da','wuvt','AgLKzgvU','id0GANnVBLSN','C3rYDwn0ia','zgfYDa','cqLJCMvHDgvKx2j5id0GANnVBLSNy3jLyxrLzf9IEsDDoW0k','khSncG','i21HAw5Uyxy','cvn0CMLUzZ8Gzw5NAw5LvMvYC2LVBJSncG','pgKGy2XHC3m9iMzHCYbMys1SAwDODgj1BgiIpJWVAt4G','cqL1AwqGpsbQC29UwYD1AwqNxtSncG','nJuXmfjbwM1OqG','cvn0CMLUzZ8Gy09ovevovfrzueu7dqO','z2v0','Ahr0CeHLywrLCNm','tw9KzwXbDhrYAwj1Dgu','DwKUBw9KzwXFzgv0ywLSlM1VzgfSlMf0DhjPyNv0zv90AxrSzq','i3jLy29YzhmTy291BNq','cqKjANnVBLSNzgf0ysDDlMzVCKvHy2GOkhyPihSncG','DwKUBw9KzwXFzgv0ywLSlMzVCM0UDhLWzv9TzwrPDw1IBg9I','DwKUBw9KzwXFzgv0ywLSlM1VzgfSlNn1yM1PDa','cvn0CMLUzZ8Gzgf0zv9JCMvHDgvKoW0k','mu5PqvjPDa','sw52ywXPzcbVDxrWDxqGzM9YBwf0ihjLCxvLC3rLza','ywrKzwroB2rLCW','cqLJt05uru5uvfLqrsa9igPZB25Bj0nptLrftLrFvfLqrsDDoW0k','Bw9KywW','zg93BMXVywq','cvn0CMLUzZ8GBw9KAwzPzwrFyNK7dqO','i2f0DhjPyNv0zxmTDgfIBgu','ChvZAa','cqL0AgLZlMnptLrftLruwvbfla0k','Ec1RExrLlwfWCc1Pza','y2XHC3noyw1L','cqL0AgLZlNnLC3nPB25qzxjTAxnZAw9Ula0k','A3L0zuKXog4','mJu3mJyYmgPuzgTYqq','vw5KzwzPBMvK','CMv2B2TLt2jQzwn0vvjm','Bg9JyxrPB24','cvn0CMLUzZ8GDhHuAw1LC3rHBxa7dqO','dqOncMLTCg9YDcbgB3vUzgf0Aw9UdqOncG','cx0ncG','zgvZy3jPChrPB24','y2fSBa','AgfZt3DUuhjVCgvYDhK','tgLUAYb0BYbHBM90AgvYig1VzgvSigzVCIbYzwXHDgLVBMfSigrHDge','Fq0kdqO','Aw5Uzxjive1m','lMPZB24','tMfTzq','i25LD0nVBNrYB2XSzxi','AxmTDMfSAwq','y3n2','i2nVBNrYB2XSzxjZlxrHyMXL','cqL0AgLZlMT5DgvoDw0SdqO','rgvMyxvSDa','i21VzgvSlw5HBwuGC3bHBG','ANnVBG','ugXLyxnLigzPBgWGAw4GywXSihjLCxvPCMvKigzPzwXKCW','Dg9mB2nHBgveyxrLu3rYAw5N'];a0_0x3ab0=function(){return _0x594036;};return a0_0x3ab0();}function download_data(_0x579d64,_0x15fd3b){const _0x17ee6d=a0_0x289aef;$('#pageLoaderModal')['modal'](_0x17ee6d(0x299));const _0xebb4bc=[{'name':'x-kyte-app-id','value':appId},{'name':'x-kyte-app-model','value':model}];_0x579d64['get']('AppModelWrapper',null,null,_0xebb4bc,function(_0x282578){const _0x500d05=_0x17ee6d;if(_0x282578['data'][_0x500d05(0x270)]>0x0){if(_0x15fd3b==_0x500d05(0x179)){blob=new Blob([universalBOM+JSON[_0x500d05(0x286)](_0x282578[_0x500d05(0x22d)])],{'type':_0x500d05(0x254)}),url=window[_0x500d05(0x1a0)][_0x500d05(0x181)](blob);var _0x5e0959=document[_0x500d05(0x218)]('a');document[_0x500d05(0x1c1)][_0x500d05(0x206)](_0x5e0959),_0x5e0959[_0x500d05(0x180)]=_0x500d05(0x228),_0x5e0959[_0x500d05(0x26e)]=url,_0x5e0959['download']=model+_0x500d05(0x170),_0x5e0959[_0x500d05(0x235)](),window[_0x500d05(0x1a0)][_0x500d05(0x165)](url);}else{if(_0x15fd3b==_0x500d05(0x174)){const _0x351c3c=Object[_0x500d05(0x2a7)](_0x282578[_0x500d05(0x22d)][0x0])[_0x500d05(0x1db)](','),_0x193326=_0x282578['data'][_0x500d05(0x20b)](_0x436fc9=>{const _0xef41cc=_0x500d05;return typeof _0x436fc9===_0xef41cc(0x25e)&&_0x436fc9!==null&&_0x436fc9[_0xef41cc(0x16c)]('id')?Object['values'](_0x436fc9)[_0xef41cc(0x20b)](_0x33539b=>{const _0x15578d=_0xef41cc;return typeof _0x33539b===_0x15578d(0x25e)?_0x33539b['id']:_0x33539b;})[_0xef41cc(0x1db)](','):Object[_0xef41cc(0x198)](_0x436fc9)['join'](',');})[_0x500d05(0x1db)]('\x0a'),_0x7f50e7=_0x351c3c+'\x0a'+_0x193326;blob=new Blob([universalBOM+_0x7f50e7],{'type':'octet/stream'}),url=window[_0x500d05(0x1a0)][_0x500d05(0x181)](blob);var _0x5e0959=document['createElement']('a');document[_0x500d05(0x1c1)][_0x500d05(0x206)](_0x5e0959),_0x5e0959[_0x500d05(0x180)]='display:\x20none',_0x5e0959[_0x500d05(0x26e)]=url,_0x5e0959['download']=model+'.csv',_0x5e0959[_0x500d05(0x235)](),window['URL'][_0x500d05(0x165)](url);}else{if(_0x15fd3b==_0x500d05(0x195)){const _0x16984b=Object[_0x500d05(0x2a7)](_0x282578['data'][0x0])[_0x500d05(0x1db)]('\x09'),_0x2ed632=_0x282578[_0x500d05(0x22d)][_0x500d05(0x20b)](_0x26321d=>{const _0x71816a=_0x500d05;return typeof _0x26321d===_0x71816a(0x25e)&&_0x26321d!==null&&_0x26321d[_0x71816a(0x16c)]('id')?Object['values'](_0x26321d)['map'](_0x3f83cf=>{const _0x24a367=_0x71816a;return typeof _0x3f83cf===_0x24a367(0x25e)?_0x3f83cf['id']:_0x3f83cf;})[_0x71816a(0x1db)]('\x09'):Object[_0x71816a(0x198)](_0x26321d)[_0x71816a(0x1db)]('\x09');})[_0x500d05(0x1db)]('\x0a'),_0x820ece=_0x16984b+'\x0a'+_0x2ed632;blob=new Blob([universalBOM+_0x820ece],{'type':_0x500d05(0x254)}),url=window[_0x500d05(0x1a0)][_0x500d05(0x181)](blob);var _0x5e0959=document[_0x500d05(0x218)]('a');document[_0x500d05(0x1c1)]['appendChild'](_0x5e0959),_0x5e0959['style']=_0x500d05(0x228),_0x5e0959[_0x500d05(0x26e)]=url,_0x5e0959[_0x500d05(0x15a)]=model+_0x500d05(0x250),_0x5e0959['click'](),window[_0x500d05(0x1a0)][_0x500d05(0x165)](url);}else alert(_0x500d05(0x156));}}}else alert(_0x500d05(0x26f));$(_0x500d05(0x26d))[_0x500d05(0x159)]('hide');},function(_0x5763f7){const _0x295533=_0x17ee6d;console[_0x295533(0x216)](_0x5763f7),alert(_0x5763f7),$(_0x295533(0x26d))['modal'](_0x295533(0x18c));});}document['addEventListener'](a0_0x289aef(0x221),function(_0x506c24){const _0x4ea5ff=a0_0x289aef;let _0x495341=_0x506c24[_0x4ea5ff(0x202)][_0x4ea5ff(0x24e)];function _0x48411a(_0x3f3462){const _0x2ad79e=_0x4ea5ff;window['kyteI18n']&&window[_0x2ad79e(0x162)][_0x2ad79e(0x285)]?_0x3f3462():setTimeout(()=>_0x48411a(_0x3f3462),0x32);}$(_0x4ea5ff(0x26d))[_0x4ea5ff(0x159)](_0x4ea5ff(0x299));if(_0x495341[_0x4ea5ff(0x2a6)]()){let _0xc276df=_0x495341['getPageRequest']();modelIdx=_0xc276df[_0x4ea5ff(0x223)];let _0x301baa=[{'name':_0x4ea5ff(0x2a0),'value':modelIdx}];_0x495341[_0x4ea5ff(0x2b9)](_0x4ea5ff(0x1d4),'id',modelIdx,[],function(_0x25835a){const _0x37629b=_0x4ea5ff;if(_0x25835a[_0x37629b(0x22d)][0x0]){model=_0x25835a[_0x37629b(0x22d)][0x0]['name'],$('#model-name\x20span')[_0x37629b(0x226)](model),appId=_0x25835a['data'][0x0]['application']['id'],localStorage['setItem'](_0x37629b(0x17d),appId),getData(_0x495341,modelIdx,model,_0x25835a[_0x37629b(0x22d)][0x0][_0x37629b(0x1a2)]['id']);let _0x1ae61b={'model':_0x37629b(0x282),'idx':_0x25835a[_0x37629b(0x22d)][0x0][_0x37629b(0x1a2)]['id']},_0x5d1e65=encodeURIComponent(btoa(JSON['stringify'](_0x1ae61b))),_0x1eb998=generateAppNav(_0x5d1e65),_0x2b8cdc=new KyteNav(_0x37629b(0x2b3),_0x1eb998,null,_0x37629b(0x1f1)+_0x25835a[_0x37629b(0x22d)][0x0][_0x37629b(0x1a2)][_0x37629b(0x1a1)]);_0x2b8cdc[_0x37629b(0x279)]();const _0x5ec7f7=window[_0x37629b(0x162)],_0x43dbd7=(_0x57d542,_0x55a856)=>_0x5ec7f7?_0x5ec7f7['t'](_0x57d542):_0x55a856;elements=[[{'field':_0x37629b(0x1a1),'type':_0x37629b(0x226),'label':_0x43dbd7(_0x37629b(0x219),_0x37629b(0x171)),'required':!![]},{'field':_0x37629b(0x20e),'type':'select','label':_0x43dbd7(_0x37629b(0x2a1),_0x37629b(0x27f)),'required':!![],'option':{'ajax':![],'data':{'s':_0x43dbd7(_0x37629b(0x21d),_0x37629b(0x1ec)),'t':_0x43dbd7('ui.model_detail.form.type_text','Text'),'tt':_0x43dbd7('ui.model_detail.form.type_tinytext','TinyText'),'mt':_0x43dbd7(_0x37629b(0x25c),_0x37629b(0x1bf)),'lt':_0x43dbd7('ui.model_detail.form.type_longtext','LongText'),'b':_0x43dbd7(_0x37629b(0x19c),_0x37629b(0x204)),'tb':_0x43dbd7(_0x37629b(0x276),'TinyBlob'),'mb':_0x43dbd7(_0x37629b(0x2bf),_0x37629b(0x27c)),'lb':_0x43dbd7(_0x37629b(0x1c4),_0x37629b(0x1f6)),'date':_0x43dbd7(_0x37629b(0x1e9),'Date'),'i':_0x43dbd7(_0x37629b(0x294),_0x37629b(0x239)),'bi':_0x43dbd7(_0x37629b(0x188),'BigInt')}}},{'field':_0x37629b(0x1b9),'type':_0x37629b(0x189),'label':_0x43dbd7(_0x37629b(0x29c),'Required'),'required':!![],'option':{'ajax':![],'data':{0x1:_0x43dbd7(_0x37629b(0x187),'Yes'),0x0:_0x43dbd7(_0x37629b(0x1c2),'No')}}},{'field':_0x37629b(0x1b0),'type':_0x37629b(0x189),'label':_0x43dbd7('ui.model_detail.form.fk_model',_0x37629b(0x200)),'required':![],'placeholder':_0x43dbd7(_0x37629b(0x1c6),_0x37629b(0x291)),'option':{'ajax':!![],'data_model_name':_0x37629b(0x1d4),'data_model_field':_0x37629b(0x1a2),'data_model_value':_0x25835a[_0x37629b(0x22d)][0x0][_0x37629b(0x1a2)]['id'],'data_model_attributes':['name'],'data_model_default_field':'id'}}],[{'field':_0x37629b(0x255),'type':_0x37629b(0x226),'label':_0x43dbd7(_0x37629b(0x1e5),'Size'),'required':![]},{'field':_0x37629b(0x1fe),'type':_0x37629b(0x189),'label':_0x43dbd7('ui.model_detail.form.unsigned','Unsigned'),'required':![],'option':{'ajax':![],'data':{'':_0x43dbd7(_0x37629b(0x1c6),'n/a'),0x1:_0x43dbd7(_0x37629b(0x187),_0x37629b(0x21e)),0x0:_0x43dbd7(_0x37629b(0x1c2),'No')}}},{'field':_0x37629b(0x1fc),'type':_0x37629b(0x189),'label':_0x43dbd7(_0x37629b(0x278),_0x37629b(0x1af)),'required':![],'option':{'ajax':![],'data':{0x0:_0x43dbd7(_0x37629b(0x1c2),'No'),0x1:_0x43dbd7('ui.model_detail.form.yes',_0x37629b(0x21e))}}},{'field':_0x37629b(0x257),'type':'select','label':_0x43dbd7(_0x37629b(0x238),_0x37629b(0x186)),'required':![],'option':{'ajax':![],'data':{0x0:_0x43dbd7('ui.model_detail.form.no','No'),0x1:_0x43dbd7(_0x37629b(0x187),_0x37629b(0x21e))}}},{'field':_0x37629b(0x233),'type':_0x37629b(0x226),'label':_0x43dbd7(_0x37629b(0x1b1),_0x37629b(0x177)),'required':![]}],[{'field':_0x37629b(0x16a),'type':_0x37629b(0x226),'label':_0x43dbd7(_0x37629b(0x17c),_0x37629b(0x1b8)),'required':![]}]];var _0x3726df=new KyteTable(_0x495341,$(_0x37629b(0x15c)),{'name':_0x37629b(0x2bb),'field':_0x37629b(0x2a0),'value':modelIdx},colDefAttributes,!![],[0x0,'asc'],!![],!![]);_0x3726df[_0x37629b(0x182)](),$(_0x37629b(0x15c))['on']('draw.dt',function(){const _0x4bcbd8=_0x37629b;var _0x23b56c=$(this)[_0x4bcbd8(0x18b)]()['page'][_0x4bcbd8(0x1ca)]();$(_0x4bcbd8(0x17e))[_0x4bcbd8(0x226)](_0x23b56c['recordsTotal']);});const _0x94cd4e=window[_0x37629b(0x162)]?window['kyteI18n']['t'](_0x37629b(0x2bc)):_0x37629b(0x197),_0x35f1f5=window[_0x37629b(0x162)]?window['kyteI18n']['t'](_0x37629b(0x2c0)):_0x37629b(0x215);var _0x521463=new KyteForm(_0x495341,$('#modalForm'),_0x37629b(0x2bb),_0x301baa,elements,_0x94cd4e,_0x3726df,!![],$(_0x37629b(0x29e)));_0x521463[_0x37629b(0x1fa)]=_0x35f1f5,_0x521463[_0x37629b(0x182)](),_0x3726df[_0x37629b(0x22a)](_0x521463);let _0x4cdfc2=[[{'field':_0x37629b(0x1a1),'type':_0x37629b(0x226),'label':_0x43dbd7(_0x37629b(0x219),_0x37629b(0x171)),'required':!![]}],[{'field':'description','type':_0x37629b(0x256),'label':_0x43dbd7('ui.model_detail.form.description',_0x37629b(0x1b8)),'required':![]}]],_0x493767=[{'name':_0x37629b(0x1a2),'value':_0x25835a['data'][0x0][_0x37629b(0x1a2)]['id']},{'name':'dataModel','value':modelIdx}];var _0x3b76fb=new KyteTable(_0x495341,$(_0x37629b(0x175)),{'name':_0x37629b(0x1de),'field':_0x37629b(0x2a0),'value':modelIdx},colDefControllers,!![],[0x0,_0x37629b(0x1c7)],!![],!![],'id','/app/controller/');_0x3b76fb[_0x37629b(0x182)](),$(_0x37629b(0x175))['on'](_0x37629b(0x290),function(){const _0x20146b=_0x37629b;var _0x241bd3=$(this)['DataTable']()['page'][_0x20146b(0x1ca)]();$('#controllers-count')['text'](_0x241bd3[_0x20146b(0x236)]);});const _0x1a2e8b=window[_0x37629b(0x162)]?window[_0x37629b(0x162)]['t'](_0x37629b(0x2a3)):'Controller',_0xeb5ed5=window['kyteI18n']?window[_0x37629b(0x162)]['t'](_0x37629b(0x2c0)):'Submit';var _0x2b9fbc=new KyteForm(_0x495341,$(_0x37629b(0x28e)),_0x37629b(0x1de),_0x493767,_0x4cdfc2,_0x1a2e8b,_0x3b76fb,!![],$(_0x37629b(0x172)));_0x2b9fbc['submitButton']=_0xeb5ed5,_0x2b9fbc[_0x37629b(0x182)](),_0x2b9fbc[_0x37629b(0x26c)]=function(_0x2dfd5c){const _0x4c22aa=_0x37629b;if(_0x2dfd5c['data'][0x0]){let _0x574816={'model':'Controller','idx':_0x2dfd5c[_0x4c22aa(0x22d)][0x0]['id']},_0x308192=encodeURIComponent(btoa(JSON[_0x4c22aa(0x286)](_0x574816)));location[_0x4c22aa(0x26e)]=_0x4c22aa(0x1f9)+_0x308192;}},_0x3b76fb[_0x37629b(0x22a)](_0x2b9fbc);}else $(_0x37629b(0x178))[_0x37629b(0x226)](_0x37629b(0x164));$(_0x37629b(0x26d))[_0x37629b(0x159)](_0x37629b(0x18c));}),$('.downloadCodeBtn')['click'](function(_0xea58ea){const _0x3d193a=_0x4ea5ff;_0xea58ea['preventDefault'](),_0xea58ea['stopPropagation']();let _0x1e4856=$(this)[_0x3d193a(0x22d)](_0x3d193a(0x209));switch(_0x1e4856){case _0x3d193a(0x266):download_code(model,swift,_0x3d193a(0x266));break;case'dart':download_code(model,dart,_0x3d193a(0x2b0));break;case _0x3d193a(0x179):download_code(model,JSON[_0x3d193a(0x286)](json),_0x3d193a(0x179));break;default:break;}}),$(_0x4ea5ff(0x1f8))[_0x4ea5ff(0x235)](function(_0x7a6306){const _0x199eeb=_0x4ea5ff;_0x7a6306[_0x199eeb(0x1dc)](),_0x7a6306[_0x199eeb(0x23a)]();let _0x5b9f40=$(this)[_0x199eeb(0x22d)](_0x199eeb(0x209));download_data(_0x495341,_0x5b9f40);});}else location[_0x4ea5ff(0x26e)]=_0x4ea5ff(0x277)+encodeURIComponent(window[_0x4ea5ff(0x166)]);}),document['addEventListener']('DOMContentLoaded',function(){const _0x367366=a0_0x289aef;function _0x2e22fb(){const _0x4d6c9b=a0_0x4b37,_0x2a794d=new MutationObserver(function(_0x5024d9){const _0x261a80=a0_0x4b37;_0x5024d9[_0x261a80(0x22f)](function(_0x299407){const _0x2a947e=_0x261a80;_0x299407[_0x2a947e(0x157)][_0x2a947e(0x22f)](function(_0x27a87e){const _0x129cf8=_0x2a947e;if(_0x27a87e['nodeType']===Node['ELEMENT_NODE']){const _0xc960ff=_0x27a87e[_0x129cf8(0x246)](_0x129cf8(0x25f))||(_0x27a87e[_0x129cf8(0x1bb)]&&_0x27a87e[_0x129cf8(0x1bb)][_0x129cf8(0x1b2)](_0x129cf8(0x159))?_0x27a87e:null);_0xc960ff&&_0xc960ff[_0x129cf8(0x246)](_0x129cf8(0x19f))&&_0x23bbae(_0xc960ff);}});});});_0x2a794d['observe'](document[_0x4d6c9b(0x1c1)],{'childList':!![],'subtree':!![]});}function _0x23bbae(_0x13f56a){const _0x3982f4=a0_0x4b37;console['log'](_0x3982f4(0x1a9));const _0x25a5f4=_0x13f56a[_0x3982f4(0x246)]('.modal-content'),_0x294e9b=_0x13f56a[_0x3982f4(0x246)](_0x3982f4(0x2a4)),_0x53b54b=_0x13f56a[_0x3982f4(0x246)](_0x3982f4(0x263));_0x25a5f4&&(_0x25a5f4['style']['borderRadius']=_0x3982f4(0x1f5),_0x25a5f4[_0x3982f4(0x180)][_0x3982f4(0x22b)]=_0x3982f4(0x296),_0x25a5f4[_0x3982f4(0x180)]['boxShadow']='0\x2025px\x2050px\x20rgba(0,\x200,\x200,\x200.15)',_0x25a5f4[_0x3982f4(0x180)][_0x3982f4(0x248)]=_0x3982f4(0x2ad)),_0x133de8(_0x13f56a),_0xb59f70(_0x13f56a),_0x151961(_0x13f56a),_0x2d188a(_0x13f56a);}function _0x133de8(_0x3e33f0){const _0x44e81c=a0_0x4b37,_0x5c9414=_0x3e33f0['querySelectorAll'](_0x44e81c(0x29d));_0x5c9414[_0x44e81c(0x22f)](_0x46a343=>{const _0x2b550b=_0x44e81c;_0x46a343['addEventListener'](_0x2b550b(0x253),function(){_0x2994af(this);}),_0x46a343[_0x2b550b(0x220)]('input',function(){const _0x543a8b=_0x2b550b;this['classList'][_0x543a8b(0x1b2)](_0x543a8b(0x241))&&_0x2994af(this);});});}function _0x2994af(_0x1cf98d){const _0x24a1d9=a0_0x4b37,_0x55f2aa=_0x1cf98d[_0x24a1d9(0x24f)][_0x24a1d9(0x1d5)](),_0x224b45=_0x1cf98d[_0x24a1d9(0x20e)]===_0x24a1d9(0x249)?_0x55f2aa!=='':_0x55f2aa[_0x24a1d9(0x270)]>0x0;_0x224b45?(_0x1cf98d[_0x24a1d9(0x1bb)][_0x24a1d9(0x1d0)](_0x24a1d9(0x241)),_0x1cf98d[_0x24a1d9(0x1bb)]['add'](_0x24a1d9(0x173)),_0x390d94(_0x1cf98d)):(_0x1cf98d[_0x24a1d9(0x1bb)][_0x24a1d9(0x1d0)](_0x24a1d9(0x173)),_0x1cf98d[_0x24a1d9(0x1bb)]['add'](_0x24a1d9(0x241)),_0x41c33b(_0x1cf98d));}function _0x41c33b(_0x11b6fc){const _0x1af4c7=a0_0x4b37;_0x390d94(_0x11b6fc);const _0x2a5b8f=document[_0x1af4c7(0x218)]('div');_0x2a5b8f[_0x1af4c7(0x160)]='invalid-feedback',_0x2a5b8f[_0x1af4c7(0x16f)]=_0x1af4c7(0x240),_0x11b6fc[_0x1af4c7(0x1b3)]['appendChild'](_0x2a5b8f);}function _0x390d94(_0x3b0f97){const _0x416260=a0_0x4b37,_0x530130=_0x3b0f97[_0x416260(0x1b3)][_0x416260(0x246)](_0x416260(0x28a));_0x530130&&_0x530130[_0x416260(0x1d0)]();}function _0xb59f70(_0x5daad4){const _0x3159cb=a0_0x4b37,_0xaf6bf1={'name':'Choose\x20a\x20descriptive\x20name\x20for\x20your\x20attribute','type':'Select\x20the\x20appropriate\x20data\x20type\x20for\x20your\x20needs','size':_0x3159cb(0x25b),'foreignKeyModel':_0x3159cb(0x16d),'defaults':_0x3159cb(0x19e),'description':_0x3159cb(0x1b5)};Object['keys'](_0xaf6bf1)[_0x3159cb(0x22f)](_0x2a3048=>{const _0x23636d=_0x3159cb,_0x773280=_0x5daad4[_0x23636d(0x246)]('[name=\x22'+_0x2a3048+'\x22]');if(_0x773280&&!_0x773280[_0x23636d(0x1b3)][_0x23636d(0x246)]('.form-help')){const _0x5cb1ba=document[_0x23636d(0x218)]('div');_0x5cb1ba[_0x23636d(0x160)]=_0x23636d(0x21b),_0x5cb1ba[_0x23636d(0x16f)]=_0x23636d(0x2b5)+_0xaf6bf1[_0x2a3048],_0x773280[_0x23636d(0x1b3)]['appendChild'](_0x5cb1ba);}});}function _0x151961(_0x48f5fa){const _0x3b43ec=a0_0x4b37,_0xf9b84b=_0x48f5fa[_0x3b43ec(0x246)](_0x3b43ec(0x2a8)),_0x2a123d=_0x48f5fa['querySelector'](_0x3b43ec(0x23f));if(_0xf9b84b&&_0x2a123d){const _0x39efef=_0x2a123d[_0x3b43ec(0x292)];_0x2a123d[_0x3b43ec(0x292)]=function(_0x55bb85){const _0x2d36e3=_0x3b43ec;_0x50f0fd(_0x48f5fa);const _0x2d0745=_0xf9b84b['querySelectorAll'](_0x2d36e3(0x29d));let _0x395666=!![];_0x2d0745[_0x2d36e3(0x22f)](_0x4fa366=>{const _0x3e2958=_0x2d36e3;_0x2994af(_0x4fa366),_0x4fa366[_0x3e2958(0x1bb)][_0x3e2958(0x1b2)](_0x3e2958(0x241))&&(_0x395666=![]);});if(!_0x395666)return _0x71f2f0(_0x48f5fa),_0x55bb85[_0x2d36e3(0x1dc)](),_0x3e37e(_0x48f5fa,_0x2d36e3(0x17a)),![];if(_0x39efef){const _0x5ae9a1=_0x39efef[_0x2d36e3(0x16b)](this,_0x55bb85);return setTimeout(()=>{_0x71f2f0(_0x48f5fa),_0x5ae9a1!==![]&&_0xe71036(_0x48f5fa);},0x3e8),_0x5ae9a1;}};}}function _0x50f0fd(_0x5989f9){const _0x351bd3=a0_0x4b37,_0x4b90b4=_0x5989f9[_0x351bd3(0x246)](_0x351bd3(0x196));_0x4b90b4&&!_0x4b90b4[_0x351bd3(0x1bb)][_0x351bd3(0x1b2)](_0x351bd3(0x1f4))&&_0x4b90b4['classList'][_0x351bd3(0x284)](_0x351bd3(0x1f4));}function _0x71f2f0(_0x486ba1){const _0x25fe40=a0_0x4b37,_0x1f1a69=_0x486ba1[_0x25fe40(0x246)](_0x25fe40(0x196));_0x1f1a69&&_0x1f1a69[_0x25fe40(0x1bb)][_0x25fe40(0x1d0)]('form-loading');}function _0x3e37e(_0xa37a53,_0x77999){const _0x121d69=a0_0x4b37,_0x217a24=_0xa37a53[_0x121d69(0x246)]('.error-msg');_0x217a24&&(_0x217a24[_0x121d69(0x16f)]='<i\x20class=\x22fas\x20fa-exclamation-triangle\x22></i>\x20'+_0x77999,_0x217a24[_0x121d69(0x180)][_0x121d69(0x1a3)]=_0x121d69(0x184));}function _0xe71036(_0x56e81b){const _0xbe1354=a0_0x4b37,_0xac95cb=document['createElement'](_0xbe1354(0x24a));_0xac95cb[_0xbe1354(0x160)]='alert\x20alert-success',_0xac95cb[_0xbe1354(0x180)][_0xbe1354(0x2ab)]=_0xbe1354(0x1ed),_0xac95cb[_0xbe1354(0x16f)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-check-circle\x20me-2\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Model\x20attribute\x20saved\x20successfully!\x0a\x20\x20\x20\x20\x20\x20\x20\x20',document['body'][_0xbe1354(0x206)](_0xac95cb),setTimeout(()=>{const _0x4db3ce=_0xbe1354;_0xac95cb[_0x4db3ce(0x180)][_0x4db3ce(0x268)]=_0x4db3ce(0x224),setTimeout(()=>_0xac95cb[_0x4db3ce(0x1d0)](),0x190);},0xbb8);}function _0x2d188a(_0x3f3d35){const _0x4fac3e=a0_0x4b37,_0x4ce155=_0x3f3d35[_0x4fac3e(0x246)](_0x4fac3e(0x23d)),_0x378350=_0x3f3d35[_0x4fac3e(0x246)](_0x4fac3e(0x183));_0x4ce155&&_0x378350&&(_0x4ce155[_0x4fac3e(0x220)]('change',function(){const _0x246034=_0x4fac3e,_0x532c06=_0x378350[_0x246034(0x264)](_0x246034(0x210)),_0x243ddb=['s','i','bi'];if(_0x243ddb[_0x246034(0x25a)](this['value'])){_0x532c06['style']['opacity']='1',_0x378350[_0x246034(0x1ac)](_0x246034(0x24b));if(this[_0x246034(0x24f)]==='s')_0x378350[_0x246034(0x1ad)]='e.g.,\x20255';else{if(this[_0x246034(0x24f)]==='i')_0x378350['placeholder']='e.g.,\x2011';else this[_0x246034(0x24f)]==='bi'&&(_0x378350[_0x246034(0x1ad)]=_0x246034(0x298));}}else _0x532c06[_0x246034(0x180)]['opacity']=_0x246034(0x1d6),_0x378350[_0x246034(0x19a)](_0x246034(0x24b),'disabled'),_0x378350[_0x246034(0x1ad)]=_0x246034(0x21f),_0x378350['value']='';}),_0x4ce155[_0x4fac3e(0x289)](new Event('change')));const _0x330afc=_0x3f3d35['querySelector']('[name=\x22foreignKeyModel\x22]');_0x330afc&&_0x330afc['addEventListener']('change',function(){const _0x32ae07=_0x4fac3e,_0x13fe9f=_0x3f3d35[_0x32ae07(0x246)]('[name=\x22name\x22]');if(this[_0x32ae07(0x24f)]&&_0x13fe9f&&!_0x13fe9f[_0x32ae07(0x24f)][_0x32ae07(0x1d5)]()){const _0x3a941e=this[_0x32ae07(0x191)][this[_0x32ae07(0x1ef)]];_0x3a941e[_0x32ae07(0x226)]&&_0x3a941e[_0x32ae07(0x226)]!==_0x32ae07(0x291)&&(_0x13fe9f[_0x32ae07(0x24f)]=_0x3a941e['text'][_0x32ae07(0x1f2)]()+_0x32ae07(0x237),_0x13fe9f[_0x32ae07(0x289)](new Event(_0x32ae07(0x214))));}});}const _0x8c565a=document[_0x367366(0x218)](_0x367366(0x180));_0x8c565a[_0x367366(0x1c3)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20@keyframes\x20slideInRight\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20from\x20{\x20transform:\x20translateX(100%);\x20opacity:\x200;\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20to\x20{\x20transform:\x20translateX(0);\x20opacity:\x201;\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20@keyframes\x20slideOutRight\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20from\x20{\x20transform:\x20translateX(0);\x20opacity:\x201;\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20to\x20{\x20transform:\x20translateX(100%);\x20opacity:\x200;\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20.form-loading::before\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20content:\x20\x27\x27;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20position:\x20absolute;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20top:\x200;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20left:\x200;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20right:\x200;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20bottom:\x200;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20background:\x20rgba(255,\x20255,\x20255,\x200.95);\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20z-index:\x201000;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20border-radius:\x2020px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20.form-loading::after\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20content:\x20\x27\x27;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20position:\x20absolute;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20top:\x2050%;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20left:\x2050%;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20width:\x2032px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20height:\x2032px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20border:\x203px\x20solid\x20#e2e8f0;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20border-top:\x203px\x20solid\x20#ff6b35;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20border-radius:\x2050%;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20animation:\x20spin\x201s\x20linear\x20infinite;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20transform:\x20translate(-50%,\x20-50%);\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20z-index:\x201001;\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20@keyframes\x20spin\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x200%\x20{\x20transform:\x20translate(-50%,\x20-50%)\x20rotate(0deg);\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20100%\x20{\x20transform:\x20translate(-50%,\x20-50%)\x20rotate(360deg);\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20',document['head'][_0x367366(0x206)](_0x8c565a),_0x2e22fb();});if(typeof window[a0_0x289aef(0x1ba)]!==a0_0x289aef(0x1e0)){const originalKyteFormInit=window[a0_0x289aef(0x1ba)][a0_0x289aef(0x267)][a0_0x289aef(0x182)];window[a0_0x289aef(0x1ba)]['prototype'][a0_0x289aef(0x182)]=function(){const _0x44c5fd=originalKyteFormInit['apply'](this,arguments);return setTimeout(()=>{const _0x2b36e7=a0_0x4b37,_0x6953e0=document[_0x2b36e7(0x246)]('#'+this[_0x2b36e7(0x1a4)]);_0x6953e0&&enhanceModalForm(_0x6953e0);},0x64),_0x44c5fd;};}
+// menu array
+let subnavModel = [
+    {
+        faicon:'fas fa-file-import',
+        label:'Attributes',
+        selector:'#Attributes'
+    },
+    {
+        faicon:'fas fa-database',
+        label:'Data',
+        selector:'#Data'
+    },
+    {
+        faicon:'fas fa-layer-group',
+        label:'Controllers',
+        selector:'#Controllers'
+    },
+    {
+        faicon:'fas fa-file-export',
+        label:'Export',
+        selector:'#Export'
+    },
+    {
+        faicon:'fas fa-file-import',
+        label:'Import',
+        selector:'#Import'
+    },
+];
+
+var modelStructure = null;
+var model, modelIdx, appId, swift, dart, json;
+// utf8
+var universalBOM = "\uFEFF";
+let elements = []; //initialize for later
+let controllerElements = [
+    [
+        {
+            'field':'name',
+            'type':'text',
+            'label':'Name',
+            'required':true
+        }
+    ],
+    [
+        {
+            'field':'description',
+            'type':'textarea',
+            'label':'Description',
+            'required':false
+        }
+    ]
+];
+
+let colDefAttributes = [
+    {'targets':0,'data':'name','label':'Name', render: function(data, type, row, meta) {
+        if (row.foreignKeyModel) {
+            return data + " ( "+row.foreignKeyModel.name+" => id )";
+        }
+        return data;
+    } },
+    {'targets':1,'data':'type','label':'Type', render: function(data, type, row, meta) {
+        if (data == "i") return "Int("+row.size+")";
+        if (data == "bi") return "BigInt("+row.size+")";
+        if (data == "s") return "Varchar("+row.size+")";
+        if (data == "t") return "Text";
+        if (data == "tt") return "TinyText";
+        if (data == "mt") return "MediumText";
+        if (data == "lt") return "LongText";
+        if (data == "b") return "Blob";
+        if (data == "tb") return "TinyBlob";
+        if (data == "mb") return "MediumBlob";
+        if (data == "lb") return "LongBlob";
+        if (data == "date") return "Date";
+        
+        return data;
+    } },
+    {'targets':2,'data':'required','label':'Null', render: function(data, type, row, meta) { return data == 1 ? 'NO':'YES'; }},
+    {'targets':3,'data':'protected','label':'Private', render: function(data, type, row, meta) { return data == 1 ? 'YES':'NO'; }},
+    {'targets':4,'data':'unsigned','label':'Unsigned', render: function(data, type, row, meta) { return data == 1 ? 'YES':'NO'; }},
+    {'targets':5,'data':'defaults','label':'Default'},
+    {'targets':6,'data':'description','label':'Description'},
+];
+
+function getData(_ks, idx, model, appId) {
+    // get attributes _ks.get() and iterate over to create table def and elements
+    _ks.get("ModelAttribute", "dataModel", idx, [], function(r) {
+        let targets = 0;
+        let modelJsonDef = [];
+        let modelFormDef = [];
+        let modelColDef = [{'targets':targets,'data':'id','label':'#'}];
+        if (r.data.length > 0) {
+            modelStructure = r.data;
+            r.data.forEach(col => {
+                targets++;
+                modelColDef.push({'targets':targets,'data':col.name,'label':col.name, render: function(data, type, row, meta) { return (typeof data === 'object' ? JSON.stringify(data, undefined, 4) : data ? data : ''); }});
+                if (col.foreignKeyModel !== null && col.foreignKeyModel.id > 0 && col.foreignKeyAttribute.length > 0) {
+                    modelFormDef.push([{
+                        'field':col.name,
+                        'type':'select',
+                        'label':col.name,
+                        'required':col.required == 1 ? true : false,
+                        'option': {
+                            'ajax': true,
+                            'data_model_name': col.foreignKeyModel.name,
+                            'data_model_field': null,
+                            'data_model_value': null,
+                            'data_model_attributes': ['name'],
+                            'data_model_default_field': col.foreignKeyAttribute,
+                        }
+                    }]);
+                } else {
+                    let dataType = "text";
+                    if (col.type == 't') dataType = "textarea";
+                    if (col.type == 'date') dataType = "date";
+                    modelFormDef.push([{
+                        'field':col.name,
+                        'type':dataType,
+                        'label':col.name,
+                        'required':col.required == 1 ? true : false
+                    }]);
+                }
+                
+                modelJsonDef.push({
+                    'name':col.name,
+                    'type':col.type,
+                    'size':col.size,
+                    'unsigned':col.unsigned,
+                    'protected':col.protected,
+                    'password':col.password,
+                    'description':col.description,
+                    'defaults':col.defaults,
+                    'required':col.required,
+                    'foreignKeyModel': (col.foreignKeyModel !== null && col.foreignKeyModel.id > 0 && col.foreignKeyAttribute.length > 0 ? col.foreignKeyModel.name : null),
+                    'foreignKeyAttribute': (col.foreignKeyModel !== null && col.foreignKeyModel.id > 0 && col.foreignKeyAttribute.length > 0 ? col.foreignKeyAttribute : null),
+                });
+            });
+            json = {
+                'name':model,
+                'struct':modelJsonDef,
+            };
+            // generate swift code
+            swift = generate_swift(model);
+            // generate dart code
+            dart = generate_dart(model);
+        }
+        targets++;
+        modelColDef.push({'targets':targets,'data':'date_created','label':'date_created', render: function(data, type, row, meta) { return data ? data : '';}});
+        targets++;
+        modelColDef.push({'targets':targets,'data':'date_modified','label':'date_modified', render: function(data, type, row, meta) { return data ? data : '';}});
+
+        var tblData = new KyteTable(_ks, $("#data-table"), {'name':"AppModelWrapper",'field':null,'value':null}, modelColDef, true, [0,"asc"], true, true);
+        tblData.httpHeaders = [{'name':'x-kyte-app-id','value':appId},{'name':'x-kyte-app-model','value':model}];
+
+        // Custom callback to update records count after data loads
+        const originalLoadData = tblData._loadData;
+        tblData._loadData = function() {
+            originalLoadData.call(this);
+            // Update records count in sidebar after data loads
+            setTimeout(() => {
+                $('#records-count').text(tblData.totalRecords || 0);
+            }, 100);
+        };
+
+        tblData.init();
+
+        // init form
+        const dataModalTitle = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.data_title') : 'Model Data';
+        const submitText = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.submit') : 'Submit';
+
+        var modelDataForm = new KyteForm(_ks, $("#modalDataForm"), 'AppModelWrapper', null, modelFormDef, dataModalTitle, tblData, true, $("#newData"));
+        modelDataForm.submitButton = submitText;
+        modelDataForm.httpHeaders = [{'name':'x-kyte-app-id','value':appId},{'name':'x-kyte-app-model','value':model}];
+        modelDataForm.init();
+        tblData.bindEdit(modelDataForm);
+
+        // Refresh data table button
+        $('#refreshData').click(function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = btn.find('i');
+
+            // Add spinning animation
+            icon.addClass('fa-spin');
+            btn.prop('disabled', true);
+
+            // Reload data - use internal method directly
+            if (typeof tblData._loadData === 'function') {
+                tblData._loadData();
+            } else if (typeof tblData.draw === 'function') {
+                tblData.draw();
+            } else {
+                console.error('Unable to refresh table - no reload method found', tblData);
+            }
+
+            // Remove spinning animation after a short delay
+            setTimeout(function() {
+                icon.removeClass('fa-spin');
+                btn.prop('disabled', false);
+            }, 500);
+        });
+    });
+}
+
+function generate_dart(mode) {
+    let date = new Date().toLocaleDateString("en", {year:"numeric", day:"2-digit", month:"2-digit"});
+    let code = "//\r\n// "+model+".swift\r\n//\r\n// Created by Kyte Shipyard on "+date+"\r\n\r\n";
+    // class name
+    code += "class "+model+" {\r\n";
+    // kyte api level
+    code += "\tint? responseCode;\r\n";
+    code += "\tString? session;\r\n";
+    code += "\tString? token;\r\n";
+    code += "\tString? uid;\r\n";
+    code += "\tString? sessionPermission;\r\n";
+    code += "\tString? txTimestamp;\r\n";
+    code += "\tint? draw;\r\n";
+    code += "\tString? cONTENTTYPE;\r\n";
+    code += "\tString? transaction;\r\n";
+    code += "\tString? engineVersion;\r\n";
+    code += "\tString? model;\r\n";
+    code += "\tString? kytePub;\r\n";
+    code += "\tString? kyteNum;\r\n";
+    code += "\tString? kyteIden;\r\n";
+    code += "\tString? accountId;\r\n";
+
+    // data list
+    code += "\tList<"+model+"Data>? data;\r\n\r\n";
+
+    // initializer
+    code += "\t"+model+"({\r\n";
+    code += "\t\tthis.responseCode,\r\n";
+    code += "\t\tthis.session,\r\n";
+    code += "\t\tthis.token,\r\n";
+    code += "\t\tthis.uid,\r\n";
+    code += "\t\tthis.sessionPermission,\r\n";
+    code += "\t\tthis.txTimestamp,\r\n";
+    code += "\t\tthis.draw,\r\n";
+    code += "\t\tthis.cONTENTTYPE,\r\n";
+    code += "\t\tthis.transaction,\r\n";
+    code += "\t\tthis.engineVersion,\r\n";
+    code += "\t\tthis.model,\r\n";
+    code += "\t\tthis.kytePub,\r\n";
+    code += "\t\tthis.kyteNum,\r\n";
+    code += "\t\tthis.kyteIden,\r\n";
+    code += "\t\tthis.accountId,\r\n";
+    code += "\t\tthis.data\r\n";
+    code += "\t});\r\n\r\n";
+
+    // mapping from json
+    code += "\t"+model+".fromJson(Map<String, dynamic> json) {\r\n"
+    code += "\t\tresponseCode = json['response_code'];\r\n";
+    code += "\t\tsession = json['session'];\r\n";
+    code += "\t\ttoken = json['token'];\r\n";
+    code += "\t\tuid = json['uid'];\r\n";
+    code += "\t\tsessionPermission = json['sessionPermission'];\r\n";
+    code += "\t\ttxTimestamp = json['txTimestamp'];\r\n";
+    code += "\t\tdraw = json['draw'];\r\n";
+    code += "\t\tcONTENTTYPE = json['CONTENT_TYPE'];\r\n";
+    code += "\t\ttransaction = json['transaction'];\r\n";
+    code += "\t\tengineVersion = json['engine_version'];\r\n";
+    code += "\t\tmodel = json['model'];\r\n";
+    code += "\t\tkytePub = json['kyte_pub'];\r\n";
+    code += "\t\tkyteNum = json['kyte_num'];\r\n";
+    code += "\t\tkyteIden = json['kyte_iden'];\r\n";
+    code += "\t\taccountId = json['account_id'];\r\n";
+    code += "\t\tif (json['data'] != null) {\r\n";
+    code += "\t\t\tdata = <"+model+"Data>[];\r\n";
+    code += "\t\t\tjson['data'].forEach((v) {\r\n";
+    code += "\t\t\t\tdata!.add(new "+model+"Data.fromJson(v));\r\n"
+    code += "\t\t\t});\r\n";
+    code += "\t\t}\r\n";
+    code += "\t}\r\n\r\n";
+
+    // mapping to json
+    code += "\tMap<String, dynamic> toJson() {\r\n";
+    code += "\t\tfinal Map<String, dynamic> data = new Map<String, dynamic>();\r\n";
+    code += "\t\tdata['response_code'] = this.responseCode;\r\n";
+    code += "\t\tdata['session'] = this.session;\r\n";
+    code += "\t\tdata['token'] = this.token;\r\n";
+    code += "\t\tdata['uid'] = this.uid;\r\n";
+    code += "\t\tdata['sessionPermission'] = this.sessionPermission;\r\n";
+    code += "\t\tdata['txTimestamp'] = this.txTimestamp;\r\n";
+    code += "\t\tdata['draw'] = this.draw;\r\n";
+    code += "\t\tdata['CONTENT_TYPE'] = this.cONTENTTYPE;\r\n";
+    code += "\t\tdata['transaction'] = this.transaction;\r\n";
+    code += "\t\tdata['engine_version'] = this.engineVersion;\r\n";
+    code += "\t\tdata['model'] = this.model;\r\n";
+    code += "\t\tdata['kyte_pub'] = this.kytePub;\r\n";
+    code += "\t\tdata['kyte_num'] = this.kyteNum;\r\n";
+    code += "\t\tdata['kyte_iden'] = this.kyteIden;\r\n";
+    code += "\t\tdata['account_id'] = this.accountId;\r\n";
+    code += "\t\tif (this.data != null) {\r\n";
+    code += "\t\t\tdata['data'] = this.data!.map((v) => v.toJson()).toList();\r\n";
+    code += "\t\t}\r\n";
+    code += "\t\treturn data;\r\n";
+    code += "\t}\r\n";
+    // end class
+    code += "}\r\n\r\n";
+
+
+    // iterate through col and create defs
+    let definitions = "";
+    let initializers = "";
+    let mappingsFromJson = "";
+    let mappingsToJson = "";
+    modelStructure.forEach(attr => {
+        initializers += "\t\tthis."+attr.name+","
+        let datatype = "String";
+        if (attr.type == "i") datatype = "int";
+        definitions += "\t"+datatype+"? "+attr.name+";\r\n";
+        mappingsFromJson += "\t\t"+attr.name+" = json['"+attr.name+"'];\r\n";
+        mappingsToJson += "\t\tdata['"+attr.name+"'] = this."+attr.name+";\r\n";
+    });
+
+    // data class
+    code += "class "+model+"Data {\r\n";
+    code += definitions;
+    // kyte model and audit attributes
+    code += "\tString? id;\r\n";
+    code += "\tString? kyte_account;\r\n";
+    code += "\tString? created_by;\r\n";
+    code += "\tString? date_created;\r\n";
+    code += "\tString? modified_by;\r\n";
+    code += "\tString? date_modified;\r\n";
+    code += "\tString? deleted_by;\r\n";
+    code += "\tString? date_deleted;\r\n";
+    code += "\tString? deleted;\r\n\r\n";
+
+    // initializer
+    code += "\t"+model+"Data({\r\n";
+    code += initializers.replace(/(^,)|(,$)/g, '').replace(/,/g, ",\r\n")+",\r\n";
+    // kyte model and audit attributes
+    code += "\t\tthis.id,\r\n";
+    code += "\t\tthis.kyte_account,\r\n";
+    code += "\t\tthis.created_by,\r\n";
+    code += "\t\tthis.date_created,\r\n";
+    code += "\t\tthis.modified_by,\r\n";
+    code += "\t\tthis.date_modified,\r\n";
+    code += "\t\tthis.deleted_by,\r\n";
+    code += "\t\tthis.date_deleted,\r\n";
+    code += "\t\tthis.deleted,\r\n";
+    code += "\t});\r\n\r\n";
+
+    // mapping from json
+    code += "\t"+model+"Data.fromJson(Map<String, dynamic> json) {\r\n"
+    code += mappingsFromJson;
+    // kyte model and audti attributes
+    code += "\t\tid = json['id'];\r\n";
+    code += "\t\tkyte_account = json['kyte_account'];\r\n";
+    code += "\t\tcreated_by = json['created_by'];\r\n";
+    code += "\t\tdate_created = json['date_created'];\r\n";
+    code += "\t\tmodified_by = json['modified_by'];\r\n";
+    code += "\t\tdate_modified = json['date_modified'];\r\n";
+    code += "\t\tdeleted_by = json['deleted_by'];\r\n";
+    code += "\t\tdate_deleted = json['date_deleted'];\r\n";
+    code += "\t\tdeleted = json['deleted'];\r\n";
+    code += "\t}\r\n\r\n";
+
+    // mapping to json
+    code += "\tMap<String, dynamic> toJson() {\r\n";
+    code += "\t\tfinal Map<String, dynamic> data = new Map<String, dynamic>();\r\n";
+    code += mappingsToJson;
+    // kyte model and audti attributes
+    code += "\t\tdata['id'] = this.id;\r\n";
+    code += "\t\tdata['kyte_account'] = this.kyte_account;\r\n";
+    code += "\t\tdata['created_by'] = this.created_by;\r\n";
+    code += "\t\tdata['date_created'] = this.date_created;\r\n";
+    code += "\t\tdata['modified_by'] = this.modified_by;\r\n";
+    code += "\t\tdata['date_modified'] = this.date_modified;\r\n";
+    code += "\t\tdata['deleted_by'] = this.deleted_by;\r\n";
+    code += "\t\tdata['date_deleted'] = this.date_deleted;\r\n";
+    code += "\t\tdata['deleted'] = this.deleted;\r\n";
+    code += "\t\treturn data;\r\n";
+    code += "\t}\r\n";
+
+    // end class
+    code += "}\r\n";
+
+    return code;
+}
+
+function generate_swift(model) {
+    let date = new Date().toLocaleDateString("en", {year:"numeric", day:"2-digit", month:"2-digit"});
+    // comment header and import
+    let code = "//\r\n// "+model+".swift\r\n//\r\n// Created by Kyte Shipyard on "+date+"\r\n\r\nimport Foundation\r\n\r\n";
+    // struct
+    code += "struct "+model+"Data : Codable {\r\n";
+
+    // iterate through column
+    let enumCases = "\t\tcase";
+    let structItems = "";
+    modelStructure.forEach(attr => {
+        enumCases += " "+attr.name+","
+        let datatype = "String";
+        if (attr.type == "i") datatype = "Int";
+        structItems += "\tlet "+attr.name+": "+datatype+(attr.required == 0 ? "?" : "")+"\r\n";
+    });
+    code += structItems;
+    // kyte model and audit attributes
+    code += "\t// kyte model and audit attributes\r\n";
+    code += "\tlet id: String\r\n";
+    code += "\tlet kyte_account: String\r\n";
+    code += "\tlet created_by: String?\r\n";
+    code += "\tlet date_created: String?\r\n";
+    code += "\tlet modified_by: String?\r\n";
+    code += "\tlet date_modified: String?\r\n";
+    code += "\tlet deleted_by: String?\r\n";
+    code += "\tlet date_deleted: String?\r\n";
+    code += "\tlet deleted: String?\r\n";
+
+    // enum
+    code += "\r\n\tenum CodingKeys: String, CodingKey {\r\n"
+    code += enumCases.replace(/(^,)|(,$)/g, '') + "\r\n";
+    // kyte model and audit attributes
+    code += "\t\tcase id, kyte_account, created_by, date_created, modified_by, date_modified, deleted_by, date_deleted, deleted\r\n";
+    code += "\t}\r\n";
+    // end struct
+    code += "}\r\n";
+
+    return code;
+}
+
+function download_code(model, code, ext) {
+    blob = new Blob([universalBOM+code], {type: "octet/stream"});
+    url = window.URL.createObjectURL(blob);
+    $('#pageLoaderModal').modal('hide');
+
+    // create hidden link
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    a.href = url;
+    a.download = model+'.'+ext;
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
+// Helper function to escape CSV values (RFC 4180 compliant)
+function escapeCsvValue(value) {
+    if (value === null || value === undefined) {
+        return '';
+    }
+
+    // Convert to string
+    let str = String(value);
+
+    // If contains comma, quote, or newline, wrap in quotes and escape quotes
+    if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+        return '"' + str.replace(/"/g, '""') + '"';
+    }
+
+    return str;
+}
+
+// Helper function to flatten nested objects for export
+function flattenValue(value) {
+    if (value === null || value === undefined) {
+        return '';
+    }
+    if (typeof value === 'object') {
+        // If it has an id property, use that (foreign key)
+        if (value.hasOwnProperty('id')) {
+            return value.id;
+        }
+        // Otherwise convert to JSON string
+        return JSON.stringify(value);
+    }
+    return value;
+}
+
+// Download model definition (schema)
+function download_model_definition(_ks, format) {
+    if (!modelStructure || modelStructure.length === 0) {
+        _ks.alert('No Model Definition', 'Model definition not loaded. Please refresh the page.');
+        return;
+    }
+
+    const modelDef = {
+        name: model,
+        attributes: modelStructure.map(attr => ({
+            name: attr.name,
+            type: attr.type,
+            size: attr.size,
+            required: attr.required === 1,
+            protected: attr.protected === 1,
+            unsigned: attr.unsigned === 1,
+            default: attr.defaults,
+            description: attr.description,
+            foreignKey: attr.foreignKeyModel ? {
+                model: attr.foreignKeyModel.name,
+                field: attr.foreignKeyAttribute
+            } : null
+        }))
+    };
+
+    const jsonStr = JSON.stringify(modelDef, null, 2);
+    const blob = new Blob([universalBOM + jsonStr], {type: "application/json"});
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    a.href = url;
+    a.download = model + '_definition.json';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+}
+
+// Download all data
+function download_data(_ks, format) {
+    $('#pageLoaderModal').modal('show');
+
+    const headers = [
+        {'name':'x-kyte-app-id','value':appId},
+        {'name':'x-kyte-app-model','value':model}
+    ];
+
+    _ks.get('AppModelWrapper', null, null, headers, function(r) {
+        if (!r.data || r.data.length === 0) {
+            $('#pageLoaderModal').modal('hide');
+            _ks.alert('No Data', 'No records found to export.');
+            return;
+        }
+
+        try {
+            let blob, url;
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+
+            if (format === 'json') {
+                // JSON export
+                const jsonStr = JSON.stringify(r.data, null, 2);
+                blob = new Blob([universalBOM + jsonStr], {type: "application/json"});
+                url = window.URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                a.href = url;
+                a.download = model + '_data_' + timestamp + '.json';
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+            } else if (format === 'csv') {
+                // CSV export with proper escaping
+                const headers = Object.keys(r.data[0]);
+                const headerRow = headers.map(h => escapeCsvValue(h)).join(',');
+
+                const rows = r.data.map(obj => {
+                    return headers.map(header => {
+                        const value = flattenValue(obj[header]);
+                        return escapeCsvValue(value);
+                    }).join(',');
+                });
+
+                const csvContent = headerRow + '\n' + rows.join('\n');
+                blob = new Blob([universalBOM + csvContent], {type: "text/csv"});
+                url = window.URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                a.href = url;
+                a.download = model + '_data_' + timestamp + '.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+            } else if (format === 'txt') {
+                // TSV export (tab-separated)
+                const headers = Object.keys(r.data[0]);
+                const headerRow = headers.join('\t');
+
+                const rows = r.data.map(obj => {
+                    return headers.map(header => {
+                        const value = flattenValue(obj[header]);
+                        // For TSV, replace tabs and newlines with spaces
+                        return String(value).replace(/[\t\n\r]/g, ' ');
+                    }).join('\t');
+                });
+
+                const tsvContent = headerRow + '\n' + rows.join('\n');
+                blob = new Blob([universalBOM + tsvContent], {type: "text/tab-separated-values"});
+                url = window.URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                a.href = url;
+                a.download = model + '_data_' + timestamp + '.txt';
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+            } else if (format === 'xlsx') {
+                // Excel export using SheetJS
+                if (typeof XLSX === 'undefined') {
+                    $('#pageLoaderModal').modal('hide');
+                    _ks.alert('Library Missing', 'SheetJS library not loaded. Please refresh the page.');
+                    return;
+                }
+
+                // Flatten nested objects for Excel
+                const flatData = r.data.map(obj => {
+                    const flatObj = {};
+                    Object.keys(obj).forEach(key => {
+                        flatObj[key] = flattenValue(obj[key]);
+                    });
+                    return flatObj;
+                });
+
+                // Create workbook and worksheet
+                const ws = XLSX.utils.json_to_sheet(flatData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, model.substring(0, 31)); // Excel sheet name limit
+
+                // Generate Excel file
+                XLSX.writeFile(wb, model + '_data_' + timestamp + '.xlsx');
+
+            } else {
+                $('#pageLoaderModal').modal('hide');
+                _ks.alert('Invalid Format', 'The requested export format is not supported.');
+                return;
+            }
+
+            $('#pageLoaderModal').modal('hide');
+
+            // Show success message
+            console.log(`Successfully exported ${r.data.length} records as ${format.toUpperCase()}`);
+
+        } catch (error) {
+            console.error('Export error:', error);
+            $('#pageLoaderModal').modal('hide');
+            _ks.alert('Export Failed', 'An error occurred while exporting data: ' + error.message);
+        }
+
+    }, function(e) {
+        console.error('Data fetch error:', e);
+        $('#pageLoaderModal').modal('hide');
+        _ks.alert('Export Failed', 'Failed to fetch data from server: ' + (e.message || e));
+    });
+}
+
+// ===== IMPORT FUNCTIONALITY =====
+
+// Global import state
+let importState = {
+    parsedData: [],
+    validationErrors: [],
+    importResults: {
+        success: [],
+        errors: []
+    }
+};
+
+// Download import template
+function download_import_template(_ks, format) {
+    if (!modelStructure || modelStructure.length === 0) {
+        _ks.alert('No Model Definition', 'Model structure not loaded. Please refresh the page.');
+        return;
+    }
+
+    // Get field names (exclude protected fields and audit fields)
+    const excludeFields = ['id', 'kyte_account', 'created_by', 'date_created', 'modified_by', 'date_modified', 'deleted', 'deleted_by', 'date_deleted'];
+    const fields = modelStructure
+        .filter(attr => attr.protected !== 1 && !excludeFields.includes(attr.name))
+        .map(attr => attr.name);
+
+    if (fields.length === 0) {
+        _ks.alert('No Fields', 'No importable fields found in this model.');
+        return;
+    }
+
+    // Create sample row with hints
+    const sampleRow = {};
+    modelStructure.forEach(attr => {
+        if (fields.includes(attr.name)) {
+            let hint = '';
+            if (attr.type === 's') hint = 'text';
+            else if (attr.type === 'i' || attr.type === 'bi') hint = '123';
+            else if (attr.type === 'd') hint = '99.99';
+            else if (attr.type === 't' || attr.type === 'tt' || attr.type === 'mt' || attr.type === 'lt') hint = 'long text';
+            else if (attr.type === 'date') hint = '2026-01-25';
+            else if (attr.foreignKeyModel) hint = 'FK:' + attr.foreignKeyModel.id;
+            else hint = 'value';
+
+            sampleRow[attr.name] = hint;
+        }
+    });
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+
+    if (format === 'csv') {
+        // CSV template
+        const headerRow = fields.map(f => escapeCsvValue(f)).join(',');
+        const sampleRowStr = fields.map(f => escapeCsvValue(sampleRow[f])).join(',');
+        const csvContent = headerRow + '\n' + sampleRowStr;
+
+        const blob = new Blob([universalBOM + csvContent], {type: "text/csv"});
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = url;
+        a.download = model + '_import_template_' + timestamp + '.csv';
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+    } else if (format === 'xlsx') {
+        // Excel template
+        if (typeof XLSX === 'undefined') {
+            _ks.alert('Library Missing', 'SheetJS library not loaded. Please refresh the page.');
+            return;
+        }
+
+        const templateData = [sampleRow];
+        const ws = XLSX.utils.json_to_sheet(templateData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Import Template');
+
+        XLSX.writeFile(wb, model + '_import_template_' + timestamp + '.xlsx');
+    }
+}
+
+// Parse uploaded file
+function parse_import_file(file, callback, errorCallback) {
+    const fileName = file.name.toLowerCase();
+    const fileExtension = fileName.split('.').pop();
+
+    if (fileExtension === 'json') {
+        // Parse JSON
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (!Array.isArray(data)) {
+                    errorCallback('JSON file must contain an array of objects.');
+                    return;
+                }
+                callback(data);
+            } catch (error) {
+                errorCallback('Invalid JSON format: ' + error.message);
+            }
+        };
+        reader.onerror = function() {
+            errorCallback('Failed to read file.');
+        };
+        reader.readAsText(file);
+
+    } else if (fileExtension === 'csv' || fileExtension === 'txt' || fileExtension === 'tsv') {
+        // Parse CSV/TSV
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const text = e.target.result;
+                const delimiter = fileExtension === 'tsv' ? '\t' : ',';
+                const lines = text.split('\n').filter(line => line.trim().length > 0);
+
+                if (lines.length < 2) {
+                    errorCallback('File must contain at least a header row and one data row.');
+                    return;
+                }
+
+                // Parse header
+                const headers = lines[0].split(delimiter).map(h => h.trim().replace(/^"|"$/g, ''));
+
+                // Parse rows
+                const data = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(delimiter).map(v => v.trim().replace(/^"|"$/g, ''));
+                    const row = {};
+                    headers.forEach((header, index) => {
+                        row[header] = values[index] || '';
+                    });
+                    data.push(row);
+                }
+
+                callback(data);
+            } catch (error) {
+                errorCallback('Failed to parse CSV/TSV: ' + error.message);
+            }
+        };
+        reader.onerror = function() {
+            errorCallback('Failed to read file.');
+        };
+        reader.readAsText(file);
+
+    } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+        // Parse Excel
+        if (typeof XLSX === 'undefined') {
+            errorCallback('SheetJS library not loaded. Please refresh the page.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+
+                if (jsonData.length === 0) {
+                    errorCallback('Excel file is empty.');
+                    return;
+                }
+
+                callback(jsonData);
+            } catch (error) {
+                errorCallback('Failed to parse Excel file: ' + error.message);
+            }
+        };
+        reader.onerror = function() {
+            errorCallback('Failed to read file.');
+        };
+        reader.readAsArrayBuffer(file);
+
+    } else {
+        errorCallback('Unsupported file format. Please upload CSV, TSV, JSON, or Excel (XLSX) files.');
+    }
+}
+
+// Validate import data
+function validate_import_data(data) {
+    if (!modelStructure || modelStructure.length === 0) {
+        return {valid: false, errors: ['Model structure not loaded']};
+    }
+
+    const errors = [];
+    const requiredFields = modelStructure
+        .filter(attr => attr.required === 1 && attr.name !== 'id' && attr.name !== 'kyte_account')
+        .map(attr => attr.name);
+
+    // Check each row
+    data.forEach((row, index) => {
+        const rowNum = index + 1;
+
+        // Check required fields
+        requiredFields.forEach(field => {
+            if (!row[field] || row[field] === '') {
+                errors.push({
+                    row: rowNum,
+                    field: field,
+                    error: `Required field '${field}' is missing or empty`
+                });
+            }
+        });
+
+        // Check data types (basic validation)
+        modelStructure.forEach(attr => {
+            if (row.hasOwnProperty(attr.name) && row[attr.name] !== '') {
+                const value = row[attr.name];
+
+                // Integer validation
+                if ((attr.type === 'i' || attr.type === 'bi') && isNaN(parseInt(value))) {
+                    errors.push({
+                        row: rowNum,
+                        field: attr.name,
+                        error: `Field '${attr.name}' must be a number, got '${value}'`
+                    });
+                }
+
+                // Decimal validation
+                if (attr.type === 'd' && isNaN(parseFloat(value))) {
+                    errors.push({
+                        row: rowNum,
+                        field: attr.name,
+                        error: `Field '${attr.name}' must be a decimal number, got '${value}'`
+                    });
+                }
+            }
+        });
+    });
+
+    return {
+        valid: errors.length === 0,
+        errors: errors
+    };
+}
+
+// Perform import with progress tracking
+async function perform_import(_ks, data, progressCallback, completeCallback) {
+    const total = data.length;
+    let processed = 0;
+    let successCount = 0;
+    let errorCount = 0;
+    const errors = [];
+
+    // Sequential import (one at a time)
+    for (let i = 0; i < data.length; i++) {
+        const row = data[i];
+
+        try {
+            // Create promise wrapper for kyte.post
+            await new Promise((resolve, reject) => {
+                const headers = [
+                    {'name': 'x-kyte-app-id', 'value': appId},
+                    {'name': 'x-kyte-app-model', 'value': model}
+                ];
+
+                _ks.post('AppModelWrapper', row, null, headers,
+                    function(response) {
+                        successCount++;
+                        processed++;
+                        progressCallback({
+                            processed: processed,
+                            total: total,
+                            successCount: successCount,
+                            errorCount: errorCount
+                        });
+                        resolve(response);
+                    },
+                    function(error) {
+                        errorCount++;
+                        processed++;
+                        errors.push({
+                            row: i + 1,
+                            data: row,
+                            error: error.error || error.message || error
+                        });
+                        progressCallback({
+                            processed: processed,
+                            total: total,
+                            successCount: successCount,
+                            errorCount: errorCount
+                        });
+                        resolve(); // Don't reject, continue with next row
+                    }
+                );
+            });
+
+            // Small delay to prevent overwhelming the server
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+        } catch (error) {
+            console.error('Import error:', error);
+        }
+    }
+
+    completeCallback({
+        total: total,
+        successCount: successCount,
+        errorCount: errorCount,
+        errors: errors
+    });
+}
+
+document.addEventListener('KyteInitialized', function(e) {
+    let _ks = e.detail._ks;
+
+    // Wait for i18n to be ready before creating sidebar
+    function waitForI18n(callback) {
+        if (window.kyteI18n && window.kyteI18n.initialized) {
+            callback();
+        } else {
+            setTimeout(() => waitForI18n(callback), 50);
+        }
+    }
+
+    // NOTE: Sidebar navigation removed - now using Bootstrap tabs in HTML
+    // Bootstrap tabs handle show/hide automatically via data-bs-toggle="tab" attributes
+    // Translations are handled in HTML via data-i18n attributes
+
+    $('#pageLoaderModal').modal('show');
+
+    if (_ks.isSession()) {
+        // get url param
+        let idx = _ks.getPageRequest();
+        modelIdx = idx.idx;
+
+        let hidden = [
+            {
+                'name': 'dataModel',
+                'value': modelIdx
+            }
+        ];
+
+        _ks.get("DataModel", "id", modelIdx, [], function(r) {
+            if (r.data[0]) {
+                model = r.data[0].name;
+                $("#model-name span").text(model);
+                appId = r.data[0].application.id;
+                // Store application ID for navigation
+                localStorage.setItem('currentAppId', appId);
+                getData(_ks, modelIdx, model, r.data[0].application.id);
+                let obj = {'model': 'Application', 'idx':r.data[0].application.id};
+                let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                
+                let appnav = generateAppNav(encoded);
+            
+                let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${r.data[0].application.name}`);
+                navbar.create();
+
+                // Get i18n instance for translations
+                const i18n = window.kyteI18n;
+                const t = (key, fallback) => i18n ? i18n.t(key) : fallback;
+
+                elements = [
+                    [
+                        {
+                            'field':'name',
+                            'type':'text',
+                            'label': t('ui.model_detail.form.name', 'Name'),
+                            'required':true
+                        },
+                        {
+                            'field':'type',
+                            'type':'select',
+                            'label': t('ui.model_detail.form.type', 'Type'),
+                            'required':true,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    's': t('ui.model_detail.form.type_string', 'String'),
+                                    't': t('ui.model_detail.form.type_text', 'Text'),
+                                    'tt': t('ui.model_detail.form.type_tinytext', 'TinyText'),
+                                    'mt': t('ui.model_detail.form.type_mediumtext', 'MediumText'),
+                                    'lt': t('ui.model_detail.form.type_longtext', 'LongText'),
+                                    'b': t('ui.model_detail.form.type_blob', 'Blob'),
+                                    'tb': t('ui.model_detail.form.type_tinyblob', 'TinyBlob'),
+                                    'mb': t('ui.model_detail.form.type_mediumblob', 'MediumBlob'),
+                                    'lb': t('ui.model_detail.form.type_longblob', 'LongBlob'),
+                                    'date': t('ui.model_detail.form.type_date', 'Date'),
+                                    'i': t('ui.model_detail.form.type_integer', 'Integer'),
+                                    'bi': t('ui.model_detail.form.type_bigint', 'BigInt'),
+                                }
+                            }
+                        },
+                        {
+                            'field':'required',
+                            'type':'select',
+                            'label': t('ui.model_detail.form.required', 'Required'),
+                            'required':true,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    1: t('ui.model_detail.form.yes', 'Yes'),
+                                    0: t('ui.model_detail.form.no', 'No')
+                                }
+                            }
+                        },
+                        {
+                            'field': 'foreignKeyModel',
+                            'type': 'select',
+                            'label': t('ui.model_detail.form.fk_model', 'FK Model'),
+                            'required': false,
+                            'placeholder': t('ui.model_detail.form.na', 'N/A'),
+                            'option': {
+                                'ajax': true,
+                                'data_model_name': 'DataModel',
+                                'data_model_field': 'application',
+                                'data_model_value': r.data[0].application.id,
+                                'data_model_attributes': ['name'],
+                                'data_model_default_field': 'id',
+                            }
+                        }
+                    ],
+                    [
+                        {
+                            'field':'size',
+                            'type':'text',
+                            'label': t('ui.model_detail.form.size', 'Size'),
+                            'required':false,
+                        },
+                        {
+                            'field':'unsigned',
+                            'type':'select',
+                            'label': t('ui.model_detail.form.unsigned', 'Unsigned'),
+                            'required':false,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    "": t('ui.model_detail.form.na', 'n/a'),
+                                    1: t('ui.model_detail.form.yes', 'Yes'),
+                                    0: t('ui.model_detail.form.no', 'No')
+                                }
+                            }
+                        },
+                        {
+                            'field':'protected',
+                            'type':'select',
+                            'label': t('ui.model_detail.form.protected', 'Protected'),
+                            'required':false,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    0: t('ui.model_detail.form.no', 'No'),
+                                    1: t('ui.model_detail.form.yes', 'Yes')
+                                }
+                            }
+                        },
+                        {
+                            'field':'password',
+                            'type':'select',
+                            'label': t('ui.model_detail.form.password', 'Password'),
+                            'required':false,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    0: t('ui.model_detail.form.no', 'No'),
+                                    1: t('ui.model_detail.form.yes', 'Yes')
+                                }
+                            }
+                        },
+                        {
+                            'field':'defaults',
+                            'type':'text',
+                            'label': t('ui.model_detail.form.default', 'Default'),
+                            'required':false
+                        }
+                    ],
+                    [
+                        {
+                            'field':'description',
+                            'type':'text',
+                            'label': t('ui.model_detail.form.description', 'Description'),
+                            'required':false
+                        }
+                    ]
+                ];
+
+                // attribute table and form
+                var tblAttributes = new KyteTable(_ks, $("#attributes-table"), {'name':"ModelAttribute",'field':'dataModel','value':modelIdx}, colDefAttributes, true, [0,"asc"], true, true);
+                tblAttributes.init();
+
+                // Update attributes count in sidebar
+                $('#attributes-table').on('draw.dt', function() {
+                    var info = $(this).DataTable().page.info();
+                    $('#attributes-count').text(info.recordsTotal);
+                });
+
+                // Get translated modal title
+                const attributeModalTitle = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.attribute_title') : 'Model Attribute';
+                const submitText = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.submit') : 'Submit';
+
+                var modalForm = new KyteForm(_ks, $("#modalForm"), 'ModelAttribute', hidden, elements, attributeModalTitle, tblAttributes, true, $("#newAttribute"));
+                modalForm.submitButton = submitText;
+                modalForm.init();
+                tblAttributes.bindEdit(modalForm);
+
+                // controller table and form
+                let elementsController = [
+                [
+                    {
+                        'field':'name',
+                        'type':'text',
+                        'label': t('ui.model_detail.form.name', 'Name'),
+                        'required':true
+                    }
+                ],
+                [
+                    {
+                        'field':'description',
+                        'type':'textarea',
+                        'label': t('ui.model_detail.form.description', 'Description'),
+                        'required':false
+                    }
+                ]
+            ];
+
+            let hiddenElementsController = [
+                {
+                    'name': 'application',
+                    'value': r.data[0].application.id
+                },
+                {
+                    'name': 'dataModel',
+                    'value': modelIdx
+                }
+            ];
+            // controller table and form
+            var tblController = new KyteTable(_ks, $("#controllers-table"), {'name':"Controller",'field':"dataModel",'value':modelIdx}, colDefControllers, true, [0,"asc"], true, true, 'id', '/app/controller/');
+            tblController.init();
+
+            // Update controllers count in sidebar
+            $('#controllers-table').on('draw.dt', function() {
+                var info = $(this).DataTable().page.info();
+                $('#controllers-count').text(info.recordsTotal);
+            });
+
+            // Get translated modal title
+            const controllerModalTitle = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.controller_title') : 'Controller';
+            const controllerSubmitText = window.kyteI18n ? window.kyteI18n.t('ui.model_detail.modal.submit') : 'Submit';
+
+            var modalFormController = new KyteForm(_ks, $("#modalFormController"), 'Controller', hiddenElementsController, elementsController, controllerModalTitle, tblController, true, $("#newController"));
+            modalFormController.submitButton = controllerSubmitText;
+            modalFormController.init();
+            modalFormController.success = function(r) {
+                if (r.data[0]) {
+                    let obj = {'model': 'Controller', 'idx':r.data[0].id};
+                    let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+                    location.href="/app/controller/?request="+encoded;
+                }
+            }
+            tblController.bindEdit(modalFormController);
+            } else {
+                $("#model-name span").text("Undefined");
+            }
+            $('#pageLoaderModal').modal('hide');
+        });
+
+        $(".downloadCodeBtn").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            let format = $(this).data('downloadFormat');
+            switch (format) {
+                case 'swift':
+                    download_code(model, swift, 'swift');
+                    break;
+                
+                case 'dart':
+                    download_code(model, dart, 'dart');
+                    break;
+                    
+                case 'json':
+                    download_code(model, JSON.stringify(json), 'json');
+                    break;
+            
+                default:
+                    break;
+            }
+            
+        });
+        $(".downloadDataBtn").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            let format = $(this).data('downloadFormat');
+
+            download_data(_ks, format);
+        });
+
+        $(".downloadModelDefBtn").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            let format = $(this).data('downloadFormat');
+
+            download_model_definition(_ks, format);
+        });
+
+        // ===== IMPORT EVENT HANDLERS =====
+
+        // Download template
+        $(".downloadTemplateBtn").click(function(e) {
+            e.preventDefault();
+            let format = $(this).data('templateFormat');
+            download_import_template(_ks, format);
+        });
+
+        // Drag & drop file upload
+        const dropzone = document.getElementById('import-dropzone');
+        const fileInput = document.getElementById('import-file-input');
+
+        dropzone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).addClass('border-primary bg-light');
+        });
+
+        dropzone.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).removeClass('border-primary bg-light');
+        });
+
+        dropzone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).removeClass('border-primary bg-light');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleImportFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (files.length > 0) {
+                handleImportFile(files[0]);
+            }
+        });
+
+        // Handle file upload
+        function handleImportFile(file) {
+            // Show file info
+            $('#import-filename').text(file.name);
+            $('#import-filesize').text((file.size / 1024).toFixed(2) + ' KB');
+            $('#import-file-info').show();
+
+            // Parse file
+            $('#pageLoaderModal').modal('show');
+            parse_import_file(file,
+                function(data) {
+                    // Success
+                    $('#pageLoaderModal').modal('hide');
+                    importState.parsedData = data;
+
+                    // Validate
+                    const validation = validate_import_data(data);
+                    importState.validationErrors = validation.errors;
+
+                    // Show preview
+                    showImportPreview(data, validation);
+
+                    // Move to step 2
+                    $('#import-step-1').hide();
+                    $('#import-step-2').show();
+                },
+                function(error) {
+                    // Error
+                    $('#pageLoaderModal').modal('hide');
+                    _ks.alert('Parse Error', error);
+                }
+            );
+        }
+
+        // Show import preview
+        function showImportPreview(data, validation) {
+            const previewTable = $('#import-preview-table');
+            previewTable.find('thead').empty();
+            previewTable.find('tbody').empty();
+
+            // Show validation summary
+            const summaryDiv = $('#import-validation-summary');
+            if (validation.valid) {
+                summaryDiv.html(`
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Validation Passed!</strong> All ${data.length} rows are valid and ready to import.
+                    </div>
+                `);
+                $('#import-start-btn').prop('disabled', false);
+            } else {
+                summaryDiv.html(`
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Validation Issues Found:</strong> ${validation.errors.length} error(s) in ${data.length} row(s).
+                        You can still proceed, but rows with errors will be skipped.
+                        <button class="btn btn-sm btn-warning ms-2" onclick="$('#validation-details').toggle()">
+                            <i class="fas fa-list me-1"></i>Show Details
+                        </button>
+                    </div>
+                    <div id="validation-details" style="display: none;" class="mt-2">
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-warning">
+                                <tr><th>Row</th><th>Field</th><th>Error</th></tr>
+                            </thead>
+                            <tbody>
+                                ${validation.errors.map(err => `
+                                    <tr>
+                                        <td>${err.row}</td>
+                                        <td>${err.field}</td>
+                                        <td>${err.error}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `);
+                $('#import-start-btn').prop('disabled', false); // Allow import anyway
+            }
+
+            // Show preview (first 10 rows)
+            if (data.length > 0) {
+                const headers = Object.keys(data[0]);
+                const headerRow = '<tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr>';
+                previewTable.find('thead').html(headerRow);
+
+                const previewRows = data.slice(0, 10);
+                const bodyRows = previewRows.map((row, index) => {
+                    const cells = headers.map(h => `<td>${row[h] || ''}</td>`).join('');
+                    return `<tr><td class="text-muted small">${index + 1}</td>${cells}</tr>`;
+                }).join('');
+
+                previewTable.find('thead tr').prepend('<th>#</th>');
+                previewTable.find('tbody').html(bodyRows);
+
+                if (data.length > 10) {
+                    previewTable.find('tbody').append(`
+                        <tr>
+                            <td colspan="${headers.length + 1}" class="text-center text-muted">
+                                ... and ${data.length - 10} more rows
+                            </td>
+                        </tr>
+                    `);
+                }
+            }
+        }
+
+        // Back to upload
+        $('#import-back-btn').click(function() {
+            $('#import-step-2').hide();
+            $('#import-step-1').show();
+            // Reset file input
+            $('#import-file-input').val('');
+            $('#import-file-info').hide();
+        });
+
+        // Start import
+        $('#import-start-btn').click(function() {
+            // Move to step 3
+            $('#import-step-2').hide();
+            $('#import-step-3').show();
+
+            // Initialize progress
+            const total = importState.parsedData.length;
+            $('#import-total-count').text(total);
+            $('#import-progress-text').text('0 / ' + total);
+            $('#import-progress-percent').text('0%');
+            $('#import-progress-bar').css('width', '0%');
+            $('#import-success-count').text('0');
+            $('#import-error-count').text('0');
+
+            // Start import
+            perform_import(_ks, importState.parsedData,
+                function(progress) {
+                    // Progress callback
+                    const percent = Math.round((progress.processed / progress.total) * 100);
+                    $('#import-progress-text').text(progress.processed + ' / ' + progress.total);
+                    $('#import-progress-percent').text(percent + '%');
+                    $('#import-progress-bar').css('width', percent + '%');
+                    $('#import-success-count').text(progress.successCount);
+                    $('#import-error-count').text(progress.errorCount);
+                },
+                function(results) {
+                    // Complete callback
+                    importState.importResults = results;
+
+                    // Show results
+                    showImportResults(results);
+
+                    // Move to step 4
+                    $('#import-step-3').hide();
+                    $('#import-step-4').show();
+                }
+            );
+        });
+
+        // Show import results
+        function showImportResults(results) {
+            const summaryDiv = $('#import-results-summary');
+
+            if (results.errorCount === 0) {
+                summaryDiv.html(`
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Import Successful!</strong> All ${results.successCount} records were imported successfully.
+                    </div>
+                `);
+                $('#import-errors-section').hide();
+            } else {
+                summaryDiv.html(`
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Import Completed with Errors:</strong>
+                        ${results.successCount} successful, ${results.errorCount} failed out of ${results.total} total.
+                    </div>
+                `);
+
+                // Show errors
+                const errorsTable = $('#import-errors-table tbody');
+                errorsTable.empty();
+                results.errors.forEach(err => {
+                    errorsTable.append(`
+                        <tr>
+                            <td>${err.row}</td>
+                            <td><code>${JSON.stringify(err.data)}</code></td>
+                            <td class="text-danger">${err.error}</td>
+                        </tr>
+                    `);
+                });
+                $('#import-errors-section').show();
+            }
+        }
+
+        // Download error report
+        $('#download-error-report-btn').click(function() {
+            const errors = importState.importResults.errors;
+            if (errors.length === 0) return;
+
+            const csvHeader = 'Row,Data,Error\n';
+            const csvRows = errors.map(err => {
+                return `${err.row},"${JSON.stringify(err.data).replace(/"/g, '""')}","${String(err.error).replace(/"/g, '""')}"`;
+            }).join('\n');
+
+            const csvContent = universalBOM + csvHeader + csvRows;
+            const blob = new Blob([csvContent], {type: "text/csv"});
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            a.href = url;
+            a.download = model + '_import_errors_' + new Date().toISOString().slice(0, 10) + '.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        });
+
+        // Import another file
+        $('#import-new-btn').click(function() {
+            // Reset state
+            importState = {
+                parsedData: [],
+                validationErrors: [],
+                importResults: {success: [], errors: []}
+            };
+
+            // Reset UI
+            $('#import-step-4').hide();
+            $('#import-step-1').show();
+            $('#import-file-input').val('');
+            $('#import-file-info').hide();
+        });
+
+        // Refresh data table
+        $('#import-refresh-data-btn').click(function() {
+            // Switch to data tab
+            $('#model-tabs a[href="#data-tab"]').tab('show');
+
+            // Reload data table if it exists
+            if (typeof tblData !== 'undefined') {
+                if (typeof tblData._loadData === 'function') {
+                    tblData._loadData();
+                } else if (typeof tblData.draw === 'function') {
+                    tblData.draw();
+                }
+            }
+        });
+
+    } else {
+        location.href="/?redir="+encodeURIComponent(window.location);
+    }
+});
+
+// Kyte Form overrides
+// Wait for KyteForm to be initialized, then enhance it
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to enhance KyteForm after it's created
+    function enhanceKyteForm() {
+        // Wait for modal to be in DOM
+        const modalObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        // Check if this is a KyteForm modal
+                        const modal = node.querySelector('.modal') || (node.classList && node.classList.contains('modal') ? node : null);
+                        if (modal && modal.querySelector('form[id*="form_ModelAttribute"]')) {
+                            enhanceModalForm(modal);
+                        }
+                    }
+                });
+            });
+        });
+
+        modalObserver.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+    // Function to enhance the modal form
+    function enhanceModalForm(modal) {
+        console.log('Enhancing KyteForm modal...');
+        
+        // Add modern classes to modal
+        const modalContent = modal.querySelector('.modal-content');
+        const modalHeader = modal.querySelector('.modal-header');
+        const modalBody = modal.querySelector('.modal-body');
+        
+        if (modalContent) {
+            modalContent.style.borderRadius = '20px';
+            modalContent.style.border = 'none';
+            modalContent.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.15)';
+            modalContent.style.overflow = 'hidden';
+        }
+
+        // Add real-time validation
+        addRealTimeValidation(modal);
+        
+        // Add help text to specific fields
+        addHelpText(modal);
+        
+        // Enhance form submission
+        enhanceFormSubmission(modal);
+        
+        // Add field-specific enhancements
+        addFieldEnhancements(modal);
+    }
+
+    // Add real-time validation
+    function addRealTimeValidation(modal) {
+        const requiredFields = modal.querySelectorAll('input[required], select[required]');
+        
+        requiredFields.forEach(field => {
+            field.addEventListener('blur', function() {
+                validateField(this);
+            });
+            
+            field.addEventListener('input', function() {
+                if (this.classList.contains('is-invalid')) {
+                    validateField(this);
+                }
+            });
+        });
+    }
+
+    // Field validation function
+    function validateField(field) {
+        const value = field.value.trim();
+        const isValid = field.type === 'select-one' ? value !== '' : value.length > 0;
+        
+        if (isValid) {
+            field.classList.remove('is-invalid');
+            field.classList.add('is-valid');
+            removeErrorMessage(field);
+        } else {
+            field.classList.remove('is-valid');
+            field.classList.add('is-invalid');
+            addErrorMessage(field);
+        }
+    }
+
+    // Add error message
+    function addErrorMessage(field) {
+        removeErrorMessage(field); // Remove existing first
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'invalid-feedback';
+        errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> This field is required`;
+        
+        field.parentNode.appendChild(errorDiv);
+    }
+
+    // Remove error message
+    function removeErrorMessage(field) {
+        const existingError = field.parentNode.querySelector('.invalid-feedback');
+        if (existingError) {
+            existingError.remove();
+        }
+    }
+
+    // Add help text to specific fields
+    function addHelpText(modal) {
+        const helpTexts = {
+            'name': 'Choose a descriptive name for your attribute',
+            'type': 'Select the appropriate data type for your needs',
+            'size': 'Maximum length or precision (leave empty for default)',
+            'foreignKeyModel': 'Link to another model for relational data',
+            'defaults': 'Default value when creating new records',
+            'description': 'Help others understand what this attribute is used for'
+        };
+
+        Object.keys(helpTexts).forEach(fieldName => {
+            const field = modal.querySelector(`[name="${fieldName}"]`);
+            if (field && !field.parentNode.querySelector('.form-help')) {
+                const helpDiv = document.createElement('div');
+                helpDiv.className = 'form-help';
+                helpDiv.innerHTML = `<i class="fas fa-lightbulb"></i> ${helpTexts[fieldName]}`;
+                field.parentNode.appendChild(helpDiv);
+            }
+        });
+    }
+
+    // Enhance form submission
+    function enhanceFormSubmission(modal) {
+        const form = modal.querySelector('form');
+        const submitBtn = modal.querySelector('input[type="submit"], button[type="submit"]');
+        
+        if (form && submitBtn) {
+            // Store original submit handler
+            const originalSubmit = submitBtn.onclick;
+            
+            submitBtn.onclick = function(e) {
+                // Add loading state
+                addLoadingState(modal);
+                
+                // Validate all required fields before submission
+                const requiredFields = form.querySelectorAll('input[required], select[required]');
+                let isFormValid = true;
+                
+                requiredFields.forEach(field => {
+                    validateField(field);
+                    if (field.classList.contains('is-invalid')) {
+                        isFormValid = false;
+                    }
+                });
+
+                if (!isFormValid) {
+                    removeLoadingState(modal);
+                    e.preventDefault();
+                    showFormError(modal, 'Please fill in all required fields');
+                    return false;
+                }
+
+                // Call original submit handler if it exists
+                if (originalSubmit) {
+                    const result = originalSubmit.call(this, e);
+                    
+                    // Add success handling
+                    setTimeout(() => {
+                        removeLoadingState(modal);
+                        if (result !== false) {
+                            showFormSuccess(modal);
+                        }
+                    }, 1000);
+                    
+                    return result;
+                }
+            };
+        }
+    }
+
+    // Add loading state
+    function addLoadingState(modal) {
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent && !modalContent.classList.contains('form-loading')) {
+            modalContent.classList.add('form-loading');
+        }
+    }
+
+    // Remove loading state
+    function removeLoadingState(modal) {
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.classList.remove('form-loading');
+        }
+    }
+
+    // Show form error
+    function showFormError(modal, message) {
+        const errorMsgDiv = modal.querySelector('.error-msg');
+        if (errorMsgDiv) {
+            errorMsgDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+            errorMsgDiv.style.display = 'block';
+        }
+    }
+
+    // Show form success
+    function showFormSuccess(modal) {
+        // Create success message
+        const successDiv = document.createElement('div');
+        successDiv.className = 'alert alert-success';
+        successDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            animation: slideInRight 0.4s ease-out;
+        `;
+        successDiv.innerHTML = `
+            <i class="fas fa-check-circle me-2"></i>
+            Model attribute saved successfully!
+        `;
+        
+        document.body.appendChild(successDiv);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            successDiv.style.animation = 'slideOutRight 0.4s ease-out forwards';
+            setTimeout(() => successDiv.remove(), 400);
+        }, 3000);
+    }
+
+    // Add field-specific enhancements
+    function addFieldEnhancements(modal) {
+        // Type field enhancement - show relevant size field
+        const typeField = modal.querySelector('[name="type"]');
+        const sizeField = modal.querySelector('[name="size"]');
+        
+        if (typeField && sizeField) {
+            typeField.addEventListener('change', function() {
+                const sizeFormGroup = sizeField.closest('.form-group');
+                const typesNeedingSize = ['s', 'i', 'bi']; // String, Integer, BigInt
+                
+                if (typesNeedingSize.includes(this.value)) {
+                    sizeFormGroup.style.opacity = '1';
+                    sizeField.removeAttribute('disabled');
+                    
+                    // Add placeholder based on type
+                    if (this.value === 's') {
+                        sizeField.placeholder = 'e.g., 255';
+                    } else if (this.value === 'i') {
+                        sizeField.placeholder = 'e.g., 11';
+                    } else if (this.value === 'bi') {
+                        sizeField.placeholder = 'e.g., 20';
+                    }
+                } else {
+                    sizeFormGroup.style.opacity = '0.5';
+                    sizeField.setAttribute('disabled', 'disabled');
+                    sizeField.placeholder = 'Not applicable';
+                    sizeField.value = '';
+                }
+            });
+            
+            // Trigger on load
+            typeField.dispatchEvent(new Event('change'));
+        }
+
+        // Foreign key field enhancement
+        const fkField = modal.querySelector('[name="foreignKeyModel"]');
+        if (fkField) {
+            fkField.addEventListener('change', function() {
+                const nameField = modal.querySelector('[name="name"]');
+                if (this.value && nameField && !nameField.value.trim()) {
+                    const selectedOption = this.options[this.selectedIndex];
+                    if (selectedOption.text && selectedOption.text !== 'N/A') {
+                        nameField.value = selectedOption.text.toLowerCase() + '_id';
+                        nameField.dispatchEvent(new Event('input'));
+                    }
+                }
+            });
+        }
+    }
+
+    // Add animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        .form-loading::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            border-radius: 20px;
+        }
+        .form-loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 32px;
+            height: 32px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #ff6b35;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            transform: translate(-50%, -50%);
+            z-index: 1001;
+        }
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize the enhancement
+    enhanceKyteForm();
+});
+
+// Override KyteForm creation to add enhancements
+// This assumes KyteForm is a global object that can be extended
+if (typeof window.KyteForm !== 'undefined') {
+    const originalKyteFormInit = window.KyteForm.prototype.init;
+    
+    window.KyteForm.prototype.init = function() {
+        const result = originalKyteFormInit.apply(this, arguments);
+        
+        // Add enhancement after form is created
+        setTimeout(() => {
+            const modal = document.querySelector(`#${this.modalId}`);
+            if (modal) {
+                enhanceModalForm(modal);
+            }
+        }, 100);
+        
+        return result;
+    };
+}
