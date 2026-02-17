@@ -1,4 +1,9 @@
-## 1.6.6 (pending)
+## 1.6.6
+
+### Bug Fixes:
+- **Settings Page Button Styling**: Added missing `btn-modern`, `btn-modern-primary`, `btn-modern-success`, and `btn-modern-outline` CSS definitions so buttons (Update Email, Update Password, Add Administrator) render with proper styling
+- **Settings Page Button Spacing**: Added missing `input-group-modern` and `password-grid` CSS layouts so buttons have proper margin from adjacent inputs and borders
+- **KyteTable Action Dropdown Clipping**: Fixed action dropdown menus being clipped inside `.content-section` and `.setting-card` containers by removing `overflow: hidden` and the hover `transform` that created a containing block trapping `position: fixed` dropdowns. Added explicit `border-radius` to `.section-header` and `.setting-card-header` to preserve rounded corner appearance. This fix applies to settings, site detail, and configuration pages
 
 ## 1.6.5
 
