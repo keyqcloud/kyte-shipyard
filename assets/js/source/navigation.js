@@ -100,6 +100,12 @@ function generateAppSidebar(encodedRequest) {
                         href: '/app/log.html?request=' + encodedRequest
                     },
                     {
+                        faicon: 'fas fa-clipboard-list',
+                        label: 'Activity Log',
+                        labelKey: 'sidebar.activity_log',
+                        href: '/app/activity-log.html?request=' + encodedRequest
+                    },
+                    {
                         faicon: 'fas fa-robot',
                         label: 'AI Error Assistant',
                         labelKey: 'sidebar.ai_error_assistant',
@@ -225,6 +231,12 @@ function generateAppNav(encodedRequest) {
                         href:'/app/log.html?request='+encodedRequest
                     },
                     {
+                        faicon:'fas fa-clipboard-list',
+                        class:'me-2',
+                        label:'Activity Log',
+                        href:'/app/activity-log.html?request='+encodedRequest
+                    },
+                    {
                         faicon:'fas fa-robot',
                         class:'me-2',
                         label:'AI Error Assistant',
@@ -268,6 +280,12 @@ let rootnav = [
             class:'me-2 text-light',
             label: 'System Log',
             href: '/app/system-log.html'
+        },
+        {
+            faicon:'fas fa-clipboard-list',
+            class:'me-2 text-light',
+            label: 'Activity Log',
+            href: '/app/system-activity-log.html'
         }
     ],
     [

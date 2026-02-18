@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-    <!-- <link rel="stylesheet" href="/assets/css/kyte-shipyard-styles.css"> -->
     <!--  -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,7 +45,8 @@
                 'navigation.js',
                 'kyte-shipyard-tables.js',
                 'kyte-i18n.js',
-                'kyte-shipyard-system-log.js'
+                'kyte-shipyard-activity-log-common.js',
+                'kyte-shipyard-system-activity-log.js'
             ];
 
             scripts.forEach(function(script) {
@@ -98,7 +98,7 @@
             margin: 0;
         }
 
-        /* Primary Navigation (Application Level) */
+        /* Primary Navigation */
         #application-nav {
             background: linear-gradient(135deg, #2d3748, #4a5568) !important;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -135,7 +135,7 @@
             transform: translateY(-1px);
         }
 
-        /* Secondary Navigation (Project Level) */
+        /* Secondary Navigation */
         #mainnav {
             background: linear-gradient(135deg, #4a5568, #718096) !important;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -160,12 +160,6 @@
             background: rgba(255, 255, 255, 0.15) !important;
             color: white !important;
             transform: translateY(-1px);
-        }
-
-        #mainnav .nav-link.active {
-            background: rgba(255, 255, 255, 0.2) !important;
-            color: white !important;
-            font-weight: 600 !important;
         }
 
         /* Main Content Area */
@@ -228,41 +222,6 @@
             z-index: 1;
         }
 
-        /* Enhanced New Button */
-        .btn-new {
-            background: linear-gradient(135deg, #6f42c1, #0dcaf0);
-            border: none;
-            border-radius: 12px;
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: white;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-new:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(111, 66, 193, 0.4);
-            background: linear-gradient(135deg, #5a3099, #0ab0cc);
-            color: white;
-            text-decoration: none;
-        }
-
-        .btn-new:active {
-            transform: translateY(0);
-        }
-
-        .btn-new i {
-            font-size: 1.1rem;
-        }
-
         /* Table Container */
         .table-container {
             background: white;
@@ -271,57 +230,6 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.8);
             overflow: hidden;
-        }
-
-        .table-header {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid #e2e8f0;
-            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .table-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin: 0;
-        }
-
-        .table-description {
-            color: #718096;
-            font-size: 0.9rem;
-            margin: 0.5rem 0 0;
-        }
-
-        .table-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .view-toggle {
-            display: flex;
-            background: #e2e8f0;
-            border-radius: 8px;
-            padding: 4px;
-        }
-
-        .view-toggle button {
-            background: none;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            color: #718096;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .view-toggle button.active {
-            background: white;
-            color: #2d3748;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         /* DataTable Enhancements */
@@ -352,11 +260,6 @@
 
         .dataTables_filter {
             text-align: right;
-        }
-
-        .dataTables_filter label {
-            font-weight: 500;
-            color: #4a5568;
         }
 
         table.dataTable {
@@ -423,141 +326,6 @@
             color: white !important;
         }
 
-        /* Footer */
-        footer {
-            background: linear-gradient(135deg, #2d3748, #4a5568);
-            margin-top: auto;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-content {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.8);
-            padding: 1rem 1.5rem;
-        }
-
-        .footer-versions {
-            font-weight: 300;
-        }
-
-        .footer-copyright {
-            font-weight: 400;
-        }
-
-        /* Loading Modal */
-        .modal.white {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-        }
-
-        .spinner-wrapper {
-            color: #6f42c1;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 1rem;
-            }
-
-            .page-header {
-                padding: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .section-heading {
-                font-size: 2rem;
-            }
-
-            .dataTables_wrapper {
-                padding: 1rem;
-            }
-
-            .dataTables_length,
-            .dataTables_filter {
-                text-align: left;
-                margin-bottom: 1rem;
-            }
-
-            table.dataTable thead th,
-            table.dataTable tbody td {
-                padding: 0.75rem 0.5rem;
-                font-size: 0.85rem;
-            }
-
-            .table-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-        }
-
-        /* Accessibility */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* Log Level Badges */
-        .log-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .log-badge.debug {
-            background: #6c757d;
-            color: white;
-        }
-
-        .log-badge.info {
-            background: #0dcaf0;
-            color: white;
-        }
-
-        .log-badge.warning {
-            background: #ffc107;
-            color: #2d3748;
-        }
-
-        .log-badge.error {
-            background: #dc3545;
-            color: white;
-        }
-
-        .log-badge.critical {
-            background: #6f42c1;
-            color: white;
-        }
-
-        .log-badge.system {
-            background: #6f42c1;
-            color: white;
-        }
-
-        .log-badge.application {
-            background: #0dcaf0;
-            color: white;
-        }
-
-        /* Account Badge */
-        .account-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            background: #e2e8f0;
-            color: #2d3748;
-        }
-
         /* Filter Panel */
         .filter-panel {
             background: #f8fafc;
@@ -581,7 +349,7 @@
 
         .filter-group {
             flex: 1;
-            min-width: 200px;
+            min-width: 150px;
         }
 
         .filter-group label {
@@ -649,11 +417,75 @@
             border-color: #cbd5e0;
             background: #f8fafc;
         }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #2d3748, #4a5568);
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 1rem 1.5rem;
+        }
+
+        /* Loading Modal */
+        .modal.white {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .spinner-wrapper {
+            color: #6f42c1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .page-header {
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .section-heading {
+                font-size: 2rem;
+            }
+
+            .dataTables_wrapper {
+                padding: 1rem;
+            }
+
+            .dataTables_length,
+            .dataTables_filter {
+                text-align: left;
+                margin-bottom: 1rem;
+            }
+
+            table.dataTable thead th,
+            table.dataTable tbody td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <!-- Page loading modal.  Once session is validated, the loading modal will close. -->
+    <!-- Page loading modal -->
     <div id="pageLoaderModal" class="modal white" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
         <div class="modal-dialog modal-sm h-100 d-flex">
             <div class="mx-auto align-self-center" style="width: 48px">
@@ -661,7 +493,6 @@
             </div>
         </div>
     </div>
-    <!--  -->
 
     <div id="wrapper">
         <!-- START ACCOUNT NAV -->
@@ -669,7 +500,7 @@
             <div class="container-fluid">
                 <!-- Brand -->
                 <a href="/app/" class="navbar-brand">
-                    Kyte Shipyard<sup>™</sup>
+                    Kyte Shipyard<sup>&trade;</sup>
                     <img src="/assets/images/kyte_shipyard_light.png" alt="Kyte Shipyard">
                 </a>
 
@@ -724,57 +555,84 @@
 
         <!-- Main Content -->
         <div class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h1 class="section-heading" data-i18n="ui.system_activity_log.title">System Activity Log</h1>
+                        <p class="page-subtitle" data-i18n="ui.system_activity_log.subtitle">Cross-application activity tracking for account administrators</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Data Table -->
             <div id="content-data-wrapper">
                 <div class="table-container">
-                    
                     <!-- Filter Panel -->
                     <div class="filter-panel">
-                        <h5><i class="fas fa-filter me-2"></i><span data-i18n="ui.system_log.filter.title">Filter Logs</span></h5>
+                        <h5><i class="fas fa-filter me-2"></i><span data-i18n="ui.system_activity_log.filter.title">Filter Activity</span></h5>
                         <div class="filter-row">
                             <div class="filter-group">
-                                <label for="filter-log-level" data-i18n="ui.system_log.filter.log_level">Log Level</label>
-                                <select id="filter-log-level" multiple>
-                                    <option value="debug" data-i18n="ui.system_log.filter.level.debug">Debug</option>
-                                    <option value="info" data-i18n="ui.system_log.filter.level.info">Info</option>
-                                    <option value="warning" data-i18n="ui.system_log.filter.level.warning">Warning</option>
-                                    <option value="error" selected data-i18n="ui.system_log.filter.level.error">Error</option>
-                                    <option value="critical" selected data-i18n="ui.system_log.filter.level.critical">Critical</option>
+                                <label for="filter-action" data-i18n="ui.system_activity_log.filter.action">Action</label>
+                                <select id="filter-action">
+                                    <option value="">All Actions</option>
+                                    <option value="POST">POST (Create)</option>
+                                    <option value="PUT">PUT (Update)</option>
+                                    <option value="DELETE">DELETE</option>
+                                    <option value="GET">GET (Read)</option>
+                                    <option value="LOGIN">LOGIN</option>
+                                    <option value="LOGOUT">LOGOUT</option>
+                                    <option value="LOGIN_FAIL">LOGIN_FAIL</option>
                                 </select>
                             </div>
                             <div class="filter-group">
-                                <label for="filter-source" data-i18n="ui.system_log.filter.source">Source</label>
-                                <select id="filter-source">
-                                    <option value="" data-i18n="ui.system_log.filter.all_sources">All Sources</option>
-                                    <option value="error_handler" data-i18n="ui.system_log.filter.error_handler">Error Handler</option>
-                                    <option value="exception_handler" data-i18n="ui.system_log.filter.exception_handler">Exception Handler</option>
-                                    <option value="logger" data-i18n="ui.system_log.filter.logger">Logger</option>
-                                    <option value="output_buffer" data-i18n="ui.system_log.filter.output_buffer">Output Buffer</option>
+                                <label for="filter-severity" data-i18n="ui.system_activity_log.filter.severity">Severity</label>
+                                <select id="filter-severity" multiple>
+                                    <option value="info">Info</option>
+                                    <option value="warning">Warning</option>
+                                    <option value="critical">Critical</option>
                                 </select>
                             </div>
                             <div class="filter-group">
-                                <label for="filter-start-date" data-i18n="ui.system_log.filter.start_date">Start Date</label>
-                                <input type="text" id="filter-start-date" data-i18n-placeholder="ui.system_log.filter.start_date_placeholder" placeholder="Select start date" readonly>
+                                <label for="filter-category" data-i18n="ui.system_activity_log.filter.category">Category</label>
+                                <select id="filter-category">
+                                    <option value="">All Categories</option>
+                                    <option value="auth">Authentication</option>
+                                    <option value="data">Data</option>
+                                    <option value="config">Configuration</option>
+                                    <option value="system">System</option>
+                                </select>
                             </div>
                             <div class="filter-group">
-                                <label for="filter-end-date" data-i18n="ui.system_log.filter.end_date">End Date</label>
-                                <input type="text" id="filter-end-date" data-i18n-placeholder="ui.system_log.filter.end_date_placeholder" placeholder="Select end date" readonly>
+                                <label for="filter-model" data-i18n="ui.system_activity_log.filter.model">Model</label>
+                                <input type="text" id="filter-model" placeholder="e.g. User, Product">
+                            </div>
+                        </div>
+                        <div class="filter-row mt-2">
+                            <div class="filter-group">
+                                <label for="filter-start-date" data-i18n="ui.system_activity_log.filter.start_date">Start Date</label>
+                                <input type="text" id="filter-start-date" placeholder="Select start date" readonly>
+                            </div>
+                            <div class="filter-group">
+                                <label for="filter-end-date" data-i18n="ui.system_activity_log.filter.end_date">End Date</label>
+                                <input type="text" id="filter-end-date" placeholder="Select end date" readonly>
                             </div>
                             <div class="filter-actions">
                                 <button id="btn-apply-filter" class="btn-filter">
-                                    <i class="fas fa-check me-1"></i> <span data-i18n="ui.system_log.filter.apply">Apply</span>
+                                    <i class="fas fa-check me-1"></i> <span data-i18n="ui.system_activity_log.filter.apply">Apply</span>
                                 </button>
                                 <button id="btn-clear-filter" class="btn-clear">
-                                    <i class="fas fa-times me-1"></i> <span data-i18n="ui.system_log.filter.clear">Clear</span>
+                                    <i class="fas fa-times me-1"></i> <span data-i18n="ui.system_activity_log.filter.clear">Clear</span>
                                 </button>
                             </div>
                         </div>
                     </div>
                     <!-- End Filter Panel -->
                     <div class="table-content">
-                        <table id="system-log-table" class="table table-striped w-100"></table>
+                        <table id="system-activity-log-table" class="table table-striped w-100"></table>
                     </div>
                 </div>
+            </div>
         </div>
     </div>
 
@@ -782,10 +640,10 @@
     <footer>
         <div class="footer-content d-flex justify-content-between align-items-center">
             <div class="footer-versions">
-                <div><span data-i18n="footer.shipyard_version">Kyte Shipyard™ Version</span> <span id="kyteShipyardVersion"></span></div>
+                <div><span data-i18n="footer.shipyard_version">Kyte Shipyard&trade; Version</span> <span id="kyteShipyardVersion"></span></div>
                 <div><span data-i18n="footer.js_version">Kyte JS Version</span> <span id="kyteJSVersion"></span></div>
             </div>
-            <p class="footer-copyright mb-0" data-i18n="footer.copyright">KeyQ © 2020-2026</p>
+            <p class="footer-copyright mb-0" data-i18n="footer.copyright">KeyQ &copy; 2020-2026</p>
         </div>
     </footer>
 </body>

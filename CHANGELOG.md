@@ -1,3 +1,43 @@
+## 1.7.0
+
+### New Feature: Activity/Audit Log Viewer
+
+Comprehensive frontend for viewing and filtering activity/audit logs tracked by kyte-php v4.1.0.
+
+- **App-Level Activity Log** (`app/activity-log.html`)
+  - KyteTable with columns: Timestamp, User, Action, Model, Status, Severity, IP
+  - Filter panel: action type, severity, category, model name, date range
+  - Color-coded badges for actions (POST=green, PUT=blue, DELETE=red, LOGIN=purple) and severity levels
+  - Row click opens detail page in new tab
+  - Scoped to current application context
+
+- **Activity Log Detail Page** (`app/activity-log/index.html`)
+  - Summary cards: Action, User, Timestamp, Status
+  - Activity information table with all fields
+  - User & request details table (IP, user agent, session token, URI)
+  - Request data section with formatted JSON and copy button
+  - Changes section (PUT only) with old/new value diff table
+  - Error details section for failed requests
+
+- **System-Level Activity Log** (`app/system-activity-log.html`)
+  - Cross-application view for account administrators
+  - Additional Application column for multi-app visibility
+  - Same filter and badge capabilities as app-level view
+
+- **Shared Utilities** (`kyte-shipyard-activity-log-common.js`)
+  - Badge rendering functions for actions, severity, category, and response codes
+  - Filter setup and condition builder
+  - JSON formatting and clipboard utilities
+  - Color maps for all action and severity types
+
+- **Navigation Updates**
+  - App sidebar: Added "Activity Log" item with clipboard icon after Error Log
+  - Root/account nav: Added "Activity Log" link after System Log
+
+- **i18n Translations**
+  - Added activity log keys for all 4 languages (English, Japanese, Korean, Spanish)
+  - Covers page titles, subtitles, filter labels, table column headers, and navigation items
+
 ## 1.6.6
 
 ### Bug Fixes:
