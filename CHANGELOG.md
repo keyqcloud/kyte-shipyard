@@ -1,3 +1,21 @@
+## 1.7.1
+
+### Bug Fix: KyteTable Sort Regression
+
+- Fixed KyteTable `init()` to handle both flat `[0, "desc"]` and nested `[[0, "desc"]]` order parameter formats
+- Added `_updateSortIndicators()` call during table initialization so the default sort column indicator is visible on load
+- This restores server-side sorting behavior that was lost during the recent KyteTable revamp
+
+### Enhancement: Dashboard Activity Log Card
+
+- Added 24-hour activity log summary card to the application dashboard
+- Displays counts for creates, updates, deletes, and auth events
+- Shows 5 most recent activity entries with action icons and timestamps
+- Card links to full activity log page
+- i18n support for all 4 languages (en, ja, ko, es)
+
+---
+
 ## 1.7.0
 
 ### New Feature: Activity/Audit Log Viewer

@@ -41,6 +41,7 @@ document.addEventListener('KyteInitialized', function(e) {
         // Start loading indicators for each section
         showSectionLoader('resources');
         showSectionLoader('errors');
+        showSectionLoader('activity');
         showSectionLoader('cron');
         showSectionLoader('ai-assistant');
 
@@ -48,6 +49,7 @@ document.addEventListener('KyteInitialized', function(e) {
         Promise.all([
             fetchResourceCounts(),
             fetchErrorMetrics(),
+            fetchActivityMetrics(),
             fetchCronJobMetrics(),
             fetchAIAssistantMetrics()
         ]).then(() => {
@@ -268,6 +270,58 @@ document.addEventListener('KyteInitialized', function(e) {
             });
         }
 
+        function fetchActivityMetrics() {
+            return new Promise((resolve) => {
+                const oneDayAgo = Math.floor(Date.now() / 1000) - (24 * 60 * 60);
+
+                _ks.get('KyteActivityLog', 'application_id', appId, [], (res) => {
+                    if (res.data && res.data.length > 0) {
+                        // Helper to parse date_created (format: "MM/DD/YYYY HH:MM:SS")
+                        const parseDate = (dateStr) => {
+                            if (!dateStr || dateStr === '') return 0;
+                            const parts = dateStr.match(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/);
+                            if (parts) {
+                                const date = new Date(
+                                    parseInt(parts[3]), parseInt(parts[1]) - 1, parseInt(parts[2]),
+                                    parseInt(parts[4]), parseInt(parts[5]), parseInt(parts[6])
+                                );
+                                return Math.floor(date.getTime() / 1000);
+                            }
+                            return 0;
+                        };
+
+                        // Filter to last 24h
+                        const recent = res.data.filter(a => parseDate(a.date_created) >= oneDayAgo);
+
+                        dashboardData.activity = {
+                            total24h: recent.length,
+                            creates: recent.filter(a => a.action === 'POST').length,
+                            updates: recent.filter(a => a.action === 'PUT').length,
+                            deletes: recent.filter(a => a.action === 'DELETE').length,
+                            auth: recent.filter(a => a.action === 'LOGIN' || a.action === 'LOGOUT' || a.action === 'LOGIN_FAIL').length,
+                            recent: recent
+                                .sort((a, b) => parseDate(b.date_created) - parseDate(a.date_created))
+                                .slice(0, 5)
+                        };
+                    } else {
+                        dashboardData.activity = {
+                            total24h: 0, creates: 0, updates: 0, deletes: 0, auth: 0, recent: []
+                        };
+                    }
+                    renderActivityStats();
+                    hideSectionLoader('activity');
+                    resolve();
+                }, () => {
+                    dashboardData.activity = {
+                        total24h: 0, creates: 0, updates: 0, deletes: 0, auth: 0, recent: []
+                    };
+                    renderActivityStats();
+                    hideSectionLoader('activity');
+                    resolve();
+                });
+            });
+        }
+
         function fetchCronJobMetrics() {
             return new Promise((resolve) => {
                 // Get cron jobs first
@@ -476,6 +530,58 @@ document.addEventListener('KyteInitialized', function(e) {
                 });
             } else {
                 $errorList.append(`<div class="empty-state">${t('ui.dashboard.errors.no_errors', 'No recent errors')}</div>`);
+            }
+        }
+
+        function renderActivityStats() {
+            const ACTION_ICONS = {
+                'POST': '🟢', 'PUT': '🔵', 'DELETE': '🔴', 'GET': '⚪',
+                'LOGIN': '🟣', 'LOGOUT': '⚫', 'LOGIN_FAIL': '🔴'
+            };
+
+            // Update stat card
+            $('#stat-activity-24h').text(dashboardData.activity.total24h || 0);
+            $('#stat-activity-create').text(dashboardData.activity.creates || 0);
+            $('#stat-activity-update').text(dashboardData.activity.updates || 0);
+            $('#stat-activity-delete').text(dashboardData.activity.deletes || 0);
+            $('#stat-activity-auth').text(dashboardData.activity.auth || 0);
+
+            // Helper to parse date_created (format: "MM/DD/YYYY HH:MM:SS")
+            const parseDate = (dateStr) => {
+                if (!dateStr || dateStr === '') return 0;
+                const parts = dateStr.match(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/);
+                if (parts) {
+                    const date = new Date(
+                        parseInt(parts[3]), parseInt(parts[1]) - 1, parseInt(parts[2]),
+                        parseInt(parts[4]), parseInt(parts[5]), parseInt(parts[6])
+                    );
+                    return Math.floor(date.getTime() / 1000);
+                }
+                return 0;
+            };
+
+            // Render recent activity list
+            const $activityList = $('#recent-activity-list');
+            $activityList.empty();
+
+            if (dashboardData.activity.recent && dashboardData.activity.recent.length > 0) {
+                dashboardData.activity.recent.forEach(activity => {
+                    const icon = ACTION_ICONS[activity.action] || '⚪';
+                    const timeAgo = formatTimeAgo(parseDate(activity.date_created));
+                    const user = activity.user_email || 'System';
+                    const detail = activity.model_name ? `${activity.model_name}` : '';
+
+                    $activityList.append(`
+                        <div class="activity-item">
+                            <span class="activity-icon">${icon}</span>
+                            <span class="activity-action">${activity.action}</span>
+                            <span class="activity-detail">${detail} <span style="color:#a0aec0;font-size:0.8em;">by ${user}</span></span>
+                            <span class="activity-time">${timeAgo}</span>
+                        </div>
+                    `);
+                });
+            } else {
+                $activityList.append(`<div class="empty-state">${t('ui.dashboard.activity_log.no_activity', 'No recent activity')}</div>`);
             }
         }
 

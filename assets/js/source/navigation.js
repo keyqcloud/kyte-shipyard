@@ -14,6 +14,12 @@ function generateAppSidebar(encodedRequest) {
                         label: 'Dashboard',
                         labelKey: 'sidebar.dashboard',
                         href: '/app/dashboard/?request=' + encodedRequest
+                    },
+                    {
+                        faicon: 'fas fa-laptop-code',
+                        label: 'Code IDE',
+                        labelKey: 'sidebar.code_ide',
+                        href: '/app/ide/?request=' + encodedRequest
                     }
                 ]
             },

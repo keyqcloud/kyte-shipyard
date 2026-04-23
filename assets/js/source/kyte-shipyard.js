@@ -1,4 +1,4 @@
-var KS_VERSION = '1.7.0';
+var KS_VERSION = '1.7.1';
 
 function loadScript(url, callback) {
     var script = document.createElement('script');
@@ -54,8 +54,10 @@ function displayKyteInitializationError(message) {
 }
 
 $(document).ready(function() {
-    document.getElementById("kyteShipyardVersion").textContent = KS_VERSION;
-    document.getElementById("kyteJSVersion").textContent = typeof Kyte.VERSION !== 'undefined' ? Kyte.VERSION : 'pre-1.0.5';
+    var versionEl = document.getElementById("kyteShipyardVersion");
+    if (versionEl) versionEl.textContent = KS_VERSION;
+    var jsVersionEl = document.getElementById("kyteJSVersion");
+    if (jsVersionEl) jsVersionEl.textContent = typeof Kyte.VERSION !== 'undefined' ? Kyte.VERSION : 'pre-1.0.5';
 
     loadScript('/assets/js/kyte-connect.js', function(error) {
         if (error) {

@@ -171,7 +171,7 @@
             gap: 0.5rem;
         }
 
-        .error-item, .cron-item {
+        .error-item, .cron-item, .activity-item {
             display: grid;
             grid-template-columns: auto auto 1fr auto;
             gap: 1rem;
@@ -180,15 +180,15 @@
             border-bottom: 1px solid #f1f5f9;
         }
 
-        .error-item:last-child, .cron-item:last-child {
+        .error-item:last-child, .cron-item:last-child, .activity-item:last-child {
             border-bottom: none;
         }
 
-        .error-icon, .cron-icon {
+        .error-icon, .cron-icon, .activity-icon {
             font-size: 1.25rem;
         }
 
-        .error-level, .cron-status {
+        .error-level, .cron-status, .activity-action {
             font-size: 0.75rem;
             font-weight: 600;
             padding: 0.25rem 0.5rem;
@@ -197,7 +197,7 @@
             color: #4a5568;
         }
 
-        .error-message, .cron-name {
+        .error-message, .cron-name, .activity-detail {
             font-size: 0.875rem;
             color: #2d3748;
             overflow: hidden;
@@ -205,7 +205,7 @@
             white-space: nowrap;
         }
 
-        .error-time, .cron-time {
+        .error-time, .cron-time, .activity-time {
             font-size: 0.75rem;
             color: #a0aec0;
             text-align: right;
@@ -360,6 +360,22 @@
                         </div>
                     </div>
 
+                    <div id="activity-stats" class="stat-card" style="cursor: pointer;" onclick="window.location.href='/app/activity-log.html?request=' + new URLSearchParams(window.location.search).get('request')">
+                        <div class="stat-card-header">
+                            <div class="stat-icon activity">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <span class="stat-label" data-i18n="ui.dashboard.activity_log.title">Activity Log (24h)</span>
+                        </div>
+                        <div class="stat-value"><span id="stat-activity-24h">0</span></div>
+                        <div class="stat-details">
+                            <div>🟢 <span id="stat-activity-create">0</span> <span data-i18n="ui.dashboard.activity_log.creates">Creates</span></div>
+                            <div>🔵 <span id="stat-activity-update">0</span> <span data-i18n="ui.dashboard.activity_log.updates">Updates</span></div>
+                            <div>🔴 <span id="stat-activity-delete">0</span> <span data-i18n="ui.dashboard.activity_log.deletes">Deletes</span></div>
+                            <div>🟣 <span id="stat-activity-auth">0</span> <span data-i18n="ui.dashboard.activity_log.auth">Auth Events</span></div>
+                        </div>
+                    </div>
+
                     <div id="ai-assistant-stats" class="stat-card" style="cursor: pointer;" onclick="window.location.href='/app/ai-error-assistant.html?request=' + new URLSearchParams(window.location.search).get('request')">
                         <div class="stat-card-header">
                             <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
@@ -382,6 +398,17 @@
                         <span data-i18n="ui.dashboard.errors.title">Recent Errors (24h)</span>
                     </h2>
                     <div id="recent-errors-list">
+                        <div class="empty-state" data-i18n="nav.loading">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="dashboard-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-clipboard-list" style="color: #4facfe;"></i>
+                        <span data-i18n="ui.dashboard.activity_log.recent_title">Recent Activity (24h)</span>
+                    </h2>
+                    <div id="recent-activity-list">
                         <div class="empty-state" data-i18n="nav.loading">Loading...</div>
                     </div>
                 </div>
