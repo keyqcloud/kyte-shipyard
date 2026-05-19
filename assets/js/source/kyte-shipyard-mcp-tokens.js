@@ -67,6 +67,39 @@ document.addEventListener('KyteInitialized', function(e) {
             return rtf.format(Math.round(diffSec / (86400 * 365)), 'year');
         }
 
+        // Inline toast — mirrors createToast() in kyte-shipyard-application-configuration.js
+        // (kept local since that helper isn't exported globally). role="status" + aria-live
+        // makes screen readers announce the toast on appear.
+        function showMcpToast(type, message) {
+            const toast = document.createElement('div');
+            const isSuccess = type === 'success';
+            toast.setAttribute('role', 'status');
+            toast.setAttribute('aria-live', 'polite');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                color: white;
+                font-weight: 500;
+                z-index: 9999;
+                max-width: 400px;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+                background: ${isSuccess
+                    ? 'linear-gradient(135deg, #10b981, #059669)'
+                    : 'linear-gradient(135deg, #ef4444, #dc2626)'};
+                animation: mcp-toast-slide-in 0.3s ease-out;
+            `;
+            toast.innerHTML = `<div style="display:flex;align-items:center;gap:0.75rem;">
+                <i class="fas ${isSuccess ? 'fa-check-circle' : 'fa-exclamation-circle'}" aria-hidden="true"></i>
+                <span></span>
+            </div>`;
+            toast.querySelector('span').textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), isSuccess ? 3000 : 5000);
+        }
+
         function escapeHtml(s) {
             if (s === null || s === undefined) return '';
             return String(s)
@@ -395,6 +428,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 revokePending = null;
                 revokeModal.hide();
                 dataTable.draw();
+                showMcpToast('success', t('ui.mcp_tokens.revoke.success', 'Token revoked.'));
             }, function(err) {
                 const msg = (err && err.responseJSON && err.responseJSON.message)
                     || (err && err.message)
@@ -406,6 +440,13 @@ document.addEventListener('KyteInitialized', function(e) {
 
         revokeModalEl.addEventListener('hidden.bs.modal', function() {
             revokePending = null;
+        });
+
+        // Default focus to Cancel on a destructive-action confirmation, so a user
+        // pressing Enter from a stale focus doesn't accidentally confirm.
+        revokeModalEl.addEventListener('shown.bs.modal', function() {
+            const cancel = revokeModalEl.querySelector('.modal-footer .btn-secondary');
+            if (cancel) cancel.focus();
         });
 
         // ────────────────────────────────────────────────────────────
@@ -452,7 +493,8 @@ document.addEventListener('KyteInitialized', function(e) {
         // Inject a tiny "Copy" button into a snippet block. Idempotent.
         function ensureSnippetCopy($block, getText) {
             if ($block.find('.snippet-copy').length) return;
-            const $btn = $('<button type="button" class="snippet-copy"><i class="fas fa-copy"></i></button>');
+            const label = t('ui.mcp_tokens.reveal.copy', 'Copy');
+            const $btn = $(`<button type="button" class="snippet-copy" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><i class="fas fa-copy" aria-hidden="true"></i></button>`);
             $btn.on('click', function(ev) {
                 ev.stopPropagation();
                 copyToClipboard(getText(), $btn);
@@ -490,7 +532,11 @@ document.addEventListener('KyteInitialized', function(e) {
             document.body.removeChild(ta);
         }
 
-        $('#connect-assistant').on('click', function(ev) {
+        // Bound to the page-header button AND the empty-state CTA. Both routes
+        // open the same wizard; the empty-state CTA exists so first-time users
+        // (zero tokens, header buttons easy to miss) have a clear path to mint
+        // their first token.
+        $('#connect-assistant, #empty-connect-assistant').on('click', function(ev) {
             ev.preventDefault();
             $('#mcp-connect-error').addClass('d-none').text('');
             $('#mcp-connect-token').val('');
@@ -501,6 +547,14 @@ document.addEventListener('KyteInitialized', function(e) {
             const firstTab = document.getElementById('tab-claude-code-tab');
             if (firstTab && bootstrap.Tab) bootstrap.Tab.getOrCreateInstance(firstTab).show();
             connectModal.show();
+        });
+
+        // Focus the primary CTA on each step so keyboard users land somewhere useful.
+        connectModalEl.addEventListener('shown.bs.modal', function() {
+            const mintBtn = document.getElementById('mcp-connect-mint');
+            if (mintBtn && !mintBtn.closest('.wizard-footer').classList.contains('d-none')) {
+                mintBtn.focus();
+            }
         });
 
         $('#mcp-connect-mint').on('click', function() {
@@ -536,6 +590,8 @@ document.addEventListener('KyteInitialized', function(e) {
                 ensureSnippetCopy($npxBlock, () => npxSnippet);
 
                 setWizardStep(2);
+                // Land focus on the token copy button — most likely next action.
+                document.getElementById('mcp-connect-copy-token').focus();
             }, function(err) {
                 const msg = (err && err.responseJSON && err.responseJSON.message)
                     || (err && err.message)

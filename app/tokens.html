@@ -159,6 +159,15 @@
             margin-bottom: 1rem;
         }
 
+        .empty-state-card .btn-connect {
+            margin-top: 1rem;
+        }
+
+        @keyframes mcp-toast-slide-in {
+            from { opacity: 0; transform: translateX(100%); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
         /* kyte-form.css ships its own .modal-header background + title icon
            with !important. Override here so MCP modals match the page's
            purple/AI theme rather than the default orange model-CRUD theme. */
@@ -454,6 +463,10 @@
                     <div class="empty-icon"><i class="fas fa-robot"></i></div>
                     <h5 data-i18n="ui.mcp_tokens.empty.title">No MCP tokens yet</h5>
                     <p data-i18n="ui.mcp_tokens.empty.subtitle">Create your first token to let an AI assistant read your Kyte apps.</p>
+                    <button type="button" class="btn-connect mt-2" id="empty-connect-assistant">
+                        <i class="fas fa-magic"></i>
+                        <span data-i18n="ui.mcp_tokens.connect_assistant">Connect AI Assistant</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -621,6 +634,7 @@
                                 <option value="never" data-i18n="ui.mcp_tokens.create.expires.never">Never (not recommended)</option>
                             </select>
                             <div id="mcp-create-expires-custom-wrap" class="mt-2 d-none">
+                                <label for="mcp-create-expires-custom" class="visually-hidden" data-i18n="ui.mcp_tokens.create.field.expires_custom_label">Custom expiration date</label>
                                 <input type="date" class="form-control" id="mcp-create-expires-custom">
                             </div>
                         </div>
