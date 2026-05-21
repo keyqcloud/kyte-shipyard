@@ -330,6 +330,8 @@
 
   "ui.models.modal.title": "Modelo de Datos",
   "ui.models.modal.field.name": "Nombre del Modelo",
+  "ui.models.modal.field.sensitive": "Sensible",
+  "ui.models.modal.field.sensitive_description": "Cuando está activado, los cuerpos de solicitud y respuesta no se almacenan en los registros de actividad o de errores, y las herramientas de lectura MCP omiten la definición del esquema.",
 
   "ui.model_detail.back_to_models": "Volver a Modelos",
   "ui.model_detail.data_model": "Modelo de Datos",
@@ -371,6 +373,7 @@
   "ui.model_detail.form.size": "Tamaño",
   "ui.model_detail.form.unsigned": "Sin signo",
   "ui.model_detail.form.protected": "Protegido",
+  "ui.model_detail.form.sensitive": "Sensible",
   "ui.model_detail.form.password": "Contraseña",
   "ui.model_detail.form.default": "Predeterminado",
   "ui.model_detail.form.description": "Descripción",
@@ -469,6 +472,8 @@
 
   "ui.controllers.modal.title": "Controlador API",
   "ui.controllers.modal.field.name": "Nombre",
+  "ui.controllers.modal.field.sensitive": "Sensible",
+  "ui.controllers.modal.field.sensitive_description": "Cuando está activado, los cuerpos de solicitud y respuesta no se almacenan en los registros de actividad o de errores, y las herramientas de lectura MCP omiten el código fuente.",
   "ui.controllers.modal.field.data_model": "Modelo de Datos",
   "ui.controllers.modal.field.data_model_placeholder": "Modelo Virtual",
   "ui.controllers.modal.field.description": "Descripción",

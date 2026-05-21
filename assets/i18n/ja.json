@@ -335,6 +335,8 @@
 
   "ui.models.modal.title": "データモデル",
   "ui.models.modal.field.name": "モデル名",
+  "ui.models.modal.field.sensitive": "機密",
+  "ui.models.modal.field.sensitive_description": "有効にすると、リクエストおよびレスポンスのボディはアクティビティ・エラーログに保存されず、MCP読み取りツールはスキーマ定義を返しません。",
 
   "ui.model_detail.back_to_models": "モデルに戻る",
   "ui.model_detail.data_model": "データモデル",
@@ -377,6 +379,7 @@
   "ui.model_detail.form.unsigned": "符号なし",
   "ui.model_detail.form.protected": "保護",
   "ui.model_detail.form.password": "パスワード",
+  "ui.model_detail.form.sensitive": "機密",
   "ui.model_detail.form.default": "デフォルト",
   "ui.model_detail.form.description": "説明",
   "ui.model_detail.form.yes": "はい",
@@ -477,6 +480,8 @@
   "ui.controllers.modal.field.data_model": "データモデル",
   "ui.controllers.modal.field.data_model_placeholder": "仮想モデル",
   "ui.controllers.modal.field.description": "説明",
+  "ui.controllers.modal.field.sensitive": "機密",
+  "ui.controllers.modal.field.sensitive_description": "有効にすると、リクエストおよびレスポンスのボディはアクティビティ・エラーログに保存されず、MCP読み取りツールはソースを返しません。",
 
   "ui.sites.page_title": "配信サイト - Kyte Shipyard",
   "ui.sites.title": "配信サイト",

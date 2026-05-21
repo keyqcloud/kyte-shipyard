@@ -38,6 +38,21 @@ document.addEventListener('KyteInitialized', function(e) {
                     'label': i18n.t('ui.models.modal.field.name'),
                     'required':true
                 }
+            ],
+            [
+                {
+                    'field':'sensitive',
+                    'type':'select',
+                    'label': i18n.t('ui.models.modal.field.sensitive'),
+                    'required':false,
+                    'option': {
+                        'ajax': false,
+                        'data': {
+                            0: i18n.t('ui.model_detail.form.no'),
+                            1: i18n.t('ui.model_detail.form.yes')
+                        }
+                    }
+                }
             ]
         ];
 

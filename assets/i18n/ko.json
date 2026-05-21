@@ -330,6 +330,8 @@
 
   "ui.models.modal.title": "데이터 모델",
   "ui.models.modal.field.name": "모델 이름",
+  "ui.models.modal.field.sensitive": "민감",
+  "ui.models.modal.field.sensitive_description": "활성화하면 요청 및 응답 본문이 활동/오류 로그에 저장되지 않으며, MCP 읽기 도구는 스키마 정의를 반환하지 않습니다.",
 
   "ui.model_detail.back_to_models": "모델로 돌아가기",
   "ui.model_detail.data_model": "데이터 모델",
@@ -371,6 +373,7 @@
   "ui.model_detail.form.size": "크기",
   "ui.model_detail.form.unsigned": "부호 없음",
   "ui.model_detail.form.protected": "보호됨",
+  "ui.model_detail.form.sensitive": "민감",
   "ui.model_detail.form.password": "비밀번호",
   "ui.model_detail.form.default": "기본값",
   "ui.model_detail.form.description": "설명",
@@ -469,6 +472,8 @@
 
   "ui.controllers.modal.title": "API 컨트롤러",
   "ui.controllers.modal.field.name": "이름",
+  "ui.controllers.modal.field.sensitive": "민감",
+  "ui.controllers.modal.field.sensitive_description": "활성화하면 요청 및 응답 본문이 활동/오류 로그에 저장되지 않으며, MCP 읽기 도구는 소스를 반환하지 않습니다.",
   "ui.controllers.modal.field.data_model": "데이터 모델",
   "ui.controllers.modal.field.data_model_placeholder": "가상 모델",
   "ui.controllers.modal.field.description": "설명",
