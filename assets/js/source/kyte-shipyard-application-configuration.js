@@ -416,8 +416,22 @@ function createToast(type, message) {
 // Generate system Kyte Connect code
 function generateSystemKyteCode() {
     if (!api || !app) return '';
-    
-    return `let endpoint = 'https://${api.kyte_api}';
+
+    // Branch on Application.auth_mode (introduced in kyte-php v4.4.0 /
+    // kyte-api-js v2.0). Default 'hmac' preserves legacy emit so apps
+    // upgraded from v1.x without an explicit choice stay on HMAC.
+    const authMode = app.auth_mode || 'hmac';
+    const endpoint = `https://${api.kyte_api}`;
+
+    if (authMode === 'jwt') {
+        return `let endpoint = '${endpoint}';
+var k = new Kyte(endpoint, null, null, null, '${app.identifier}', { authMode: 'jwt' });
+k.init();
+
+`;
+    }
+
+    return `let endpoint = '${endpoint}';
 var k = new Kyte(endpoint, '${api.kyte_pub}', '${api.kyte_iden}', '${api.kyte_num}', '${app.identifier}');
 k.init();
 
