@@ -1,3 +1,56 @@
+## 2.0.0
+
+### Breaking Change: default to JWT bearer authentication
+
+Shipyard's self-auth now defaults to JWT bearer tokens (kyte-php Phase 3) instead of static HMAC credentials in `kyte-connect.js`. The kyte-api-js v2 library handles `/jwt/login`, refresh-token rotation, and bearer header attachment internally — no other call sites change. `login.js`, `isSession`, `sessionDestroy` etc. continue to use the same `_ks.*` methods.
+
+To upgrade an existing install:
+
+**Option A — Migrate to JWT (recommended)**
+
+1. Ensure your kyte-php backend is v4.4.0+ with `AUTH_STRATEGY_DISPATCHER='on'` and `KYTE_JWT_SECRET` defined in config.php (128 hex chars recommended)
+2. Reduce your `kyte-connect.js` to a single line:
+   ```js
+   let endpoint = 'https://your-kyte-api.example.com';
+   ```
+   No publickey / identifier / account / HMAC creds required.
+
+**Option B — Pin to legacy HMAC**
+
+Add `let authMode = 'hmac';` to your existing `kyte-connect.js` alongside the existing publickey / identifier / account globals. Shipyard continues exactly as before.
+
+See `assets/js/source/kyte-connect.example.js` for a template covering both modes.
+
+### Sensitive Flags (Phase 2.5 — merged from feature/sensitive-flag-ui)
+
+Sensitive checkbox controls on the create forms for Controller, DataModel, and ModelAttribute. Pairs with the kyte-php three-tier `sensitive` flag enforcement (drop bodies from activity logs, gate MCP read tools, suppress AI error context). See [kyte-php v4.4.0 CHANGELOG](https://github.com/keyqcloud/kyte-php/releases/tag/v4.4.0) for the full server-side semantics.
+
+> Sensitive toggle on *existing* records (detail/edit views) lands in a follow-up release — see Tempo card #166.
+
+### JWT-aware page generation (Phase 3 — merged from feature/jwt-aware-page-generation)
+
+- **Auth Mode** selector on the Application create form (hmac / jwt). The selection drives generated-page connect-string shape via `kyte-shipyard-application.js`, `kyte-shipyard-application-configuration.js`, and `kyte-shipyard-page-wizard.js`.
+- Generated pages get the v2 constructor when `auth_mode='jwt'`:
+  ```js
+  new Kyte(endpoint, null, null, null, app_identifier, { authMode: 'jwt' })
+  ```
+- HMAC apps continue with the v1 four-arg constructor.
+- `update-kyte-loading.py` script and the pre-login HTML pages (`index.html`, `password.html`, `reset.html`, `error.html`) gain conditional `kyte.js` loading for localhost dev vs CDN prod.
+
+### Modernization
+
+- **Build pipeline**: switched from `javascript-obfuscator` to `esbuild` via `npm run build`. Outputs are ~50–65% smaller than the previous obfuscated artifacts and emit source maps (`.js.map`) for prod debuggability. Obfuscation never provided real security — HMAC creds in kyte-connect.js were trivially extractable via DevTools — so the size + debug win has no security downside.
+- **CI builds in-pipeline**: `.github/workflows/deploy.yml` now runs `npm ci && npm run build` on tag push. Previously assumed artifacts were already committed; that risked shipping stale builds whenever someone tagged without running release.sh locally.
+- **GitHub Releases**: tag push creates a GitHub Release with notes extracted from this CHANGELOG and the kyte-shipyard.zip bundle attached.
+- **`release.sh` pre-flight gates**: enforces CHANGELOG section match, KS_VERSION match, clean working tree, on `main`, in-sync with origin, tag doesn't already exist. Fixes the prior `1=` typo that silently passed all version mismatches.
+- **`assets/js/*.js` artifacts removed from git**: source in `assets/js/source/` is the only tracked JS. Top-level `*.js` and `*.js.map` are produced by `npm run build` and shipped to S3 from CI. Eliminates artifact drift, oversized PR diffs, and merge conflicts on generated files.
+- **`obfuscate.sh` removed**: replaced by esbuild.
+- **`kyte-connect.example.js` template** added under `assets/js/source/` documenting both JWT and HMAC modes.
+
+### Build dependency
+
+Adds `esbuild` as a devDependency. CI uses Node 24 (matches kyte-php's release pipeline). Local dev: `npm install` once, then `npm run build` or `npm run watch`.
+
 ## 1.8.0
 
 ### New Feature: MCP Tokens & Connect AI Assistant
