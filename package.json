@@ -1,6 +1,6 @@
 {
   "name": "kyte-shipyard",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": true,
   "description": "Kyte Shipyard — admin UI for the Kyte platform. Sources in assets/js/source/, esbuild minifies to assets/js/ (gitignored).",
   "type": "module",
