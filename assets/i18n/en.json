@@ -330,6 +330,8 @@
 
   "ui.models.modal.title": "Data Model",
   "ui.models.modal.field.name": "Model Name",
+  "ui.models.modal.field.sensitive": "Sensitive",
+  "ui.models.modal.field.sensitive_description": "When enabled, request and response bodies are not stored in activity or error logs, and MCP read tools withhold the schema definition.",
 
   "ui.model_detail.back_to_models": "Back to Models",
   "ui.model_detail.data_model": "Data Model",
@@ -372,6 +374,7 @@
   "ui.model_detail.form.unsigned": "Unsigned",
   "ui.model_detail.form.protected": "Protected",
   "ui.model_detail.form.password": "Password",
+  "ui.model_detail.form.sensitive": "Sensitive",
   "ui.model_detail.form.default": "Default",
   "ui.model_detail.form.description": "Description",
   "ui.model_detail.form.yes": "Yes",
@@ -472,6 +475,8 @@
   "ui.controllers.modal.field.data_model": "Data Model",
   "ui.controllers.modal.field.data_model_placeholder": "Virtual Model",
   "ui.controllers.modal.field.description": "Description",
+  "ui.controllers.modal.field.sensitive": "Sensitive",
+  "ui.controllers.modal.field.sensitive_description": "When enabled, request and response bodies are not stored in activity or error logs, and MCP read tools withhold the source.",
 
   "ui.sites.page_title": "Distribution Sites - Kyte Shipyard",
   "ui.sites.title": "Distribution Sites",

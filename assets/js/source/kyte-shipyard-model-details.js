@@ -48,6 +48,21 @@ let controllerElements = [
             'label':'Description',
             'required':false
         }
+    ],
+    [
+        {
+            'field':'sensitive',
+            'type':'select',
+            'label':'Sensitive',
+            'required':false,
+            'option': {
+                'ajax': false,
+                'data': {
+                    0: 'No',
+                    1: 'Yes'
+                }
+            }
+        }
     ]
 ];
 
@@ -1096,6 +1111,19 @@ document.addEventListener('KyteInitialized', function(e) {
                             'field':'password',
                             'type':'select',
                             'label': t('ui.model_detail.form.password', 'Password'),
+                            'required':false,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    0: t('ui.model_detail.form.no', 'No'),
+                                    1: t('ui.model_detail.form.yes', 'Yes')
+                                }
+                            }
+                        },
+                        {
+                            'field':'sensitive',
+                            'type':'select',
+                            'label': t('ui.model_detail.form.sensitive', 'Sensitive'),
                             'required':false,
                             'option': {
                                 'ajax': false,
