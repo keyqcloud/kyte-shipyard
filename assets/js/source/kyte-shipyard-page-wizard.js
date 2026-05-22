@@ -7,6 +7,7 @@ let kyte_pub = '';
 let kyte_iden = '';
 let kyte_num = '';
 let kyte_app = '';
+let kyte_auth_mode = 'hmac';
 
 let page_path = '';
 
@@ -31,6 +32,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 kyte_iden = r.kyte_iden;
                 kyte_num = r.kyte_num;
                 kyte_app = site.application.identifier;
+                kyte_auth_mode = site.application.auth_mode || 'hmac';
 
                 cfDomain = site.cfDomain;
                 $("#path-preview").html('https://'+cfDomain+'/index.html');
@@ -705,8 +707,14 @@ document.addEventListener('KyteInitialized', function(e) {
             if (r.data.length > 0) {
                 let pageId = r.data[0].id;
 
-                // generate kyte connect
-                let connect = "let endpoint = 'https://"+kyte_endpoint+"';var k = new Kyte(endpoint, '"+kyte_pub+"', '"+kyte_iden+"', '"+kyte_num+"', '"+kyte_app+"');k.init();\n\n";
+                // generate kyte connect — branch on app.auth_mode so JWT-enabled
+                // apps get the v2 constructor shape with the authMode flag.
+                let connect;
+                if (kyte_auth_mode === 'jwt') {
+                    connect = "let endpoint = 'https://"+kyte_endpoint+"';var k = new Kyte(endpoint, null, null, null, '"+kyte_app+"', { authMode: 'jwt' });k.init();\n\n";
+                } else {
+                    connect = "let endpoint = 'https://"+kyte_endpoint+"';var k = new Kyte(endpoint, '"+kyte_pub+"', '"+kyte_iden+"', '"+kyte_num+"', '"+kyte_app+"');k.init();\n\n";
+                }
 
                 // Set up "Open in Editor" button URL
                 let editorObj = {'model': 'KytePage', 'idx': pageId};
