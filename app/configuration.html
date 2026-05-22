@@ -353,6 +353,40 @@
 
                 <!-- Kyte Connect Section -->
                 <div id="KyteConnect" class="content-section">
+                    <!-- Authentication Mode -->
+                    <div class="config-card">
+                        <div class="config-card-header">
+                            <div class="config-card-icon">
+                                <i class="fas fa-key"></i>
+                            </div>
+                            <div>
+                                <h3 class="config-card-title" data-i18n="ui.config.kyte_connect.auth_mode.title">Authentication Mode</h3>
+                            </div>
+                        </div>
+                        <p class="config-card-description" data-i18n="ui.config.kyte_connect.auth_mode.description">
+                            Choose how clients authenticate against this application's API. HMAC (legacy) uses static access keys baked into the Kyte Connect code. JWT (recommended) uses short-lived bearer tokens minted at login with rotating refresh tokens — no static credentials in the browser.
+                        </p>
+                        <p class="config-card-description">
+                            <br>
+                            <strong data-i18n="ui.config.kyte_connect.auth_mode.important">Important:</strong>
+                            <span data-i18n="ui.config.kyte_connect.auth_mode.important_text">Changing this setting will automatically regenerate the Kyte Connect code. Already-deployed pages will continue to work with their current auth method until you republish them, giving you a graceful migration window. JWT requires kyte-php v4.4.0+ with AUTH_STRATEGY_DISPATCHER='on' and KYTE_JWT_SECRET defined.</span>
+                        </p>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="ui.config.kyte_connect.auth_mode.setting">Authentication Mode</label>
+                            <select id="kyte_connect_auth_mode" class="form-select">
+                                <option value="hmac" data-i18n="ui.config.kyte_connect.auth_mode.hmac">HMAC (Legacy — static access keys)</option>
+                                <option value="jwt" data-i18n="ui.config.kyte_connect.auth_mode.jwt">JWT Bearer (Recommended — rotating tokens)</option>
+                            </select>
+                        </div>
+                        <!-- Save Button -->
+                        <div class="d-flex justify-content-end">
+                            <button id="saveAuthModeSettings" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>
+                                <span data-i18n="ui.config.kyte_connect.auth_mode.save_button">Save Authentication Mode</span>
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Obfuscation Settings -->
                     <div class="config-card">
                         <div class="config-card-header">

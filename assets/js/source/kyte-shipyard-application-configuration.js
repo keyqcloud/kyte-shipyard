@@ -117,6 +117,11 @@ document.addEventListener('KyteInitialized', function(e) {
 function populateApplicationSettings(app) {
     $("#obfuscate_kyte_connect").val(parseInt(app.obfuscate_kyte_connect));
 
+    // Kyte Connect auth mode (introduced with kyte-php v4.4.0 / Shipyard 2.0.0).
+    // Defaults to 'hmac' when the column is absent or empty so pre-v4.4.0
+    // backends keep the legacy behavior.
+    $("#kyte_connect_auth_mode").val((app.auth_mode === 'jwt') ? 'jwt' : 'hmac');
+
     // AWS credentials
     if (typeof app.aws_key === "object" && app.aws_key) {
         $("#aws_username").val(app.aws_key.username || '');
@@ -246,6 +251,12 @@ function setupFormEventHandlers(_ks, idx) {
     $("#saveObfuscationSettings").click(function(e) {
         e.preventDefault();
         saveObfuscationSettings(_ks, idx);
+    });
+
+    // Auth mode settings save handler
+    $("#saveAuthModeSettings").click(function(e) {
+        e.preventDefault();
+        saveAuthModeSettings(_ks, idx);
     });
 }
 
@@ -854,6 +865,48 @@ function saveObfuscationSettings(_ks, idx) {
         saveBtn.html(originalText).prop('disabled', false);
     }, function(err) {
         showError("Unable to update obfuscation settings. Please try again or contact support. " + err);
+        saveBtn.html(originalText).prop('disabled', false);
+    });
+}
+
+// Save Kyte Connect auth_mode (HMAC ↔ JWT) and regenerate Connect code so the
+// system-version preview reflects the new constructor shape immediately.
+// Mirrors saveObfuscationSettings: PUT only the auth_mode field (avoids
+// the protected-fields blanking bug tracked separately, Tempo #167).
+function saveAuthModeSettings(_ks, idx) {
+    const currentAuthMode = (app.auth_mode === 'jwt') ? 'jwt' : 'hmac';
+    const newAuthMode = $("#kyte_connect_auth_mode").val() === 'jwt' ? 'jwt' : 'hmac';
+
+    let updateData = { 'auth_mode': newAuthMode };
+
+    const saveBtn = $("#saveAuthModeSettings");
+    const originalText = saveBtn.html();
+    saveBtn.html('<i class="fas fa-spinner fa-spin me-2"></i>Saving...').prop('disabled', true);
+
+    _ks.put('Application', 'id', idx, updateData, null, [], function(r) {
+        if (r.data && r.data.length > 0) {
+            // Update the in-memory app object so subsequent Connect-code
+            // regeneration uses the new mode.
+            app = {...app, ...updateData};
+
+            // Regenerate the Connect code on change so the comparison panel
+            // immediately reflects the new constructor shape.
+            if (currentAuthMode !== newAuthMode) {
+                updateKyteConnectCode(_ks);
+            }
+
+            showSuccess("Authentication mode updated. Republish any deployed pages to apply the new connect string.");
+
+            // Refresh the comparison panel if it's currently visible.
+            if (document.getElementById('KyteConnect').classList.contains('active')) {
+                initializeKyteConnectComparison();
+            }
+        } else {
+            showError("Unable to update authentication mode. Please try again or contact support.");
+        }
+        saveBtn.html(originalText).prop('disabled', false);
+    }, function(err) {
+        showError("Unable to update authentication mode. Please try again or contact support. " + err);
         saveBtn.html(originalText).prop('disabled', false);
     });
 }
