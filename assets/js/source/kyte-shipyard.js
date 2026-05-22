@@ -17,13 +17,32 @@ function loadScript(url, callback) {
 }
 
 function initializeKyte(callback) {
-    if (typeof endpoint === 'undefined' || typeof publickey === 'undefined' || 
-        typeof identifier === 'undefined' || typeof account === 'undefined') {
-        callback(new Error('Required credentials are not defined properly.'));
+    if (typeof endpoint === 'undefined') {
+        callback(new Error('endpoint is not defined.'));
         return;
     }
 
-    var _ks = new Kyte(endpoint, publickey, identifier, account);
+    // Default to JWT bearer auth — no static credentials required client-side.
+    // To opt into legacy HMAC, kyte-connect.js must set authMode='hmac' AND
+    // provide publickey, identifier, account globals.
+    // Shipyard is platform-level (not scoped to a single Kyte Application),
+    // so applicationId is null — JwtEndpoint.login treats app_identifier as
+    // optional and falls back to KyteUser + default username/password fields.
+    // The kyte-api-js v2 library handles /jwt/login, refresh-token rotation,
+    // and bearer header attachment internally — no other call sites change.
+    var mode = (typeof authMode !== 'undefined') ? authMode : 'jwt';
+
+    var _ks;
+    if (mode === 'hmac') {
+        if (typeof publickey === 'undefined' || typeof identifier === 'undefined' || typeof account === 'undefined') {
+            callback(new Error('HMAC mode requires publickey, identifier, and account globals in kyte-connect.js.'));
+            return;
+        }
+        _ks = new Kyte(endpoint, publickey, identifier, account);
+    } else {
+        _ks = new Kyte(endpoint, null, null, null, null, { authMode: 'jwt' });
+    }
+
     _ks.init();
     _ks.addLogoutHandler(".logout");
 
