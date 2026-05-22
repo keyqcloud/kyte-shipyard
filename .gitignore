@@ -4,3 +4,6 @@
 /assets/js/source/kyte-source.js
 /assets/js/kyte-source.js
 /assets/js/kyte-dev.js
+
+# Node toolchain (esbuild build pipeline)
+node_modules/
