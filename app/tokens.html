@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title data-i18n="ui.mcp_tokens.page_title">MCP Tokens - Kyte Shipyard</title>
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/assets/css/kyte-form.css">
+    <link rel="stylesheet" href="/assets/css/kyte-shipyard-common.css">
+    <!--  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Nunito:wght@200;500;700&display=swap" rel="stylesheet">
+    <!-- javascripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
+    <!-- JavaScript obfuscator -->
+    <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
+    <!-- Kyte -->
+    <script>
+        // Auto-detect localhost and conditionally load local kyte.js for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            // Load kyte.js: use local dev version on localhost, otherwise use CDN
+            const kyteScript = isLocalhost ? '/assets/js/kyte-dev.js' : 'https://cdn.keyqcloud.com/kyte/js/stable/kyte.js';
+            document.write('<script src="' + kyteScript + '"' + (isLocalhost ? '' : ' crossorigin="anonymous"') + '><\/script>');
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading local kyte-api-js from /assets/js/kyte-dev.js', 'color: #FF6B6B; font-weight: bold;');
+            }
+        })();
+    </script>
+    <script>
+        // Auto-detect localhost and load non-obfuscated source files for development
+        (function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const jsPath = isLocalhost ? '/assets/js/source/' : '/assets/js/';
+
+            const scripts = [
+                'kyte-shipyard.js',
+                'navigation.js',
+                'kyte-shipyard-tables.js',
+                'kyte-i18n.js',
+                'kyte-shipyard-mcp-tokens.js'
+            ];
+
+            scripts.forEach(function(script) {
+                document.write('<script src="' + jsPath + script + '"><\/script>');
+            });
+
+            if (isLocalhost) {
+                console.log('%c[DEV MODE] Loading non-obfuscated source files from ' + jsPath, 'color: #4CAF50; font-weight: bold;');
+            }
+        })();
+    </script>
+
+    <!-- Initialize i18n for authenticated pages -->
+    <script>
+        document.addEventListener('KyteInitialized', function(e) {
+            const kyteI18n = new KyteI18n('en', '/assets/i18n/');
+
+            // Make kyteI18n globally available
+            window.kyteI18n = kyteI18n;
+
+            // Get user language from localStorage (stored during login)
+            const cachedLanguage = localStorage.getItem('kyte_user_language');
+
+            // Initialize with cached language or browser detection
+            kyteI18n.init(cachedLanguage).then(() => {
+                console.log('[i18n] Page initialized with language:', kyteI18n.getCurrentLanguage());
+                kyteI18n.translateDOM();
+
+                // Dispatch custom event after i18n is fully loaded
+                document.dispatchEvent(new CustomEvent('KyteI18nReady'));
+            }).catch(error => {
+                console.error('[i18n] Failed to initialize:', error);
+            });
+        });
+    </script>
+
+    <style>
+        /* Override sidebar layout for top-level page */
+        .main-content {
+            margin-left: 0 !important;
+            width: 100% !important;
+            max-width: 1400px !important;
+            margin: 0 auto !important;
+        }
+
+        footer {
+            margin-left: 0 !important;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-heading {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .page-subtitle {
+            color: #718096;
+            font-size: 1rem;
+            margin: 0;
+            max-width: 720px;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-connect {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 500;
+            border: none;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-connect:hover {
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .empty-state-card {
+            background: white;
+            border-radius: 12px;
+            padding: 3rem 1.5rem;
+            text-align: center;
+            border: 1px dashed rgba(0, 0, 0, 0.1);
+            color: #718096;
+        }
+
+        .empty-state-card .empty-icon {
+            font-size: 2.5rem;
+            color: #cbd5e0;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-card .btn-connect {
+            margin-top: 1rem;
+        }
+
+        @keyframes mcp-toast-slide-in {
+            from { opacity: 0; transform: translateX(100%); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* kyte-form.css ships its own .modal-header background + title icon
+           with !important. Override here so MCP modals match the page's
+           purple/AI theme rather than the default orange model-CRUD theme. */
+        .modal-mcp .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white;
+            border-bottom: none;
+        }
+
+        .modal-mcp .modal-title::before {
+            content: '\f544' !important; /* fa-robot — MCP/AI theme */
+        }
+
+        .modal-mcp .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        /* kyte-form.css zeroes .modal-body padding (it expects a .mx-3 wrapper).
+           Our modals don't use that wrapper, so restore Bootstrap-ish padding. */
+        .modal-mcp .modal-body {
+            padding: 1.5rem 1.75rem !important;
+        }
+
+        .modal-mcp .modal-footer {
+            padding: 1rem 1.75rem !important;
+        }
+
+        .modal-mcp .form-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+
+        .modal-mcp .form-help {
+            display: block;
+            color: #718096;
+            font-size: 0.85em;
+            margin-top: 0.25rem;
+        }
+
+        .scopes-card {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .scopes-card .scope-icon {
+            color: #4c51bf;
+            font-size: 1.25rem;
+            margin-top: 0.15rem;
+        }
+
+        .scope-chip {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: #e0e7ff;
+            color: #3730a3;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .reveal-warning {
+            background: #fffaf0;
+            border-left: 4px solid #ed8936;
+            color: #7b341e;
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .token-display {
+            display: flex;
+            gap: 0.5rem;
+            align-items: stretch;
+        }
+
+        .token-display input {
+            flex: 1;
+            font-family: 'SF Mono', Menlo, Consolas, monospace;
+            font-size: 0.9em;
+            background: #f7fafc !important;
+        }
+
+        .token-copy-btn {
+            white-space: nowrap;
+        }
+
+        .form-error {
+            color: #c53030;
+            background: #fed7d7;
+            border-radius: 4px;
+            padding: 0.5rem 0.75rem;
+            margin-top: 0.5rem;
+            font-size: 0.9em;
+        }
+
+        /* Connect AI Assistant wizard */
+        .wizard-intro-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .wizard-intro-list li {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: #4a5568;
+        }
+
+        .wizard-intro-list li i {
+            color: #4c51bf;
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+        }
+
+        .modal-mcp .nav-tabs {
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 1rem;
+        }
+
+        .modal-mcp .nav-tabs .nav-link {
+            color: #4a5568;
+            border: none;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            padding: 0.5rem 0.9rem;
+            font-weight: 500;
+            background: transparent;
+        }
+
+        .modal-mcp .nav-tabs .nav-link.active {
+            color: #4c51bf;
+            border-bottom-color: #4c51bf;
+            background: transparent;
+        }
+
+        .snippet-block {
+            position: relative;
+            background: #1a202c;
+            color: #e2e8f0;
+            font-family: 'SF Mono', Menlo, Consolas, monospace;
+            font-size: 0.82em;
+            line-height: 1.5;
+            border-radius: 8px;
+            padding: 0.75rem 0.9rem;
+            white-space: pre;
+            overflow-x: auto;
+            margin: 0.25rem 0 0.75rem;
+        }
+
+        .snippet-copy {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 2px 8px;
+            font-size: 0.75em;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+        }
+
+        .snippet-copy:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .placeholder-note {
+            display: inline-block;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 1px 6px;
+            border-radius: 6px;
+            margin-left: 0.4rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Page loading modal -->
+    <div id="pageLoaderModal" class="modal white" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-sm h-100 d-flex">
+            <div class="mx-auto align-self-center" style="width: 48px">
+                <div class="spinner-wrapper text-center fa-6x"><span class="fas fa-sync fa-spin"></span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="wrapper">
+        <!-- START UNIFIED TOP NAV -->
+        <nav id="application-nav" class="navbar navbar-dark navbar-expand-sm">
+            <div class="container-fluid">
+                <!-- Brand -->
+                <a href="/app/" class="navbar-brand">
+                    Kyte Shipyard<sup>™</sup>
+                    <img src="/assets/images/kyte_shipyard_light.png" alt="Kyte Shipyard">
+                </a>
+
+                <button data-bs-toggle="collapse" class="navbar-toggler" type="button" data-bs-target="#application-navcol" aria-controls="#application-navcol" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="application-navcol">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link me-2" href="/app/">
+                                <i class="fas fa-rocket me-2"></i><span data-i18n="nav.projects">Projects</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link me-2" href="/app/aws.html">
+                                <i class="fab fa-aws me-2"></i><span data-i18n="nav.aws_keys">AWS Keys</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link me-2" href="/app/keys.html">
+                                <i class="fas fa-key me-2"></i><span data-i18n="nav.api_keys">API Keys</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link me-2 active" href="/app/tokens.html">
+                                <i class="fas fa-robot me-2"></i><span data-i18n="nav.mcp_tokens">MCP Tokens</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link me-2" href="/app/system-log.html">
+                                <i class="fas fa-list-alt me-2"></i><span data-i18n="nav.system_log">System Log</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link me-2" href="/app/system-activity-log.html">
+                                <i class="fas fa-clipboard-list me-2"></i><span data-i18n="nav.system_activity_log">Activity Log</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-2"></i><span data-i18n="nav.account">Account</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="/app/settings.html"><i class="fas fa-cog me-2"></i><span data-i18n="nav.settings">Settings</span></a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item logout" href="#"><i class="fas fa-power-off me-2"></i><span data-i18n="nav.logout">Logout</span></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- END UNIFIED TOP NAV -->
+
+        <!-- Main Content (No Sidebar for Top-Level Page) -->
+        <div class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                    <div>
+                        <h1 class="section-heading"><i class="fas fa-robot me-2" style="color: #667eea;"></i><span data-i18n="ui.mcp_tokens.title">MCP Tokens</span></h1>
+                        <p class="page-subtitle" data-i18n="ui.mcp_tokens.subtitle">Issue and manage Model Context Protocol (MCP) tokens for AI assistants like Claude Code and Claude Desktop. Tokens authorize read access to your apps' models, controllers, pages, and more.</p>
+                    </div>
+                    <div class="page-actions">
+                        <a class="btn-connect" href="#" id="connect-assistant">
+                            <i class="fas fa-magic"></i>
+                            <span data-i18n="ui.mcp_tokens.connect_assistant">Connect AI Assistant</span>
+                        </a>
+                        <a class="btn-new" href="#" id="new">
+                            <i class="fas fa-plus"></i>
+                            <span data-i18n="ui.mcp_tokens.new_token">Create MCP Token</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MCP Tokens Table (wired in chunk 2) -->
+            <div id="content-data-wrapper">
+                <div class="table-container">
+                    <table id="mcp-tokens-table" class="table table-striped w-100"></table>
+                </div>
+                <div id="mcp-tokens-empty" class="empty-state-card d-none">
+                    <div class="empty-icon"><i class="fas fa-robot"></i></div>
+                    <h5 data-i18n="ui.mcp_tokens.empty.title">No MCP tokens yet</h5>
+                    <p data-i18n="ui.mcp_tokens.empty.subtitle">Create your first token to let an AI assistant read your Kyte apps.</p>
+                    <button type="button" class="btn-connect mt-2" id="empty-connect-assistant">
+                        <i class="fas fa-magic"></i>
+                        <span data-i18n="ui.mcp_tokens.connect_assistant">Connect AI Assistant</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content d-flex justify-content-between align-items-center">
+            <div class="footer-versions">
+                <div><span data-i18n="footer.shipyard_version">Kyte Shipyard™ Version</span> <span id="kyteShipyardVersion"></span></div>
+                <div><span data-i18n="footer.js_version">Kyte JS Version</span> <span id="kyteJSVersion"></span></div>
+            </div>
+            <p class="footer-copyright mb-0" data-i18n="footer.copyright">KeyQ © 2020-2026</p>
+        </div>
+    </footer>
+
+    <!-- modal form (legacy KyteForm placeholder, unused on this page) -->
+    <div id="modalForm"></div>
+
+    <!-- Connect AI Assistant wizard modal -->
+    <div class="modal modal-mcp fade" id="mcp-connect-modal" tabindex="-1" aria-labelledby="mcp-connect-modal-title" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mcp-connect-modal-title" data-i18n="ui.mcp_tokens.connect.title">Connect an AI Assistant</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Step 1: explain + mint -->
+                    <div class="wizard-step" data-step="1">
+                        <p class="mb-3" data-i18n="ui.mcp_tokens.connect.step1.intro">A one-click setup for connecting Claude Code or Claude Desktop to this Kyte instance. We'll mint a read-only token and show you the exact snippets to paste.</p>
+                        <ul class="wizard-intro-list">
+                            <li><i class="fas fa-key"></i><span data-i18n="ui.mcp_tokens.connect.step1.bullet1">Mints a 30-day, read-only MCP token scoped to your account</span></li>
+                            <li><i class="fas fa-laptop-code"></i><span data-i18n="ui.mcp_tokens.connect.step1.bullet2">Shows install paths for Claude Code (manual + quick install) and Claude Desktop</span></li>
+                            <li><i class="fas fa-shield-alt"></i><span data-i18n="ui.mcp_tokens.connect.step1.bullet3">Token is shown once. Revoke it anytime from this page.</span></li>
+                        </ul>
+                        <div id="mcp-connect-error" class="form-error d-none"></div>
+                    </div>
+
+                    <!-- Step 2: token + setup -->
+                    <div class="wizard-step d-none" data-step="2">
+                        <div class="reveal-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span data-i18n="ui.mcp_tokens.connect.step2.warning">This is the only time you'll see the full token. Save it before closing.</span>
+                        </div>
+                        <label for="mcp-connect-token" class="form-label" data-i18n="ui.mcp_tokens.reveal.token_label">Token</label>
+                        <div class="token-display mb-3">
+                            <input type="text" class="form-control" id="mcp-connect-token" readonly>
+                            <button type="button" class="btn btn-outline-primary token-copy-btn" id="mcp-connect-copy-token">
+                                <i class="fas fa-copy me-1"></i><span data-i18n="ui.mcp_tokens.reveal.copy">Copy</span>
+                            </button>
+                        </div>
+
+                        <ul class="nav nav-tabs" id="mcp-connect-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="tab-claude-code-tab" data-bs-toggle="tab" data-bs-target="#tab-claude-code" type="button" role="tab" aria-selected="true" data-i18n="ui.mcp_tokens.connect.tab.claude_code">Claude Code (manual)</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tab-quick-tab" data-bs-toggle="tab" data-bs-target="#tab-quick" type="button" role="tab" aria-selected="false">
+                                    <span data-i18n="ui.mcp_tokens.connect.tab.quick">Quick install</span>
+                                    <span class="placeholder-note" data-i18n="ui.mcp_tokens.connect.placeholder_note">soon</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tab-desktop-tab" data-bs-toggle="tab" data-bs-target="#tab-desktop" type="button" role="tab" aria-selected="false">
+                                    <span data-i18n="ui.mcp_tokens.connect.tab.desktop">Claude Desktop</span>
+                                    <span class="placeholder-note" data-i18n="ui.mcp_tokens.connect.placeholder_note">soon</span>
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <!-- Claude Code (manual) -->
+                            <div class="tab-pane fade show active" id="tab-claude-code" role="tabpanel">
+                                <p class="mb-2" data-i18n="ui.mcp_tokens.connect.step2.code_intro">Add this entry to your project's .mcp.json file (or ~/.mcp.json for a global setup):</p>
+                                <div class="snippet-block" id="mcp-connect-jsonsnippet"></div>
+                                <p class="mb-0" style="font-size: 0.875em; color: #4a5568;">
+                                    <i class="fas fa-info-circle me-1" style="color:#4c51bf;"></i>
+                                    <span data-i18n="ui.mcp_tokens.connect.step2.envvar_note">Set the KYTE_APP_KEY environment variable to the token above before launching Claude Code, or replace ${KYTE_APP_KEY} in the snippet with the token directly (less secure).</span>
+                                </p>
+                            </div>
+                            <!-- Quick install (npx) -->
+                            <div class="tab-pane fade" id="tab-quick" role="tabpanel">
+                                <p class="mb-2" data-i18n="ui.mcp_tokens.connect.step2.quick_intro">One-liner that drops the Kyte skill bundle into your Claude config and writes the .mcp.json entry for you:</p>
+                                <div class="snippet-block" id="mcp-connect-npxsnippet"></div>
+                                <p class="mb-0" style="font-size: 0.875em; color: #4a5568;">
+                                    <i class="fas fa-info-circle me-1" style="color:#4c51bf;"></i>
+                                    <span data-i18n="ui.mcp_tokens.connect.step2.quick_note">You'll be prompted to paste the token when the install runs. The @kyte/claude-assistant package is in pre-release; use the manual setup above for now.</span>
+                                </p>
+                            </div>
+                            <!-- Claude Desktop (.mcpb bundle) -->
+                            <div class="tab-pane fade" id="tab-desktop" role="tabpanel">
+                                <p class="mb-2" data-i18n="ui.mcp_tokens.connect.step2.desktop_intro">Download the Kyte MCP bundle (.mcpb) and double-click it to install in Claude Desktop. You'll be prompted for the token and Kyte URL during install.</p>
+                                <a class="btn btn-primary" href="https://cdn.keyqcloud.com/kyte/mcp/kyte-mcp-latest.mcpb" target="_blank" rel="noopener" id="mcp-connect-desktop-download">
+                                    <i class="fas fa-download me-1"></i><span data-i18n="ui.mcp_tokens.connect.step2.desktop_download">Download Kyte.mcpb</span>
+                                </a>
+                                <p class="mt-3 mb-0" style="font-size: 0.875em; color: #4a5568;">
+                                    <i class="fas fa-info-circle me-1" style="color:#4c51bf;"></i>
+                                    <span data-i18n="ui.mcp_tokens.connect.step2.desktop_note">Bundle is in pre-release. The download link will be live once the bundle ships; until then, use the manual setup with Claude Code.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Step 1 footer -->
+                    <div class="wizard-footer w-100 d-flex justify-content-end gap-2" data-step="1">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="ui.mcp_tokens.connect.button.cancel">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="mcp-connect-mint" data-i18n="ui.mcp_tokens.connect.button.mint">Mint Token & Continue</button>
+                    </div>
+                    <!-- Step 2 footer -->
+                    <div class="wizard-footer w-100 d-flex justify-content-end d-none" data-step="2">
+                        <button type="button" class="btn btn-primary" id="mcp-connect-done" data-i18n="ui.mcp_tokens.connect.button.done">Done</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create MCP Token modal -->
+    <div class="modal modal-mcp fade" id="mcp-create-modal" tabindex="-1" aria-labelledby="mcp-create-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mcp-create-modal-title" data-i18n="ui.mcp_tokens.create.title">Create MCP Token</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="mcp-create-form" novalidate>
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label for="mcp-create-name" class="form-label" data-i18n="ui.mcp_tokens.create.field.name">Name</label>
+                            <input type="text" class="form-control" id="mcp-create-name" required maxlength="255">
+                            <small class="form-help" data-i18n="ui.mcp_tokens.create.field.name_help">A label so you can identify this token later (e.g. "Claude Code – laptop").</small>
+                        </div>
+
+                        <!-- Application -->
+                        <div class="mb-3">
+                            <label for="mcp-create-application" class="form-label" data-i18n="ui.mcp_tokens.create.field.application">Application</label>
+                            <select class="form-select" id="mcp-create-application">
+                                <option value="" data-i18n="ui.mcp_tokens.create.field.application_all">All apps</option>
+                            </select>
+                            <small class="form-help" data-i18n="ui.mcp_tokens.create.field.application_help">Restrict this token to a single app, or leave as "All apps" to allow access across your account.</small>
+                        </div>
+
+                        <!-- Scopes (read-only for v1) -->
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="ui.mcp_tokens.create.field.scopes">Scopes</label>
+                            <div class="scopes-card">
+                                <i class="fas fa-eye scope-icon"></i>
+                                <div>
+                                    <div class="mb-1"><span class="scope-chip" data-i18n="ui.mcp_tokens.scope.read">read</span></div>
+                                    <small class="form-help" style="margin-top: 0;" data-i18n="ui.mcp_tokens.create.scopes_note">This token will have read access to your apps' data — models, controllers, pages, and more. Draft and commit scopes will be available once write tools land.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Expires -->
+                        <div class="mb-3">
+                            <label for="mcp-create-expires" class="form-label" data-i18n="ui.mcp_tokens.create.field.expires">Expires</label>
+                            <select class="form-select" id="mcp-create-expires">
+                                <option value="30" selected data-i18n="ui.mcp_tokens.create.expires.30d">30 days</option>
+                                <option value="90" data-i18n="ui.mcp_tokens.create.expires.90d">90 days</option>
+                                <option value="365" data-i18n="ui.mcp_tokens.create.expires.1y">1 year</option>
+                                <option value="custom" data-i18n="ui.mcp_tokens.create.expires.custom">Custom date</option>
+                                <option value="never" data-i18n="ui.mcp_tokens.create.expires.never">Never (not recommended)</option>
+                            </select>
+                            <div id="mcp-create-expires-custom-wrap" class="mt-2 d-none">
+                                <label for="mcp-create-expires-custom" class="visually-hidden" data-i18n="ui.mcp_tokens.create.field.expires_custom_label">Custom expiration date</label>
+                                <input type="date" class="form-control" id="mcp-create-expires-custom">
+                            </div>
+                        </div>
+
+                        <!-- Advanced -->
+                        <details class="mb-2">
+                            <summary class="form-label" style="cursor: pointer;" data-i18n="ui.mcp_tokens.create.advanced">Advanced</summary>
+                            <div class="mt-2">
+                                <label for="mcp-create-ip-allowlist" class="form-label" data-i18n="ui.mcp_tokens.create.field.ip_allowlist">IP allowlist</label>
+                                <textarea class="form-control" id="mcp-create-ip-allowlist" rows="2" placeholder="10.0.0.0/24, 192.168.1.0/24"></textarea>
+                                <small class="form-help" data-i18n="ui.mcp_tokens.create.field.ip_allowlist_help">Optional. Comma-separated CIDR ranges restricting where this token can be used from.</small>
+                            </div>
+                        </details>
+
+                        <div id="mcp-create-error" class="form-error d-none"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="ui.mcp_tokens.create.button.cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="mcp-create-submit" data-i18n="ui.mcp_tokens.create.button.create">Create token</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revoke MCP Token confirmation modal -->
+    <div class="modal modal-mcp fade" id="mcp-revoke-modal" tabindex="-1" aria-labelledby="mcp-revoke-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mcp-revoke-modal-title" data-i18n="ui.mcp_tokens.revoke.title">Revoke MCP token?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-2" data-i18n="ui.mcp_tokens.revoke.confirm">You're about to revoke:</p>
+                    <div style="background:#f7fafc;border:1px solid #e2e8f0;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;">
+                        <div id="mcp-revoke-name" style="font-weight:600;color:#2d3748;"></div>
+                        <div id="mcp-revoke-prefix" style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:0.85em;color:#718096;margin-top:0.25rem;"></div>
+                    </div>
+                    <p class="mb-0" style="color:#7b341e;" data-i18n="ui.mcp_tokens.revoke.warning">This token will stop working immediately. Any AI assistants using it will lose access. This cannot be undone.</p>
+                    <div id="mcp-revoke-error" class="form-error d-none"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="ui.mcp_tokens.revoke.button.cancel">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="mcp-revoke-confirm" data-i18n="ui.mcp_tokens.revoke.button.confirm">Revoke token</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reveal MCP Token modal (one-time raw token display) -->
+    <div class="modal modal-mcp fade" id="mcp-reveal-modal" tabindex="-1" aria-labelledby="mcp-reveal-modal-title" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mcp-reveal-modal-title" data-i18n="ui.mcp_tokens.reveal.title">Save your MCP token</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="reveal-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span data-i18n="ui.mcp_tokens.reveal.warning">This is the only time you'll see the full token. Save it somewhere secure now — Kyte stores only a hash and can't show it to you again.</span>
+                    </div>
+                    <label for="mcp-reveal-token" class="form-label" data-i18n="ui.mcp_tokens.reveal.token_label">Token</label>
+                    <div class="token-display">
+                        <input type="text" class="form-control" id="mcp-reveal-token" readonly>
+                        <button type="button" class="btn btn-outline-primary token-copy-btn" id="mcp-reveal-copy">
+                            <i class="fas fa-copy me-1"></i><span data-i18n="ui.mcp_tokens.reveal.copy">Copy</span>
+                        </button>
+                    </div>
+                    <small class="form-help mt-3" data-i18n="ui.mcp_tokens.reveal.next_steps">Next: paste this token into your MCP client. The "Connect AI Assistant" button walks you through Claude Code and Claude Desktop setup.</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="mcp-reveal-done" data-i18n="ui.mcp_tokens.reveal.button.done">I've saved this token</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

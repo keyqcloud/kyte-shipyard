@@ -1,3 +1,32 @@
+## 1.8.0
+
+### New Feature: MCP Tokens & Connect AI Assistant
+
+Surface for issuing, listing, and revoking Model Context Protocol (MCP) bearer tokens, plus a guided wizard for connecting AI assistants to a Kyte tenant. Pairs with kyte-php Phase 2 (MCP server, scope-gated tools, audit logging).
+
+- **MCP Tokens Page** (`app/tokens.html`)
+  - Top-level page (account scope) with KyteTable listing tokens by name, application, scope badges, last used, expiration, and creation time
+  - "Create MCP Token" modal with name, optional application binding, scope selection (read only in v1.8.0), and expiration (24h / 7d / 30d / 90d / custom date / never)
+  - One-time raw-token reveal modal with copy-to-clipboard and explicit "I have saved this token" acknowledgement
+  - Revoke confirmation modal with screen-reader-friendly success toast
+
+- **Connect AI Assistant Wizard** (2-step modal)
+  - Step 1: token mint with sensible defaults (`Claude Code – YYYY-MM-DD`, 30-day expiry, read scope)
+  - Step 2: three install paths — Claude Code `.mcp.json` snippet, `npx @kyte/claude-assistant` command, `.mcpb` desktop bundle download (npx and .mcpb URLs are placeholders pending package release)
+  - Snippet blocks carry per-block copy buttons with aria labels
+
+- **Navigation & Empty States**
+  - Root nav and per-page top nav gain an "MCP Tokens" entry between API Keys and System Log
+  - Empty state surfaces a CTA opening the Connect AI Assistant wizard for first-time users
+
+- **i18n**
+  - 83 MCP-related keys per locale across en/ja/ko/es with full parity
+  - Scope identifiers (read/draft/commit) remain English (protocol-level)
+
+- **Developer Documentation**
+  - `DEV-SETUP.md` gains a "KyteTable & KyteForm gotchas" section documenting positional constructor flags (the `actionView`/`actionEdit`/`actionDelete` kebab-column auto-injection), `.modal-body` zero-padding default, and the `.modal-header` orange theme/database icon override pattern
+  - Windows symlink notes added for `kyte-dev.js` (Developer Mode or hard-link fallback)
+
 ## 1.7.1
 
 ### Bug Fix: KyteTable Sort Regression

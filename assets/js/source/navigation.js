@@ -282,6 +282,12 @@ let rootnav = [
             href: '/app/keys.html'
         },
         {
+            faicon:'fas fa-robot',
+            class:'me-2 text-light',
+            label: 'MCP Tokens',
+            href: '/app/tokens.html'
+        },
+        {
             faicon:'fas fa-list-alt',
             class:'me-2 text-light',
             label: 'System Log',
