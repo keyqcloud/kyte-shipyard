@@ -1,17 +1,43 @@
 name: Deploy to CDN
 
-on:  
+# Tag-triggered. Builds the JS bundle in CI (no longer relies on
+# committed obfuscated artifacts), uploads the zip + CHANGELOG to S3,
+# invalidates CloudFront, and creates a GitHub Release with release
+# notes extracted from CHANGELOG.md. The deployed Shipyard's self-
+# update mechanism pulls from s3://<bucket>/kyte/shipyard/stable/.
+
+on:
   push:
     tags:
-      - '*'
+      - 'v*'
+
+permissions:
+  contents: write   # needed for softprops/action-gh-release
+
+# Opt into Node.js 24 ahead of the 2026-06-02 force-migration.
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   deploy:
+    name: Build and deploy to S3 + CloudFront
     runs-on: ubuntu-latest
 
     steps:
     - name: Check out source code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v5
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v5
+      with:
+        node-version: '24'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build (esbuild minify + source maps)
+      run: npm run build
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -20,10 +46,45 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Extract tag name
-      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+    - name: Extract version from tag
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
 
-    - name: Prepare package
+    - name: Verify KS_VERSION matches tag
+      run: |
+        VERSION="${{ steps.version.outputs.VERSION }}"
+        JS_VERSION=$(awk -F\' '/var KS_VERSION =/ {print $2}' assets/js/source/kyte-shipyard.js)
+        if [ "$VERSION" != "$JS_VERSION" ]; then
+          echo "::error::Tag v$VERSION but KS_VERSION in source is $JS_VERSION."
+          exit 1
+        fi
+
+    - name: Verify CHANGELOG.md has matching section
+      run: |
+        VERSION="${{ steps.version.outputs.VERSION }}"
+        if ! grep -q "^## ${VERSION}$" CHANGELOG.md; then
+          echo "::error::Tag v$VERSION but CHANGELOG.md has no '## $VERSION' section."
+          exit 1
+        fi
+
+    - name: Extract release notes from CHANGELOG.md
+      run: |
+        VERSION="${{ steps.version.outputs.VERSION }}"
+        awk -v v="^## ${VERSION}$" '
+          $0 ~ v { capture=1; next }
+          /^## / && capture { exit }
+          capture { print }
+        ' CHANGELOG.md > release-notes.md
+
+        if [ ! -s release-notes.md ]; then
+          echo "::error::Could not extract release notes for v$VERSION from CHANGELOG.md"
+          exit 1
+        fi
+
+        echo "Release notes preview (first 20 lines):"
+        head -20 release-notes.md
+
+    - name: Prepare deploy bundle
       run: |
         mkdir tmp
         cp *.html tmp/
@@ -34,19 +95,35 @@ jobs:
         cp -r assets/images tmp/assets/
         mkdir tmp/assets/js
         cp -r assets/js/packages tmp/assets/js/
+        # CI just built these — they are not in git.
         cp assets/js/*.js tmp/assets/js/
+        cp assets/js/*.js.map tmp/assets/js/ 2>/dev/null || true
+        # Ship kyte-connect.example.js so operators have a template next
+        # to the install. The real kyte-connect.js stays per-deployment.
+        if [ -f assets/js/source/kyte-connect.example.js ]; then
+          cp assets/js/source/kyte-connect.example.js tmp/assets/js/
+        fi
         cd tmp
         zip -r9 ../kyte-shipyard.zip .
-        cd ../
+        cd ..
 
-    - name: Copy latest files to S3
+    - name: Upload bundle to S3 (stable)
       run: aws s3 cp ./kyte-shipyard.zip s3://${{ secrets.S3_BUCKET }}/kyte/shipyard/stable/kyte-shipyard.zip
 
-    - name: Copy CHANGELOG.md to S3
+    - name: Upload CHANGELOG to S3
       run: aws s3 cp ./CHANGELOG.md s3://${{ secrets.S3_BUCKET }}/kyte/shipyard/archive/CHANGELOG.md
 
-    - name: Copy archive files to S3
-      run: aws s3 cp ./kyte-shipyard.zip s3://${{ secrets.S3_BUCKET }}/kyte/shipyard/archive/kyte-shipyard-${{ env.TAG_NAME }}.zip
+    - name: Upload versioned archive to S3
+      run: aws s3 cp ./kyte-shipyard.zip s3://${{ secrets.S3_BUCKET }}/kyte/shipyard/archive/kyte-shipyard-${{ steps.version.outputs.VERSION }}.zip
 
-    - name: Invalidate CloudFront cache for latest files
+    - name: Invalidate CloudFront cache
       run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CF_DISTRIBUTION_ID }} --paths '/*'
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        name: kyte-shipyard v${{ steps.version.outputs.VERSION }}
+        body_path: release-notes.md
+        files: kyte-shipyard.zip
+        draft: false
+        prerelease: false
