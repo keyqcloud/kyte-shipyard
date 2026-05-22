@@ -1,0 +1,18 @@
+{
+  "name": "kyte-shipyard",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Kyte Shipyard — admin UI for the Kyte platform. Sources in assets/js/source/, esbuild minifies to assets/js/ (gitignored).",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "watch": "node build.mjs --watch",
+    "clean": "node -e \"const fs=require('node:fs');const d='assets/js';for(const f of fs.readdirSync(d).filter(x=>x.endsWith('.js')||x.endsWith('.js.map'))){fs.unlinkSync(d+'/'+f);}\""
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

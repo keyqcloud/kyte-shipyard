@@ -136,6 +136,26 @@ document.addEventListener('KyteInitialized', function(e) {
                     encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
                     $("#model-name").html(`<a href="/app/model/?request=${encoded}">${modelName}</a>`);
                 }
+
+                // Settings tab: prefill + bind auto-save handler. PUT only the
+                // toggled field so we don't disturb unrelated columns and avoid
+                // the protected-field-blanking issue documented in #19.
+                $("#setting-sensitive").prop("checked", String(r.data[0].sensitive) === "1");
+                $("#setting-sensitive").off("change.sensitive").on("change.sensitive", function() {
+                    const newVal = this.checked ? 1 : 0;
+                    const $status = $("#sensitive-save-status");
+                    const savingMsg = (window.kyteI18n && window.kyteI18n.t('ui.controller_detail.sensitive_saving')) || 'Saving...';
+                    const savedMsg = (window.kyteI18n && window.kyteI18n.t('ui.controller_detail.sensitive_saved')) || 'Saved.';
+                    const failMsg = (window.kyteI18n && window.kyteI18n.t('ui.controller_detail.sensitive_save_failed')) || 'Save failed. Reverting.';
+                    $status.removeClass("text-success text-danger").addClass("text-muted").html('<i class="fas fa-spinner fa-spin me-1"></i>' + savingMsg);
+                    _ks.put("Controller", "id", idx, { sensitive: newVal }, null, [], function() {
+                        $status.removeClass("text-muted text-danger").addClass("text-success").html('<i class="fas fa-check me-1"></i>' + savedMsg);
+                        setTimeout(() => $status.html(""), 2500);
+                    }, function() {
+                        $("#setting-sensitive").prop("checked", newVal === 0);
+                        $status.removeClass("text-muted text-success").addClass("text-danger").html('<i class="fas fa-exclamation-triangle me-1"></i>' + failMsg);
+                    });
+                });
             } else {
                 $("#controller-name span").text("Undefined");
                 $("#model-name").html("Undefined");

@@ -37,6 +37,19 @@ document.addEventListener('KyteInitialized', function(e) {
                     }
                 }
             },
+            {
+                'field':'auth_mode',
+                'type':'select',
+                'label': t('ui.projects.form.auth_mode', 'Auth Mode'),
+                'required':true,
+                'option': {
+                    'ajax': false,
+                    'data': {
+                        'hmac': t('ui.projects.form.auth_mode_hmac', 'HMAC (legacy, default)'),
+                        'jwt':  t('ui.projects.form.auth_mode_jwt',  'JWT (requires kyte-api-js v2+)')
+                    }
+                }
+            },
         ],
         [
             {
@@ -76,7 +89,19 @@ document.addEventListener('KyteInitialized', function(e) {
         dataTable.init();
         var modalForm = new KyteForm(_ks, $("#modalForm"), 'Application', null, elements, t('ui.projects.form.modal_title', 'My App'), dataTable, true, $("#new"));
         modalForm.success = function(r) {
-            let connect = "let endpoint = 'https://"+r.kyte_api+"';var k = new Kyte(endpoint, '"+r.kyte_pub+"', '"+r.kyte_iden+"', '"+r.kyte_num+"', '"+r.data[0].identifier+"');k.init();\n\n";
+            // Branch the generated constructor on the new Application.auth_mode
+            // column. JWT mode uses null for the HMAC positional args and
+            // passes the 6th-arg options bag introduced in kyte-api-js v2.0;
+            // legacy HMAC mode is unchanged.
+            let authMode = (r.data[0] && r.data[0].auth_mode) ? r.data[0].auth_mode : 'hmac';
+            let appIdentifier = r.data[0].identifier;
+            let endpointURL = "https://" + r.kyte_api;
+            let connect;
+            if (authMode === 'jwt') {
+                connect = "let endpoint = '" + endpointURL + "';var k = new Kyte(endpoint, null, null, null, '" + appIdentifier + "', { authMode: 'jwt' });k.init();\n\n";
+            } else {
+                connect = "let endpoint = '" + endpointURL + "';var k = new Kyte(endpoint, '" + r.kyte_pub + "', '" + r.kyte_iden + "', '" + r.kyte_num + "', '" + appIdentifier + "');k.init();\n\n";
+            }
             let obfuscatedConnect = JavaScriptObfuscator.obfuscate(connect,
                 {
                     compact: true,

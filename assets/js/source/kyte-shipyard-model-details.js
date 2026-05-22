@@ -48,6 +48,21 @@ let controllerElements = [
             'label':'Description',
             'required':false
         }
+    ],
+    [
+        {
+            'field':'sensitive',
+            'type':'select',
+            'label':'Sensitive',
+            'required':false,
+            'option': {
+                'ajax': false,
+                'data': {
+                    0: 'No',
+                    1: 'Yes'
+                }
+            }
+        }
     ]
 ];
 
@@ -988,11 +1003,31 @@ document.addEventListener('KyteInitialized', function(e) {
                 getData(_ks, modelIdx, model, r.data[0].application.id);
                 let obj = {'model': 'Application', 'idx':r.data[0].application.id};
                 let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
-                
+
                 let appnav = generateAppNav(encoded);
-            
+
                 let navbar = new KyteNav("#mainnav", appnav, null, `<i class="fas fa-rocket me-2"></i>${r.data[0].application.name}`);
                 navbar.create();
+
+                // Settings tab: prefill + bind auto-save. PUT only the toggled
+                // field to avoid disturbing other columns. Matches the pattern
+                // in kyte-shipyard-controller-details.js.
+                $("#model-setting-sensitive").prop("checked", String(r.data[0].sensitive) === "1");
+                $("#model-setting-sensitive").off("change.sensitive").on("change.sensitive", function() {
+                    const newVal = this.checked ? 1 : 0;
+                    const $status = $("#model-sensitive-save-status");
+                    const savingMsg = (window.kyteI18n && window.kyteI18n.t('ui.model_detail.sensitive_saving')) || 'Saving...';
+                    const savedMsg = (window.kyteI18n && window.kyteI18n.t('ui.model_detail.sensitive_saved')) || 'Saved.';
+                    const failMsg = (window.kyteI18n && window.kyteI18n.t('ui.model_detail.sensitive_save_failed')) || 'Save failed. Reverting.';
+                    $status.removeClass("text-success text-danger").addClass("text-muted").html('<i class="fas fa-spinner fa-spin me-1"></i>' + savingMsg);
+                    _ks.put("DataModel", "id", modelIdx, { sensitive: newVal }, null, [], function() {
+                        $status.removeClass("text-muted text-danger").addClass("text-success").html('<i class="fas fa-check me-1"></i>' + savedMsg);
+                        setTimeout(() => $status.html(""), 2500);
+                    }, function() {
+                        $("#model-setting-sensitive").prop("checked", newVal === 0);
+                        $status.removeClass("text-muted text-success").addClass("text-danger").html('<i class="fas fa-exclamation-triangle me-1"></i>' + failMsg);
+                    });
+                });
 
                 // Get i18n instance for translations
                 const i18n = window.kyteI18n;
@@ -1096,6 +1131,19 @@ document.addEventListener('KyteInitialized', function(e) {
                             'field':'password',
                             'type':'select',
                             'label': t('ui.model_detail.form.password', 'Password'),
+                            'required':false,
+                            'option': {
+                                'ajax': false,
+                                'data': {
+                                    0: t('ui.model_detail.form.no', 'No'),
+                                    1: t('ui.model_detail.form.yes', 'Yes')
+                                }
+                            }
+                        },
+                        {
+                            'field':'sensitive',
+                            'type':'select',
+                            'label': t('ui.model_detail.form.sensitive', 'Sensitive'),
                             'required':false,
                             'option': {
                                 'ajax': false,

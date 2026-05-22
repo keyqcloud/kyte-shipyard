@@ -220,6 +220,11 @@
                             <i class="fas fa-file-import"></i> <span data-i18n="ui.model_detail.sidebar.import">Import</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#model-settings-tab" style="font-weight: 500;">
+                            <i class="fas fa-cog"></i> <span data-i18n="ui.model_detail.tab.settings">Settings</span>
+                        </a>
+                    </li>
                 </ul>
 
                 <!-- Tab Content -->
@@ -535,6 +540,29 @@
                                             <i class="fas fa-sync me-2"></i>Refresh Data Table
                                         </button>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Tab -->
+                    <div class="tab-pane fade p-3" id="model-settings-tab">
+                        <div class="section-header mb-3">
+                            <h2 class="section-title">
+                                <i class="fas fa-cog me-2"></i>
+                                <span data-i18n="ui.model_detail.settings_title">Model Settings</span>
+                            </h2>
+                        </div>
+                        <div class="section-content">
+                            <div class="card" style="max-width: 720px;">
+                                <div class="card-body">
+                                    <h6 class="card-title mb-2" data-i18n="ui.models.modal.field.sensitive">Sensitive</h6>
+                                    <p class="text-muted small mb-3" data-i18n="ui.models.modal.field.sensitive_description">When enabled, request and response bodies are not stored in activity or error logs, and MCP read tools withhold the schema definition.</p>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="model-setting-sensitive">
+                                        <label class="form-check-label" for="model-setting-sensitive" data-i18n="ui.model_detail.sensitive_label">Mark this model as sensitive</label>
+                                    </div>
+                                    <div id="model-sensitive-save-status" class="small mt-2 text-muted" style="min-height: 1.25em;"></div>
                                 </div>
                             </div>
                         </div>

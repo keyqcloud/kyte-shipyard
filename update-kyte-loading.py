@@ -52,10 +52,17 @@ def main():
     print()
 
     count = 0
-    app_dir = Path('app')
 
-    # Find all HTML files
-    for html_file in app_dir.rglob('*.html'):
+    # Root-level HTML files (login, password reset, error pages) plus every
+    # HTML file under app/. The pre-login flows live at the root and were
+    # missed in the original sweep — `if html_file.exists()` guards against
+    # the script being re-run in environments that don't ship all four.
+    root_files = [Path(name) for name in ('index.html', 'password.html', 'reset.html', 'error.html')]
+    app_files = list(Path('app').rglob('*.html'))
+
+    for html_file in root_files + app_files:
+        if not html_file.exists():
+            continue
         if update_file(html_file):
             print(f"  📝 Updated: {html_file}")
             count += 1
