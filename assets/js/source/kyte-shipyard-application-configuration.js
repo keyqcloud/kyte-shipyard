@@ -885,21 +885,30 @@ function saveAuthModeSettings(_ks, idx) {
 
     _ks.put('Application', 'id', idx, updateData, null, [], function(r) {
         if (r.data && r.data.length > 0) {
-            // Update the in-memory app object so subsequent Connect-code
-            // regeneration uses the new mode.
+            // 1. Mirror the new auth_mode into the local app object so
+            //    generateSystemKyteCode() emits the right constructor shape.
             app = {...app, ...updateData};
 
-            // Regenerate the Connect code on change so the comparison panel
-            // immediately reflects the new constructor shape.
             if (currentAuthMode !== newAuthMode) {
-                updateKyteConnectCode(_ks);
-            }
-
-            showSuccess("Authentication mode updated. Republish any deployed pages to apply the new connect string.");
-
-            // Refresh the comparison panel if it's currently visible.
-            if (document.getElementById('KyteConnect').classList.contains('active')) {
+                // 2. Regenerate systemKyteCode against the NEW auth_mode
+                //    before pushing. initializeKyteConnectComparison sets
+                //    `systemKyteCode = generateSystemKyteCode()` and also
+                //    refreshes the comparison panel. Without this step,
+                //    updateKyteConnectCode would push the *stale* code
+                //    (the HMAC shape) and the republish flag would carry
+                //    the wrong content to every published page.
                 initializeKyteConnectComparison();
+
+                // 3. Same path the obfuscation toggle uses — sets
+                //    kyte_connect / kyte_connect_obfuscated /
+                //    republish_kyte_connect=1 on Application, which the
+                //    backend reacts to by republishing every page that
+                //    embeds the connect string.
+                updateKyteConnectCode(_ks);
+
+                showSuccess("Authentication mode updated. All published pages will be republished with the new connect string.");
+            } else {
+                showSuccess("Authentication mode unchanged.");
             }
         } else {
             showError("Unable to update authentication mode. Please try again or contact support.");

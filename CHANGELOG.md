@@ -1,3 +1,13 @@
+## 2.0.1
+
+### Bug Fix: auth_mode toggle was republishing pages with the OLD (HMAC) connect string
+
+In 2.0.0, the auth_mode toggle on /app/configuration.html called `updateKyteConnectCode(_ks)` (which sets `republish_kyte_connect=1` on the Application — the same path the obfuscation toggle uses for backend page-republish). But it did so BEFORE regenerating `systemKyteCode` against the new app.auth_mode. Result: the server triggered republish, but with the stale HMAC-shape connect string. Operators flipped HMAC → JWT in the UI, the "republish" message said it worked, but the pages out there still embedded the HMAC `new Kyte(...)` call.
+
+Fix: call `initializeKyteConnectComparison()` (which regenerates `systemKyteCode` from the now-updated app.auth_mode) BEFORE `updateKyteConnectCode(_ks)`. The republish now carries the correct shape.
+
+User-visible effect: flipping the Authentication Mode toggle and clicking Save now actually republishes every page with the new connect string. No need to manually republish each page through the page editor.
+
 ## 2.0.0
 
 ### Breaking Change: default to JWT bearer authentication
