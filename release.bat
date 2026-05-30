@@ -35,11 +35,6 @@ if not "%js_version%"=="%~1" (
     exit /b 1
 )
 
-echo Reobfuscating all JS
-for %%f in (assets\js\source\*.js) do (
-    call :obfuscate "%%f"
-)
-
 echo Creating tag for release version %~1
 
 git add .
@@ -67,14 +62,4 @@ if errorlevel 1 (
 )
 
 echo Git push successful. New release v%~1 is available
-goto :eof
-
-:obfuscate
-set "filename=%~1"
-set "output=%filename%"
-set "output=%output:source\=%"
-if not "%filename%"=="" if not "%output%"=="" (
-    echo Obfuscating: %filename% Output: %output%
-    javascript-obfuscator.cmd "%filename%" --output "%output%" --compact true --string-array-encoding base64 --string-array-wrappers-type variable
-)
 goto :eof
