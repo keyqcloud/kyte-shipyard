@@ -394,7 +394,6 @@ function hasActualChanges() {
     const currentName = $("#setting-script-name").val();
     const currentIncludeAll = $("#setting-include-all").val();
     const currentDescription = $("#setting-script-description").val();
-    const currentObfuscate = parseInt($("#setting-obfuscatejs").val()) || 0;
     const currentModule = parseInt($("#setting-jsmodule").val()) || 0;
     
     return (
@@ -402,7 +401,6 @@ function hasActualChanges() {
         currentName !== script.name ||
         currentIncludeAll !== script.include_all ||
         currentDescription !== script.description ||
-        currentObfuscate !== (script.obfuscate_js || 0) ||
         currentModule !== (script.is_js_module || 0)
     );
 }
@@ -1000,7 +998,6 @@ function syncScriptWithCurrentState() {
     script.name = $("#setting-script-name").val();
     script.include_all = $("#setting-include-all").val();
     script.description = $("#setting-script-description").val();
-    script.obfuscate_js = parseInt($("#setting-obfuscatejs").val());
     script.is_js_module = parseInt($("#setting-jsmodule").val());
 }
 
@@ -1078,27 +1075,14 @@ function saveScriptWithSummary(changeSummary) {
     $('#pageLoaderModal').modal('show');
     
     try {
-        let obfuscatedJS = script.script_type == 'js' ? JavaScriptObfuscator.obfuscate(scriptEditor.getValue(), {
-            compact: true,
-            controlFlowFlattening: true,
-            controlFlowFlatteningThreshold: 1,
-            numbersToExpressions: true,
-            simplify: true,
-            stringArrayEncoding: ['base64'],
-            stringArrayShuffle: true,
-            splitStrings: true,
-            stringArrayWrappersType: 'variable',
-            stringArrayThreshold: 1
-        }).getObfuscatedCode() : '';
-
         let payload = {
             'change_summary': changeSummary,
             'content': scriptEditor.getValue(),
-            'content_js_obfuscated': obfuscatedJS,
+            'content_js_obfuscated': '',
             'name': $("#setting-script-name").val(),
             'include_all': $("#setting-include-all").val(),
             'description': $("#setting-script-description").val(),
-            'obfuscate_js': $("#setting-obfuscatejs").val(),
+            'obfuscate_js': 0,
             'is_js_module': $("#setting-jsmodule").val(),
         };
 
@@ -1131,27 +1115,14 @@ function publishScriptWithSummary(changeSummary) {
     $('#pageLoaderModal').modal('show');
 
     try {
-        let obfuscatedJS = script.script_type == 'js' ? JavaScriptObfuscator.obfuscate(scriptEditor.getValue(), {
-            compact: true,
-            controlFlowFlattening: true,
-            controlFlowFlatteningThreshold: 1,
-            numbersToExpressions: true,
-            simplify: true,
-            stringArrayEncoding: ['base64'],
-            stringArrayShuffle: true,
-            splitStrings: true,
-            stringArrayWrappersType: 'variable',
-            stringArrayThreshold: 1
-        }).getObfuscatedCode() : '';
-
         let payload = {
             'change_summary': changeSummary,
             'content': scriptEditor.getValue(),
-            'content_js_obfuscated': obfuscatedJS,
+            'content_js_obfuscated': '',
             'name': $("#setting-script-name").val(),
             'include_all': $("#setting-include-all").val(),
             'description': $("#setting-script-description").val(),
-            'obfuscate_js': $("#setting-obfuscatejs").val(),
+            'obfuscate_js': 0,
             'is_js_module': $("#setting-jsmodule").val(),
             'state': 1,
         };
@@ -1209,9 +1180,6 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#setting-script-description").val(script.description);
                 
                 if (script.script_type == 'js') {
-                    $("#setting-obfuscatejs").val(script.obfuscate_js || 0);
-                    $('#obfuscatejs-option-wrapper').removeClass('d-none');
-                    
                     $("#setting-jsmodule").val(script.is_js_module || 0);
                     $("#jsmodule-option-wrapper").removeClass('d-none');
                 }
@@ -1374,7 +1342,7 @@ document.addEventListener('KyteInitialized', function(e) {
                 });
 
                 // Form change handlers to mark as dirty
-                $("#setting-script-name, #setting-script-description, #setting-include-all, #setting-obfuscatejs, #setting-jsmodule").on('change input', function() {
+                $("#setting-script-name, #setting-script-description, #setting-include-all, #setting-jsmodule").on('change input', function() {
                     isDirty = true;
                 });
 

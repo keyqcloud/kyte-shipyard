@@ -86,7 +86,6 @@ function hasActualChanges() {
     const currentWebComponentObj = $("#webcomponent_obj_name").val();
     const currentLang = $("#lang").val() === 'default' ? '' : $("#lang").val();
     const currentSitemapInclude = parseInt($("#setting-sitemap-include").val());
-    const currentObfuscateJs = parseInt($("#setting-obfuscatejs").val());
     const currentIsJsModule = parseInt($("#setting-is_js_module").val());
     const currentUseContainer = parseInt($("#setting-use_container").val());
     const currentProtected = parseInt($("#setting-protected").val());
@@ -98,7 +97,6 @@ function hasActualChanges() {
     const originalWebComponentObj = pageData.page.webcomponent_obj_name || '';
     const originalLang = pageData.page.lang || '';
     const originalSitemapInclude = pageData.page.sitemap_include || 0;
-    const originalObfuscateJs = pageData.page.obfuscate_js || 0;
     const originalIsJsModule = pageData.page.is_js_module || 0;
     const originalUseContainer = pageData.page.use_container || 0;
     const originalProtected = pageData.page.protected || 0;
@@ -116,7 +114,6 @@ function hasActualChanges() {
         currentWebComponentObj !== originalWebComponentObj ||
         currentLang !== originalLang ||
         currentSitemapInclude !== originalSitemapInclude ||
-        currentObfuscateJs !== originalObfuscateJs ||
         currentIsJsModule !== originalIsJsModule ||
         currentUseContainer !== originalUseContainer ||
         currentProtected !== originalProtected
@@ -970,24 +967,12 @@ function restoreVersion(versionData, _ks) {
                 
                 // Use existing save functionality but without showing the change summary modal
                 let rawJS = jsEditor.getValue();
-                let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS, {
-                    compact: true,
-                    controlFlowFlattening: true,
-                    controlFlowFlatteningThreshold: 1,
-                    numbersToExpressions: true,
-                    simplify: true,
-                    stringArrayEncoding: ['base64'],
-                    stringArrayShuffle: true,
-                    splitStrings: true,
-                    stringArrayWrappersType: 'variable',
-                    stringArrayThreshold: 1
-                });
 
                 let payload = {
                     'change_summary': changeSummary,
                     'html': htmlEditor.getValue(),
                     'javascript': rawJS,
-                    'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
+                    'javascript_obfuscated': '',
                     'stylesheet': cssEditor.getValue(),
                     'main_navigation': $("#setting-main-navigation").val(),
                     'side_navigation': $("#setting-side-navigation").val(),
@@ -997,7 +982,7 @@ function restoreVersion(versionData, _ks) {
                     'lang': $("#lang").val() == 'default' ? null : $("#lang").val(),
                     'webcomponent_obj_name': $("#webcomponent_obj_name").val(),
                     'sitemap_include': $("#setting-sitemap-include").val(),
-                    'obfuscate_js': $("#setting-obfuscatejs").val(),
+                    'obfuscate_js': 0,
                     'is_js_module': $("#setting-is_js_module").val(),
                     'use_container': $("#setting-use_container").val(),
                     'page_type': pageData.page.page_type == 'block' ? 'custom': pageData.page.page_type,
@@ -1329,24 +1314,12 @@ function savePageWithSummary(changeSummary) {
     
     try {
         let rawJS = jsEditor.getValue();
-        let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS, {
-            compact: true,
-            controlFlowFlattening: true,
-            controlFlowFlatteningThreshold: 1,
-            numbersToExpressions: true,
-            simplify: true,
-            stringArrayEncoding: ['base64'],
-            stringArrayShuffle: true,
-            splitStrings: true,
-            stringArrayWrappersType: 'variable',
-            stringArrayThreshold: 1
-        });
 
         let payload = {
             'change_summary': changeSummary,
             'html': htmlEditor.getValue(),
             'javascript': rawJS,
-            'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
+            'javascript_obfuscated': '',
             'stylesheet': cssEditor.getValue(),
             'main_navigation': $("#setting-main-navigation").val(),
             'side_navigation': $("#setting-side-navigation").val(),
@@ -1356,7 +1329,7 @@ function savePageWithSummary(changeSummary) {
             'lang': $("#lang").val() == 'default' ? null : $("#lang").val(),
             'webcomponent_obj_name': $("#webcomponent_obj_name").val(),
             'sitemap_include': $("#setting-sitemap-include").val(),
-            'obfuscate_js': $("#setting-obfuscatejs").val(),
+            'obfuscate_js': 0,
             'is_js_module': $("#setting-is_js_module").val(),
             'use_container': $("#setting-use_container").val(),
             'page_type': pageData.page.page_type == 'block' ? 'custom': pageData.page.page_type,
@@ -1414,7 +1387,6 @@ function syncPageDataWithCurrentState() {
     pageData.page.webcomponent_obj_name = $("#webcomponent_obj_name").val();
     pageData.page.lang = $("#lang").val() === 'default' ? '' : $("#lang").val();
     pageData.page.sitemap_include = parseInt($("#setting-sitemap-include").val());
-    pageData.page.obfuscate_js = parseInt($("#setting-obfuscatejs").val());
     pageData.page.is_js_module = parseInt($("#setting-is_js_module").val());
     pageData.page.use_container = parseInt($("#setting-use_container").val());
     pageData.page.protected = parseInt($("#setting-protected").val());
@@ -1426,24 +1398,12 @@ function publishPageWithSummary(changeSummary) {
 
     try {
         let rawJS = jsEditor.getValue();
-        let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS, {
-            compact: true,
-            controlFlowFlattening: true,
-            controlFlowFlatteningThreshold: 1,
-            numbersToExpressions: true,
-            simplify: true,
-            stringArrayEncoding: ['base64'],
-            stringArrayShuffle: true,
-            splitStrings: true,
-            stringArrayWrappersType: 'variable',
-            stringArrayThreshold: 1
-        });
 
         let payload = {
             'change_summary': changeSummary,
             'html': htmlEditor.getValue(),
             'javascript': rawJS,
-            'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
+            'javascript_obfuscated': '',
             'stylesheet': cssEditor.getValue(),
             'main_navigation': $("#setting-main-navigation").val(),
             'side_navigation': $("#setting-side-navigation").val(),
@@ -1453,7 +1413,7 @@ function publishPageWithSummary(changeSummary) {
             'lang': $("#lang").val() == 'default' ? null : $("#lang").val(),
             'webcomponent_obj_name': $("#webcomponent_obj_name").val(),
             'sitemap_include': $("#setting-sitemap-include").val(),
-            'obfuscate_js': $("#setting-obfuscatejs").val(),
+            'obfuscate_js': 0,
             'is_js_module': $("#setting-is_js_module").val(),
             'use_container': $("#setting-use_container").val(),
             'page_type': pageData.page.page_type == 'block' ? 'custom' : pageData.page.page_type,
@@ -1786,7 +1746,6 @@ document.addEventListener('KyteInitialized', function(e) {
                     $('#setting-sitemap-include').val(pageData.page.sitemap_include);
                 }
 
-                $("#setting-obfuscatejs").val(pageData.page.obfuscate_js);
                 $("#setting-is_js_module").val(pageData.page.is_js_module);
                 $("#setting-use_container").val(pageData.page.use_container);
 

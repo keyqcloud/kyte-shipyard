@@ -115,8 +115,6 @@ document.addEventListener('KyteInitialized', function(e) {
 
 // Populate application settings form
 function populateApplicationSettings(app) {
-    $("#obfuscate_kyte_connect").val(parseInt(app.obfuscate_kyte_connect));
-
     // Kyte Connect auth mode (introduced with kyte-php v4.4.0 / Shipyard 2.0.0).
     // Defaults to 'hmac' when the column is absent or empty so pre-v4.4.0
     // backends keep the legacy behavior.
@@ -245,12 +243,6 @@ function setupFormEventHandlers(_ks, idx) {
     $("#saveAppSettings").click(function(e) {
         e.preventDefault();
         saveApplicationSettings(_ks, idx);
-    });
-    
-    // Obfuscation settings save handler
-    $("#saveObfuscationSettings").click(function(e) {
-        e.preventDefault();
-        saveObfuscationSettings(_ks, idx);
     });
 
     // Auth mode settings save handler
@@ -627,35 +619,11 @@ function updateKyteConnectCode(_ks) {
     updateButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
     updateButton.disabled = true;
     
-    // Generate obfuscated version if needed
-    const obfuscateEnabled = parseInt(document.getElementById('obfuscate_kyte_connect').value);
-    let obfuscatedCode = '';
-    
-    if (obfuscateEnabled) {
-        try {
-            const obfuscated = JavaScriptObfuscator.obfuscate(systemKyteCode, {
-                compact: true,
-                controlFlowFlattening: true,
-                controlFlowFlatteningThreshold: 1,
-                numbersToExpressions: true,
-                simplify: true,
-                stringArrayEncoding: ['base64'],
-                stringArrayShuffle: true,
-                splitStrings: true,
-                stringArrayWrappersType: 'variable',
-                stringArrayThreshold: 1
-            });
-            obfuscatedCode = obfuscated.getObfuscatedCode();
-        } catch (error) {
-            console.error('Obfuscation failed:', error);
-            showError('Failed to obfuscate code. Saving unobfuscated version.');
-        }
-    }
-    
     // Prepare update data - only update Kyte Connect related fields
+    // (JS obfuscation removed in Shipyard 2.1.0 — KYTE-#191; always store plain)
     const updateData = {
         'kyte_connect': systemKyteCode,
-        'kyte_connect_obfuscated': obfuscatedCode,
+        'kyte_connect_obfuscated': '',
         'republish_kyte_connect': 1 // Reset flag after manual update
     };
     
@@ -664,7 +632,7 @@ function updateKyteConnectCode(_ks) {
         if (r.data.length > 0) {
             // Update local app object
             app.kyte_connect = systemKyteCode;
-            app.kyte_connect_obfuscated = obfuscatedCode;
+            app.kyte_connect_obfuscated = '';
             
             // Update current code and refresh comparison
             currentKyteCode = systemKyteCode;
@@ -809,7 +777,7 @@ function saveApplicationSettings(_ks, idx) {
             // Update local app object
             app = {...app, ...updateData};
             
-            // Refresh Kyte Connect comparison in case obfuscation setting changed
+            // Refresh Kyte Connect comparison in case settings changed
             if (document.getElementById('KyteConnect').classList.contains('active')) {
                 initializeKyteConnectComparison();
             }
@@ -825,54 +793,10 @@ function saveApplicationSettings(_ks, idx) {
     });
 }
 
-function saveObfuscationSettings(_ks, idx) {
-    // Get current obfuscation setting to check if it actually changed
-    const currentObfuscationSetting = parseInt(app.obfuscate_kyte_connect);
-    const newObfuscationSetting = parseInt($("#obfuscate_kyte_connect").val());
-    
-    // Prepare update data - ONLY obfuscation setting
-    let updateData = {
-        'obfuscate_kyte_connect': newObfuscationSetting
-    };
-
-    // Show loading state for obfuscation button
-    const saveBtn = $("#saveObfuscationSettings");
-    const originalText = saveBtn.html();
-    saveBtn.html('<i class="fas fa-spinner fa-spin me-2"></i>Saving...').prop('disabled', true);
-
-    // Save obfuscation settings
-    _ks.put('Application', 'id', idx, updateData, null, [], function(r) {
-        if (r.data.length > 0) {
-            // Update local app object first
-            app = {...app, ...updateData};
-            
-            // Only regenerate Kyte Connect code if the setting actually changed
-            if (currentObfuscationSetting !== newObfuscationSetting) {
-                updateKyteConnectCode(_ks);
-            }
-            
-            showSuccess("Obfuscation settings successfully updated!");
-            
-            // Refresh Kyte Connect comparison since obfuscation setting changed
-            if (document.getElementById('KyteConnect').classList.contains('active')) {
-                initializeKyteConnectComparison();
-            }
-        } else {
-            showError("Unable to update obfuscation settings. Please try again or contact support.");
-        }
-        
-        // Restore button
-        saveBtn.html(originalText).prop('disabled', false);
-    }, function(err) {
-        showError("Unable to update obfuscation settings. Please try again or contact support. " + err);
-        saveBtn.html(originalText).prop('disabled', false);
-    });
-}
-
 // Save Kyte Connect auth_mode (HMAC ↔ JWT) and regenerate Connect code so the
 // system-version preview reflects the new constructor shape immediately.
-// Mirrors saveObfuscationSettings: PUT only the auth_mode field (avoids
-// the protected-fields blanking bug tracked separately, Tempo #167).
+// PUT only the auth_mode field (avoids the protected-fields blanking bug
+// tracked separately, Tempo #167).
 function saveAuthModeSettings(_ks, idx) {
     const currentAuthMode = (app.auth_mode === 'jwt') ? 'jwt' : 'hmac';
     const newAuthMode = $("#kyte_connect_auth_mode").val() === 'jwt' ? 'jwt' : 'hmac';
@@ -899,11 +823,9 @@ function saveAuthModeSettings(_ks, idx) {
                 //    the wrong content to every published page.
                 initializeKyteConnectComparison();
 
-                // 3. Same path the obfuscation toggle uses — sets
-                //    kyte_connect / kyte_connect_obfuscated /
-                //    republish_kyte_connect=1 on Application, which the
-                //    backend reacts to by republishing every page that
-                //    embeds the connect string.
+                // 3. Push kyte_connect + republish_kyte_connect=1 on
+                //    Application, which the backend reacts to by republishing
+                //    every page that embeds the connect string.
                 updateKyteConnectCode(_ks);
 
                 showSuccess("Authentication mode updated. All published pages will be republished with the new connect string.");
