@@ -102,7 +102,6 @@ document.addEventListener('KyteInitialized', function(e) {
                     $('#setting-sitemap-include').val(pageData.page.sitemap_include);
                 }
 
-                $("#setting-obfuscatejs").val(pageData.page.obfuscate_js);
                 $("#setting-is_js_module").val(pageData.page.is_js_module);
                 $("#setting-use_container").val(pageData.page.use_container);
 
@@ -237,20 +236,6 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#saveCode").click(function () {
                     $('#pageLoaderModal').modal('show');
                     let rawJS = jsEditor.getValue();
-                    let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS + blockEditor.getJs(),
-                        {
-                            compact: true,
-                            controlFlowFlattening: true,
-                            controlFlowFlatteningThreshold: 1,
-                            numbersToExpressions: true,
-                            simplify: true,
-                            stringArrayEncoding: ['base64'],
-                            stringArrayShuffle: true,
-                            splitStrings: true,
-                            stringArrayWrappersType: 'variable',
-                            stringArrayThreshold: 1
-                        }
-                    );
                     let payload = {
                         'main_navigation': $("#setting-main-navigation").val(),
                         'side_navigation': $("#setting-side-navigation").val(),
@@ -262,7 +247,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         'page_type': 'block',
                         'html': blockEditor.getHtml().match(/<body[^>]*>([\s\S]*)<\/body>/)[1],
                         'javascript': rawJS + blockEditor.getJs(),
-                        'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
+                        'javascript_obfuscated': '',
                         'is_js_module': $("#setting-is_js_module").val(),
                         'stylesheet': blockEditor.getCss(),
                         'protected': $("#setting-protected").val(),
@@ -283,25 +268,11 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#publishPage").click(function () {
                     $('#pageLoaderModal').modal('show');
                     let rawJS = jsEditor.getValue();
-                    let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS + blockEditor.getJs(),
-                        {
-                            compact: true,
-                            controlFlowFlattening: true,
-                            controlFlowFlatteningThreshold: 1,
-                            numbersToExpressions: true,
-                            simplify: true,
-                            stringArrayEncoding: ['base64'],
-                            stringArrayShuffle: true,
-                            splitStrings: true,
-                            stringArrayWrappersType: 'variable',
-                            stringArrayThreshold: 1
-                        }
-                    );
                     let payload = {
                         'block_layout': JSON.stringify(blockEditor.getProjectData()),
                         'html': blockEditor.getHtml().match(/<body[^>]*>([\s\S]*)<\/body>/)[1],
                         'javascript': rawJS + blockEditor.getJs(),
-                        'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
+                        'javascript_obfuscated': '',
                         'stylesheet': blockEditor.getCss(),
                         'page_type': 'block',
                         'main_navigation': $("#setting-main-navigation").val(),
@@ -311,7 +282,7 @@ document.addEventListener('KyteInitialized', function(e) {
                         'description': $("#setting-page-description").val(),
                         'lang':$("#lang").val() == 'default' ? null : $("#lang").val(),
                         'sitemap_include': $("#setting-sitemap-include").val(),
-                        'obfuscate_js': $("#setting-obfuscatejs").val(),
+                        'obfuscate_js': 0,
                         'is_js_module': $("#setting-is_js_module").val(),
                         'use_container': $("#setting-use_container").val(),
                         'state': 1,

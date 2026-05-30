@@ -110,7 +110,6 @@ document.addEventListener('KyteInitialized', function(e) {
                 $("#setting-section-description").val(section.description);
                 $("#bgColor").val(section.bgColor);
                 $("#fgColor").val(section.fgColor);
-                $("#setting-obfuscatejs").val(section.obfuscate_js);
 
                 htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {
                     value: section.html,
@@ -185,29 +184,15 @@ document.addEventListener('KyteInitialized', function(e) {
                     $('#pageLoaderModal').modal('show');
                     
                     let rawJS = jsEditor.getValue();
-                    let obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS,
-                        {
-                            compact: true,
-                            controlFlowFlattening: true,
-                            controlFlowFlatteningThreshold: 1,
-                            numbersToExpressions: true,
-                            simplify: true,
-                            stringArrayEncoding: ['base64'],
-                            stringArrayShuffle: true,
-                            splitStrings: true,
-                            stringArrayWrappersType: 'variable',
-                            stringArrayThreshold: 1
-                        }
-                    );
                     let payload = {
                         'html': htmlEditor.getValue(),
                         'javascript': rawJS,
-                        'javascript_obfuscated': obfuscatedJS.getObfuscatedCode(),
+                        'javascript_obfuscated': '',
                         'stylesheet': cssEditor.getValue(),
                         'navigation':$("#setting-main-navigation").val(),
                         'title':$("#setting-section-title").val(),
                         'description':$("#setting-section-description").val(),
-                        'obfuscate_js':$("#setting-obfuscatejs").val(),
+                        'obfuscate_js': 0,
                         'bgColor':$("#bgColor").val(),
                         'fgColor':$("#fgColor").val(),
                     };

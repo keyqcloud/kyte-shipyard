@@ -22,8 +22,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
-    <!-- JavaScript obfuscator -->
-    <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
     <!-- Kyte -->
     <script>
         // Auto-detect localhost and conditionally load local kyte.js for development
@@ -383,39 +381,6 @@
                             <button id="saveAuthModeSettings" class="btn btn-primary">
                                 <i class="fas fa-save me-2"></i>
                                 <span data-i18n="ui.config.kyte_connect.auth_mode.save_button">Save Authentication Mode</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Obfuscation Settings -->
-                    <div class="config-card">
-                        <div class="config-card-header">
-                            <div class="config-card-icon">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
-                            <div>
-                                <h3 class="config-card-title" data-i18n="ui.config.kyte_connect.obfuscation.title">Kyte Connect Obfuscation</h3>
-                            </div>
-                        </div>
-                        <p class="config-card-description" data-i18n="ui.config.kyte_connect.obfuscation.description">
-                            Control whether JavaScript for connecting to the Kyte API endpoint is obfuscated. Obfuscation is recommended for security, but if organizational policies (such as firewall requirements) prevent obfuscated code, you can disable it here.
-                        </p>
-                        <p class="config-card-description">
-                            <br>
-                            <strong data-i18n="ui.config.kyte_connect.obfuscation.important">Important:</strong> <span data-i18n="ui.config.kyte_connect.obfuscation.important_text">Changing this setting will automatically regenerate the Kyte Connect code and update all published pages with the new version. You can review the updated code in the "Kyte Connect Code Comparison" section below before it's applied.</span>
-                        </p>
-                        <div class="form-group">
-                            <label class="form-label" data-i18n="ui.config.kyte_connect.obfuscation.setting">Obfuscation Setting</label>
-                            <select id="obfuscate_kyte_connect" class="form-select">
-                                <option value="1" data-i18n="ui.config.kyte_connect.obfuscation.enabled">Obfuscate (Recommended)</option>
-                                <option value="0" data-i18n="ui.config.kyte_connect.obfuscation.disabled">Do Not Obfuscate (Not Recommended)</option>
-                            </select>
-                        </div>
-                        <!-- Save Button -->
-                        <div class="d-flex justify-content-end">
-                            <button id="saveObfuscationSettings" class="btn btn-primary">
-                                <i class="fas fa-save me-2"></i>
-                                <span data-i18n="ui.config.kyte_connect.obfuscation.save_button">Save Obfuscation Settings</span>
                             </button>
                         </div>
                     </div>

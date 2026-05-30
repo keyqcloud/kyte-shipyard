@@ -25,19 +25,6 @@ document.addEventListener('KyteInitialized', function(e) {
                 'required':true
             },
             {
-                'field':'obfuscate_kyte_connect',
-                'type':'select',
-                'label': t('ui.projects.form.obfuscate_kyte_connect', 'Obfuscate Kyte Connect'),
-                'required':true,
-                'option': {
-                    'ajax': false,
-                    'data': {
-                        1: t('ui.projects.form.obfuscate_default', 'Obfuscate (Default)'),
-                        0: t('ui.projects.form.do_not_obfuscate', 'Do not obfuscate (not recommended)')
-                    }
-                }
-            },
-            {
                 'field':'auth_mode',
                 'type':'select',
                 'label': t('ui.projects.form.auth_mode', 'Auth Mode'),
@@ -102,24 +89,10 @@ document.addEventListener('KyteInitialized', function(e) {
             } else {
                 connect = "let endpoint = '" + endpointURL + "';var k = new Kyte(endpoint, '" + r.kyte_pub + "', '" + r.kyte_iden + "', '" + r.kyte_num + "', '" + appIdentifier + "');k.init();\n\n";
             }
-            let obfuscatedConnect = JavaScriptObfuscator.obfuscate(connect,
-                {
-                    compact: true,
-                    controlFlowFlattening: true,
-                    controlFlowFlatteningThreshold: 1,
-                    numbersToExpressions: true,
-                    simplify: true,
-                    stringArrayEncoding: ['base64'],
-                    stringArrayShuffle: true,
-                    splitStrings: true,
-                    stringArrayWrappersType: 'variable',
-                    stringArrayThreshold: 1
-                }
-            );
             _ks.put('Application', 'id', r.data[0].id,
             {
                 'kyte_connect': connect,
-                'kyte_connect_obfuscated': obfuscatedConnect.getObfuscatedCode(),
+                'kyte_connect_obfuscated': '',
             }, null, [], function(res) {
                 if (res.data.length <= 0) {
                     alert(t('ui.projects.form.error_update', 'Unable to update application settings. Please try again or contact support.'));

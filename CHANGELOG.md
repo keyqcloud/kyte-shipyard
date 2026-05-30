@@ -1,3 +1,18 @@
+## 2.1.0
+
+### Change: remove JavaScript obfuscation (pairs with kyte-php v4.7.0 — KYTE-#191)
+
+Shipyard was the client-side obfuscation engine: it loaded the `javascript-obfuscator` CDN library and ran `JavaScriptObfuscator.obfuscate(...)` on customer page/script/section JS and the app `kyte_connect` string before sending the obfuscated copy to the API. Obfuscation has no real security value (client JS is readable in the browser), bloats stored content, and has had WAFs/firewalls block legitimate obfuscated JS. No customer asked for it.
+
+This release removes obfuscation generation entirely:
+
+- **Obfuscation engine removed** from the page code editor, block editor, script editor, section editor, and application/configuration screens. The `javascript-obfuscator` CDN `<script>` include is dropped from all 9 HTML pages that carried it.
+- **Payloads now send plain source.** The `*_obfuscated` fields (`javascript_obfuscated`, `content_js_obfuscated`, `kyte_connect_obfuscated`) are still sent but as empty strings, and the `obfuscate_js` / `obfuscate_kyte_connect` flags are sent as `0`. (Sending the keys — empty — keeps kyte-php's content-save guards satisfied during mixed-version rollout; kyte-php drops the columns in a later release.)
+- **UI removed:** the obfuscation toggles on the page/script/section editors and the "Kyte Connect Obfuscation" settings card (and its Save button) on the app configuration page, plus the now-unused obfuscation i18n keys across en/es/ja/ko.
+- **Editor fixes:** the obfuscation field is removed from the unsaved-changes (dirty) checks in the page and script editors — left in, it would have falsely reported "unsaved changes" once the toggle was gone (`parseInt(undefined)` → `NaN`/`0` mismatch).
+
+Pairs with kyte-php v4.7.0 (which always serves plain JS and stops versioning on obfuscated content — resolving the #188 version-bloat bug). Forward/backward compatible with either kyte-php version during rollout. Minification is unrelated and unaffected (esbuild still minifies Shipyard's own bundles).
+
 ## 2.0.1
 
 ### Bug Fix: auth_mode toggle was republishing pages with the OLD (HMAC) connect string
