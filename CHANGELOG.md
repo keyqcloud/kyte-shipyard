@@ -1,5 +1,12 @@
 ## 2.2.0
 
+### Feature: "Republish all pages" + per-page republish result (KYTE-#181)
+
+Pairs with kyte-php v4.8.1, which makes the republish hook fault-isolated and returns a `republish_summary`. On the app **configuration page**:
+
+- A **"Republish all pages"** button (on the Authentication Mode card) — an explicit recovery action that re-stamps and re-deploys every published page with the current Kyte Connect code, then reports the result. Useful when an auto-republish half-completed.
+- The **per-page result is now surfaced**: the auth-mode flip / kyte-connect update and the new button all read `republish_summary` and show how many pages succeeded/failed (failures are listed and logged to the console) — instead of a blind "it worked" toast.
+
 ### Feature: Publish action in the IDE (KYTE-#189)
 
 The in-app IDE could only Save (which persists content); there was no way to publish from it. Added a **Publish** action for publishable file types (**pages** and **scripts** — the ones that deploy to S3):
