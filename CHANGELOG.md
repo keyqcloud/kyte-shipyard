@@ -1,3 +1,15 @@
+## 2.2.0
+
+### Feature: Publish action in the IDE (KYTE-#189)
+
+The in-app IDE could only Save (which persists content); there was no way to publish from it. Added a **Publish** action for publishable file types (**pages** and **scripts** — the ones that deploy to S3):
+
+- A green **rocket** button in the IDE tab bar, shown only when the active file is a page or script.
+- **Ctrl+Shift+S** keyboard shortcut (Save remains Ctrl+S); added to the welcome-screen shortcut list.
+- Publishing sends `state=1` alongside the content, so the backend runs its normal publish path (page → `publishPage` → S3 + CloudFront; script → `handleScriptPublication` → S3) and creates a version with the change summary. Unlike Save, Publish is allowed even when the file isn't dirty (re-deploy current content), and it persists any pending edits in the same request.
+
+Pairs with kyte-php v4.8.1 (`block_layout` partial-save guard). The "IDE save didn't persist" issue from #189 was already fixed by kyte-php v4.8.0.
+
 ## 2.1.0
 
 ### Change: remove JavaScript obfuscation (pairs with kyte-php v4.7.0 — KYTE-#191)

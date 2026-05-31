@@ -65,6 +65,7 @@ const FILE_TYPES = {
         iconClass: 'html',
         sectionIcon: 'fas fa-sitemap',
         model: 'KytePage',
+        publishable: true,           // can be published to S3 (state=1 → publishPage)
         loadModel: 'KytePageData',   // Special loader: uses KytePageData to get content
         loadField: 'page',            // KytePageData is keyed by 'page' field
         listField: 'site',
@@ -119,6 +120,7 @@ const FILE_TYPES = {
         iconClass: 'js',
         sectionIcon: 'fas fa-scroll',
         model: 'KyteScript',
+        publishable: true,           // can be published to S3 (state=1 → handleScriptPublication)
         listField: 'site',
         parts: [
             { key: 'content', label: 'JavaScript', language: 'javascript', field: 'content' }
@@ -690,7 +692,16 @@ function renderTabs() {
         </button>
     `;
 
-    tabBar.innerHTML = tabsHtml + historyBtnHtml;
+    // Show a Publish button only for publishable file types (pages, scripts → S3)
+    const isPublishable = activeTab && activeTab.fileType.publishable;
+    const publishBtnHtml = `
+        <button class="history-toggle-btn ide-publish-btn ${isPublishable ? '' : 'hidden'}"
+                onclick="window.kyteIDE.publishActiveFile()" title="Publish to live site (Ctrl+Shift+S)">
+            <i class="fas fa-rocket" style="color:#34c759;"></i>
+        </button>
+    `;
+
+    tabBar.innerHTML = tabsHtml + publishBtnHtml + historyBtnHtml;
 }
 
 function renderSubTabs(tab) {
@@ -872,7 +883,7 @@ function saveFile(fileId, callback) {
     }
 }
 
-function performSave(fileId, fileType, itemId, buf, changeSummary, callback) {
+function performSave(fileId, fileType, itemId, buf, changeSummary, callback, publish) {
     // Build update data
     const data = {};
     fileType.parts.forEach(part => {
@@ -884,13 +895,19 @@ function performSave(fileId, fileType, itemId, buf, changeSummary, callback) {
         data.change_summary = changeSummary;
     }
 
+    // Publish: state=1 triggers the backend publish (page → S3 via publishPage,
+    // script → S3 via handleScriptPublication). Save without it just persists.
+    if (publish) {
+        data.state = 1;
+    }
+
     // For Pages, the save target is KytePage and the ID is from the nested page object
     const saveModel = fileType.model;
     const saveId = (fileType.id === 'page' && buf.item && buf.item.page)
         ? buf.item.page.id
         : itemId;
 
-    notify('info', 'Saving...');
+    notify('info', publish ? 'Publishing...' : 'Saving...');
 
     _ks.put(saveModel, 'id', saveId, data, null, [], function(r) {
         // Update original to match current (no longer dirty)
@@ -900,7 +917,7 @@ function performSave(fileId, fileType, itemId, buf, changeSummary, callback) {
 
         updateDirtyIndicators(fileId);
         renderTabs();
-        notify('success', 'Saved successfully');
+        notify('success', publish ? 'Published successfully' : 'Saved successfully');
 
         // Refresh version history if panel is open
         if (historyPanelOpen && activeTabId === fileId) {
@@ -909,13 +926,52 @@ function performSave(fileId, fileType, itemId, buf, changeSummary, callback) {
 
         if (callback) callback();
     }, function(err) {
-        notify('error', 'Save failed: ' + err);
+        notify('error', (publish ? 'Publish failed: ' : 'Save failed: ') + err);
     });
 }
 
 function saveActiveFile() {
     if (activeTabId) {
         saveFile(activeTabId);
+    }
+}
+
+// Publish the active file to its live site (pages/scripts → S3). Unlike save,
+// publishing is allowed even when not dirty (re-deploy current content). It also
+// persists any pending edits in the same request (state=1 + content). See KYTE-#189.
+function publishActiveFile() {
+    if (activeTabId) {
+        publishFile(activeTabId);
+    }
+}
+
+function publishFile(fileId, callback) {
+    const buf = fileBuffers[fileId];
+    if (!buf) return;
+
+    const { fileType, itemId } = parseFileId(fileId);
+
+    if (!fileType.publishable) {
+        notify('info', 'This file type deploys automatically on save — no separate publish.');
+        return;
+    }
+
+    // Flush current editor content to buffer
+    if (activeTabId === fileId) {
+        saveEditorToBuffer();
+    }
+
+    // Versioned types capture a change summary (publish also creates a version)
+    if (fileType.versioning) {
+        showChangeSummaryModal(function(action, summary) {
+            if (action === 'cancel') {
+                return;
+            }
+            const changeSummary = action === 'save' ? summary : '';
+            performSave(fileId, fileType, itemId, buf, changeSummary, callback, true);
+        });
+    } else {
+        performSave(fileId, fileType, itemId, buf, null, callback, true);
     }
 }
 
@@ -1196,8 +1252,15 @@ function initKeyboardShortcuts() {
     document.addEventListener('keydown', function(e) {
         const isCtrl = e.ctrlKey || e.metaKey;
 
+        // Ctrl+Shift+S — Publish
+        if (isCtrl && e.shiftKey && (e.key === 's' || e.key === 'S')) {
+            e.preventDefault();
+            publishActiveFile();
+            return;
+        }
+
         // Ctrl+S — Save
-        if (isCtrl && e.key === 's') {
+        if (isCtrl && !e.shiftKey && e.key === 's') {
             e.preventDefault();
             saveActiveFile();
         }
@@ -1345,6 +1408,7 @@ window.kyteIDE = {
     toggleSection,
     toggleGroup,
     saveActiveFile,
+    publishActiveFile,
     collapseAll,
     toggleHistory,
     restoreVersion
