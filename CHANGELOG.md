@@ -1,3 +1,26 @@
+## 2.2.0
+
+### Improvement: show the file path under the name in the IDE explorer
+
+Pages and scripts in the IDE file tree now show their **path** (`s3key`) in a muted second line under the file name. Same-named files (common for pages) are now distinguishable at a glance without having to open each one. The full path is also available as a hover tooltip.
+
+### Feature: "Republish all pages" + per-page republish result (KYTE-#181)
+
+Pairs with kyte-php v4.8.1, which makes the republish hook fault-isolated and returns a `republish_summary`. On the app **configuration page**:
+
+- A **"Republish all pages"** button (on the Authentication Mode card) — an explicit recovery action that re-stamps and re-deploys every published page with the current Kyte Connect code, then reports the result. Useful when an auto-republish half-completed.
+- The **per-page result is now surfaced**: the auth-mode flip / kyte-connect update and the new button all read `republish_summary` and show how many pages succeeded/failed (failures are listed and logged to the console) — instead of a blind "it worked" toast.
+
+### Feature: Publish action in the IDE (KYTE-#189)
+
+The in-app IDE could only Save (which persists content); there was no way to publish from it. Added a **Publish** action for publishable file types (**pages** and **scripts** — the ones that deploy to S3):
+
+- A green **rocket** button in the IDE tab bar, shown only when the active file is a page or script.
+- **Ctrl+Shift+S** keyboard shortcut (Save remains Ctrl+S); added to the welcome-screen shortcut list.
+- Publishing sends `state=1` alongside the content, so the backend runs its normal publish path (page → `publishPage` → S3 + CloudFront; script → `handleScriptPublication` → S3) and creates a version with the change summary. Unlike Save, Publish is allowed even when the file isn't dirty (re-deploy current content), and it persists any pending edits in the same request.
+
+Pairs with kyte-php v4.8.1 (`block_layout` partial-save guard). The "IDE save didn't persist" issue from #189 was already fixed by kyte-php v4.8.0.
+
 ## 2.1.0
 
 ### Change: remove JavaScript obfuscation (pairs with kyte-php v4.7.0 — KYTE-#191)

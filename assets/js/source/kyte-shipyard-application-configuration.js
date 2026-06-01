@@ -250,6 +250,12 @@ function setupFormEventHandlers(_ks, idx) {
         e.preventDefault();
         saveAuthModeSettings(_ks, idx);
     });
+
+    // Republish all pages handler (KYTE-#181)
+    $("#republishAllPages").click(function(e) {
+        e.preventDefault();
+        republishAllPages(_ks, idx);
+    });
 }
 
 // Handle user model change
@@ -633,13 +639,21 @@ function updateKyteConnectCode(_ks) {
             // Update local app object
             app.kyte_connect = systemKyteCode;
             app.kyte_connect_obfuscated = '';
-            
+
             // Update current code and refresh comparison
             currentKyteCode = systemKyteCode;
             displayKyteCodes();
             compareKyteCodes();
-            
-            showSuccess('Kyte Connect code updated successfully!');
+
+            // Surface the per-page republish result (KYTE-#181)
+            const formatted = formatRepublishSummary(r.data[0] && r.data[0].republish_summary);
+            if (formatted && !formatted.ok) {
+                showError('Kyte Connect updated, but some pages failed to republish. ' + formatted.message);
+            } else if (formatted) {
+                showSuccess('Kyte Connect code updated. ' + formatted.message);
+            } else {
+                showSuccess('Kyte Connect code updated successfully!');
+            }
         } else {
             showError('Failed to update Kyte Connect code. Please try again.');
         }
@@ -650,6 +664,46 @@ function updateKyteConnectCode(_ks) {
         showError('Failed to update Kyte Connect code: ' + err);
         updateButton.innerHTML = originalText;
         updateButton.disabled = false;
+    });
+}
+
+// Format the backend's republish_summary (KYTE-#181) into a user-facing result.
+// Returns { ok: bool, message: string } or null when no summary is present.
+function formatRepublishSummary(summary) {
+    if (!summary) return null;
+    const ok = summary.succeeded || 0;
+    const failed = summary.failed || 0;
+    const total = ok + failed;
+    if (failed === 0) {
+        return { ok: true, message: `Republished ${ok} page${ok === 1 ? '' : 's'}.` };
+    }
+    console.warn('Republish failures:', summary.failures);
+    const detail = (summary.failures || [])
+        .map(f => `page ${f.page}${f.s3key ? ' (' + f.s3key + ')' : ''}`)
+        .join(', ');
+    return { ok: false, message: `Republished ${ok} of ${total} pages — ${failed} failed: ${detail}. See console for details.` };
+}
+
+// Explicitly re-stamp and re-deploy every published page with the CURRENT Kyte
+// Connect code, and report a per-page result. Recovery action for a half-completed
+// auto-republish. See KYTE-#181.
+function republishAllPages(_ks, idx) {
+    const btn = $("#republishAllPages");
+    const original = btn.html();
+    btn.html('<i class="fas fa-spinner fa-spin me-2"></i>Republishing...').prop('disabled', true);
+
+    _ks.put('Application', 'id', idx, { 'republish_kyte_connect': 1 }, null, [], function(r) {
+        const summary = (r.data && r.data[0]) ? r.data[0].republish_summary : null;
+        const formatted = formatRepublishSummary(summary);
+        if (formatted && !formatted.ok) {
+            showError(formatted.message);
+        } else {
+            showSuccess(formatted ? formatted.message : 'All pages republished.');
+        }
+        btn.html(original).prop('disabled', false);
+    }, function(err) {
+        showError('Republish failed: ' + err);
+        btn.html(original).prop('disabled', false);
     });
 }
 

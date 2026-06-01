@@ -261,6 +261,23 @@ body, html {
     text-overflow: ellipsis;
 }
 
+/* Stacked name + path (pages & scripts) so same-named files are distinguishable */
+.tree-item .file-meta {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.tree-item .file-path {
+    font-size: 0.68rem;
+    color: #6a6a6a;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .tree-item .dirty-indicator {
     margin-left: auto;
     width: 8px;
