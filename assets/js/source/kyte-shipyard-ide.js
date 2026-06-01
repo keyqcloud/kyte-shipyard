@@ -407,6 +407,7 @@ function renderPagesSection() {
         html += renderGroup(site.name || 'Unnamed Site', 'fas fa-globe', site._pages.map(page => ({
             fileId: generateFileId(FILE_TYPES.PAGE, page.id),
             name: FILE_TYPES.PAGE.displayName(page),
+            path: page.s3key || '',
             iconClass: FILE_TYPES.PAGE.iconClass,
             icon: FILE_TYPES.PAGE.icon
         })));
@@ -439,6 +440,7 @@ function renderScriptsSection() {
             return {
                 fileId: generateFileId(FILE_TYPES.SCRIPT, script.id),
                 name: FILE_TYPES.SCRIPT.displayName(script),
+                path: script.s3key || '',
                 iconClass: isCss ? 'css' : 'js',
                 icon: isCss ? 'fab fa-css3-alt' : 'fab fa-js'
             };
@@ -475,9 +477,12 @@ function renderGroup(label, icon, items) {
             </div>
             <div class="tree-group-items">
                 ${items.map(item => `
-                    <div class="tree-item nested" data-file-id="${item.fileId}" onclick="window.kyteIDE.openFile('${item.fileId}')">
+                    <div class="tree-item nested" data-file-id="${item.fileId}" onclick="window.kyteIDE.openFile('${item.fileId}')" title="${escapeHtml(item.path || item.name)}">
                         <i class="file-icon ${item.iconClass} ${item.icon}"></i>
-                        <span class="file-name">${escapeHtml(item.name)}</span>
+                        <span class="file-meta">
+                            <span class="file-name">${escapeHtml(item.name)}</span>
+                            ${item.path ? `<span class="file-path">${escapeHtml(item.path)}</span>` : ''}
+                        </span>
                         <span class="dirty-indicator"></span>
                     </div>
                 `).join('')}

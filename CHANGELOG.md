@@ -1,5 +1,9 @@
 ## 2.2.0
 
+### Improvement: show the file path under the name in the IDE explorer
+
+Pages and scripts in the IDE file tree now show their **path** (`s3key`) in a muted second line under the file name. Same-named files (common for pages) are now distinguishable at a glance without having to open each one. The full path is also available as a hover tooltip.
+
 ### Feature: "Republish all pages" + per-page republish result (KYTE-#181)
 
 Pairs with kyte-php v4.8.1, which makes the republish hook fault-isolated and returns a `republish_summary`. On the app **configuration page**:
