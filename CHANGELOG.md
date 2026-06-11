@@ -12,6 +12,11 @@ Shipyard is **platform-level** — it initializes the Kyte client with no `appli
 
 HMAC mode keeps the existing `KytePasswordReset` model-CRUD calls untouched. **Requires kyte-php v4.11.0+** for the `/jwt/password-*` endpoints.
 
+### Fix: password page UI bugs (surfaced during #268 QA)
+
+- The show/hide-password eye icons on password.html threw `ReferenceError: togglePassword is not defined` on every click in every deployment — the handler was scoped inside the `KyteInitialized` listener while the HTML wires it via inline `onclick`. Now exposed globally.
+- A failed password update displayed `[object Object]` — `showError` rendered the HMAC error-callback object directly. It now extracts the message string.
+
 ## 2.2.0
 
 ### Improvement: show the file path under the name in the IDE explorer
