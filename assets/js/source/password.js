@@ -9,11 +9,30 @@ document.addEventListener('KyteInitialized', function(e) {
     }
 
     // get user info from token
-    _ks.get('KytePasswordReset', 'token', token, [], function(response) {
-        if (response.data.length < 1) { location.href = "/"; }
-        email = response.data[0].email;
-        $("#email").val(email);
-    });
+    if (_ks.authMode === 'jwt') {
+        // Shipyard is platform-level (no applicationId), so the anonymous
+        // model-CRUD path can't carry this in JWT mode — use the dedicated
+        // endpoint (kyte-php v4.11.0+, KYTE-#268).
+        $.ajax({
+            method: 'POST',
+            url: _ks.url + '/jwt/password-validate',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({ token: token }),
+            success: function(response) {
+                if (!response.valid) { location.href = "/"; return; }
+                email = response.email;
+                $("#email").val(email);
+            },
+            error: function() { location.href = "/"; }
+        });
+    } else {
+        _ks.get('KytePasswordReset', 'token', token, [], function(response) {
+            if (response.data.length < 1) { location.href = "/"; }
+            email = response.data[0].email;
+            $("#email").val(email);
+        });
+    }
 
     // 
     // Password validation and requirements
@@ -165,7 +184,7 @@ document.addEventListener('KyteInitialized', function(e) {
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating Password...';
         submitButton.disabled = true;
 
-        _ks.put('KytePasswordReset', 'email', encodeURIComponent(email), {'token':token, 'password':$("#password").val()}, null, [], function(response) {
+        const onUpdated = function() {
             submitButton.innerHTML = originalText;
             // Show success message
             successMsg.classList.remove('d-none');
@@ -173,11 +192,31 @@ document.addEventListener('KyteInitialized', function(e) {
             setTimeout(() => {
                 window.location.href = '/';
             }, 2000);
-        }, function(e) {
+        };
+        const onUpdateFailed = function(e) {
             submitButton.innerHTML = originalText;
             showError(e);
             submitButton.disabled = false;
-        });
+        };
+
+        if (_ks.authMode === 'jwt') {
+            $.ajax({
+                method: 'POST',
+                url: _ks.url + '/jwt/password-update',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({ token: token, password: $("#password").val() }),
+                success: onUpdated,
+                error: function(xhr) {
+                    var msg = (xhr.responseJSON && xhr.responseJSON.message)
+                        ? xhr.responseJSON.message
+                        : 'Unable to update password. Please request a new reset link.';
+                    onUpdateFailed(msg);
+                }
+            });
+        } else {
+            _ks.put('KytePasswordReset', 'email', encodeURIComponent(email), {'token':token, 'password':$("#password").val()}, null, [], onUpdated, onUpdateFailed);
+        }
     });
 
     // Initialize email field (would typically come from URL parameter)
