@@ -153,7 +153,7 @@ document.addEventListener('KyteInitialized', function(e) {
         const input = document.getElementById(inputId);
         const button = input.nextElementSibling;
         const icon = button.querySelector('i');
-        
+
         if (input.type === 'password') {
             input.type = 'text';
             icon.className = 'fas fa-eye-slash';
@@ -162,6 +162,10 @@ document.addEventListener('KyteInitialized', function(e) {
             icon.className = 'fas fa-eye';
         }
     }
+    // password.html wires the eye icons via inline onclick="togglePassword(...)",
+    // which needs a global — this function was scoped to the KyteInitialized
+    // listener and threw ReferenceError on every click.
+    window.togglePassword = togglePassword;
 
     // Event listeners
     document.getElementById('password').addEventListener('input', updateRequirements);
@@ -229,6 +233,11 @@ document.addEventListener('KyteInitialized', function(e) {
     });
 
     function showError(message) {
+        // The HMAC error callback hands over an object ({error, message}) —
+        // rendering that directly shows "[object Object]". Extract a string.
+        if (message && typeof message === 'object') {
+            message = message.message || message.error || 'Unable to update password. Please request a new reset link.';
+        }
         const errorMsg = document.getElementById('errorMsg');
         errorMsg.querySelector('span').textContent = message;
         errorMsg.classList.remove('d-none');
