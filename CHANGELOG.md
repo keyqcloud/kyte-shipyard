@@ -1,3 +1,22 @@
+## 2.3.0
+
+### Fix: password reset works in JWT mode (KYTE-#268)
+
+Shipyard is **platform-level** — it initializes the Kyte client with no `applicationId` — so in JWT mode its anonymous password-reset calls could ride neither the legacy HMAC-anonymous path nor the v4.11.0 `AppContextStrategy` (which requires an `x-kyte-appid`). Result: **password reset was broken on JWT-mode Shipyard** (the request failed closed before ever reaching the server).
+
+`reset.js` and `password.js` now call the dedicated kyte-php endpoints when in JWT mode (`_ks.authMode === 'jwt'`), mirroring how login already works appid-less:
+
+- request reset → `POST /jwt/password-reset` (no-reveal UX unchanged: same message whether or not the email exists)
+- token check on password.html → `POST /jwt/password-validate` (invalid/expired → redirect to `/`, as before)
+- set new password → `POST /jwt/password-update` (server also revokes every refresh-token session for the user)
+
+HMAC mode keeps the existing `KytePasswordReset` model-CRUD calls untouched. **Requires kyte-php v4.11.0+** for the `/jwt/password-*` endpoints.
+
+### Fix: password page UI bugs (surfaced during #268 QA)
+
+- The show/hide-password eye icons on password.html threw `ReferenceError: togglePassword is not defined` on every click in every deployment — the handler was scoped inside the `KyteInitialized` listener while the HTML wires it via inline `onclick`. Now exposed globally.
+- A failed password update displayed `[object Object]` — `showError` rendered the HMAC error-callback object directly. It now extracts the message string.
+
 ## 2.2.0
 
 ### Improvement: show the file path under the name in the IDE explorer

@@ -26,18 +26,30 @@ document.addEventListener('KyteInitialized', function(e) {
         submitButton.disabled = true;
         
         if ($("input[type=email]").val()) {
-            _ks.post("KytePasswordReset", {'email' : $("input[type=email]").val()}, null, [], function() {
-                // alert("If the email you provided is correct, an email with reset instructions was sent to you.");
+            // No-reveal in both modes: success and failure show the same
+            // "if the email is correct..." message.
+            const done = function() {
                 submitButton.innerHTML = originalText;
                 submitButton.disabled = false;
                 successMsg.classList.remove('d-none');
-            }, function() {
-                // alert("If the email you provided is correct, an email with reset instructions was sent to you.");
-                submitButton.innerHTML = originalText;
-                submitButton.disabled = false;
-                // showError("If the email you provided is correct, an email with reset instructions was sent to you.")
-                successMsg.classList.remove('d-none');
-            });
+            };
+
+            if (_ks.authMode === 'jwt') {
+                // Shipyard is platform-level (no applicationId), so the
+                // anonymous model-CRUD path can't carry this in JWT mode —
+                // use the dedicated endpoint (kyte-php v4.11.0+, KYTE-#268).
+                $.ajax({
+                    method: 'POST',
+                    url: _ks.url + '/jwt/password-reset',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify({ email: $("input[type=email]").val() }),
+                    success: done,
+                    error: done
+                });
+            } else {
+                _ks.post("KytePasswordReset", {'email' : $("input[type=email]").val()}, null, [], done, done);
+            }
         }
     });
             
