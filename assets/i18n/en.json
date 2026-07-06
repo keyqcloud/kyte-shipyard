@@ -431,6 +431,12 @@
   "ui.model_detail.sensitive_saving": "Saving...",
   "ui.model_detail.sensitive_saved": "Saved.",
   "ui.model_detail.sensitive_save_failed": "Save failed. Reverting.",
+  "ui.model_detail.projection_card_title": "Column Projection",
+  "ui.model_detail.projection_description": "When enabled, list and read endpoints honor the client's requested field list (the X-Kyte-Fields header) and return only those columns instead of the full row — lighter, faster tables for models with large columns. Leave off for controllers whose logic needs the full record.",
+  "ui.model_detail.projection_label": "Allow client-requested column projection",
+  "ui.model_detail.projection_saving": "Saving...",
+  "ui.model_detail.projection_saved": "Saved.",
+  "ui.model_detail.projection_save_failed": "Save failed. Reverting.",
 
   "ui.site_detail.back_to_sites": "Back to Sites",
   "ui.site_detail.sidebar.content": "Content",

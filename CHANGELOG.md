@@ -1,3 +1,13 @@
+## 2.4.0
+
+### Feature: per-model "Column Projection" toggle (KYTE-#342)
+
+The model **Settings** tab gains a **Column Projection** switch. When enabled, the model's list and read endpoints honor the client's `X-Kyte-Fields` header and return only the requested columns instead of the full row — lighter, faster tables for models with large `text`/`longtext` columns. Off by default (full rows — unchanged behavior).
+
+The switch reads and writes the `allow_projection` flag inside the model's `controller_config` JSON column (new in kyte-php v4.16.0). It **merges** rather than clobbers, so any other controller-config flags are preserved. Saves inline with the same auto-save + revert-on-failure UX as the Sensitive toggle (a partial PUT that omits `name`, so `DataModelController` skips the table-rename path).
+
+**Requires kyte-php v4.16.0+** (the `controller_config` column + server-side projection opt-in). Against an older server the toggle persists its value but has no effect.
+
 ## 2.3.0
 
 ### Fix: password reset works in JWT mode (KYTE-#268)

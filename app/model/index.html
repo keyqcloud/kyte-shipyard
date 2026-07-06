@@ -565,6 +565,17 @@
                                     <div id="model-sensitive-save-status" class="small mt-2 text-muted" style="min-height: 1.25em;"></div>
                                 </div>
                             </div>
+                            <div class="card mt-3" style="max-width: 720px;">
+                                <div class="card-body">
+                                    <h6 class="card-title mb-2" data-i18n="ui.model_detail.projection_card_title">Column Projection</h6>
+                                    <p class="text-muted small mb-3" data-i18n="ui.model_detail.projection_description">When enabled, list and read endpoints honor the client's requested field list (the X-Kyte-Fields header) and return only those columns instead of the full row — lighter, faster tables for models with large columns. Leave off for controllers whose logic needs the full record.</p>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="model-setting-allow-projection">
+                                        <label class="form-check-label" for="model-setting-allow-projection" data-i18n="ui.model_detail.projection_label">Allow client-requested column projection</label>
+                                    </div>
+                                    <div id="model-projection-save-status" class="small mt-2 text-muted" style="min-height: 1.25em;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
