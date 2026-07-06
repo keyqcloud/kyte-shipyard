@@ -431,6 +431,12 @@
   "ui.model_detail.sensitive_saving": "Guardando...",
   "ui.model_detail.sensitive_saved": "Guardado.",
   "ui.model_detail.sensitive_save_failed": "Error al guardar. Revirtiendo.",
+  "ui.model_detail.projection_card_title": "Proyección de columnas",
+  "ui.model_detail.projection_description": "Cuando está habilitado, los endpoints de lista y lectura respetan la lista de campos solicitada por el cliente (el encabezado X-Kyte-Fields) y devuelven solo esas columnas en lugar de la fila completa, lo que hace que las tablas sean más ligeras y rápidas para modelos con columnas grandes. Déjelo desactivado para controladores cuya lógica necesita el registro completo.",
+  "ui.model_detail.projection_label": "Permitir proyección de columnas solicitada por el cliente",
+  "ui.model_detail.projection_saving": "Guardando...",
+  "ui.model_detail.projection_saved": "Guardado.",
+  "ui.model_detail.projection_save_failed": "Error al guardar. Revirtiendo.",
 
   "ui.site_detail.back_to_sites": "Volver a Sitios",
   "ui.site_detail.sidebar.content": "Contenido",

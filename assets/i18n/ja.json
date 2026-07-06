@@ -436,6 +436,12 @@
   "ui.model_detail.sensitive_saving": "保存中...",
   "ui.model_detail.sensitive_saved": "保存しました。",
   "ui.model_detail.sensitive_save_failed": "保存に失敗しました。元に戻します。",
+  "ui.model_detail.projection_card_title": "列プロジェクション",
+  "ui.model_detail.projection_description": "有効にすると、一覧および読み取りエンドポイントはクライアントが要求したフィールド一覧（X-Kyte-Fields ヘッダー）を尊重し、行全体ではなく該当する列のみを返します。大きな列を持つモデルの一覧が軽く高速になります。完全なレコードを必要とするコントローラーではオフのままにしてください。",
+  "ui.model_detail.projection_label": "クライアントが要求する列プロジェクションを許可",
+  "ui.model_detail.projection_saving": "保存中...",
+  "ui.model_detail.projection_saved": "保存しました。",
+  "ui.model_detail.projection_save_failed": "保存に失敗しました。元に戻します。",
 
   "ui.site_detail.back_to_sites": "サイト一覧に戻る",
   "ui.site_detail.sidebar.content": "コンテンツ",

@@ -1029,6 +1029,41 @@ document.addEventListener('KyteInitialized', function(e) {
                     });
                 });
 
+                // Settings tab (KYTE-#342): allow_projection lives inside the
+                // controller_config JSON column. Parse it once, then toggle only
+                // the allow_projection key so any other controller_config flags
+                // are preserved, and PUT the merged JSON (partial update — no
+                // `name`, so DataModelController skips the table-rename path).
+                let controllerConfig = {};
+                try {
+                    const raw = r.data[0].controller_config;
+                    if (raw) {
+                        const parsed = (typeof raw === "string") ? JSON.parse(raw) : raw;
+                        if (parsed && typeof parsed === "object") controllerConfig = parsed;
+                    }
+                } catch (e) {
+                    controllerConfig = {};
+                }
+                $("#model-setting-allow-projection").prop("checked", controllerConfig.allow_projection === true);
+                $("#model-setting-allow-projection").off("change.projection").on("change.projection", function() {
+                    const newVal = this.checked;
+                    const $status = $("#model-projection-save-status");
+                    const savingMsg = (window.kyteI18n && window.kyteI18n.t('ui.model_detail.projection_saving')) || 'Saving...';
+                    const savedMsg = (window.kyteI18n && window.kyteI18n.t('ui.model_detail.projection_saved')) || 'Saved.';
+                    const failMsg = (window.kyteI18n && window.kyteI18n.t('ui.model_detail.projection_save_failed')) || 'Save failed. Reverting.';
+                    $status.removeClass("text-success text-danger").addClass("text-muted").html('<i class="fas fa-spinner fa-spin me-1"></i>' + savingMsg);
+                    // Merge into a copy so a failed save reverts cleanly.
+                    const merged = Object.assign({}, controllerConfig, { allow_projection: newVal });
+                    _ks.put("DataModel", "id", modelIdx, { controller_config: JSON.stringify(merged) }, null, [], function() {
+                        controllerConfig = merged; // commit only on success
+                        $status.removeClass("text-muted text-danger").addClass("text-success").html('<i class="fas fa-check me-1"></i>' + savedMsg);
+                        setTimeout(() => $status.html(""), 2500);
+                    }, function() {
+                        $("#model-setting-allow-projection").prop("checked", !newVal);
+                        $status.removeClass("text-muted text-success").addClass("text-danger").html('<i class="fas fa-exclamation-triangle me-1"></i>' + failMsg);
+                    });
+                });
+
                 // Get i18n instance for translations
                 const i18n = window.kyteI18n;
                 const t = (key, fallback) => i18n ? i18n.t(key) : fallback;
