@@ -96,6 +96,9 @@ document.addEventListener('KyteInitialized', function(e) {
 
                 // Setup event handlers for Kyte Connect section
                 setupKyteConnectHandlers(_ks);
+
+                // Load the app's SSO (OIDC) provider config
+                loadSsoConfig(_ks, idx);
             }
             
             // Initialize environment variables table
@@ -107,7 +110,10 @@ document.addEventListener('KyteInitialized', function(e) {
         
         // Setup form event handlers
         setupFormEventHandlers(_ks, idx);
-        
+
+        // Setup SSO config save handler
+        setupSsoHandlers(_ks, idx);
+
     } else {
         location.href="/?redir="+encodeURIComponent(window.location);
     }
@@ -975,7 +981,109 @@ function escapeHtml(text) {
 
 function formatDate(date) {
     if (!date) return 'Unknown';
-    
+
     const d = new Date(date);
     return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+}
+
+// ---- SSO (OIDC / Microsoft) provider config (KYTE-#560 P2) ----
+// The provider row is managed via KyteAppIdentityProviderController, which
+// encrypts client_secret on write and never returns it. The secret field is
+// therefore WRITE-ONLY: we only send client_secret when the admin types a new
+// one; a blank field keeps the stored secret. `has_client_secret` tells us
+// whether one is configured without ever seeing the value.
+let ssoConfigId = null;
+
+function ssoRedirectUri(_ks) {
+    const base = (_ks && _ks.url ? String(_ks.url) : '').replace(/\/+$/, '');
+    return base ? base + '/sso/callback' : '/sso/callback';
+}
+
+function loadSsoConfig(_ks, idx) {
+    $("#sso_redirect_uri").text(ssoRedirectUri(_ks));
+
+    _ks.get('KyteAppIdentityProvider', 'application', idx, [], function(r) {
+        const cfg = (r && r.data && r.data.length) ? r.data[0] : null;
+        if (!cfg) {
+            ssoConfigId = null;
+            return;
+        }
+        ssoConfigId = cfg.id;
+        $("#sso_enabled").prop('checked', parseInt(cfg.enabled, 10) === 1);
+        $("#sso_tenant").val(cfg.tenant || '');
+        $("#sso_client_id").val(cfg.client_id || '');
+        $("#sso_scopes").val(cfg.scopes || 'openid profile email');
+        $("#sso_email_claim").val(cfg.user_email_claim || 'email');
+        $("#sso_jit_enabled").prop('checked', parseInt(cfg.jit_enabled, 10) === 1);
+        $("#sso_restrict_existing").prop('checked', parseInt(cfg.restrict_to_existing, 10) === 1);
+        if (cfg.has_client_secret) {
+            $("#sso_client_secret").attr('placeholder', '•••••••• (configured)');
+            $("#sso_secret_status").html('<i class="fas fa-check-circle me-1 text-success"></i>A client secret is configured. Leave blank to keep it, or enter a new one to replace it.');
+        }
+    }, function() { /* no config yet — leave the form at its defaults */ });
+}
+
+function setupSsoHandlers(_ks, idx) {
+    $("#saveSsoSettings").off('click').on('click', function(e) {
+        e.preventDefault();
+        saveSsoConfig(_ks, idx);
+    });
+}
+
+function saveSsoConfig(_ks, idx) {
+    const btn = $("#saveSsoSettings");
+    const tenant = ($("#sso_tenant").val() || '').trim();
+    const clientId = ($("#sso_client_id").val() || '').trim();
+    const secret = $("#sso_client_secret").val() || '';
+    const enabled = $("#sso_enabled").is(':checked');
+
+    if (enabled && (!tenant || !clientId)) {
+        showError('Tenant ID and Client ID are required to enable sign-in.');
+        return;
+    }
+    if (enabled && !ssoConfigId && secret.trim() === '') {
+        showError('A client secret is required to enable sign-in.');
+        return;
+    }
+
+    const data = {
+        application: idx,
+        provider: 'microsoft',
+        enabled: enabled ? 1 : 0,
+        tenant: tenant,
+        issuer: tenant ? ('https://login.microsoftonline.com/' + tenant + '/v2.0') : '',
+        client_id: clientId,
+        scopes: ($("#sso_scopes").val() || 'openid profile email').trim(),
+        user_email_claim: ($("#sso_email_claim").val() || 'email').trim(),
+        redirect_uri: ssoRedirectUri(_ks),
+        jit_enabled: $("#sso_jit_enabled").is(':checked') ? 1 : 0,
+        restrict_to_existing: $("#sso_restrict_existing").is(':checked') ? 1 : 0
+    };
+    // Write-only secret: only include it when a new one was typed.
+    if (secret.trim() !== '') {
+        data.client_secret = secret;
+    }
+
+    btn.prop('disabled', true);
+    const ok = function(r) {
+        btn.prop('disabled', false);
+        const row = (r && r.data && r.data.length) ? r.data[0] : null;
+        if (row && row.id) { ssoConfigId = row.id; }
+        $("#sso_client_secret").val('');
+        if (data.client_secret) {
+            $("#sso_client_secret").attr('placeholder', '•••••••• (configured)');
+            $("#sso_secret_status").html('<i class="fas fa-check-circle me-1 text-success"></i>A client secret is configured. Leave blank to keep it, or enter a new one to replace it.');
+        }
+        showSuccess('SSO configuration saved.');
+    };
+    const fail = function(err) {
+        btn.prop('disabled', false);
+        showError((typeof err === 'string' ? err : (err && err.error)) || 'Failed to save SSO configuration.');
+    };
+
+    if (ssoConfigId) {
+        _ks.put('KyteAppIdentityProvider', 'id', ssoConfigId, data, null, [], ok, fail);
+    } else {
+        _ks.post('KyteAppIdentityProvider', data, null, [], ok, fail);
+    }
 }

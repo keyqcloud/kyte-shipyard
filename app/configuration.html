@@ -175,6 +175,10 @@
                             <i class="fas fa-robot"></i>
                             <span data-i18n="ui.config.sidebar.ai_error_correction">AI Error Correction</span>
                         </button>
+                        <button class="nav-link" data-section="SSO">
+                            <i class="fas fa-right-to-bracket"></i>
+                            <span data-i18n="ui.config.sidebar.sso">Single Sign-On</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -325,6 +329,89 @@
                         <button id="saveAppSettings" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>
                             <span data-i18n="ui.config.save_button">Save App Configuration</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SSO / Identity Provider Section -->
+                <div id="SSO" class="content-section">
+                    <div class="config-card">
+                        <div class="config-card-header">
+                            <div class="config-card-icon">
+                                <i class="fas fa-right-to-bracket"></i>
+                            </div>
+                            <div>
+                                <h3 class="config-card-title" data-i18n="ui.config.sso.title">Single Sign-On (Microsoft)</h3>
+                            </div>
+                        </div>
+                        <p class="config-card-description" data-i18n="ui.config.sso.description">
+                            Let your app's users sign in with Microsoft (Entra / Azure AD). Register an app in your Azure tenant, then enter its Client ID, Tenant ID, and a client secret below. The client secret is stored encrypted and never shown again.
+                        </p>
+
+                        <div class="form-group mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="sso_enabled">
+                                <label class="form-check-label" for="sso_enabled" data-i18n="ui.config.sso.enable">Enable Microsoft sign-in for this app</label>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" data-i18n="ui.config.sso.tenant">Tenant ID</label>
+                                <input type="text" id="sso_tenant" class="form-control" placeholder="e.g. e87b0ae4-7f21-482c-...">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" data-i18n="ui.config.sso.client_id">Client ID (Application ID)</label>
+                                <input type="text" id="sso_client_id" class="form-control" placeholder="e.g. 71f46dda-6973-404e-...">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="ui.config.sso.client_secret">Client Secret</label>
+                            <input type="password" id="sso_client_secret" class="form-control" autocomplete="new-password" placeholder="Enter a new secret">
+                            <div class="form-text mt-1" id="sso_secret_status">
+                                <i class="fas fa-info-circle me-1"></i>
+                                <span data-i18n="ui.config.sso.secret_hint">Stored encrypted. Leave blank to keep the current secret.</span>
+                            </div>
+                        </div>
+
+                        <div class="form-grid mt-2">
+                            <div class="form-group">
+                                <label class="form-label" data-i18n="ui.config.sso.scopes">Scopes</label>
+                                <input type="text" id="sso_scopes" class="form-control" value="openid profile email">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" data-i18n="ui.config.sso.email_claim">Email claim</label>
+                                <input type="text" id="sso_email_claim" class="form-control" value="email">
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="sso_jit_enabled" checked>
+                                <label class="form-check-label" for="sso_jit_enabled" data-i18n="ui.config.sso.jit">Auto-create users on first sign-in (JIT)</label>
+                            </div>
+                            <div class="form-check form-switch mt-1">
+                                <input class="form-check-input" type="checkbox" id="sso_restrict_existing">
+                                <label class="form-check-label" for="sso_restrict_existing" data-i18n="ui.config.sso.restrict">Only allow users that already exist</label>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info d-flex align-items-start mt-3" role="alert">
+                            <i class="fas fa-info-circle me-2 mt-1"></i>
+                            <div>
+                                <strong data-i18n="ui.config.sso.redirect_label">Redirect URI</strong>
+                                <span data-i18n="ui.config.sso.redirect_hint"> — paste this into your Azure app registration's Redirect URIs:</span>
+                                <div class="mt-1"><code id="sso_redirect_uri">—</code></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="d-flex justify-content-end pb-3 pe-3">
+                        <button id="saveSsoSettings" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>
+                            <span data-i18n="ui.config.sso.save_button">Save SSO Configuration</span>
                         </button>
                     </div>
                 </div>
