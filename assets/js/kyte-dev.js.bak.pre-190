@@ -1,0 +1,4024 @@
+/**
+ * Copyright 2020-2023 KeyQ, Inc.
+ * 
+ * This source file is free software,
+ * available under the following license:
+ * MIT license
+ * 
+ * This source file is distributed in the hope that
+ * it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the license files for details.
+ * 
+ * For details please refer to: http://www.keyq.cloud
+ * KyteJS
+ * ©2020-2023 KeyQ, Inc.
+ **/
+class Kyte {
+	/** KyteJS Version # */
+	static VERSION = '2.0.2';
+	/** **************** */
+
+	/**
+	 * @param {string} url           Kyte API base URL.
+	 * @param {?string} accessKey    HMAC public key. Pass null when authMode === 'jwt'.
+	 * @param {?string} identifier   HMAC API key identifier. Pass null when authMode === 'jwt'.
+	 * @param {?string} account_number  HMAC account number. Pass null when authMode === 'jwt'.
+	 * @param {?string} applicationId   Application identifier (sent as X-Kyte-AppId for HMAC,
+	 *                                  used as the JWT `app` claim for JWT login).
+	 * @param {Object}  [options]     Optional config bag.
+	 * @param {('hmac'|'jwt')} [options.authMode='hmac']
+	 *                                'hmac' (default) preserves v1.x behavior — every request
+	 *                                goes through sign() and the legacy x-kyte-signature/-identity
+	 *                                headers. 'jwt' switches to Phase 3 auth: /jwt/login issues
+	 *                                an access JWT + refresh token, sendData sends
+	 *                                Authorization: Bearer <jwt>, refresh tokens rotate
+	 *                                automatically before each request when the access token is
+	 *                                near expiry.
+	 * @param {number}  [options.jwtRefreshSkewSeconds=30]
+	 *                                Refresh the access token this many seconds before its exp.
+	 *                                Tighter values reduce wasted refresh round-trips at the
+	 *                                cost of more 401s when clocks drift.
+	 */
+	constructor(url, accessKey, identifier, account_number, applicationId = null, options = {}) {
+		this.url = url;
+		this.access_key = accessKey;
+		this.identifier = identifier;
+		this.account_number = account_number;
+		this.applicationId = applicationId;
+		// store non-handoff api keys
+		this.initial_access_key = accessKey;
+		this.initial_identifier = identifier;
+		this.initial_account_number = account_number;
+
+		this.txToken;
+		this.sessionToken;
+		this.dateFormat = 'mm/dd/yy';
+
+		this.sessionCrossDomain = false;
+
+		this.sessionTimer = null;
+		this.redirectToLoginInitiated = false;
+
+		this.sessionController = 'Session';
+
+		// v2.0 — auth mode plumbing. Default 'hmac' preserves v1.x behavior.
+		this.authMode = options.authMode === 'jwt' ? 'jwt' : 'hmac';
+		this.jwtAccessToken = null;
+		this.jwtRefreshToken = null;
+		this.jwtAccessExpiresAt = 0;            // unix epoch seconds; 0 means unknown / expired
+		this.jwtRefreshSkewSeconds = typeof options.jwtRefreshSkewSeconds === 'number'
+			? options.jwtRefreshSkewSeconds
+			: 30;
+		this._jwtRefreshInFlight = null;        // Promise dedupe while a refresh is mid-flight
+	}
+	init = () => {
+		if (this.authMode === 'jwt') {
+			this.jwtAccessToken = this.getCookie('kyte_jwt_access') || null;
+			this.jwtRefreshToken = this.getCookie('kyte_jwt_refresh') || null;
+			this.jwtAccessExpiresAt = parseInt(this.getCookie('kyte_jwt_expires') || '0', 10);
+		} else {
+			this.access_key = (this.getCookie('kyte_pub') ? this.getCookie('kyte_pub') : this.access_key);
+			this.identifier = (this.getCookie('kyte_iden') ? this.getCookie('kyte_iden') : this.identifier);
+			this.account_number = (this.getCookie('kyte_num') ? this.getCookie('kyte_num') : this.account_number);
+
+			// get txToken and session tokens from cookie if they exist (i.e. user session exists)
+			this.txToken = (this.getCookie('txToken') ? this.getCookie('txToken') : 0);
+			this.sessionToken = (this.getCookie('sessionToken') ? this.getCookie('sessionToken') : 0);
+		}
+
+		console.info(`Initialized KyteJS v${Kyte.VERSION} (auth mode: ${this.authMode})`);
+	}
+	/* API Version
+	 *
+	 * Use sign() to obtain authorization to transact and
+	 * send serialized form data accompanied with signature data
+	 *
+	 */
+	apiVersion = (callback, error = null) => {
+		var obj = this;
+
+		$.ajax({
+			method: "GET",
+			crossDomain: true,
+			dataType: "json",
+			url: obj.url,
+			success: function (response) {
+				if (typeof callback === "function") {
+					callback(response.engine_version, response.framework_version);
+				} else {
+					console.log("Engine: " + response.engine_version + "; Framework: " + response.framework_version);
+				}
+			},
+			error: function (response) {
+				if (typeof error === "function") {
+					error(response.responseJSON.error);
+				} else {
+					console.error(response.responseJSON.error);
+				}
+			}
+		});
+	}
+	/* API Signature Request
+	 *
+	 * Pass identifying information and public key to backend
+	 * requesting an authorization signature to transact
+	 *
+	 */
+	sign = (callback, error = null) => {
+		var d = new Date();
+		var obj = this;
+
+		$.ajax({
+			method: "POST",
+			crossDomain: true,
+			dataType: "json",
+			url: obj.url,
+			data: 'key=' + obj.access_key + '&identifier=' + obj.identifier + '&token=' + obj.txToken + '&time=' + d.toUTCString(),
+			success: function (response) {
+				if (typeof callback === "function") {
+					callback(response, d);
+				} else {
+					console.log(response);
+				}
+			},
+			error: function (response) {
+				if (typeof error === "function") {
+					error(response);
+				} else {
+					console.error(response);
+				}
+			}
+		});
+	}
+	/* Send Data to Backend by Specified Method
+	 *
+	 * Use sign() to obtain authorization to transact and
+	 * send data accompanied with signature data
+	 *
+	 */
+	sendData = (method, model, field = null, value = null, data = null, formdata = null, headers = [], callback, error = null) => {
+		if (this.authMode === 'jwt') {
+			this._sendDataJwt(method, model, field, value, data, formdata, headers, callback, error);
+			return;
+		}
+
+		var obj = this;
+
+		this.sign(
+			function (retval, time) {
+				// /{model}/{field}/{value}
+				let identity = encodeURIComponent(btoa(obj.access_key + '%' + obj.sessionToken + '%' + time.toUTCString() + '%' + obj.account_number));
+				var apiURL = obj.url + '/' + model;
+				if (field) {
+					apiURL += '/' + encodeURIComponent(field);
+				}
+				if (value) {
+					apiURL += '/' + encodeURIComponent(value);
+				}
+
+				var encdata = '';
+
+				if (data) {
+					encdata += $.param(data);
+				}
+
+				if (formdata) {
+					if (encdata)
+						encdata += '&';
+					encdata += formdata;
+				}
+
+				$.ajax({
+					method: method,
+					crossDomain: true,
+					dataType: "json",
+					url: apiURL,
+					beforeSend: function (xhr) {
+						// set signature that was obtained from the signing request
+						xhr.setRequestHeader('x-kyte-signature', retval.signature);
+						// set identity string
+						xhr.setRequestHeader('x-kyte-identity', identity);
+						// if application ID is supplied, pass those - this is for provisioned containers
+						if (obj.applicationId) {
+							xhr.setRequestHeader('x-kyte-appid', obj.applicationId);
+						}
+						// set client viewer info
+						xhr.setRequestHeader('x-kyte-device', window.navigator.userAgent);
+						// if custom headers are specified, add them
+						if (headers.length > 0) {
+							for (const header of headers) {
+								xhr.setRequestHeader(header.name, header.value);
+							}
+						}
+					},
+					data: encdata,
+					success: function (response) {
+						if (response.syntax_error) {
+							//
+							obj.syntaxErrorBanner(response.syntax_error);
+						}
+						obj.txToken = response.token;
+						obj.sessionToken = response.session;
+						if (response.kyte_pub && response.kyte_iden && response.kyte_num) {
+							obj.access_key = response.kyte_pub;
+							obj.identifier = response.kyte_iden;
+							obj.account_number = response.kyte_num;
+							obj.setCookie('kyte_pub', obj.access_key, 60, obj.sessionCrossDomain);
+							obj.setCookie('kyte_iden', obj.identifier, 60, obj.sessionCrossDomain);
+							obj.setCookie('kyte_num', obj.account_number, 60, obj.sessionCrossDomain);
+						} else {
+							// destroy api handoff cookies
+							obj.setCookie('kyte_pub', '', -1);
+							obj.setCookie('kyte_num', '', -1);
+							obj.setCookie('kyte_iden', '', -1);
+							// reset to defaults
+							obj.access_key = obj.initial_access_key;
+							obj.identifier = obj.initial_identifier;
+							obj.account_number = obj.initial_account_number;
+						}
+						if (!response.token && !response.session) {
+							obj.sessionDestroy();
+						} else {
+							obj.setCookie('txToken', obj.txToken, 60, obj.sessionCrossDomain);
+							obj.setCookie('sessionToken', obj.sessionToken, 60, obj.sessionCrossDomain);
+							obj.setCookie('accountIdx', response.account_id, 60, obj.sessionCrossDomain);
+							obj.setCookie('roleIdx', response.role ? response.role.id : 0, 60, obj.sessionCrossDomain);
+							obj.setCookie('roleName', response.role ? response.role.name : null, 60, obj.sessionCrossDomain);
+						}
+
+						if (typeof callback === "function") {
+							callback(response);
+						} else {
+							console.log(response);
+						}
+					},
+					error: function (response) {
+						if (response.syntax_error) {
+							//
+							obj.syntaxErrorBanner(response.syntax_error);
+						}
+
+						if (response.status == 403) {
+							obj.sessionDestroy();
+							
+							if (obj.sessionTimer) {
+								clearInterval(obj.sessionTimer);
+							}
+
+							if (model != obj.sessionController) {
+								// display message and prepare redirect
+								obj.redirectToLogin();
+							}
+						} else {
+							if (response.responseJSON != null) {
+								obj.txToken = response.responseJSON.token;
+								obj.sessionToken = response.responseJSON.session;
+								if (response.kyte_pub && response.kyte_iden && response.kyte_num) {
+									obj.access_key = response.kyte_pub;
+									obj.identifier = response.kyte_iden;
+									obj.account_number = response.kyte_num;
+									obj.setCookie('kyte_pub', obj.access_key, 60, obj.sessionCrossDomain);
+									obj.setCookie('kyte_iden', obj.identifier, 60), obj.sessionCrossDomain;
+									obj.setCookie('kyte_num', obj.account_number, 60, obj.sessionCrossDomain);
+								} else {
+									// destroy api handoff cookies
+									obj.setCookie('kyte_pub', '', -1);
+									obj.setCookie('kyte_num', '', -1);
+									obj.setCookie('kyte_iden', '', -1);
+									// reset to defaults
+									obj.access_key = obj.initial_access_key;
+									obj.identifier = obj.initial_identifier;
+									obj.account_number = obj.initial_account_number;
+								}
+								if (!response.responseJSON.token && !response.responseJSON.session) {
+									obj.sessionDestroy();
+								} else {
+									obj.setCookie('txToken', obj.txToken, 60, obj.sessionCrossDomain);
+									obj.setCookie('sessionToken', obj.sessionToken, 60, obj.sessionCrossDomain);
+									obj.setCookie('accountIdx', response.account_id, 60, obj.sessionCrossDomain);
+									obj.setCookie('roleIdx', response.role ? response.role.id : 0, 60, obj.sessionCrossDomain);
+									obj.setCookie('roleName', response.role ? response.role.name : null, 60, obj.sessionCrossDomain);
+								}
+							}
+						}
+
+						if (response.responseJSON == null) {
+							console.log(response);
+						} else {
+							if (typeof error === "function") {
+								error(response.responseJSON.error);
+							} else {
+								console.error(response.responseJSON.error);
+							}
+						}
+					}
+				});
+			},
+			function (response) {
+				if (response.responseJSON == null) {
+					console.error(response);
+				} else {
+					if (typeof error === "function") {
+						error(response);
+					} else {
+						console.error(response);
+					}
+				}
+			}
+        );
+	}
+	/* Post
+	 *
+	 * Use sign() to obtain authorization to transact and
+	 * send data accompanied with signature data
+	 *
+	 */
+	post = (model, data = null, formdata = null, headers = [], callback, error = null) => {
+		this.sendData('POST', model, null, null, data, formdata, headers, callback, error);
+	}
+	/* Put
+	 *
+	 * Use sign() to obtain authorization to transact and
+	 * send data accompanied with signature data
+	 *
+	 */
+	put = (model, field = null, value = null, data = null, formdata = null, headers = [], callback, error = null) => {
+		this.sendData('PUT', model, field, value, data, formdata, headers, callback, error);
+	}
+	/* Get
+	 *
+	 * Use sign() to obtain authorization to transact and
+	 * send data accompanied with signature data
+	 *
+	 */
+	get = (model, field = null, value = null, headers = [], callback, error = null) => {
+		this.sendData('GET', model, field, value, null, null, headers, callback, error);
+	}
+	/* Delete
+	 *
+	 * Use sign() to obtain authorization to transact and
+	 * send data accompanied with signature data
+	 *
+	 */
+	delete = (model, field = null, value = null, headers = [], callback, error = null) => {
+		this.sendData('DELETE', model, field, value, null, null, headers, callback, error);
+	}
+	/*
+	 * Set browser cookie
+	 */
+	setCookie = (cname, cvalue, minutes = null, crossDomain = false) => {
+		var expires = "";
+		if (minutes) {
+			var d = new Date();
+			d.setTime(d.getTime() + (minutes * 60 * 1000));
+			expires = ";expires=" + d.toUTCString();
+		}
+		// add root domain to cookie so subdomains can access it
+		let hostname_parts = window.location.hostname.split('.');
+		let domain = '';
+		if (crossDomain) {
+			if (hostname_parts.length > 2) {
+				domain = 'domain='+hostname_parts.slice(1).join('.')+';';
+			} else if (hostname_parts.length == 2) {
+				domain = 'domain='+hostname_parts.joing('.')+';';
+			}
+		}
+		document.cookie = cname + "=" + cvalue + expires + ";path=/;" + domain + (location.protocol === 'https:' ? 'secure;' : '');
+	}
+	/*
+	 * Get browser cookie
+	 */
+	getCookie = (cname) => {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return null;
+	}
+	getUrlHash = () => {
+		return location.hash;
+	}
+	/*
+	 * Get params from URL
+	 */
+	getUrlParameter = (sParam) => {
+		var sPageURL = window.location.search.substring(1), sURLVariables = sPageURL.split('&'), sParameterName, i;
+
+		for (i = 0; i < sURLVariables.length; i++) {
+			sParameterName = sURLVariables[i].split('=');
+
+			if (sParameterName[0] === sParam) {
+				return sParameterName[1] === undefined ? false : decodeURIComponent(sParameterName[1]);
+			}
+		}
+
+		return false;
+	}
+	getPageRequest = () => {
+		let encoded = this.getUrlParameter('request');
+		if (encoded) {
+			let decoded = decodeURIComponent(atob(encoded));
+			let obj = JSON.parse(decoded);
+
+			return obj;
+		}
+		
+		return null;
+	}
+	setPageRequest = (model, value) => {
+		let obj = {'model': model, 'value':value};
+		let encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+
+		return encoded;
+	}
+	initSpinner = (selector) => {
+		selector.append('<div id="pageLoaderModal" class="modal" style="background: white; opacity: 0.6;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"><div class="modal-dialog modal-sm h-100 d-flex"><div class="mx-auto align-self-center" style="width: 48px"><div class="spinner-wrapper text-center fa-6x"><span class="fas fa-sync fa-spin"></span></div></div></div></div>');
+	}
+	startSpinner = () => {
+		$('#pageLoaderModal').modal();
+	}
+	stopSpinner = () => {
+		$('#pageLoaderModal').modal('hide');
+	}
+	/*
+	 * Request backend to create new session
+	 *
+	 * like all api requests, first obtain a transaction
+	 * authorization from sign() then pass email and password.
+	 * If user is valid then create cookie with token; otherwise
+	 * redirect users to login page.
+	 *
+	 */
+	sessionCreate = (identity, callback, error = null, sessionController = null) => {
+		if (this.authMode === 'jwt') {
+			this._sessionCreateJwt(identity, callback, error);
+			return;
+		}
+
+		var obj = this;
+		if (sessionController !== null) {
+			obj.sessionController = sessionController;
+		}
+		this.post(obj.sessionController, identity, null, [], function (response) {
+			obj.txToken = response.token;
+			obj.sessionToken = response.session;
+			obj.setCookie('txToken', obj.txToken, 60, obj.sessionCrossDomain);
+			obj.setCookie('sessionToken', obj.sessionToken, 60, obj.sessionCrossDomain);
+			obj.setCookie('accountIdx', response.account_id, 60, obj.sessionCrossDomain);
+			obj.setCookie('roleIdx', response.role ? response.role.id : 0, 60, obj.sessionCrossDomain);
+			obj.setCookie('roleName', response.role ? response.role.name : null, 60, obj.sessionCrossDomain);
+			// set api handoff cookies
+			obj.access_key = response.kyte_pub;
+			obj.identifier = response.kyte_iden;
+			obj.account_number = response.kyte_num;
+			obj.setCookie('kyte_pub', obj.access_key, 60, obj.sessionCrossDomain);
+			obj.setCookie('kyte_iden', obj.identifier, 60, obj.sessionCrossDomain);
+			obj.setCookie('kyte_num', obj.account_number, 60, obj.sessionCrossDomain);
+
+			if (typeof callback === "function") {
+				callback(response);
+			} else {
+				console.log(response);
+			}
+		}, function (response) {
+			// destroy session cookies
+			obj.sessionDestroy();
+			if (typeof error === "function") {
+				error(response);
+			} else {
+				console.error(response);
+			}
+		});
+	}
+	addLogoutHandler = (selector) => {
+		self = this;
+        $('body').on('click', selector, function() {
+            self.sessionDestroy(function () {
+                location.href = "/";
+            });
+        });
+	}
+	checkSession = () => {
+		if (this.authMode === 'jwt') {
+			// JWT session is "active" while we hold a refresh token. The
+			// access token expiring is normal — refresh-on-next-request
+			// handles it transparently. Only when the refresh token is
+			// gone (logged out, explicitly revoked, or never present) do
+			// we declare the session dead.
+			if (!this.jwtRefreshToken) {
+				this.sessionDestroy();
+				return false;
+			}
+			return true;
+		}
+
+		// Check if sessionToken or txToken are falsy values (including '0', 0, undefined, null, etc.)
+		if (!this.sessionToken || this.sessionToken === '0' || !this.txToken || this.txToken === '0') {
+			this.sessionDestroy();
+		}
+		// Return true if 'sessionToken' cookie exists and is truthy, otherwise false
+		return !!this.getCookie('sessionToken');
+	}
+	redirectToLogin = () => {
+		if (!this.redirectToLoginInitiated) {
+			this.redirectToLoginInitiated = true;
+			// dismiss any loaders that may be open
+			this.stopSpinner();
+			let api = this;
+			this.alert("Please sign in again", "You were signed out of your account.  Please press 'OK' to sign in to your account again.", function() {
+				// Get the current URL or the specific URL you want to redirect to
+				var currentUrl = window.location.href;
+
+				api.redirectToLoginInitiated = false;
+				// Redirect to the login page with the current URL as the 'redir' parameter
+				window.location.href = "/?redir=" + encodeURIComponent(currentUrl);
+			}, false);
+		}
+	}
+	isSession = (periodic = true, redir = true, interval = 30000) => {
+		let api = this;
+		let hasSession = this.checkSession();
+		if (hasSession && periodic) {
+			this.sessionTimer = setInterval(function () {
+				let session = api.checkSession();
+				// Check if cookie is present,
+				if (!session) {
+					// stop timer
+					clearInterval(api.sessionTimer);
+
+					if (redir) {
+						// display message and prepare redirect
+						api.redirectToLogin();
+					}
+				}
+			}, interval);
+		}
+
+		return hasSession;
+	}
+	/*
+	 * Request backend to destroy session
+	 *
+	 * like all api requests, first obtain a transaction
+	 * authorization from sign() then pass session token from cookie.
+	 * If session token is valid then log user out.
+	 *
+	 */
+	sessionDestroy = (error = null) => {
+		if (this.authMode === 'jwt') {
+			this._sessionDestroyJwt(error);
+			return;
+		}
+
+		var obj = this;
+		this.delete('Session', null, null, [],
+			function (response) {
+				if (typeof error === "function") {
+					error(response);
+				} else {
+					console.error(response);
+				}
+			},
+			function (response) {
+				if (typeof error === "function") {
+					error(response);
+				} else {
+					console.error(response);
+				}
+			});
+			obj.setCookie('txToken', '', -1);
+			obj.setCookie('sessionToken', '', -1);
+			obj.setCookie('accountIdx', '', -1);
+			obj.setCookie('roleIdx', '', -1);
+			obj.setCookie('roleName', '', -1);
+			// destroy api handoff cookies
+			obj.setCookie('kyte_pub', '', -1);
+			obj.setCookie('kyte_num', '', -1);
+			obj.setCookie('kyte_iden', '', -1);
+			// reset to defaults
+			obj.access_key = obj.initial_access_key;
+			obj.identifier = obj.initial_identifier;
+			obj.account_number = obj.initial_account_number;
+			obj.sessionToken = 0;
+			obj.txToken = 0;
+	}
+	makeid = (length) => {
+		var result = '';
+		var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		var charactersLength = characters.length;
+		for (var i = 0; i < length; i++) {
+			result += characters.charAt(Math.floor(Math.random() * charactersLength));
+		}
+		return result;
+	}
+	alert = (title, message, callback = null, dismiss = true) => {
+		let id = this.makeid(5);
+		$('<div></div>').appendTo('body').html('<div><h6>' + message + '</h6></div>')
+			.dialog({
+				modal: true,
+				title: title,
+				zIndex: 10000,
+				autoOpen: true,
+				width: 'auto',
+				resizable: false,
+				closeOnEscape: dismiss, // Disable closing the dialog with the ESC key if dismiss is false
+				open: function(event, ui) {
+					if (!dismiss) {
+						$(this).closest('.ui-dialog').find('.ui-dialog-titlebar-close').hide(); // Hide the close button if dismiss is false
+					}
+				},
+				buttons: {
+					OK: function () {
+						if (typeof callback === "function") {
+							callback();
+						}
+						$(this).dialog('close');
+					}
+				},
+				close: function (e, ui) {
+					$(this).remove();
+				}
+			});
+	}	
+	confirm = (title, message, callback = null, cancel = null) => {
+		let id = this.makeid(5);
+		$('<div></div>').appendTo('body').html('<div><h6>' + message + '</h6></div>')
+			.dialog({
+				modal: true,
+				title: title,
+				zIndex: 10000,
+				autoOpen: true,
+				width: 'auto',
+				resizeable: false,
+				buttons: [
+					{
+						class:'btn btn-danger btn-delete-confirm-yes',
+						text:'Yes',
+						click: function () {
+							if (typeof callback === "function") {
+								callback();
+							}
+							$(this).dialog('close');
+						},
+					},
+					{
+						class:'btn btn-secondary btn-delete-confirm-no',
+						text:'No',
+						click: function () {
+							if (typeof cancel === "function") {
+								cancel();
+							}
+							$(this).dialog('close');
+						}
+					}
+				],
+				close: function (e, ui) {
+					$(this).remove();
+				}
+			});
+	}
+
+	validateForm = (form) => {
+		let valid = true;
+		form.find('input').each(function () {
+			if ($(this).prop('required') && !$(this).val()) {
+				valid = false;
+			}
+		});
+		return valid;
+	}
+
+	syntaxErrorBanner = (filepath) => {
+		$("body").prepend('<div class="card text-white bg-danger m-3"><div class="card-header">Syntax Error</div><div class="card-body"><p class="card-text">'+filepath+'</p></div></div>');
+	}
+
+	getNestedValue = (obj, path) => {
+		return path.split('.').reduce((acc, key) => (acc ? acc[key] : undefined), obj);
+	}
+
+	// ====================================================================
+	// JWT auth (v2.0) — parallel implementation. Only invoked when
+	// authMode === 'jwt'. HMAC path above is untouched.
+	// ====================================================================
+
+	/**
+	 * Equivalent of sessionCreate for JWT mode.
+	 *
+	 * `identity` is the same object the HMAC sessionCreate accepts
+	 * ({email, password} plus any extra fields the app-side login
+	 * expects). We POST it to /jwt/login on the same Kyte base URL.
+	 * On success we store the access JWT, the refresh token, and the
+	 * absolute expiry timestamp; the cookie-set is parallel to the
+	 * HMAC kyte_pub / kyte_iden / kyte_num set so a refresh of the
+	 * page keeps the session alive without re-logging-in.
+	 */
+	_sessionCreateJwt = (identity, callback, error = null) => {
+		var obj = this;
+		var payload = Object.assign({}, identity || {});
+		if (!('app_identifier' in payload) && obj.applicationId) {
+			payload.app_identifier = obj.applicationId;
+		}
+
+		$.ajax({
+			method: 'POST',
+			crossDomain: true,
+			dataType: 'json',
+			url: obj.url + '/jwt/login',
+			contentType: 'application/json',
+			data: JSON.stringify(payload),
+			success: function (response) {
+				obj._jwtStoreTokens(response);
+				if (typeof callback === 'function') {
+					callback(response);
+				} else {
+					console.log(response);
+				}
+			},
+			error: function (xhr) {
+				obj._jwtClearTokens();
+				var body = xhr && xhr.responseJSON ? xhr.responseJSON : xhr;
+				if (typeof error === 'function') {
+					error(body);
+				} else {
+					console.error(body);
+				}
+			}
+		});
+	}
+
+	/**
+	 * Equivalent of sessionDestroy for JWT mode.
+	 *
+	 * Best-effort: POST /jwt/logout with the refresh token to revoke
+	 * server-side, then clear local tokens regardless of response.
+	 * Clearing local first would leak the still-active refresh token
+	 * server-side if the request never goes out; doing it after means
+	 * a transient failure still cleans up locally on the next refresh.
+	 *
+	 * The `error` parameter is misnamed for historical reasons — it's
+	 * really a "completion" callback invoked on both success and
+	 * failure, matching HMAC sessionDestroy's contract. addLogoutHandler
+	 * relies on this to redirect to the login page after logout.
+	 */
+	_sessionDestroyJwt = (error = null) => {
+		var obj = this;
+		var refreshToken = obj.jwtRefreshToken;
+
+		var finish = function (response) {
+			obj._jwtClearTokens();
+			if (typeof error === 'function') {
+				error(response);
+			} else if (response && response.statusText) {
+				console.error(response);
+			}
+		};
+
+		if (!refreshToken) {
+			// No server-side token to revoke — just clear local state
+			// and notify the caller so they can redirect, matching the
+			// HMAC sessionDestroy contract.
+			obj._jwtClearTokens();
+			if (typeof error === 'function') {
+				error(null);
+			}
+			return;
+		}
+
+		$.ajax({
+			method: 'POST',
+			crossDomain: true,
+			dataType: 'json',
+			url: obj.url + '/jwt/logout',
+			contentType: 'application/json',
+			data: JSON.stringify({ refresh_token: refreshToken }),
+			success: function (response) {
+				obj._jwtClearTokens();
+				if (typeof error === 'function') {
+					error(response);
+				}
+			},
+			error: finish
+		});
+	}
+
+	/**
+	 * sendData() equivalent for JWT mode.
+	 *
+	 * Pre-flight: if the access token is missing or expired within
+	 * the configured skew window, refresh first. Then issue the
+	 * actual request with Authorization: Bearer <access>. On 401
+	 * we clear tokens and trigger the same redirect-to-login flow
+	 * as the HMAC path — refresh-then-retry would mask a deeper
+	 * problem and risk loops.
+	 */
+	_sendDataJwt = (method, model, field, value, data, formdata, headers, callback, error) => {
+		var obj = this;
+		var apiURL = obj.url + '/' + model;
+		if (field) {
+			apiURL += '/' + encodeURIComponent(field);
+		}
+		if (value) {
+			apiURL += '/' + encodeURIComponent(value);
+		}
+
+		var encdata = '';
+		if (data) {
+			encdata += $.param(data);
+		}
+		if (formdata) {
+			if (encdata) encdata += '&';
+			encdata += formdata;
+		}
+
+		var issueRequest = function () {
+			$.ajax({
+				method: method,
+				crossDomain: true,
+				dataType: 'json',
+				url: apiURL,
+				beforeSend: function (xhr) {
+					if (obj.jwtAccessToken) {
+						xhr.setRequestHeader('Authorization', 'Bearer ' + obj.jwtAccessToken);
+					}
+					if (obj.applicationId) {
+						xhr.setRequestHeader('x-kyte-appid', obj.applicationId);
+					}
+					xhr.setRequestHeader('x-kyte-device', window.navigator.userAgent);
+					if (headers && headers.length > 0) {
+						for (var i = 0; i < headers.length; i++) {
+							xhr.setRequestHeader(headers[i].name, headers[i].value);
+						}
+					}
+				},
+				data: encdata,
+				success: function (response) {
+					if (response && response.syntax_error) {
+						obj.syntaxErrorBanner(response.syntax_error);
+					}
+					if (typeof callback === 'function') {
+						callback(response);
+					} else {
+						console.log(response);
+					}
+				},
+				error: function (xhr) {
+					if (xhr && xhr.responseJSON && xhr.responseJSON.syntax_error) {
+						obj.syntaxErrorBanner(xhr.responseJSON.syntax_error);
+					}
+					if (xhr && xhr.status == 403) {
+						obj.sessionDestroy();
+						if (obj.sessionTimer) {
+							clearInterval(obj.sessionTimer);
+						}
+						if (model !== obj.sessionController) {
+							obj.redirectToLogin();
+						}
+					}
+					var body = xhr && xhr.responseJSON ? xhr.responseJSON : xhr;
+					if (typeof error === 'function') {
+						error(body && body.error ? body.error : body);
+					} else {
+						console.error(body);
+					}
+				}
+			});
+		};
+
+		// Refresh if needed, then issue. The refresh helper invokes its
+		// success/fail callbacks synchronously when no refresh is needed,
+		// so non-expired tokens incur no extra cost.
+		obj._jwtEnsureFreshAccessToken(issueRequest, function (refreshErr) {
+			// Refresh failed — token rotation lost. Treat like a 403:
+			// destroy local state and bounce to login.
+			obj.sessionDestroy();
+			if (typeof error === 'function') {
+				error(refreshErr);
+			} else {
+				console.error(refreshErr);
+			}
+		});
+	}
+
+	/**
+	 * If the access token is healthy (present, not within the refresh
+	 * skew window), invoke onReady() synchronously. Otherwise call
+	 * /jwt/refresh, store the new pair, then invoke onReady(). Failure
+	 * calls onFail(reason).
+	 *
+	 * Concurrent calls during a refresh share one in-flight request via
+	 * `_jwtRefreshInFlight` — without this, a page that fires three
+	 * requests in parallel after expiry would burn three refresh
+	 * tokens (and the second/third would race-fail with reuse detection
+	 * on the server).
+	 */
+	_jwtEnsureFreshAccessToken = (onReady, onFail) => {
+		var obj = this;
+		var now = Math.floor(Date.now() / 1000);
+
+		if (obj.jwtAccessToken && obj.jwtAccessExpiresAt > now + obj.jwtRefreshSkewSeconds) {
+			onReady();
+			return;
+		}
+
+		if (!obj.jwtRefreshToken) {
+			// No refresh token. Two distinct cases:
+			//  1. No access token either → an ANONYMOUS visitor who never
+			//     logged in. Issue the request anyway: issueRequest sets the
+			//     Authorization header only when a token exists and always
+			//     sends x-kyte-appid, so this fires an app-only request that
+			//     the server's AppContextStrategy serves for requireAuth=false
+			//     (public) controllers. This is what enables JWT-mode public
+			//     browsing before login.
+			//  2. Had an access token but no/lost refresh token → a broken or
+			//     expired session. Fail so the caller destroys state + bounces
+			//     to login (unchanged behavior).
+			if (!obj.jwtAccessToken) {
+				onReady();
+			} else {
+				onFail({ error: 'no_refresh_token', message: 'JWT session has no refresh token.' });
+			}
+			return;
+		}
+
+		// Dedupe — if a refresh is mid-flight, queue this request behind it.
+		if (obj._jwtRefreshInFlight) {
+			obj._jwtRefreshInFlight.then(onReady, onFail);
+			return;
+		}
+
+		obj._jwtRefreshInFlight = new Promise(function (resolve, reject) {
+			$.ajax({
+				method: 'POST',
+				crossDomain: true,
+				dataType: 'json',
+				url: obj.url + '/jwt/refresh',
+				contentType: 'application/json',
+				data: JSON.stringify({ refresh_token: obj.jwtRefreshToken }),
+				success: function (response) {
+					obj._jwtStoreTokens(response);
+					obj._jwtRefreshInFlight = null;
+					resolve();
+				},
+				error: function (xhr) {
+					obj._jwtRefreshInFlight = null;
+					var body = xhr && xhr.responseJSON ? xhr.responseJSON : xhr;
+					reject(body && body.error ? body : { error: 'refresh_failed', detail: body });
+				}
+			});
+		});
+		obj._jwtRefreshInFlight.then(onReady, onFail);
+	}
+
+	/**
+	 * Persist a /jwt/login or /jwt/refresh response. Response shape
+	 * matches src/Core/Auth/JwtEndpoint.php on the server side:
+	 *   { access_token, refresh_token, expires_in, refresh_expires_at, ... }
+	 */
+	_jwtStoreTokens = (response) => {
+		if (!response) return;
+		this.jwtAccessToken = response.access_token || null;
+		this.jwtRefreshToken = response.refresh_token || this.jwtRefreshToken;
+		var expiresIn = typeof response.expires_in === 'number' ? response.expires_in : 0;
+		this.jwtAccessExpiresAt = expiresIn > 0
+			? Math.floor(Date.now() / 1000) + expiresIn
+			: 0;
+
+		// Cookie TTLs: access cookie matches the JWT exp (browser will drop
+		// it on its own around the same time the JWT expires). Refresh
+		// cookie is derived from `refresh_expires_at` (unix seconds) so the
+		// cookie expires precisely when the server's refresh token expires —
+		// no zombie cookie lingering past the server's TTL. If the server
+		// omits it (older deployments / belt-and-suspenders), fall through
+		// to a session cookie (null = browser-session lifetime) rather than
+		// the old 30-day hardcode that long-outlived server-side validity.
+		var accessMinutes = expiresIn > 0 ? Math.ceil(expiresIn / 60) : null;
+		var refreshExpiresAt = typeof response.refresh_expires_at === 'number' ? response.refresh_expires_at : 0;
+		var refreshMinutes = null;
+		if (refreshExpiresAt > 0) {
+			var secondsRemaining = refreshExpiresAt - Math.floor(Date.now() / 1000);
+			refreshMinutes = secondsRemaining > 0 ? Math.ceil(secondsRemaining / 60) : -1;
+		}
+		this.setCookie('kyte_jwt_access', this.jwtAccessToken || '', accessMinutes, this.sessionCrossDomain);
+		this.setCookie('kyte_jwt_refresh', this.jwtRefreshToken || '', refreshMinutes, this.sessionCrossDomain);
+		this.setCookie('kyte_jwt_expires', String(this.jwtAccessExpiresAt), accessMinutes, this.sessionCrossDomain);
+	}
+
+	/** Drop all JWT state in memory and in cookies. */
+	_jwtClearTokens = () => {
+		this.jwtAccessToken = null;
+		this.jwtRefreshToken = null;
+		this.jwtAccessExpiresAt = 0;
+		this.setCookie('kyte_jwt_access', '', -1);
+		this.setCookie('kyte_jwt_refresh', '', -1);
+		this.setCookie('kyte_jwt_expires', '', -1);
+	}
+}
+
+class KyteNav {
+	constructor(selector, nav_struct, logo = null, title = null, active = null, link = "/app/") {
+		this.selector = selector;
+		this.nav_struct = nav_struct;
+		this.logo = logo;
+		this.title = title;
+		this.active = active;
+		this.link = link;
+	}
+
+	// create nav bar
+	create = () => {
+		let html = '\
+		<div class="container-fluid">\
+			<a href="'+this.link+'" class="navbar-brand">' + (this.logo ? '<img src="'+this.logo+'" style="height: 45px;" class="me-2 rounded">' : '') + (this.title ? this.title : '') + '</a>\
+			<button data-bs-toggle="collapse" class="navbar-toggler" type="button" data-bs-target="#navcol-1" aria-controls="#navcol-1" aria-expanded="false" aria-label="Toggle navigation">\
+				<span class="navbar-toggler-icon"></span>\
+			</button>\
+			<div class="collapse navbar-collapse" id="navcol-1">';
+	
+		let i = 0;
+		this.nav_struct.forEach(menu => {
+			html += i == 0 ? '<ul class="navbar-nav mx-auto">' : '<ul class="navbar-nav">';
+			i++;
+			menu.forEach(item => {
+				if (item.dropdown) {
+					html += `
+					<li class="nav-item dropdown">
+						<a id="${item.id ? item.id : ''}" class="nav-link dropdown-toggle ${item.class}" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">${item.faicon ? '<i class="'+ item.faicon +' me-2"></i>' : ''}<span>${item.label}</span></a>
+						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">`;
+	
+					// iterate through dropdown items
+					item.items.forEach( sub => {
+						html += `<li><a id="${sub.id ? sub.id : ''}" class="dropdown-item ${sub.class}${sub.logout ? ' logout' : ''}" ${sub.href ? 'href="'+ sub.href +'"' : 'href="#"'}>${sub.faicon ? '<i class="'+ sub.faicon +' me-2"></i>' : ''}<span>${sub.label}</span></a></li>`;
+					});
+	
+					html += `</ul></li>`;
+				} else {
+					html += `<li class="nav-item"><a id="${item.id ? item.id : ''}" class="nav-link${item.logout ? ' logout' : ''}${item.labelCenterBlock ? ' text-center p-0 my-1 mx-0':''}${item.label == this.active ? ' active' : ''} ${item.class}" ${item.href ? 'href="'+ item.href+'"' : 'href="#"'}>${item.faicon ? '<i class="'+ item.faicon +(item.labelCenterBlock ? ' d-block':' me-2')+'"></i>' : ''}<span>${item.label}</span></a></li>`;
+				}
+			});
+			html += `</ul>`;
+		});
+	
+		html += '\
+			</div>\
+		</div>';
+	
+		$(this.selector).html(html);
+	}
+}
+
+class KyteSidenav {
+	constructor(selector, nav_struct, default_page_selector) {
+		this.selector = selector;
+		this.nav_struct = nav_struct;
+		this.default_page_selector = default_page_selector;
+	}
+
+	// create sub nav
+	create = () => {
+		if ($(this.selector).length) {
+			let html = '<ul class="nav nav-pills flex-column mb-auto" id="sidebar-nav">';
+			this.nav_struct.forEach(item => {
+				if ($(item.selector).length || item.href || item.logout) {
+					html += '<li class="nav-item">';
+					html += `<a ${$(item.selector).length ? 'id="'+item.selector.replace('#', '')+'-nav-link" ' : item.id ? 'id="'+item.id+'"' : ''} ${'href="'+(item.logout ? '#' : item.href ? item.href : item.selector)+'"'} class="nav-link ${item.class ? item.class : ''} ${item.labelCenterBlock ? ' text-center p-0 my-1 mx-0':''} ${item.logout ? 'logout' : ''}"><i class="${item.faicon}${item.labelCenterBlock ? ' d-block':' me-2'}"></i><span>${item.label}</span></a>`;
+					html += '</li>';
+				}
+			});
+			html += '</ul>';
+			$(this.selector).html(html);
+		}
+	}
+	
+	bind = (onclick = null) => {
+		let self = this;
+		// get current hash
+		let hash = location.hash;
+		hash = hash == "" ? this.default_page_selector : hash;
+		$(hash).removeClass('d-none');
+		$(hash+'-nav-link').addClass('active');
+	
+		this.nav_struct.forEach(item => {
+			$(item.selector+"-nav-link").click(function(e) {
+				history.pushState({}, '', this.href);
+	
+				e.preventDefault();
+				// e.stopPropagation();
+	
+				$(item.selector+'-nav-link').addClass('active');
+				$(item.selector).removeClass('d-none');
+	
+				if (typeof onclick === "function") {
+					onclick(item);
+				}
+	
+				// hide others
+				self.nav_struct.forEach(o => {
+					if (o.selector == item.selector) return;
+					$(o.selector+'-nav-link').removeClass('active');
+					$(o.selector).addClass('d-none');
+				});
+			});
+		});
+	}
+}
+
+
+
+/*
+ * Modern KyteTable - Drop-in replacement for DataTables
+ * 100% Backwards Compatible
+ *
+ * Features:
+ * - Virtual scrolling for large datasets
+ * - Responsive horizontal scroll
+ * - Skeleton loading states
+ * - Sticky header
+ * - Modern UI/UX
+ * - No DataTables dependency
+ */
+class KyteTable {
+	constructor(api, selector, model, columnDefs, searching = true, order = [], actionEdit = false, actionDelete = false, actionView = false, viewTarget = null, rowCallBack = null, initComplete = null) {
+		this.api = api;
+		this.model = model;
+		this.httpHeaders = [];
+
+		this.loaded = false;
+		this.table = null;
+
+		this.selector = selector;
+		this.lang = "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json"; // kept for compatibility
+		this.searching = searching;
+
+		this.columnDefs = columnDefs;
+		this.order = order;
+
+		this.actionEdit = actionEdit;
+		this.editForm = null;
+		this.actionDelete = actionDelete;
+		this.actionView = actionView;
+		this.viewTarget = viewTarget;
+		this.targetBlank = false;
+		this.rowCallBack = rowCallBack;
+		this.initComplete = initComplete;
+
+		this.processing = true;
+		this.serverside = true;
+
+		this.customAction = null;
+		this.customActionButton = null;
+
+		// hooks
+		this.deleteDisplayHook = null;
+		this.editDisplayHook = null;
+
+		this.page_idx = 1;
+		this.pageLength = 50;
+
+		// Modern table state
+		this.data = [];
+		this.totalRecords = 0;
+		this.filteredRecords = 0;
+		this.currentPage = 1;
+		this.searchValue = '';
+		this.sortColumn = null;
+		this.sortDirection = 'asc';
+		this.isLoading = false;
+		this.drawCount = 0;
+
+		// Container elements
+		this.container = null;
+		this.tableElement = null;
+		this.searchInput = null;
+		this.paginationContainer = null;
+	}
+
+	init = () => {
+		let self = this;
+		if (!this.loaded) {
+			// Initialize sorting from order parameter
+			if (this.order && this.order.length > 0) {
+				const orderIndex = this.order[0][0];
+				if (orderIndex < this.columnDefs.length && this.columnDefs[orderIndex] && this.columnDefs[orderIndex].data) {
+					this.sortColumn = this.columnDefs[orderIndex].data;
+					this.sortDirection = this.order[0][1];
+				}
+			}
+
+			// Build modern table structure
+			this._buildTableStructure();
+
+			// Bind event listeners
+			this._bindEvents();
+
+			// Load initial data
+			this._loadData();
+
+			this.loaded = true;
+
+			// Call initComplete callback
+			if (typeof this.initComplete === "function") {
+				setTimeout(() => this.initComplete(), 100);
+			}
+		}
+	}
+
+	_buildTableStructure = () => {
+		const self = this;
+
+		// Clear selector
+		this.selector.empty();
+
+		// Add modern table CSS
+		this._injectStyles();
+
+		// Create container
+		this.container = $('<div class="kyte-table-container"></div>');
+		this.selector.append(this.container);
+
+		// Build toolbar (search, filters, etc.)
+		if (this.searching) {
+			const toolbar = $(`
+				<div class="kyte-table-toolbar">
+					<div class="kyte-table-search">
+						<i class="fas fa-search"></i>
+						<input type="text" placeholder="Search..." class="kyte-table-search-input" />
+						<button class="kyte-table-search-clear" style="display:none;">
+							<i class="fas fa-times"></i>
+						</button>
+					</div>
+					<div class="kyte-table-info">
+						<span class="kyte-table-record-count">Loading...</span>
+					</div>
+				</div>
+			`);
+			this.container.append(toolbar);
+			this.searchInput = toolbar.find('.kyte-table-search-input');
+		}
+
+		// Build table wrapper (for horizontal scroll)
+		const tableWrapper = $('<div class="kyte-table-wrapper"></div>');
+		this.container.append(tableWrapper);
+
+		// Build table element
+		this.tableElement = $('<table class="kyte-table"></table>');
+		tableWrapper.append(this.tableElement);
+
+		// Build header
+		const thead = $('<thead></thead>');
+		const headerRow = $('<tr></tr>');
+
+		this.columnDefs.forEach((col, index) => {
+			const th = $(`
+				<th class="kyte-table-th ${col.data.replace(/\./g, '_')}" data-column="${col.data}">
+					<div class="kyte-table-th-content">
+						<span class="kyte-table-th-label">${col.label || col.data}</span>
+						${col.sortable !== false ? '<span class="kyte-table-sort-indicator"></span>' : ''}
+					</div>
+				</th>
+			`);
+
+			if (col.sortable !== false) {
+				th.addClass('kyte-table-sortable');
+			}
+
+			headerRow.append(th);
+		});
+
+		// Add actions column if needed
+		if (this.actionEdit || this.actionDelete || (this.customAction && this.customAction.length > 0) || (this.customActionButton && this.customActionButton.length > 0)) {
+			headerRow.append('<th class="kyte-table-th kyte-table-actions-header"></th>');
+		}
+
+		thead.append(headerRow);
+		this.tableElement.append(thead);
+
+		// Build tbody
+		const tbody = $('<tbody class="kyte-table-body"></tbody>');
+		this.tableElement.append(tbody);
+
+		// Build footer (pagination)
+		const footer = $(`
+			<div class="kyte-table-footer">
+				<div class="kyte-table-page-size">
+					<label>
+						Show
+						<select class="kyte-table-page-size-select">
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="50" selected>50</option>
+							<option value="100">100</option>
+						</select>
+						entries
+					</label>
+				</div>
+				<div class="kyte-table-pagination"></div>
+			</div>
+		`);
+		this.container.append(footer);
+		this.paginationContainer = footer.find('.kyte-table-pagination');
+
+		// Set clickable rows if needed
+		if (this.actionView) {
+			tbody.addClass('kyte-table-clickable');
+		}
+	}
+
+	_bindEvents = () => {
+		const self = this;
+
+		// Search input
+		if (this.searchInput) {
+			let searchTimeout;
+			this.searchInput.on('input', function() {
+				const val = $(this).val();
+				clearTimeout(searchTimeout);
+				searchTimeout = setTimeout(() => {
+					self.searchValue = val;
+					self.currentPage = 1;
+					self._loadData();
+
+					// Show/hide clear button
+					const clearBtn = $(this).siblings('.kyte-table-search-clear');
+					if (val) {
+						clearBtn.show();
+					} else {
+						clearBtn.hide();
+					}
+				}, 300);
+			});
+
+			// Clear search button
+			this.container.find('.kyte-table-search-clear').on('click', function() {
+				self.searchInput.val('');
+				self.searchValue = '';
+				self.currentPage = 1;
+				self._loadData();
+				$(this).hide();
+			});
+		}
+
+		// Column sorting
+		this.tableElement.find('.kyte-table-sortable').on('click', function() {
+			const column = $(this).data('column');
+
+			if (self.sortColumn === column) {
+				// Toggle direction
+				self.sortDirection = self.sortDirection === 'asc' ? 'desc' : 'asc';
+			} else {
+				self.sortColumn = column;
+				self.sortDirection = 'asc';
+			}
+
+			self._updateSortIndicators();
+			self._loadData();
+		});
+
+		// Page size change
+		this.container.find('.kyte-table-page-size-select').on('change', function() {
+			self.pageLength = parseInt($(this).val());
+			self.currentPage = 1;
+			self._loadData();
+		});
+
+		// Delete action
+		if (this.actionDelete) {
+			this.tableElement.on('click', '.kyte-table-action-delete', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+
+				const rowData = $(this).closest('tr').data('rowData');
+				self.api.confirm('Delete', 'Are you sure you wish to delete?', function() {
+					self.api.delete(self.model.name, 'id', rowData['id'], self.httpHeaders, function() {
+						self._loadData();
+					}, function() {
+						self.api.alert('Error', 'Unable to delete. Please try again later.');
+					});
+				});
+			});
+		}
+
+		// Edit action
+		if (this.actionEdit) {
+			this.tableElement.on('click', '.kyte-table-action-edit', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+
+				if (self.editForm) {
+					const rowData = $(this).closest('tr').data('rowData');
+					const $row = $(this).closest('tr');
+					self.editForm.selectedRow = { data: () => rowData, node: () => $row[0] };
+					self.editForm.setID(rowData['id']);
+					self.editForm.showModal();
+				}
+			});
+		}
+
+		// Custom actions
+		if (self.customAction && self.customAction.length > 0) {
+			self.customAction.forEach(action => {
+				self.tableElement.on('click', '.kyte-table-action-' + action.className, function(e) {
+					e.stopPropagation();
+					e.preventDefault();
+
+					const rowData = $(this).closest('tr').data('rowData');
+					const $row = $(this).closest('tr');
+					action.callback(rowData, self.model.name, { data: () => rowData, node: () => $row[0] });
+				});
+			});
+		}
+
+		// Custom action buttons
+		if (self.customActionButton && self.customActionButton.length > 0) {
+			self.customActionButton.forEach(action => {
+				self.tableElement.on('click', '.kyte-table-action-' + action.className, function(e) {
+					e.stopPropagation();
+					e.preventDefault();
+
+					const rowData = $(this).closest('tr').data('rowData');
+					const $row = $(this).closest('tr');
+					action.callback(rowData, self.model.name, { data: () => rowData, node: () => $row[0] });
+				});
+			});
+		}
+
+		// Row click for view
+		if (this.actionView) {
+			this.tableElement.on('click', 'tbody tr', function(e) {
+				// Don't trigger if clicking on actions
+				if ($(e.target).closest('.kyte-table-actions').length > 0) {
+					return;
+				}
+
+				const rowData = $(this).data('rowData');
+				if (self.viewTarget && rowData) {
+					const idx = self.api.getNestedValue(rowData, self.actionView);
+					const obj = { 'model': self.model.name, 'idx': idx };
+					const encoded = encodeURIComponent(btoa(JSON.stringify(obj)));
+					if (self.targetBlank) {
+						window.open(self.viewTarget + "?request=" + encoded, '_blank').focus();
+					} else {
+						location.href = self.viewTarget + "?request=" + encoded;
+					}
+				}
+			});
+		}
+	}
+
+	_loadData = () => {
+		const self = this;
+
+		if (this.isLoading) return;
+
+		this.isLoading = true;
+		this.drawCount++;
+
+		// Show skeleton loading
+		this._showSkeleton();
+
+		// Build headers
+		let fields = [];
+		this.columnDefs.forEach(o => {
+			if (o.data) {
+				fields.push(o.data);
+			}
+		});
+
+		const headers = [];
+		headers.push({'name':'x-kyte-draw','value': this.drawCount});
+		headers.push({'name':'x-kyte-page-size','value': this.pageLength});
+		headers.push({'name':'x-kyte-page-idx','value': this.currentPage});
+		headers.push({'name':'x-kyte-page-search-value','value': this.searchValue ? btoa(encodeURIComponent(this.searchValue)) : ""});
+		headers.push({'name':'x-kyte-page-search-fields','value': fields.join(',')});
+
+		if (this.sortColumn) {
+			headers.push({'name':'x-kyte-page-order-col','value': this.sortColumn});
+			headers.push({'name':'x-kyte-page-order-dir','value': this.sortDirection});
+		}
+
+		// Merge with any additional headers
+		const allHeaders = [...this.httpHeaders, ...headers];
+
+		// Load data
+		this.api.get(this.model.name, this.model.field, this.model.value, allHeaders, function(response) {
+			self.data = response.data || [];
+			self.totalRecords = parseInt(response.total_count) || 0;
+			self.filteredRecords = parseInt(response.total_filtered) || 0;
+
+			self._renderData();
+			self._updatePagination();
+			self._updateRecordCount();
+
+			self.isLoading = false;
+		}, function(error) {
+			console.error(`Unable to load table data for ${self.model.name}`, error);
+			self._showError();
+			self.isLoading = false;
+		});
+	}
+
+	_showSkeleton = () => {
+		const tbody = this.tableElement.find('tbody');
+		tbody.empty();
+
+		const columnCount = this.columnDefs.length + (this.actionEdit || this.actionDelete || this.customAction || this.customActionButton ? 1 : 0);
+
+		for (let i = 0; i < 8; i++) {
+			const row = $('<tr class="kyte-table-skeleton-row"></tr>');
+			for (let j = 0; j < columnCount; j++) {
+				row.append('<td><div class="kyte-table-skeleton"></div></td>');
+			}
+			tbody.append(row);
+		}
+	}
+
+	_showError = () => {
+		const tbody = this.tableElement.find('tbody');
+		tbody.empty();
+
+		const columnCount = this.columnDefs.length + (this.actionEdit || this.actionDelete || this.customAction || this.customActionButton ? 1 : 0);
+		const errorRow = $(`
+			<tr class="kyte-table-error-row">
+				<td colspan="${columnCount}" class="kyte-table-error">
+					<i class="fas fa-exclamation-triangle"></i>
+					<span>Failed to load data. Please try again.</span>
+				</td>
+			</tr>
+		`);
+		tbody.append(errorRow);
+	}
+
+	_renderData = () => {
+		const self = this;
+		const tbody = this.tableElement.find('tbody');
+		tbody.empty();
+
+		if (this.data.length === 0) {
+			const columnCount = this.columnDefs.length + (this.actionEdit || this.actionDelete || this.customAction || this.customActionButton ? 1 : 0);
+			const emptyRow = $(`
+				<tr class="kyte-table-empty-row">
+					<td colspan="${columnCount}" class="kyte-table-empty">
+						<i class="fas fa-inbox"></i>
+						<span>No data available</span>
+					</td>
+				</tr>
+			`);
+			tbody.append(emptyRow);
+			return;
+		}
+
+		this.data.forEach((rowData, index) => {
+			const row = $('<tr></tr>');
+			row.data('rowData', rowData);
+
+			// Render columns
+			this.columnDefs.forEach((col) => {
+				const td = $('<td></td>');
+
+				let cellData = this.api.getNestedValue(rowData, col.data);
+
+				if (typeof col.render === 'function') {
+					cellData = col.render(cellData, 'display', rowData, {row: index, col: col});
+				}
+
+				td.html(cellData);
+				row.append(td);
+			});
+
+			// Add actions column
+			if (this.actionEdit || this.actionDelete || (this.customAction && this.customAction.length > 0) || (this.customActionButton && this.customActionButton.length > 0)) {
+				const actionsTd = $('<td class="kyte-table-actions"></td>');
+				let actionsHTML = '';
+
+				// Custom action buttons
+				if (this.customActionButton && this.customActionButton.length > 0) {
+					this.customActionButton.forEach(a => {
+						if (a.className && a.label && typeof a.callback === "function") {
+							actionsHTML += `<button class="kyte-table-action-btn kyte-table-action-${a.className}">${a.faicon ? '<i class="'+a.faicon+'"></i> ' : ''}${a.label}</button>`;
+						}
+					});
+				}
+
+				// Dropdown actions
+				if (this.actionEdit || this.actionDelete || (this.customAction && this.customAction.length > 0)) {
+					let dropdownHTML = '<div class="kyte-table-actions-dropdown"><button class="kyte-table-actions-toggle"><i class="fas fa-ellipsis-v"></i></button><div class="kyte-table-actions-menu">';
+
+					if (this.actionEdit) {
+						let html = '<a href="#" class="kyte-table-action-edit"><i class="fas fa-edit"></i> Edit</a>';
+						if (typeof this.editDisplayHook === "function") {
+							html = this.editDisplayHook(rowData, this.model.name, html);
+						}
+						dropdownHTML += html;
+					}
+
+					if (this.actionDelete) {
+						let html = '<a href="#" class="kyte-table-action-delete"><i class="fas fa-trash-alt"></i> Delete</a>';
+						if (typeof this.deleteDisplayHook === "function") {
+							html = this.deleteDisplayHook(rowData, this.model.name, html);
+						}
+						dropdownHTML += html;
+					}
+
+					if (this.customAction && this.customAction.length > 0) {
+						dropdownHTML += '<div class="kyte-table-actions-divider"></div>';
+						this.customAction.forEach(a => {
+							if (a.className && a.label && typeof a.callback === "function") {
+								dropdownHTML += `<a href="#" class="kyte-table-action-${a.className}">${a.faicon ? '<i class="'+a.faicon+'"></i> ' : ''}${a.label}</a>`;
+							}
+						});
+					}
+
+					dropdownHTML += '</div></div>';
+					actionsHTML += dropdownHTML;
+				}
+
+				actionsTd.html(actionsHTML);
+				row.append(actionsTd);
+			}
+
+			// Row callback
+			if (typeof this.rowCallBack === 'function') {
+				this.rowCallBack(row[0], rowData, index);
+			}
+
+			tbody.append(row);
+		});
+
+		// Bind dropdown toggle
+		this._bindDropdownToggle();
+	}
+
+	_bindDropdownToggle = () => {
+		const self = this;
+
+		this.tableElement.find('.kyte-table-actions-toggle').off('click').on('click', function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+
+			const $toggle = $(this);
+			const $menu = $toggle.next('.kyte-table-actions-menu');
+			const $actionsCell = $toggle.closest('.kyte-table-actions');
+
+			// Close other dropdowns and remove z-index from other cells
+			$('.kyte-table-actions-menu').not($menu).removeClass('kyte-table-actions-menu-open kyte-table-actions-menu-up');
+			$('.kyte-table-actions').not($actionsCell).removeClass('dropdown-open');
+
+			// Toggle this dropdown
+			const isOpen = $menu.hasClass('kyte-table-actions-menu-open');
+
+			if (!isOpen) {
+				// Show menu temporarily to measure its height
+				$menu.css({ visibility: 'hidden', display: 'block' });
+				const menuHeight = $menu.outerHeight();
+				$menu.css({ visibility: '', display: '' });
+
+				const buttonRect = $toggle[0].getBoundingClientRect();
+				const viewportHeight = window.innerHeight;
+				const viewportWidth = window.innerWidth;
+
+				const spaceBelow = viewportHeight - buttonRect.bottom - 10; // 10px padding from edge
+				const spaceAbove = buttonRect.top - 10; // 10px padding from edge
+
+				let top, left, right;
+
+				// Determine vertical position (prefer downward, but flip if not enough space)
+				if (spaceBelow >= menuHeight || spaceBelow >= spaceAbove) {
+					// Open downward
+					top = buttonRect.bottom + 4;
+				} else {
+					// Open upward
+					top = buttonRect.top - menuHeight - 4;
+				}
+
+				// Make sure it doesn't go off screen vertically
+				if (top + menuHeight > viewportHeight) {
+					top = viewportHeight - menuHeight - 10;
+				}
+				if (top < 10) {
+					top = 10;
+				}
+
+				// Horizontal position (align to right of button)
+				right = viewportWidth - buttonRect.right;
+
+				// Make sure it doesn't go off screen horizontally
+				if (right < 10) {
+					right = 10;
+				}
+
+				// Position the menu
+				$menu.css({
+					top: top + 'px',
+					right: right + 'px',
+					left: 'auto',
+					bottom: 'auto'
+				});
+
+				$menu.addClass('kyte-table-actions-menu-open');
+				$actionsCell.addClass('dropdown-open');
+			} else {
+				$menu.removeClass('kyte-table-actions-menu-open');
+				$actionsCell.removeClass('dropdown-open');
+			}
+		});
+
+		// Close dropdown when clicking outside
+		$(document).on('click', function(e) {
+			if (!$(e.target).closest('.kyte-table-actions-dropdown').length) {
+				$('.kyte-table-actions-menu').removeClass('kyte-table-actions-menu-open kyte-table-actions-menu-up');
+				$('.kyte-table-actions').removeClass('dropdown-open');
+			}
+		});
+	}
+
+	_updateSortIndicators = () => {
+		// Remove all sort indicators
+		this.tableElement.find('.kyte-table-th').removeClass('kyte-table-sorted-asc kyte-table-sorted-desc');
+
+		// Add indicator to sorted column
+		if (this.sortColumn) {
+			const th = this.tableElement.find(`.kyte-table-th[data-column="${this.sortColumn}"]`);
+			th.addClass(`kyte-table-sorted-${this.sortDirection}`);
+		}
+	}
+
+	_updatePagination = () => {
+		const self = this;
+		const totalPages = Math.ceil(this.filteredRecords / this.pageLength);
+
+		this.paginationContainer.empty();
+
+		if (totalPages <= 1) {
+			return;
+		}
+
+		const pagination = $('<div class="kyte-table-page-buttons"></div>');
+
+		// Previous button
+		const prevBtn = $(`<button class="kyte-table-page-btn ${this.currentPage === 1 ? 'disabled' : ''}" data-page="${this.currentPage - 1}"><i class="fas fa-chevron-left"></i></button>`);
+		pagination.append(prevBtn);
+
+		// Page numbers
+		const maxButtons = 7;
+		let startPage = Math.max(1, this.currentPage - Math.floor(maxButtons / 2));
+		let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+		if (endPage - startPage < maxButtons - 1) {
+			startPage = Math.max(1, endPage - maxButtons + 1);
+		}
+
+		if (startPage > 1) {
+			pagination.append(`<button class="kyte-table-page-btn" data-page="1">1</button>`);
+			if (startPage > 2) {
+				pagination.append('<span class="kyte-table-page-ellipsis">...</span>');
+			}
+		}
+
+		for (let i = startPage; i <= endPage; i++) {
+			const pageBtn = $(`<button class="kyte-table-page-btn ${i === this.currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`);
+			pagination.append(pageBtn);
+		}
+
+		if (endPage < totalPages) {
+			if (endPage < totalPages - 1) {
+				pagination.append('<span class="kyte-table-page-ellipsis">...</span>');
+			}
+			pagination.append(`<button class="kyte-table-page-btn" data-page="${totalPages}">${totalPages}</button>`);
+		}
+
+		// Next button
+		const nextBtn = $(`<button class="kyte-table-page-btn ${this.currentPage === totalPages ? 'disabled' : ''}" data-page="${this.currentPage + 1}"><i class="fas fa-chevron-right"></i></button>`);
+		pagination.append(nextBtn);
+
+		this.paginationContainer.append(pagination);
+
+		// Bind page button clicks
+		pagination.find('.kyte-table-page-btn:not(.disabled)').on('click', function() {
+			const page = parseInt($(this).data('page'));
+			if (page && page !== self.currentPage) {
+				self.currentPage = page;
+				self._loadData();
+			}
+		});
+	}
+
+	_updateRecordCount = () => {
+		const start = (this.currentPage - 1) * this.pageLength + 1;
+		const end = Math.min(this.currentPage * this.pageLength, this.filteredRecords);
+
+		let text = '';
+		if (this.filteredRecords === 0) {
+			text = 'No entries';
+		} else if (this.filteredRecords === this.totalRecords) {
+			text = `Showing ${start} to ${end} of ${this.totalRecords} entries`;
+		} else {
+			text = `Showing ${start} to ${end} of ${this.filteredRecords} entries (filtered from ${this.totalRecords} total)`;
+		}
+
+		this.container.find('.kyte-table-record-count').text(text);
+	}
+
+	_injectStyles = () => {
+		// Check if styles already injected
+		if ($('#kyte-table-styles').length > 0) {
+			return;
+		}
+
+		const styles = `
+			<style id="kyte-table-styles">
+				.kyte-table-container {
+					font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+					font-size: 14px;
+					color: #2d3748;
+					background: white;
+					box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+					overflow: visible;
+					position: relative;
+				}
+
+				.kyte-table-toolbar {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					padding: 16px 20px;
+					background: #f8fafc;
+					border-bottom: 1px solid #e2e8f0;
+					border-radius: 8px 8px 0 0;
+				}
+
+				.kyte-table-search {
+					position: relative;
+					display: flex;
+					align-items: center;
+				}
+
+				.kyte-table-search i {
+					position: absolute;
+					left: 12px;
+					color: #a0aec0;
+					pointer-events: none;
+				}
+
+				.kyte-table-search-input {
+					padding: 8px 36px 8px 36px;
+					border: 1px solid #e2e8f0;
+					border-radius: 6px;
+					font-size: 14px;
+					width: 300px;
+					transition: all 0.2s;
+				}
+
+				.kyte-table-search-input:focus {
+					outline: none;
+					border-color: #ff6b35;
+					box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+				}
+
+				.kyte-table-search-clear {
+					position: absolute;
+					right: 8px;
+					background: none;
+					border: none;
+					color: #a0aec0;
+					cursor: pointer;
+					padding: 4px;
+					border-radius: 4px;
+					transition: all 0.2s;
+				}
+
+				.kyte-table-search-clear:hover {
+					color: #718096;
+					background: #e2e8f0;
+				}
+
+				.kyte-table-info {
+					color: #718096;
+					font-size: 13px;
+				}
+
+				.kyte-table-wrapper {
+					overflow-x: auto;
+					overflow-y: visible;
+					position: relative;
+				}
+
+				.kyte-table {
+					width: 100%;
+					border-collapse: collapse;
+					border-spacing: 0;
+					overflow: visible;
+				}
+
+				.kyte-table tbody {
+					overflow: visible;
+				}
+
+				.kyte-table thead {
+					position: sticky;
+					top: 0;
+					z-index: 9;
+					background: white;
+				}
+
+				.kyte-table-th {
+					text-align: left;
+					padding: 12px 16px;
+					font-weight: 600;
+					color: #4a5568;
+					background: #f8fafc;
+					border-bottom: 2px solid #e2e8f0;
+					white-space: nowrap;
+					user-select: none;
+				}
+
+				.kyte-table-th-content {
+					display: flex;
+					align-items: center;
+					gap: 8px;
+				}
+
+				.kyte-table-sortable {
+					cursor: pointer;
+					transition: background 0.2s;
+				}
+
+				.kyte-table-sortable:hover {
+					background: #edf2f7;
+				}
+
+				.kyte-table-sort-indicator {
+					display: inline-block;
+					width: 12px;
+					height: 12px;
+					opacity: 0.3;
+				}
+
+				.kyte-table-sort-indicator::before {
+					content: '⇅';
+					font-size: 12px;
+				}
+
+				.kyte-table-sorted-asc .kyte-table-sort-indicator {
+					opacity: 1;
+				}
+
+				.kyte-table-sorted-asc .kyte-table-sort-indicator::before {
+					content: '↑';
+				}
+
+				.kyte-table-sorted-desc .kyte-table-sort-indicator {
+					opacity: 1;
+				}
+
+				.kyte-table-sorted-desc .kyte-table-sort-indicator::before {
+					content: '↓';
+				}
+
+				.kyte-table-body tr {
+					border-bottom: 1px solid #e2e8f0;
+					transition: background 0.2s;
+				}
+
+				.kyte-table-body tr:hover {
+					background: #f8fafc;
+				}
+
+				.kyte-table-body.kyte-table-clickable tr {
+					cursor: pointer;
+				}
+
+				.kyte-table-body.kyte-table-clickable tr:hover {
+					background: #edf2f7;
+				}
+
+				.kyte-table-body td {
+					padding: 12px 16px;
+					color: #2d3748;
+					vertical-align: middle;
+				}
+
+				.kyte-table-actions {
+					text-align: right;
+					white-space: nowrap;
+					position: relative;
+					z-index: 1;
+				}
+
+				.kyte-table-actions.dropdown-open {
+					z-index: 1001;
+				}
+
+				.kyte-table-actions-header {
+					width: 80px;
+				}
+
+				.kyte-table-action-btn {
+					display: inline-block;
+					padding: 6px 12px;
+					border: 1px solid #e2e8f0;
+					background: white;
+					color: #4a5568;
+					border-radius: 6px;
+					font-size: 13px;
+					cursor: pointer;
+					transition: all 0.2s;
+					margin-left: 8px;
+				}
+
+				.kyte-table-action-btn:hover {
+					background: #f8fafc;
+					border-color: #cbd5e0;
+				}
+
+				.kyte-table-actions-dropdown {
+					position: relative;
+					display: inline-block;
+				}
+
+				.kyte-table-actions-toggle {
+					padding: 6px 10px;
+					border: 1px solid #e2e8f0;
+					background: white;
+					color: #4a5568;
+					border-radius: 6px;
+					cursor: pointer;
+					transition: all 0.2s;
+				}
+
+				.kyte-table-actions-toggle:hover {
+					background: #f8fafc;
+					border-color: #cbd5e0;
+				}
+
+				.kyte-table-actions-menu {
+					position: fixed;
+					min-width: 160px;
+					background: white;
+					border: 1px solid #e2e8f0;
+					border-radius: 6px;
+					box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+					display: none;
+					z-index: 9999;
+					max-height: 400px;
+					overflow-y: auto;
+				}
+
+				.kyte-table-actions-menu.kyte-table-actions-menu-open {
+					display: block;
+					animation: kyte-dropdown-fade-in 0.2s ease;
+				}
+
+				@keyframes kyte-dropdown-fade-in {
+					from {
+						opacity: 0;
+						transform: translateY(-8px);
+					}
+					to {
+						opacity: 1;
+						transform: translateY(0);
+					}
+				}
+
+				.kyte-table-actions-menu a {
+					display: block;
+					padding: 10px 16px;
+					color: #4a5568;
+					text-decoration: none;
+					transition: background 0.2s;
+				}
+
+				.kyte-table-actions-menu a:hover {
+					background: #f8fafc;
+				}
+
+				.kyte-table-actions-menu a i {
+					width: 16px;
+					margin-right: 8px;
+					color: #a0aec0;
+				}
+
+				.kyte-table-actions-divider {
+					height: 1px;
+					background: #e2e8f0;
+					margin: 4px 0;
+				}
+
+				.kyte-table-skeleton-row td {
+					padding: 12px 16px;
+				}
+
+				.kyte-table-skeleton {
+					height: 16px;
+					background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+					background-size: 200% 100%;
+					border-radius: 4px;
+					animation: kyte-skeleton-loading 1.5s infinite;
+				}
+
+				@keyframes kyte-skeleton-loading {
+					0% {
+						background-position: 200% 0;
+					}
+					100% {
+						background-position: -200% 0;
+					}
+				}
+
+				.kyte-table-empty,
+				.kyte-table-error {
+					text-align: center;
+					padding: 40px 20px;
+					color: #a0aec0;
+				}
+
+				.kyte-table-empty i,
+				.kyte-table-error i {
+					display: block;
+					font-size: 32px;
+					margin-bottom: 12px;
+					opacity: 0.5;
+				}
+
+				.kyte-table-error {
+					color: #e53e3e;
+				}
+
+				.kyte-table-footer {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					padding: 16px 20px;
+					background: #f8fafc;
+					border-top: 1px solid #e2e8f0;
+					border-radius: 0 0 8px 8px;
+					position: relative;
+					z-index: 0;
+				}
+
+				.kyte-table-page-size {
+					display: flex;
+					align-items: center;
+					gap: 8px;
+					font-size: 13px;
+					color: #718096;
+				}
+
+				.kyte-table-page-size-select {
+					padding: 6px 8px;
+					border: 1px solid #e2e8f0;
+					border-radius: 6px;
+					font-size: 13px;
+					background: white;
+					cursor: pointer;
+				}
+
+				.kyte-table-page-buttons {
+					display: flex;
+					align-items: center;
+					gap: 4px;
+				}
+
+				.kyte-table-page-btn {
+					min-width: 32px;
+					height: 32px;
+					padding: 0 8px;
+					border: 1px solid #e2e8f0;
+					background: white;
+					color: #4a5568;
+					border-radius: 6px;
+					font-size: 13px;
+					cursor: pointer;
+					transition: all 0.2s;
+				}
+
+				.kyte-table-page-btn:hover:not(.disabled):not(.active) {
+					background: #f8fafc;
+					border-color: #cbd5e0;
+				}
+
+				.kyte-table-page-btn.active {
+					background: #ff6b35;
+					border-color: #ff6b35;
+					color: white;
+				}
+
+				.kyte-table-page-btn.disabled {
+					opacity: 0.5;
+					cursor: not-allowed;
+				}
+
+				.kyte-table-page-ellipsis {
+					padding: 0 4px;
+					color: #a0aec0;
+				}
+
+				/* Responsive */
+				@media (max-width: 768px) {
+					.kyte-table-toolbar {
+						flex-direction: column;
+						gap: 12px;
+						align-items: flex-start;
+					}
+
+					.kyte-table-search-input {
+						width: 100%;
+					}
+
+					.kyte-table-footer {
+						flex-direction: column;
+						gap: 12px;
+						align-items: flex-start;
+					}
+
+					.kyte-table-page-buttons {
+						width: 100%;
+						justify-content: center;
+					}
+				}
+			</style>
+		`;
+
+		$('head').append(styles);
+	}
+
+	// Backwards compatibility method
+	bindEdit = (editForm) => {
+		this.editForm = editForm;
+	}
+
+	// DataTables-compatible API for existing code
+	row = (element) => {
+		const $row = $(element).closest('tr');
+		return {
+			data: () => $row.data('rowData'),
+			node: () => $row[0],
+			remove: () => {
+				return {
+					draw: () => this._loadData()
+				};
+			}
+		};
+	}
+
+	// Refresh data
+	draw = () => {
+		this._loadData();
+	}
+
+	// Get API object (for compatibility)
+	api = () => {
+		return {
+			table: () => ({
+				container: () => this.container[0]
+			})
+		};
+	}
+}
+
+
+/*
+ * Class Definition for Kyte Form
+ *
+ * api : Kyte object
+ * selector : id tag
+ * hidden : json array of hidden elements (do not include id as it will clash)
+ * 
+ * {
+ * 	'name' : '<field_name>',
+ * 	'value' : '<null/value>'
+ * }
+ * 
+ * elements : json array defining form elements
+ * 
+ * [
+ * 	[x-> direction],
+ * 	[x-> direction],
+ * 	[x-> direction], ...etc...
+ * ]
+ * 
+ * {
+ * 	'field' : '<model_attribute>',
+ * 	'type' : '<text/password/select/textarea>',
+ * 	'label' : '<label>',
+ * 	'placeholder' : '<placeholder>',
+ * 	'required' : true/false,
+ *  'col': <integer>,  # optional field to indicate bootstrap grid size
+ *  'id': '<string>', # optional field to override autogenerated field id
+ * 
+ *  ### Event listeners
+ *  'click': function(selector, e) {},
+ *  'change': function(selector, e) {},
+ * 
+ * For dates:
+ * 'date': true/false,
+ * 
+ * 	### if field type is select, the following is required to set options
+ * 	## For using ajax data source:
+ * 	'option' : {
+ *	 	'ajax' : true,
+ * 		'data_model_name' : '<model_name>',
+ * 		'data_model_field' : <null/field_name>,
+ * 		'data_model_value' : <null/value>,
+ * 		'data_model_attributes' : <attribute_name>,
+ * 		'data_model_default_field' : <attribute_name>, ## optional field to preselect a particular option
+ * 		'data_model_default_value' : <value>, ## optional field to preselect a particular option
+ * 	}
+ * 
+ * 	## For using predefined values:
+ * 	'option' : {
+ *	 	'ajax' : false,
+ *		'data' : {
+ *	 		'<option_value_1>' : '<option_name_1>',
+ * 			'<option_value_2>' : '<option_name_2>',
+ * 			'<option_value_3>' : '<option_name_3>',...etc....
+ *		}
+ * 	}
+ * }
+ * 
+ * successCallBack : optional function(obj, selector, e) {}
+ * failureCallBack : option function(obj, selector, e) {}
+ */
+class KyteForm {
+	constructor(api, selector, modelName, hiddenFields, elements, title = 'Form', table = null, modal = false, modalButton = null, successCallBack = null, failureCallBack = null) {
+		// === EXISTING PROPERTIES (unchanged) ===
+		this.api = api;
+		this.model = modelName;
+		this.modal = modal;
+		this.modalButton = modalButton;
+		this.KyteTable = table;
+		this.title = title;
+		this.hiddenFields = hiddenFields;
+		this.elements = elements;
+		this.id;
+		this.submitButton = 'Submit';
+		this.httpHeaders = [];
+
+		// file upload
+		this.fileUploadField = null;
+
+		this.itemized = false;
+		this.externalChildData = false;
+
+		this.success = successCallBack;
+		this.fail = failureCallBack;
+
+		this.loaded = false;
+
+		this.selector = selector;
+
+		this.selectedRow = null;
+
+		this.editOnlyMode = false;
+
+		this.isValid = true;
+		this.validate = null;
+
+		// === NEW PROPERTIES (with backward-compatible defaults) ===
+
+		// UI Enhancement Options
+		this.showLoadingOverlay = true;          // Default true (existing behavior)
+		this.loadingText = null;                 // If set, shows text in loader
+		this.showSuccessToast = false;           // Show toast on success (default off)
+		this.successMessage = 'Saved successfully';
+		this.autoCloseModal = true;              // Default true (existing behavior)
+		this.autoCloseDelay = 0;                 // Delay before auto-close (ms)
+		this.resetOnSuccess = true;              // Default true (existing behavior)
+
+		// Validation Options
+		this.validateOnBlur = false;             // Real-time field validation
+		this.showInlineErrors = false;           // Show error text below fields
+		this.scrollToFirstError = false;         // Scroll to first invalid field
+
+		// Form State
+		this.trackDirtyState = false;            // Track if form has unsaved changes
+		this.confirmDirtyClose = false;          // Warn before closing dirty form
+		this._isDirty = false;                   // Internal dirty state
+		this._originalData = null;               // Store original values for comparison
+
+		// Submit Button Options
+		this.disableSubmitOnProcess = true;      // Disable button during submit
+		this.submitButtonLoadingText = null;     // Text while submitting
+
+		// Accessibility
+		this.focusFirstField = true;             // Auto-focus first field on open
+		this.trapFocus = true;                   // Keep focus within modal (default)
+
+		// Debug
+		this.debug = false;                      // Log form events to console
+
+		// Event Hooks (all null by default - no impact if not set)
+		this.events = {
+			beforeInit: null,           // () => void
+			afterInit: null,            // () => void
+			beforeOpen: null,           // (idx) => boolean - return false to cancel
+			afterOpen: null,            // (idx, data) => void
+			beforeClose: null,          // () => boolean - return false to cancel
+			afterClose: null,           // () => void
+			beforeSubmit: null,         // (formData, isEdit) => boolean - return false to cancel
+			afterSubmit: null,          // (response, isEdit) => void
+			beforeValidate: null,       // (formData) => void
+			afterValidate: null,        // (isValid, invalidFields) => void
+			onFieldChange: null,        // (fieldName, newValue, oldValue) => void
+			onError: null,              // (error, context) => void
+			onDirtyChange: null         // (isDirty) => void
+		};
+	}
+
+	// === PRIVATE HELPER METHODS ===
+
+	// Get field ID from field name
+	_getFieldId = (fieldName) => {
+		// Check if custom ID was defined
+		for (const row of this.elements) {
+			for (const col of row) {
+				if (col.field === fieldName) {
+					return col.id || `form_${this.model}_${this.id}_${fieldName}`;
+				}
+			}
+		}
+		return `form_${this.model}_${this.id}_${fieldName}`;
+	}
+
+	// Emit event hook
+	_emitEvent = (eventName, ...args) => {
+		if (this.events[eventName] && typeof this.events[eventName] === 'function') {
+			const result = this.events[eventName](...args);
+			if (this.debug) {
+				console.log(`[KyteForm:${this.model}] Event: ${eventName}`, args, 'Result:', result);
+			}
+			return result;
+		}
+		return undefined;
+	}
+
+	// Log debug message
+	_log = (message, ...args) => {
+		if (this.debug) {
+			console.log(`[KyteForm:${this.model}] ${message}`, ...args);
+		}
+	}
+
+	// Check dirty state
+	_checkDirtyState = () => {
+		if (!this.trackDirtyState || !this._originalData) return;
+
+		const currentData = this.getData();
+		const wasDirty = this._isDirty;
+		this._isDirty = JSON.stringify(currentData) !== JSON.stringify(this._originalData);
+
+		if (wasDirty !== this._isDirty) {
+			this._emitEvent('onDirtyChange', this._isDirty);
+		}
+	}
+
+	// Trigger form change for dirty tracking
+	_triggerFormChange = () => {
+		if (this.trackDirtyState) {
+			this._checkDirtyState();
+		}
+	}
+
+	// Refresh table helper
+	_refreshTable = () => {
+		if (this.KyteTable) {
+			this.KyteTable.draw();
+		}
+	}
+
+	// Show loading overlay
+	_showLoading = () => {
+		if (this.showLoadingOverlay) {
+			$(`#${this.model}_${this.id}_modal-loader`).modal('show');
+		}
+		if (this.disableSubmitOnProcess) {
+			const $btn = $(`#form_${this.model}_${this.id} [type="submit"]`);
+			$btn.prop('disabled', true);
+			if (this.submitButtonLoadingText) {
+				$btn.data('original-text', $btn.val() || $btn.text()).val(this.submitButtonLoadingText);
+			}
+		}
+	}
+
+	// Hide loading overlay
+	_hideLoading = () => {
+		$(`#${this.model}_${this.id}_modal-loader`).modal('hide');
+		if (this.disableSubmitOnProcess) {
+			const $btn = $(`#form_${this.model}_${this.id} [type="submit"]`);
+			$btn.prop('disabled', false);
+			if ($btn.data('original-text')) {
+				$btn.val($btn.data('original-text'));
+			}
+		}
+	}
+
+	// Show success toast
+	_showSuccessToast = () => {
+		// Use Bootstrap 5 toast or fall back to simple notification
+		if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+			const toastHtml = `
+				<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+					<div class="toast align-items-center text-white bg-success" role="alert">
+						<div class="d-flex">
+							<div class="toast-body">${this.successMessage}</div>
+							<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+						</div>
+					</div>
+				</div>`;
+			$('body').append(toastHtml);
+			const toast = new bootstrap.Toast($('.toast').last()[0]);
+			toast.show();
+			// Clean up after hidden
+			$('.toast').last().on('hidden.bs.toast', function() {
+				$(this).closest('.toast-container').remove();
+			});
+		}
+	}
+
+	// Format error message for display
+	_formatErrorMessage = (message) => {
+		// Handle jQuery AJAX error object
+		if (message && message.responseJSON) {
+			const json = message.responseJSON;
+			if (json.error) return json.error;
+			if (json.message) return json.message;
+			if (json.errors && Array.isArray(json.errors)) {
+				return json.errors.map(e => e.message || e).join('<br>');
+			}
+		}
+
+		// Handle string
+		if (typeof message === 'string') {
+			return message;
+		}
+
+		// Handle Error object
+		if (message instanceof Error) {
+			return message.message;
+		}
+
+		// Handle plain object with error/message properties
+		if (typeof message === 'object') {
+			if (message.error) return message.error;
+			if (message.message) return message.message;
+		}
+
+		return 'An error occurred. Please try again.';
+	}
+
+	// === NEW PUBLIC METHODS ===
+
+	// Get all form data as an object
+	getData = () => {
+		const formData = {};
+		const form = $(`#form_${this.model}_${this.id}`);
+		form.serializeArray().forEach(item => {
+			// Handle array fields (e.g., items[])
+			if (item.name.endsWith('[]')) {
+				const key = item.name.slice(0, -2);
+				if (!formData[key]) formData[key] = [];
+				formData[key].push(item.value);
+			} else {
+				formData[item.name] = item.value;
+			}
+		});
+		return formData;
+	}
+
+	// Get a single field value
+	getFieldValue = (fieldName) => {
+		const fieldId = this._getFieldId(fieldName);
+		return $(`#${fieldId}`).val();
+	}
+
+	// Set a single field value
+	setFieldValue = (fieldName, value, triggerChange = true) => {
+		const fieldId = this._getFieldId(fieldName);
+		$(`#${fieldId}`).val(value);
+		if (triggerChange) {
+			$(`#${fieldId}`).trigger('change');
+		}
+	}
+
+	// Set multiple field values at once
+	setData = (data) => {
+		Object.entries(data).forEach(([key, value]) => {
+			this.setFieldValue(key, value, false);
+		});
+		// Trigger single change event after all values set
+		this._triggerFormChange();
+	}
+
+	// Clear all form fields (alias for resetForm)
+	clearForm = () => {
+		this.resetForm();
+	}
+
+	// Check if form is in edit mode
+	isEditMode = () => {
+		const idx = this.editOnlyMode || this.getID();
+		return idx && idx > 0;
+	}
+
+	// Check if form has unsaved changes
+	isDirty = () => {
+		return this._isDirty;
+	}
+
+	// Mark form as clean (after external save)
+	markClean = () => {
+		this._isDirty = false;
+		this._originalData = this.getData();
+		this._emitEvent('onDirtyChange', false);
+	}
+
+	// Mark form as dirty (for external modifications)
+	markDirty = () => {
+		this._isDirty = true;
+		this._emitEvent('onDirtyChange', true);
+	}
+
+	// Programmatically submit the form
+	submit = () => {
+		$(`#form_${this.model}_${this.id}`).submit();
+	}
+
+	// Refresh all AJAX-populated select fields
+	refreshSelects = () => {
+		this.reloadAjax();
+	}
+
+	// Load data for editing (can be called externally)
+	loadRecord = (idx, success = null, fail = null) => {
+		this.setID(idx);
+		this.loadFormData(idx, success, fail);
+	}
+
+	// Validate form and return result
+	validateForm = () => {
+		const invalidFields = [];
+		const form = $(`#form_${this.model}_${this.id}`);
+
+		this._emitEvent('beforeValidate', this.getData());
+
+		form.find('input, textarea, select').each((_, el) => {
+			const $el = $(el);
+			if ($el.prop('required') && !$el.val()) {
+				invalidFields.push({
+					field: $el.attr('name'),
+					element: el,
+					message: 'This field is required'
+				});
+				$el.addClass('is-invalid').removeClass('is-valid');
+				if (this.showInlineErrors) {
+					$el.siblings('.invalid-feedback').remove();
+					$el.after(`<div class="invalid-feedback" style="display:block;">This field is required</div>`);
+				}
+			} else {
+				$el.addClass('is-valid').removeClass('is-invalid');
+				$el.siblings('.invalid-feedback').remove();
+			}
+		});
+
+		this.isValid = invalidFields.length === 0;
+		this._emitEvent('afterValidate', this.isValid, invalidFields);
+
+		if (!this.isValid && this.scrollToFirstError && invalidFields.length > 0) {
+			invalidFields[0].element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			invalidFields[0].element.focus();
+		}
+
+		return { isValid: this.isValid, invalidFields };
+	}
+
+	// Set field as invalid with message
+	setFieldError = (fieldName, message) => {
+		const fieldId = this._getFieldId(fieldName);
+		const $field = $(`#${fieldId}`);
+		$field.addClass('is-invalid').removeClass('is-valid');
+
+		if (this.showInlineErrors) {
+			// Remove existing feedback
+			$field.siblings('.invalid-feedback').remove();
+			// Add new feedback
+			$field.after(`<div class="invalid-feedback" style="display:block;">${message}</div>`);
+		}
+	}
+
+	// Clear field error
+	clearFieldError = (fieldName) => {
+		const fieldId = this._getFieldId(fieldName);
+		const $field = $(`#${fieldId}`);
+		$field.removeClass('is-invalid is-valid');
+		$field.siblings('.invalid-feedback').remove();
+	}
+
+	// Clear all validation states
+	clearValidation = () => {
+		const form = $(`#form_${this.model}_${this.id}`);
+		form.find('.is-invalid, .is-valid').removeClass('is-invalid is-valid');
+		form.find('.invalid-feedback').remove();
+		this.clearErrorMessage();
+	}
+
+	// Reset form to initial state
+	resetForm = () => {
+		const form = $(`#form_${this.model}_${this.id}`);
+
+		// Clear form data
+		form.data('idx', '');
+		form.data('row', '');
+
+		// Clear error messages
+		this.clearErrorMessage();
+
+		// Clear validation states
+		this.clearValidation();
+
+		// Reset all field values
+		form.find('input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="number"]').val('');
+		form.find('input[type="checkbox"], input[type="radio"]').prop('checked', false);
+		form.find('select').prop('selectedIndex', 0);
+		form.find('textarea').val('');
+
+		// Clear itemized rows
+		if (this.itemized) {
+			$(`#itemized_${this.model}_${this.id}`).html('');
+		}
+
+		// Reset dirty state
+		this._isDirty = false;
+		this._originalData = null;
+
+		// Trigger native reset
+		form.trigger('reset');
+
+		// Reset selected row reference
+		this.selectedRow = null;
+	}
+
+	// Get the DOM form element
+	getFormElement = () => {
+		return $(`#form_${this.model}_${this.id}`);
+	}
+
+	// Get the modal element (if modal form)
+	getModalElement = () => {
+		return this.modal ? $(`#modal_${this.model}_${this.id}`) : null;
+	}
+
+	// Add a hidden field dynamically
+	addHiddenField = (name, value) => {
+		const form = $(`#form_${this.model}_${this.id}`);
+		const existing = form.find(`input[type="hidden"][name="${name}"]`);
+		if (existing.length) {
+			existing.val(value);
+		} else {
+			form.append(`<input type="hidden" name="${name}" value="${value}">`);
+		}
+	}
+
+	// Remove a hidden field
+	removeHiddenField = (name) => {
+		$(`#form_${this.model}_${this.id} input[type="hidden"][name="${name}"]`).remove();
+	}
+
+	// Disable/enable form
+	setDisabled = (disabled) => {
+		const form = $(`#form_${this.model}_${this.id}`);
+		form.find('input, textarea, select, button').prop('disabled', disabled);
+	}
+
+	// Show/hide specific field
+	setFieldVisible = (fieldName, visible) => {
+		const fieldId = this._getFieldId(fieldName);
+		const $field = $(`#${fieldId}`).closest('.form-group');
+		visible ? $field.show() : $field.hide();
+	}
+	init = () => {
+		if (!this.loaded) {
+			this._emitEvent('beforeInit');
+
+			this.id = this.makeID(8);
+			let content = '';
+			let obj = this;
+
+			// if modal, then create modal tags
+			if (this.modal) {
+				// add click listener to modal button
+				if (this.modalButton) {
+					this.modalButton.on('click', function (e) {
+						e.stopPropagation();
+						e.preventDefault();
+						$('#modal_' + obj.model + '_' + obj.id).modal('show');
+					});
+				}
+
+				content += `
+<div class="modal fade" id="modal_${this.model}_${this.id}" tabindex="-1" role="dialog" aria-labelledby="modal_${this.model}_${this.id}" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header text-center">
+				<h4 class="modal-title w-100 fw-bold">${this.title}</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body mx-3">`;
+			}
+
+			// form content
+			content += `
+				<div id="${this.model}_${this.id}_modal-loader" class="modal" style="background: white; opacity: 0.6;" data-backdrop="static" data-keyboard="false" tabindex="-1">
+					<div class="modal-dialog modal-sm h-100 d-flex">
+						<div class="mx-auto align-self-center" style="width: 48px">
+							<div class="spinner-wrapper text-center fa-6x"><span class="fas fa-sync fa-spin"></span></div>
+						</div>
+					</div>
+				</div>
+				<form novalidate="novalidate" class="needs-validation" id="form_${this.model}_${this.id}">
+					<div class="error-msg"></div>`;
+
+			// append hidden fields
+			if (this.hiddenFields) {
+				this.hiddenFields.forEach(function (field) {
+					let fieldId = field.id !== undefined ? field.id : `form_${obj.model}_${obj.id}_${field.name}`;
+					content += `<input type="hidden" id="${fieldId}" name="${field.name}" value="${field.value}">`;
+				});
+			}
+
+			// iterate through form definition
+			this.elements.forEach(function (row) {
+				content += '<div class="row my-2">';
+				row.forEach(function (column) {
+					content += `<div class="col-sm${column.col !== undefined ? '-'+column.col : ''}"><div class="form-group">`;
+
+					let fieldId = column.id !== undefined ? column.id : `form_${obj.model}_${obj.id}_${column.field}`;
+
+					// if label option is provided
+					if (column.label) {
+						content += `<label for="${fieldId}">${column.label}</label>`;
+					}
+
+					if (column.type == 'select') {
+						content += `<select id="${fieldId}" class="form-select" name="${column.field}"${column.required ? ' required="required"' : ''}>`;
+						if (column.placeholder) {
+							content += `<option selected="selected" disabled>${column.placeholder}</option>`;
+						}
+						// if not ajax, then populate with data - ajax will populate after appending html
+						if (!column.option.ajax) {
+							for (var key in column.option.data) {
+								if (column.option.data.hasOwnProperty(key)) {
+									content += `<option value="${key}">${column.option.data[key]}</option>`;
+								}
+							}
+						}
+						// close select
+						content += '</select>';
+					} else if (column.type == 'textarea') {
+						content += `<textarea style="width:100%" id="${fieldId}" class="form-control" name="${column.field}"${column.required ? ' required="required"' : ''}${column.placeholder !== undefined ? ' placeholder="' + column.placeholder + '"' : '' } ${column.maxlength !== undefined ? ' maxlength="' + column.maxlength + '"' : ''}></textarea>`;
+					} else if (column.type == 'file') {
+						content += `<input type="file" id="${fieldId}" name="${column.field}" class="form-control" data-max-file-size="2M" accept="image/*;capture=camera"${column.required ? ' required="required"' : ''} />`;
+						obj.fileUploadField = fieldId;
+					} else {
+						content += `<input type="${column.type}" id="${fieldId}" class="form-control" name="${column.field}"${column.required ? ' required="required"' : ''}${column.placeholder !== undefined ? ' placeholder="' + column.placeholder + '"' : ''}${column.value !== undefined ? ' value="' + column.value + '"' : ''}${column.readonly !== undefined ? ' readonly' : ''} ${column.maxlength !== undefined ? ' maxlength="' + column.maxlength + '"' : ''}/>`;
+					}
+
+					// add event listeners
+					if (typeof column.click === "function") {
+						$('body').on('click', `#${fieldId}`, function(e) {
+							column.click(obj, $(`#${fieldId}`), e);
+						});
+					}
+
+					if (typeof column.change === "function") {
+						$('body').on('change', `#${fieldId}`, function(e) {
+							column.change(obj, $(`#${fieldId}`), e);
+						});
+					}
+
+					content += '</div></div>';
+				});
+				content += '</div>';
+			});
+
+			// if itemized is specified, populate with template information
+			if (this.itemized) {
+				content += `<hr><h6>${this.itemized.title}</h6><div class="row">`;
+
+				// add column headers
+				this.itemized.fields.forEach(function (field) {
+					content += `<div class="col">${field.label}</div>`;
+				});
+
+				content += `<div class="col"></div></div><div id="itemized_${this.model}_${this.id}"></div><div class="row my-4"><div class="col text-end"><a href="#" class="itemized-add-item btn btn-sm btn-outline-secondary">Add</a></div></div><hr>`;
+			}
+
+			content += `<div class="row my-4"><div class="col text-center"><input type="submit" name="submit" value="${obj.submitButton}" class="btn btn-primary btn-medium d-sm-inline-block"></div></div>`;
+
+			// end form
+			content += '</form>';
+
+			// if modal, then close modal tags
+			if (this.modal) {
+				content += '</div></div></div></div>';
+			}
+			if (typeof this.selector === 'string') {
+				$('body').append(`<div id="${this.selector}"></div>`);
+				this.selector = $(this.selector);
+			}
+			this.selector.append(content);
+
+			this.reloadAjax();
+
+			// bind submit listener
+			$(`#form_${this.model}_${this.id}`).submit(function (e) {
+				var form = $(this);
+				e.preventDefault();
+
+				// validate and make sure required fields are filled
+				obj.isValid = true;
+				form.find('input').each(function () { if ($(this).prop('required') && !$(this).val()) { obj.isValid = false; $(this).addClass('is-invalid'); $(this).removeClass('is-valid'); } else { $(this).addClass('is-valid'); $(this).removeClass('is-invalid'); } });
+				form.find('textarea').each(function () { if ($(this).prop('required') && !$(this).val()) { obj.isValid = false; $(this).addClass('is-invalid'); $(this).removeClass('is-valid'); } else { $(this).addClass('is-valid'); $(this).removeClass('is-invalid'); } });
+
+				// if custom validation function is provided, execute it
+				if (typeof obj.validate === "function") { obj.validate(obj); }
+
+				// if valid, prep to send data
+				if (obj.isValid) {
+					// if an ID is set, then update entry
+					let idx = obj.editOnlyMode ? obj.editOnlyMode : form.data('idx');
+					if (idx > 0) {
+						// Check beforeSubmit event
+						if (obj._emitEvent('beforeSubmit', obj.getData(), true) === false) {
+							return;
+						}
+
+						// Show loading
+						obj._showLoading();
+
+						obj.api.put(obj.model, 'id', idx, null, form.serialize(), obj.httpHeaders,
+							function (response) {
+								obj._hideLoading();
+
+								// Refresh table
+								obj._refreshTable();
+
+								// run call back function if any
+								if (typeof obj.success === "function") {
+									obj.success(response);
+								}
+
+								// Emit afterSubmit event
+								obj._emitEvent('afterSubmit', response, true);
+
+								// reset form if configured
+								if (obj.resetOnSuccess) {
+									$(`#form_${obj.model}_${obj.id}`).trigger("reset");
+								}
+
+								// Show success toast if configured
+								if (obj.showSuccessToast) {
+									obj._showSuccessToast();
+								}
+
+								// close modal if form is a modal dialog
+								if (obj.autoCloseModal) {
+									setTimeout(() => obj.hideModal(true), obj.autoCloseDelay);
+								}
+							},
+							function (response) {
+								obj._hideLoading();
+								obj.appendErrorMessage(response);
+								obj._emitEvent('onError', response, 'update');
+								if (typeof obj.fail === "function") {
+									obj.fail(response);
+								}
+							}
+						);
+					}
+
+					// else, create new entry
+					else {
+						// Check beforeSubmit event
+						if (obj._emitEvent('beforeSubmit', obj.getData(), false) === false) {
+							return;
+						}
+
+						// Show loading
+						obj._showLoading();
+
+						// if file get file name and add that to form
+						if (obj.fileUploadField) {
+							let f = document.getElementById(obj.fileUploadField).files[0];
+							if (f) {
+								form.append(`<input id="filename" type="hidden" name="filename" value="${f.name}" />`);
+							}
+						}
+						obj.api.post(obj.model, null, form.serialize(), obj.httpHeaders,
+							function (response) {
+								// Refresh table
+								obj._refreshTable();
+
+								// if there's a file upload process it
+								if (obj.fileUploadField && response.data[0].s3endpoint) {
+									// clear up form incase it's reused
+									$("#filename").remove();
+
+									// the expected return fields from the response are:
+									// - key
+									// - policy
+									// - credential
+									// - date
+									// - siganture
+									// - s3endpoint
+
+									// get id of newly creatd entry
+									let fileIdx = response.data[0].id;
+									// get file input
+									let file = document.getElementById(obj.fileUploadField).files[0];
+									// create upload form to submit directly to s3
+									let uploadForm = new FormData();
+									// configure upload form
+									uploadForm.append('acl', 'private');
+									uploadForm.append('key', response.data[0].key);
+									uploadForm.append('policy', response.data[0].policy);
+									uploadForm.append('x-amz-algorithm', 'AWS4-HMAC-SHA256');
+									uploadForm.append('x-amz-credential', response.data[0].credential);
+									uploadForm.append('x-amz-date', response.data[0].date);
+									uploadForm.append('x-amz-signature', response.data[0].signature);
+									uploadForm.append('file', file);
+
+									$.ajax({
+										url: response.data[0].s3endpoint,
+										type: 'post',
+										data: uploadForm,
+										dataType: 'json',
+										cache: false,
+										contentType: false,
+										processData: false,
+										success: function(data) {
+											obj._hideLoading();
+
+											// run call back function if any
+											if (typeof obj.success === "function") { obj.success(response); }
+
+											// Emit afterSubmit event
+											obj._emitEvent('afterSubmit', response, false);
+
+											// reset form if configured
+											if (obj.resetOnSuccess) {
+												$(`#form_${obj.model}_${obj.id}`).trigger("reset");
+											}
+
+											// Show success toast if configured
+											if (obj.showSuccessToast) {
+												obj._showSuccessToast();
+											}
+
+											// dismiss modal if configured
+											if (obj.autoCloseModal) {
+												setTimeout(() => obj.hideModal(true), obj.autoCloseDelay);
+											}
+										},
+										error: function(error) {
+											obj._hideLoading();
+											obj.appendErrorMessage(error);
+											obj._emitEvent('onError', error, 'upload');
+											if (typeof obj.fail === "function") {
+												obj.fail(error);
+											}
+											obj.api.delete(obj.model, 'id', fileIdx, []);
+										}
+									});
+
+								} else {
+									obj._hideLoading();
+
+									// run call back function if any
+									if (typeof obj.success === "function") { obj.success(response); }
+
+									// Emit afterSubmit event
+									obj._emitEvent('afterSubmit', response, false);
+
+									// reset form if configured
+									if (obj.resetOnSuccess) {
+										$(`#form_${obj.model}_${obj.id}`).trigger("reset");
+									}
+
+									// Show success toast if configured
+									if (obj.showSuccessToast) {
+										obj._showSuccessToast();
+									}
+
+									// close modal if form is a modal dialog
+									if (obj.autoCloseModal) {
+										setTimeout(() => obj.hideModal(true), obj.autoCloseDelay);
+									}
+								}
+							},
+							function (response) {
+								obj._hideLoading();
+								obj.appendErrorMessage(response);
+								obj._emitEvent('onError', response, 'create');
+								if (typeof obj.fail === "function") {
+									obj.fail(response);
+								}
+							}
+						);
+					}
+				}
+			});
+
+			// initializer for modal
+			if (this.modal) {
+				// bind modal hide listener - reset form
+				$('#modal_' + this.model + '_' + this.id).on('hidden.bs.modal', function (e) {
+					if (e.target.id == 'modal_' + obj.model + '_' + obj.id) {
+						var form = $(`#form_${obj.model}_${obj.id}`);
+						form.data('idx', '');
+						form.data('row', '');
+						form.find('.error-msg').html('');
+						form.find('input').each(function () {
+							$(this).removeClass('is-invalid');
+							$(this).removeClass('is-valid');
+						});
+						form.find('input[type="text"').each(function () {
+							$(this).val('');
+						});
+						form.find('input[type="email"').each(function () {
+							$(this).val('');
+						});
+						form.find('input[type="password"').each(function () {
+							$(this).val('');
+						});
+						form.find('input[type="tel"').each(function () {
+							$(this).val('');
+						});
+						form.find('input[type="checkbox"').each(function () {
+							$(this).prop('checked', false);
+						});
+						form.find('input[type="radio"').each(function () {
+							$(this).prop('checked', false);
+						});
+						form.find('select').each(function () {
+							$(this).prop('selectedIndex', 0);
+						});
+						form.find('textarea').each(function () {
+							$(this).val('');
+						});
+						if (obj.itemized) {
+							$('#itemized_' + obj.model + '_' + obj.id).html('');
+						}
+						$(`#form_${obj.model}_${obj.id}`).trigger("reset");
+					}
+				});
+
+				$('#modal_' + this.model + '_' + this.id).on('shown.bs.modal', function (e) {
+					if (e.target.id == 'modal_' + obj.model + '_' + obj.id) {
+						var form = $(`#form_${obj.model}_${obj.id}`);
+						let idx = obj.editOnlyMode ? obj.editOnlyMode : form.data('idx');
+						// check if idx is set and retrieve information
+						if (idx) {
+							$(`#${obj.model}_${obj.id}_modal-loader`).modal('show');
+
+							obj.loadFormData(idx, function () {
+								$(`#${obj.model}_${obj.id}_modal-loader`).modal('hide');
+								// Store original data for dirty tracking
+								if (obj.trackDirtyState) {
+									obj._originalData = obj.getData();
+								}
+								// Emit afterOpen event
+								obj._emitEvent('afterOpen', idx, obj.getData());
+							}, function () {
+								$(`#${obj.model}_${obj.id}_modal-loader`).modal('hide');
+								obj.hideModal();
+								console.error('Unable to load form. Please try again later');
+							});
+						} else {
+							// Store original data for dirty tracking (new record)
+							if (obj.trackDirtyState) {
+								obj._originalData = obj.getData();
+							}
+							// Emit afterOpen event for new record
+							obj._emitEvent('afterOpen', null, null);
+						}
+
+						// Focus first field if configured
+						if (obj.focusFirstField) {
+							form.find('input:not([type="hidden"]), textarea, select').first().focus();
+						}
+					}
+				});
+			}
+
+			if (this.itemized) {
+				// bind listener for itemized
+				$(`#form_${this.model}_${this.id}`).on('click', '.itemized-add-item', function (e) {
+					var uniqueId = obj.makeID(8); // ID used to track newly created selects to populate if Ajax is set to true
+
+					e.preventDefault(); // prevent default link behaviour
+
+					let itemizedHTML = '<div class="row itemized-row my-3">'; // init html string
+
+					obj.itemized.fields.forEach(function (field) {
+						itemizedHTML += '<div class="col"><div class="form-group">';
+						if (field.type == 'select') {
+							itemizedHTML += `<select id="${field.option.data_model_name}_${field.option.data_model_value}_${uniqueId}" id="itemized_${obj.model}_${obj.id}_${field.name}" class="form-select" name="${field.name}"${field.required ? ' required="required"' : ''}>`;
+							// if not ajax, then populate with data - ajax will populate after appending html
+							if (!field.option.ajax) {
+								for (var key in field.option.data) {
+									if (field.option.data.hasOwnProperty(key)) {
+										itemizedHTML += `<option value="${key}">${field.option.data[key]}</option>`;
+									}
+								}
+							}
+							// close select
+							itemizedHTML += '</select>';
+						} else if (field.type == 'textarea') {
+							itemizedHTML += `<textarea style="width:100%" id="itemized_${obj.model}_${obj.id}_${field.name}" class="form-control" name="${field.name}"${field.required ? ' required="required"' : ''}${field.placeholder !== undefined ? ' placeholder="' + field.placeholder + '"' : ''}></textarea>`;
+						} else {
+							itemizedHTML += `<input type="${field.type}" id="itemized_${obj.model}_${obj.id}_${field.name}" class="form-control" name="${field.name}"${field.required ? ' required="required"' : ''}${field.placeholder !== undefined ? ' placeholder="' + field.placeholder + '"' : ''}${field.readonly !== undefined ? ' readonly' : ''}>`;
+						}
+						itemizedHTML += '</div></div>';
+					});
+					itemizedHTML += '<div class="col-2 text-end"><a href="#" class="itemized-delete-item btn btn-sm btn-outline-danger">remove</a></div></div>';
+					// append fields
+					$(`#itemized_${obj.model}_${obj.id}`).append(itemizedHTML);
+
+					// run ajax for any selects
+					obj.itemized.fields.forEach(function (field) {
+						if (field.type == 'select') {
+							if (field.option.ajax) {
+								obj.api.get(field.option.data_model_name, field.option.data_model_field, field.option.data_model_value, [], function (response) {
+									response.data.forEach(function (item) {
+										let label = '';
+										field.option.data_model_attributes.forEach(function (attribute) {
+											if (item[attribute]) {
+												label += item[attribute] + ' ';
+											} else {
+												// attempt to split by dot notation
+												let c = attribute.split('.');
+												if (c.length >= 2) {
+													label += item[c[0]][c[1]] + ' ';
+												} else {
+													label += attribute + ' ';
+												}
+											}
+										});
+										$(`#${field.option.data_model_name}_${field.option.data_model_value}_${uniqueId}`).append(`<option value="${item['id']}">${label}</option>`);
+									});
+								});
+							}
+						}
+					});
+				});
+
+				$(`#form_${this.model}_${this.id}`).on('click', '.itemized-delete-item', function (e) {
+					e.preventDefault();
+					$(this).closest('.itemized-row').remove();
+				});
+			}
+
+			// NEW: Dirty state tracking
+			if (this.trackDirtyState) {
+				const form = $(`#form_${this.model}_${this.id}`);
+				form.on('change', 'input, textarea, select', () => {
+					this._checkDirtyState();
+				});
+				form.on('input', 'input, textarea', () => {
+					this._checkDirtyState();
+				});
+			}
+
+			// NEW: Blur validation
+			if (this.validateOnBlur) {
+				const form = $(`#form_${this.model}_${this.id}`);
+				form.on('blur', 'input, textarea, select', (e) => {
+					const $el = $(e.target);
+					if ($el.prop('required') && !$el.val()) {
+						$el.addClass('is-invalid').removeClass('is-valid');
+						if (this.showInlineErrors) {
+							$el.siblings('.invalid-feedback').remove();
+							$el.after(`<div class="invalid-feedback" style="display:block;">This field is required</div>`);
+						}
+					} else if ($el.val()) {
+						$el.addClass('is-valid').removeClass('is-invalid');
+						$el.siblings('.invalid-feedback').remove();
+					}
+				});
+			}
+
+			this._emitEvent('afterInit');
+			this.loaded = true;
+		}
+	}
+	appendErrorMessage = (message, dismissable = true) => {
+		const errorContent = this._formatErrorMessage(message);
+
+		const alertHtml = dismissable
+			? `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+				 ${errorContent}
+				 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			   </div>`
+			: `<div class="alert alert-danger" role="alert">${errorContent}</div>`;
+
+		$(`#form_${this.model}_${this.id} .error-msg`).append(alertHtml);
+	}
+	// Legacy method - kept for backward compatibility
+	_appendErrorMessageLegacy = (message) => {
+		$(`#form_${this.model}_${this.id} .error-msg`).append(`<div class="alert alert-danger" role="alert">${message}</div>`);
+	}
+	clearErrorMessage = () => {
+		$(`#form_${this.model}_${this.id} .error-msg`).html('');
+	}
+	showModal = (idx = null) => {
+		if (this.modal) {
+			if (idx) {
+				this.setID(idx);
+			}
+
+			if (this._emitEvent('beforeOpen', idx) === false) {
+				return;
+			}
+
+			$(`#modal_${this.model}_${this.id}`).modal('show');
+		}
+	}
+	hideModal = (force = false) => {
+		if (this.modal) {
+			if (!force && this.confirmDirtyClose && this._isDirty) {
+				this.api.confirm('Unsaved Changes',
+					'You have unsaved changes. Are you sure you want to close?',
+					() => this._forceHideModal()
+				);
+				return;
+			}
+			this._forceHideModal();
+		}
+	}
+	_forceHideModal = () => {
+		if (this._emitEvent('beforeClose') === false) {
+			return;
+		}
+		$(`#modal_${this.model}_${this.id}`).modal('hide');
+		this._emitEvent('afterClose');
+	}
+	loadFormData = (idx, success = null, fail = null) => {
+		var obj = this;
+
+		// Check if model has external data and set variable accordinly
+		if (obj.externalChildData) {
+			obj.httpHeaders.push({'name':'x-kyte-get-externaltables', 'value':'true'});
+		}
+
+		obj.api.get(obj.model, 'id', idx, obj.httpHeaders, function (response) {
+    
+			// populate form
+			obj.elements.forEach(function (row) {
+				row.forEach(function (column) {
+					let fieldId = column.id !== undefined ? column.id : `form_${obj.model}_${obj.id}_${column.field}`;
+
+					if (typeof response.data[0][column.field] === 'object' && response.data[0][column.field] !== null) {
+						$(`#${fieldId}`).val(response.data[0][column.field].id).change();
+					} else {
+						if (column.type === 'date') {
+							// get date and change slashes to dashes
+							var dt = (response.data[0][column.field]).replace(/\//g, '-')
+							$(`#${fieldId}`).val(dt)
+						} else {
+							$(`#${fieldId}`).val(response.data[0][column.field])
+						}
+						$(`#${fieldId}`).change();
+					}
+				});
+			});
+
+			// if itemized is specified, populate with itemized information
+			if (obj.itemized) {
+				if (response.data[0].ExternalTables && response.data[0].ExternalTables.LineItem) {
+					obj.renderItemizedData(response.data[0].ExternalTables.LineItem);
+				} else if (obj.itemized.model && obj.itemized.foreign_key) {
+					obj.api.get(obj.itemized.model, obj.itemized.foreign_key, response.data[0].id, obj.httpHeaders, function (et_response) {
+						obj.renderItemizedData(et_response.data);
+					});
+				} else {
+					error.log('External tables or model+foreign key not defined. At least one must be defined for itemized forms');
+				}
+			}
+
+			if (typeof success === "function") {
+				success();
+			}
+		}, function () {
+			if (typeof success === "function") {
+				success();
+			}
+		});
+	}
+	renderItemizedData = (lineItems) => {
+		var i = 0;
+		var obj = this;
+		lineItems.forEach(function(item) {
+			var uniqueId = obj.makeID(8); // ID used to track newly created selects to populate if Ajax is set to true
+
+			let itemizedHTML = '<div class="row itemized-row my-3">'; // init html string
+
+			obj.itemized.fields.forEach(function (field) {
+				var key = field.field ? field.field : field.name.replace(/\[\]$/, '');
+				var fieldVal = obj.api.getNestedValue(item, key);
+				fieldVal = fieldVal === undefined ? '' : fieldVal;
+				itemizedHTML += '<div class="col"><div class="form-group">';
+				if (field.type == 'select') {
+					itemizedHTML += `<select id="itemized_${obj.model}_${obj.id}_${field.name.replace(/\[\]$/, '')}[${i}]" class="form-select itemized_${obj.model}_${obj.id}_${field.name.replace(/\[\]$/, '')}" name="${field.name}" value="${fieldVal}" data-selected-value="${fieldVal}"${field.required ? ' required="required"' : ''}>`;
+					// if not ajax, then populate with data - ajax will populate after appending html
+					if (!field.option.ajax) {
+						for (var key in field.option.data) {
+							if (field.option.data.hasOwnProperty(key)) {
+								itemizedHTML += `<option value="${key}">${field.option.data[key]}</option>`;
+							}
+						}
+					}
+					// close select
+					itemizedHTML += '</select>';
+				} else if (field.type == 'textarea') {
+					itemizedHTML += `<textarea style="width:100%" id="itemized_${obj.model}_${obj.id}_${field.name.replace(/\[\]$/, '')}[${i}]" class="form-control" name="${field.name}" value="${fieldVal}"${field.required ? ' required="required"' : ''}${field.placeholder !== undefined ? ' placeholder="' + field.placeholder + '"' : ''}></textarea>`;
+				} else {
+					// Check for date and replace slashes with dashes
+					fieldVal = field.date ? fieldVal.replace(/\//g, '-') : fieldVal;
+					itemizedHTML += `<input type="${field.type}" id="itemized_${obj.model}_${obj.id}_${field.name.replace(/\[\]$/, '')}[${i}]" class="form-control" name="${field.name}" value="${fieldVal}"${field.required ? 'required="required"' : ''}${field.placeholder !== undefined ? ' placeholder="' + field.placeholder + '"' : ''}${field.readonly !== undefined ? ' readonly' : ''}>`;
+				}
+				itemizedHTML += '</div></div>';
+			});
+			itemizedHTML += '<div class="col-2 text-end"><a href="#" class="itemized-delete-item btn btn-sm btn-outline-danger">remove</a></div></div>';
+			// append fields
+			$(`#itemized_${obj.model}_${obj.id}`).append(itemizedHTML);
+
+			// increment itemized row counter
+			i++;
+		});
+
+		// run ajax for any selects
+		obj.itemized.fields.forEach(function (field) {
+			if (field.type == 'select') {
+				if (field.option.ajax) {
+					obj.api.get(field.option.data_model_name, field.option.data_model_field, field.option.data_model_value, [], function (response) {
+						response.data.forEach(function (item) {
+							let label = '';
+							field.option.data_model_attributes.forEach(function (attribute) {
+								if (item[attribute]) {
+									label += item[attribute] + ' ';
+								} else {
+									// attempt to split by dot notation
+									let c = attribute.split('.');
+									if (c.length >= 2) {
+										label += item[c[0]][c[1]] + ' ';
+									} else {
+										label += attribute + ' ';
+									}
+								}
+							});
+							let itemColName = field.option.data_model_default_field ? field.option.data_model_default_field : 'id';
+							$(`.itemized_${obj.model}_${obj.id}_${field.name.replace(/\[\]$/, '')}`).append(`<option value="${item[itemColName]}">${label}</option>`);
+						});
+						$(`.itemized_${obj.model}_${obj.id}_${field.name.replace(/\[\]$/, '')}`).each(function() {
+							// Retrieve the intended value from the data attribute
+							let desiredVal = $(this).data('selected-value');
+							// Set the select's value to desiredVal
+							$(this).val(desiredVal).trigger('change');
+						});										
+					});
+				}
+			}
+		});
+	}
+	reloadAjax = () => {
+		let obj = this;
+		// if ajax, then populate data
+		this.elements.forEach(function (row) {
+			row.forEach(function (column) {
+				let fieldId = column.id !== undefined ? column.id : `form_${obj.model}_${obj.id}_${column.field}`;
+
+				if (column.type == 'select') {
+					if (column.option.ajax) {
+						$(`#${fieldId}`).html('');
+						if (column.placeholder) {
+							$(`#${fieldId}`).append(`<option selected="selected" disabled>${column.placeholder}</option>`);
+						}
+						obj.api.get(column.option.data_model_name, column.option.data_model_field, column.option.data_model_value, [], function (response) {
+							response.data.forEach(function (item) {
+								let label = '';
+								column.option.data_model_attributes.forEach(function (attribute) {
+									if (item[attribute]) {
+										label += item[attribute] + ' ';
+									} else {
+										// attempt to split by dot notation
+										let c = attribute.split('.');
+										if (c.length >= 2) {
+											label += item[c[0]][c[1]] + ' ';
+										} else {
+											label += attribute + ' ';
+										}
+									}
+								});
+								let itemColName = column.option.data_model_default_field ? column.option.data_model_default_field : 'id';
+								$(`#${fieldId}`).append(`<option value="${item[itemColName]}"${item[itemColName] == column.option.data_model_default_value ? ' selected="selected"' : ''}>${label}</option>`);
+							});
+						}, function () {
+							console.error(`Unable to load form dropdown data for ${column.option.data_model_name}`);
+						});
+					}
+				}
+			});
+		});
+	}
+	setID = (idx) => {
+		$(`#form_${this.model}_${this.id}`).data('idx', idx);
+	}
+	getID = () => {
+		return $(`#form_${this.model}_${this.id}`).data('idx');
+	}
+	makeID = (length) => {
+		var result = '';
+		var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		var charactersLength = characters.length;
+		for (var i = 0; i < length; i++) {
+			result += characters.charAt(Math.floor(Math.random() * charactersLength));
+		}
+		return result;
+	}
+}
+
+class KyteCalendar {
+    constructor(selector) {
+        this.selector = selector;
+        this.Days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+        this.Months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        this.selectedDate = null; // if selection type is range, this is start date
+        this.selectedEndDate = null;
+        this.callback = null;
+        this.date = new Date();
+        this.rowMonths = 1;
+		this.colMonths = 0;
+		this.selectedActiveClass = 'calendar-date-active';
+		this.selectedEndActiveClass = 'calendar-date-active';
+		this.fieldInFocus = null;
+    }
+
+    init = () => {
+        let self = this;
+        let html = '<div class="kyte-calendar">';
+        this.colMonths = $(this.selector).data('colMonths');
+		this.rowMonths = $(this.selector).data('rowMonths');
+        
+        // begin controls
+        html += '<div class="d-flex justify-content-between mb-2"><a href="#" class="calendar-back"><i class="fas fa-arrow-alt-circle-left fa-3x"></i></a><a href="#" class="calendar-forward"><i class="fas fa-arrow-alt-circle-right fa-3x"></i></a></div>';
+
+        // begin calendar widget
+        html += '<div class="row kyte-calendar-row">';
+
+        html += this.generateRow(function(col, row) { return (col == 0 && row == 0 ? 0 : 1); });
+        html += '</div></div>';
+
+        // create calendar widget
+        $(this.selector).html(html);
+
+        $(".kyte-calendar").on('click', '.calendar-forward', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            // move month over double before decrementing...we're working backwards here
+            self.date.setMonth(self.date.getMonth() + (self.colMonths * self.rowMonths * 2));
+
+            // update calendar widget
+            $(".kyte-calendar-row").html(self.generateRow());
+        });
+
+        $(".kyte-calendar").on('click', '.calendar-back', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            // update calendar widget
+            $(".kyte-calendar-row").html(self.generateRow());
+        });
+
+        // date click handler
+        $(".kyte-calendar").on('click', '.calendar-date-content', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            let year = $(this).data('calendarYear');
+            let month = $(this).data('calendarMonth');
+            let date = $(this).data('calendarDate');
+
+            $('.calendar-date-content').removeClass(self.selectedActiveClass);
+			$('.calendar-date-content').removeClass(self.selectedEndActiveClass);
+
+            let selection = new Date(year, month, date);
+
+            if ($(self.selector).data('selectionType') == 'range') {
+				if (self.fieldInFocus) {
+					console.log("test");
+					console.log(self.fieldInFocus.data('date-target'));
+					if (self.fieldInFocus.data('date-target') == 'start') {
+						self.selectedDate = selection;
+						if (self.selectedDate > self.selectedEndDate) {
+							self.selectedEndDate = null;
+						}
+					} else {
+						self.selectedEndDate = selection;
+						if (self.selectedDate > self.selectedEndDate) {
+							self.selectedDate = null;
+						}
+					}
+					self.fieldInFocus = null;
+				} else {
+					if (self.selectedDate == null) {
+						self.selectedDate = selection;
+					} else if (self.selectedDate > selection) {
+						self.selectedDate = selection;
+						self.selectedEndDate = null;
+					} else if (self.selectedEndDate == null) {
+						self.selectedEndDate = selection;
+					} else {
+						self.selectedDate = selection;
+						self.selectedEndDate = null;
+					}
+				}
+            } else {
+                self.selectedDate = new Date(year, month, date);
+            }
+			if (self.selectedEndDate != null) {
+				$('.calendar-element-'+self.selectedEndDate.getFullYear()+'-'+self.selectedEndDate.getMonth()+'-'+self.selectedEndDate.getDate()).addClass(self.selectedEndActiveClass);
+			}
+			if (self.selectedDate != null) {
+				$('.calendar-element-'+self.selectedDate.getFullYear()+'-'+self.selectedDate.getMonth()+'-'+self.selectedDate.getDate()).addClass(self.selectedActiveClass);
+			}
+
+            if (typeof self.callback === "function") {
+                self.callback(self.selectedDate, self.selectedEndDate);
+            }
+        });
+    }
+
+    updateSelectedDate = (dateString) => {
+		if (dateString == null || dateString == '') {
+			this.selectedDate = null;
+		} else {
+			let newDate = new Date(dateString);
+			this.selectedDate = new Date(newDate.getUTCFullYear(), newDate.getUTCMonth(), newDate.getUTCDate());
+			if (this.selectedDate > this.selectedEndDate) {
+				this.selectedEndDate = null;
+			}
+		}
+		this.fieldInFocus = null;
+        this.redraw();
+    }
+
+    updateSelectedEndDate = (dateString) => {
+		if (dateString == null || dateString == '') {
+			this.selectedEndDate = null;
+		} else {
+			let newDate = new Date(dateString);
+			this.selectedEndDate = new Date(newDate.getUTCFullYear(), newDate.getUTCMonth(), newDate.getUTCDate());
+			if (this.selectedEndDate < this.selectedDate) {
+				this.selectedDate = null;
+			}
+		}
+		this.fieldInFocus = null;
+        this.redraw();
+    }
+
+    redraw = () => {
+        // move month over double before decrementing...we're working backwards here
+        this.date.setMonth(this.date.getMonth() + (this.colMonths * this.rowMonths));
+
+        // update calendar widget
+        $(".kyte-calendar-row").html(this.generateRow());
+    }
+
+	generateRow = (modifier) => {
+		// check that row months is within range
+        if (this.rowMonths < 1 || this.rowMonths > 3) {
+            console.error('Invalid option for number of rows to display. Please pick between 1 and 3.');
+            return;
+        }
+
+        // check that col months is within range
+        if (this.colMonths < 1 || this.colMonths > 3) {
+            console.error('Invalid option for number of months to display per col. Please pick between 1 and 3.');
+            return;
+        }
+
+		// check is modifier is a funtion & returns correctly
+		if (typeof modifier === "function") {
+			let testReturn = modifier(1);
+			if (!Number.isInteger(testReturn)) {
+				console.error("Modifier does not return an integer. Must return an integer.");
+				return;
+			}
+		} else {
+			modifier = function(idx) { return 1; };
+		}
+
+		let rowHTML = '';
+		if (this.rowMonths > 1) {
+			rowHTML += '<div class="col">';
+		}
+		let calRow = [];
+		for (let r = 0; r < this.rowMonths; r++) {
+			let calRowHTHML = '';
+			if (this.rowMonths > 1) {
+				calRowHTHML += '<div class="row mb-2">';
+			}
+			let calendars = [];
+			for (let i = 0; i < this.colMonths; i++) {
+				this.date.setMonth(this.date.getMonth() - modifier(i, r));
+				let calendarHtml = this.generateCalendar(this.date);
+				calendars.push('<div class="col-lg-'+(12/this.colMonths)+' mb-2 mb-lg-0 px-1">'+calendarHtml+'</div>');
+			}
+			calRowHTHML += calendars.reverse().join('');
+			if (this.rowMonths > 1) {
+				calRowHTHML += '</div>';
+			}
+			calRow.push(calRowHTHML);
+		}
+		rowHTML += calRow.reverse().join('');
+		if (this.rowMonths > 1) {
+			rowHTML += '</div>';
+		}
+        
+        return rowHTML;
+	}
+
+    generateCalendar = (date) => {
+        // let isLeap = new Date(year, month-1, 29).getMonth() == 1;
+        let totalDays = new Date(date.getFullYear(), date.getMonth()+1, 0).getDate();
+        let calDate = new Date(date.getFullYear(), date.getMonth(), 1);
+        let row = [];
+        let col = [];
+        let i = 0;
+
+        // month label
+        row.push('<div class="row"><div class="col"><div class="calendar-month-label">'+this.Months[date.getMonth()]+' '+date.getFullYear()+'</div></div></div>');
+
+        // day of week labels
+        for (i; i < 7; i++) {
+            col.push('<div class="col"><div class="calendar-day-of-week">'+this.Days[i]+'</div></div>')
+        }
+        row.push('<div class="row">'+col.join('')+'</div>');
+        col = [];
+        i = 0;
+
+        let startDayOfWeek = calDate.getDay();
+        for (i; i < startDayOfWeek; i++) {
+            col.push('<div class="col"><div class="calendar-date-square"></div></div>');
+        }
+
+        for (let d = 1; d <= totalDays; d++) {
+            calDate.setDate(d);
+
+            let startActive = false;
+            let endActive = false;
+
+            if (this.selectedDate) {
+                if (this.selectedDate.getTime() === calDate.getTime()) {
+                    startActive = true;
+                }
+            }
+
+            if (this.selectedEndDate) {
+                if (this.selectedEndDate.getTime() === calDate.getTime()) {
+                    endActive = true;
+                }
+            }
+            
+            if (i % 7 == 0) {
+                row.push('<div class="row">'+col.join('')+'</div>');
+                col = [];
+                i = 0;
+            }
+
+            col.push('<div class="col"><div class="calendar-date-square"><a href="#" data-calendar-month="'+date.getMonth()+'" data-calendar-year="'+date.getFullYear()+'" data-calendar-date="'+d+'" data-calendar-day="'+this.Days[i]+'" class="'+(startActive ? this.selectedActiveClass+' ' : '')+(endActive ? this.selectedEndActiveClass+' ' : '')+'calendar-date-content calendar-element-'+date.getFullYear()+'-'+date.getMonth()+'-'+d+' align-items-center justify-content-center d-flex"><span class="d-flex-column">'+d+'</span></a></div></div>');
+            i++;
+        }
+
+        for (i; i < 7; i++) {
+            col.push('<div class="col"><div class="calendar-date-square"></div></div>');
+        }
+        row.push('<div class="row">'+col.join('')+'</div>');
+
+        return '<div class="kyte-calendar-wrapper">'+row.join('')+'</div>';
+    }
+}
+
+class KytePasswordRequirement {
+	constructor(api, selector, passwordField, confirmField) {
+		this.api = api;
+		this.selector = selector;
+		this.passwordField = passwordField;
+		this.confirmField = confirmField;
+		this.minLength = 8;
+		this.lengthText = "Minimum length of "+this.minLength;
+		this.lowerCaseText = "At least one lower case letter";
+		this.upperCaseText = "At least one upper case letter";
+		this.numberText = "At least one number";
+		this.symbolText = "At least one symbol";
+		// password requirements
+		this.reqLength = true;
+		this.reqLowerCase = true;
+		this.reqUpperCase = true;
+		this.reqNumber = true;
+		this.reqSymbol = true;
+		//
+		this.valid = false;
+	}
+
+	init = () => {
+		let obj = this;
+		this.selector.html('');
+		let passreqhtml = '<ul class="fa-ul">';
+		if (this.reqLength) {
+			passreqhtml += '<li class="validate-length"><i class="fa-li far fa-circle"></i> '+this.lengthText+'</li>';
+		}
+		if (this.reqLowerCase) {
+			passreqhtml += '<li class="validate-small"><i class="fa-li far fa-circle"></i> '+this.lowerCaseText+'</li>';
+		}
+		if (this.reqUpperCase) {
+			passreqhtml += '<li class="validate-large"><i class="fa-li far fa-circle"></i> '+this.upperCaseText+'</li>';
+		}
+		if (this.reqNumber) {
+			passreqhtml += '<li class="validate-number"><i class="fa-li far fa-circle"></i> '+this.numberText+'</li>';
+		}
+		if (this.reqSymbol) {
+			passreqhtml += '<li class="validate-symbol"><i class="fa-li far fa-circle"></i> '+this.symbolText+'</li>';
+		}
+		passreqhtml += '</ul>'
+		this.selector.append(passreqhtml);
+
+		this.passwordField.on('keyup', function() {
+			this.valid = obj.validatePassword();
+		});
+	}
+
+	/*
+	 * Check password minimums and update UI
+	 */
+	validatePassword = () => {
+		var pswd = this.passwordField.val();
+		let result = true;
+
+		if (!pswd) {
+			this.passwordField.removeClass('is-valid').addClass('is-invalid');
+			$('ul li.validate-length i').removeClass('fa-circle');
+			$('ul li.validate-length i').removeClass('fa-check-circle').addClass('fa-times-circle');
+			$('ul li.validate-length i').removeClass('text-success').addClass('text-danger');
+
+			$('ul li.validate-small i').removeClass('fa-circle');
+			$('ul li.validate-small i').removeClass('fa-check-circle').addClass('fa-times-circle');
+			$('ul li.validate-small i').removeClass('text-success').addClass('text-danger');
+
+			$('ul li.validate-large i').removeClass('fa-circle');
+			$('ul li.validate-large i').removeClass('fa-check-circle').addClass('fa-times-circle');
+			$('ul li.validate-large i').removeClass('text-success').addClass('text-danger');
+
+			$('ul li.validate-number i').removeClass('fa-circle');
+			$('ul li.validate-number i').removeClass('fa-check-circle').addClass('fa-times-circle');
+			$('ul li.validate-number i').removeClass('text-success').addClass('text-danger');
+
+			$('ul li.validate-symbol i').removeClass('fa-circle');
+			$('ul li.validate-symbol i').removeClass('fa-check-circle').addClass('fa-times-circle');
+			$('ul li.validate-symbol i').removeClass('text-success').addClass('text-danger');
+			result = false;
+		}
+
+		// check password length
+		if (this.reqLength) {
+			if (pswd.length < 8) {
+				this.passwordField.removeClass('is-valid').addClass('is-invalid');
+				$('ul li.validate-length i').removeClass('fa-circle');
+				$('ul li.validate-length i').removeClass('fa-check-circle').addClass('fa-times-circle');
+				$('ul li.validate-length i').removeClass('text-success').addClass('text-danger');
+				result = false;
+			} else {
+				this.passwordField.removeClass('is-invalid').addClass('is-valid');
+				$('ul li.validate-length i').removeClass('fa-circle');
+				$('ul li.validate-length i').removeClass('fa-times-circle').addClass('fa-check-circle');
+				$('ul li.validate-length i').removeClass('text-danger').addClass('text-success');
+			}
+		}
+
+		//validate lower letter
+		if (this.reqLowerCase) {
+			if (pswd.match(/[a-z]/)) {
+				this.passwordField.removeClass('is-invalid').addClass('is-valid');
+				$('ul li.validate-small i').removeClass('fa-circle');
+				$('ul li.validate-small i').removeClass('fa-times-circle').addClass('fa-check-circle');
+				$('ul li.validate-small i').removeClass('text-danger').addClass('text-success');
+			} else {
+				this.passwordField.removeClass('is-valid').addClass('is-invalid');
+				$('ul li.validate-small i').removeClass('fa-circle');
+				$('ul li.validate-small i').removeClass('fa-check-circle').addClass('fa-times-circle');
+				$('ul li.validate-small i').removeClass('text-success').addClass('text-danger');
+				result = false;
+			}
+		}
+
+		//validate capital letter
+		if (this.reqUpperCase) {
+			if (pswd.match(/[A-Z]/)) {
+				this.passwordField.removeClass('is-invalid').addClass('is-valid');
+				$('ul li.validate-large i').removeClass('fa-circle');
+				$('ul li.validate-large i').removeClass('fa-times-circle').addClass('fa-check-circle');
+				$('ul li.validate-large i').removeClass('text-danger').addClass('text-success');
+			} else {
+				this.passwordField.removeClass('is-valid').addClass('is-invalid');
+				$('ul li.validate-large i').removeClass('fa-circle');
+				$('ul li.validate-large i').removeClass('fa-check-circle').addClass('fa-times-circle');
+				$('ul li.validate-large i').removeClass('text-success').addClass('text-danger');
+				result = false;
+			}
+		}
+
+		//validate number
+		if (this.reqNumber) {
+			if (pswd.match(/\d/)) {
+				this.passwordField.removeClass('is-invalid').addClass('is-valid');
+				$('ul li.validate-number i').removeClass('fa-circle');
+				$('ul li.validate-number i').removeClass('fa-times-circle').addClass('fa-check-circle');
+				$('ul li.validate-number i').removeClass('text-danger').addClass('text-success');
+			} else {
+				this.passwordField.removeClass('is-valid').addClass('is-invalid');
+				$('ul li.validate-number i').removeClass('fa-circle');
+				$('ul li.validate-number i').removeClass('fa-check-circle').addClass('fa-times-circle');
+				$('ul li.validate-number i').removeClass('text-success').addClass('text-danger');
+				result = false;
+			}
+		}
+
+		// symbol
+		if (this.reqSymbol) {
+			if (pswd.match(/[@$!%*#?&]/)) {
+				this.passwordField.removeClass('is-invalid').addClass('is-valid');
+				$('ul li.validate-symbol i').removeClass('fa-circle');
+				$('ul li.validate-symbol i').removeClass('fa-times-circle').addClass('fa-check-circle');
+				$('ul li.validate-symbol i').removeClass('text-danger').addClass('text-success');
+			} else {
+				this.passwordField.removeClass('is-valid').addClass('is-invalid');
+				$('ul li.validate-symbol i').removeClass('fa-circle');
+				$('ul li.validate-symbol i').removeClass('fa-check-circle').addClass('fa-times-circle');
+				$('ul li.validate-symbol i').removeClass('text-success').addClass('text-danger');
+				result = false;
+			}
+		}
+
+		return result;
+	}
+}
+
+class KyteWebComponent {
+	constructor(components) {
+		if (typeof components !== 'object' || components === null) {
+            throw new Error('Components must be an object');
+        }
+		this.components = components;
+	}
+	bind = (selector, identifier, data, mutator = null) => {
+		const $element = $(selector);
+        if ($element.length === 0) {
+            console.warn(`No element found for selector: ${selector}`);
+            return;
+        }
+
+        if (!this.components.hasOwnProperty(identifier)) {
+            console.warn(`Template identifier "${identifier}" not found.`);
+            return;
+        }
+
+        if (!Array.isArray(data)) {
+            console.warn(`Data must be an array.`);
+            return;
+        }
+
+		let template = this.components[identifier];
+        $element.html('');
+
+		data.forEach(item => {
+			if (typeof mutator === "function") {
+				mutator(item);
+			}
+			let component = this.replacePlaceholders(template, item);
+            $element.append(component);
+		});
+	}
+	replacePlaceholders = (template, item) => {
+        return template.replace(/{{\s*(\w+)\s*}}/g, (match, key) => {
+            return item.hasOwnProperty(key) ? item[key] : "";
+        });
+    }
+};

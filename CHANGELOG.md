@@ -6,10 +6,14 @@ Adds the `/oauth/authorize` **consent screen** — the interactive authorization
 
 The connection is **account-wide** (v1): it's to the user's Kyte account, which may own many apps — so the copy says "access Kyte", not a single app. Unauthenticated users are bounced to the Shipyard login (`/?redir=…`) and returned here after signing in.
 
-- `oauth/authorize/index.html` — the consent page (clean Shipyard-styled card)
+- `oauth-authorize.html` (root) — the consent page (clean Shipyard-styled card)
 - `assets/js/source/kyte-shipyard-oauth-consent.js` — login gate → `GET /oauth/consent/client` (render) → `POST /oauth/consent/approve` (mint) → redirect
 
-**Requires kyte-php v4.17.0+** (the OAuth authorization server).
+### Fix: break the stale-session reconnection loop
+
+The consent page's raw `fetch()` bypassed the SDK's JWT auto-refresh, so returning to it with an expired access token 401'd and redirected to login — but the login page saw the same stale token and forwarded straight back, looping until a manual logout. Now it (1) refreshes the access token via `_jwtEnsureFreshAccessToken` before calling the consent endpoints (an expired-but-refreshable session refreshes silently — no re-login), and (2) on a genuine 401 / failed refresh, clears the session (`sessionDestroy`) before going to login so a real login form shows instead of bouncing.
+
+**Requires kyte-php v4.20.0+** (the OAuth authorization server).
 
 ## 2.3.0
 
