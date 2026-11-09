@@ -1,5 +1,8 @@
 ﻿# Kyte Shipyard™
 
+> [!IMPORTANT]
+> **Maintenance mode.** Kyte is in maintenance mode. Security fixes will continue through November 2027; no new features are planned. Existing installations remain supported during this period.
+
  [![CodeQL](https://github.com/keyqcloud/kyte-shipyard/actions/workflows/codeql.yml/badge.svg)](https://github.com/keyqcloud/kyte-shipyard/actions/workflows/codeql.yml) [![Deploy to CDN](https://github.com/keyqcloud/kyte-shipyard/actions/workflows/deploy.yml/badge.svg)](https://github.com/keyqcloud/kyte-shipyard/actions/workflows/deploy.yml)
 
 ## Introduction
